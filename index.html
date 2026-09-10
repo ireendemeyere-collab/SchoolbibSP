@@ -3,385 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schoolbibliotheek Don Bosco Gent campus Sint-Pieters</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- PapaParse bibliotheek om CSV-bestanden automatisch in te lezen -->
+    <title>Digitale Bibliotheek Database</title>
+    <!-- PapaParse voor het automatisch inlezen van boeken.csv -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        :root {
-            --brand-dark: #222b3c;       /* Donkerblauw uit het logo */
-            --brand-pink: #e8869c;       /* Roze/zalmkleur uit het logo */
-            --brand-light: #f5f6f8;      /* Zachte achtergrond */
-            --white: #ffffff;
-            --text-main: #2d3436;
-        }
-
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--brand-light);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--brand-dark), #2c3e50);
-            color: var(--white);
-            text-align: center;
-            padding: 2.5rem 1rem;
-            border-bottom-left-radius: 35px;
-            border-bottom-right-radius: 35px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--brand-pink);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.2rem;
-            letter-spacing: 0.5px;
-        }
-
-        header p {
-            margin: 0;
-            font-size: 1.05rem;
-            opacity: 0.85;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .search-filter-box {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        input[type="text"] {
-            padding: 0.8rem 1.2rem;
-            border: 2px solid #eee;
-            border-radius: 30px;
-            font-size: 0.95rem;
-            font-family: 'Poppins', sans-serif;
-            outline: none;
-            transition: border-color 0.3s;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--brand-pink);
-        }
-
-        .filter-sections {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            border-top: 1px solid #eee;
-            padding-top: 1rem;
-        }
-
-        .filter-group h3 {
-            font-size: 0.95rem;
-            color: var(--brand-dark);
-            margin: 0 0 0.6rem 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .checkbox-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            max-height: 150px;
-            overflow-y: auto;
-            padding-right: 0.5rem;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            color: #555;
-        }
-
-        .checkbox-label input {
-            accent-color: var(--brand-pink);
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-        }
-
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 2rem;
-        }
-
-        .book-card {
-            background: var(--white);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .book-cover {
-            width: 100%;
-            height: 270px;
-            object-fit: cover;
-            background-color: #ddd;
-        }
-
-        .book-info {
-            padding: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-        }
-
-        .book-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin: 0 0 0.3rem 0;
-            color: var(--brand-dark);
-        }
-
-        .book-author {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.6rem;
-        }
-
-        .book-tags {
-            display: flex;
-            gap: 0.3rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-
-        .tag {
-            background: #f0f3f8;
-            color: #444;
-            font-size: 0.75rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-
-        .book-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .grade-badge {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            background: #eef2f7;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
             color: #333;
-            text-align: center;
         }
-
-        .location-badge {
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.35rem 0.6rem;
-            border-radius: 8px;
-            background: #fef2f4;
-            color: #d65a77;
+        h1 {
+            color: #2c3e50;
+        }
+        .cover-placeholder {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: center;
-            border: 1px dashed var(--brand-pink);
+            color: #7f8c8d;
+            border: 2px dashed #bdc3c7;
+        }
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 200px;
+        }
+        label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        input[type="text"], select {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .loading {
+            padding: 20px;
+            text-align: center;
+            color: #666;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="logo.jpg" alt="Boekenbende Sint-Pieters Logo" class="logo-img">
-        <div>
-            <h1>Boekenbende Sint-Pieters</h1>
-            <p>Vind jouw volgende leesavontuur in de schoolbibliotheek!</p>
+    <!-- Tijdelijke lege coverpagina sectie -->
+    <div class="cover-placeholder">
+        <h3>Welkom in de Bibliotheek Database</h3>
+        <p><em>(Coverpagina / introductiezone – hier komt later je startpagina-inhoud)</em></p>
+    </div>
+
+    <h1>Boekenoverzicht</h1>
+    
+    <div class="filters-container">
+        <div class="filter-group">
+            <label for="searchInput">Zoek op titel of auteur:</label>
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Typ om te zoeken...">
         </div>
-    </header>
-
-    <div class="container">
-        <!-- Zoekbalk en Filter Panelen -->
-        <div class="search-filter-box">
-            <input type="text" id="searchInput" placeholder="Zoek op titel of auteur..." onkeyup="filterBooks()">
-            
-            <div class="filter-sections">
-                <!-- 1. Graad -->
-                <div class="filter-group">
-                    <h3>Graad</h3>
-                    <div class="checkbox-list" id="gradeCheckboxes"></div>
-                </div>
-
-                <!-- 2. Thema -->
-                <div class="filter-group">
-                    <h3>Thema</h3>
-                    <div class="checkbox-list" id="tagCheckboxes"></div>
-                </div>
-
-                <!-- 3. Soort boek -->
-                <div class="filter-group">
-                    <h3>Soort boek</h3>
-                    <div class="checkbox-list" id="locationCheckboxes"></div>
-                </div>
-            </div>
+        <div class="filter-group">
+            <label for="locatieFilter">Locatie:</label>
+            <select id="locatieFilter" onchange="filterTable()">
+                <option value="">Alle locaties</option>
+            </select>
         </div>
-
-        <!-- Boeken Rooster -->
-        <div class="book-grid" id="bookGrid">
-            <p style="text-align: center; grid-column: 1 / -1;">Boeken worden ingeladen...</p>
+        <div class="filter-group">
+            <label for="graadFilter">Graad:</label>
+            <select id="graadFilter" onchange="filterTable()">
+                <option value="">Alle graden</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="themaFilter">Thema (Tag):</label>
+            <select id="themaFilter" onchange="filterTable()">
+                <option value="">Alle thema's</option>
+            </select>
         </div>
     </div>
 
-    <script>
-        let books = [];
-        const CSV_FILE = 'boeken.csv';
+    <table id="bookTable">
+        <thead>
+            <tr>
+                <th>Titel</th>
+                <th>Auteur</th>
+                <th>Tags</th>
+                <th>Graad</th>
+                <th>Locatie</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr><td colspan="5" class="loading">Gegevens inladen vanuit boeken.csv...</td></tr>
+        </tbody>
+    </table>
 
-        function loadCSV() {
-            Papa.parse(CSV_FILE, {
+    <script>
+        let allBooks = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            Papa.parse('boeken.csv', {
                 download: true,
-                header: true,
+                header: false,
                 complete: function(results) {
-                    books = results.data.filter(book => book.title && book.title.trim() !== "");
-                    setupCheckboxes();
-                    displayBooks(books);
+                    allBooks = results.data.filter(row => row.length >= 5 && row[0] && row[0].trim() !== '' && !row[0].toLowerCase().includes('titel'));
+                    populateDropdowns(allBooks);
+                    displayTable(allBooks);
                 },
                 error: function(err) {
-                    console.error("Fout bij laden CSV:", err);
-                    document.getElementById('bookGrid').innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: red;">Kan "boeken.csv" niet vinden. Controleer of het bestand in de repository staat!</p>';
+                    document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" style="color: red;">Fout bij het laden van boeken.csv: ${err.message}</td></tr>`;
                 }
             });
-        }
+        });
 
-        function setupCheckboxes() {
-            const grades = new Set();
-            const tags = new Set();
-            const locations = new Set();
+        function displayTable(books) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
 
-            books.forEach(book => {
-                if (book.grade) grades.add(book.grade.trim());
-                if (book.location) locations.add(book.location.trim());
-                if (book.tags) {
-                    book.tags.split(',').forEach(tag => tags.add(tag.trim()));
-                }
-            });
-
-            // Vul Graden
-            const gradeContainer = document.getElementById('gradeCheckboxes');
-            gradeContainer.innerHTML = Array.from(grades).map(grade => `
-                <label class="checkbox-label">
-                    <input type="checkbox" name="grade" value="${grade}" onchange="filterBooks()"> ${grade}
-                </label>
-            `).join('');
-
-            // Vul Thema's
-            const tagContainer = document.getElementById('tagCheckboxes');
-            tagContainer.innerHTML = Array.from(tags).map(tag => `
-                <label class="checkbox-label">
-                    <input type="checkbox" name="tag" value="${tag}" onchange="filterBooks()"> ${tag}
-                </label>
-            `).join('');
-
-            // Vul Soort Boek
-            const locationContainer = document.getElementById('locationCheckboxes');
-            locationContainer.innerHTML = Array.from(locations).map(loc => `
-                <label class="checkbox-label">
-                    <input type="checkbox" name="location" value="${loc}" onchange="filterBooks()"> ${loc}
-                </label>
-            `).join('');
-        }
-
-        function displayBooks(booksToDisplay) {
-            const grid = document.getElementById('bookGrid');
-            if (booksToDisplay.length === 0) {
-                grid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Geen boeken gevonden die aan je selectie voldoen.</p>';
+            if (books.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #777;">Geen boeken gevonden.</td></tr>`;
                 return;
             }
 
-            grid.innerHTML = booksToDisplay.map(book => `
-                <div class="book-card">
-                    <img src="${book.cover || ''}" alt="${book.title || ''}" class="book-cover" onerror="this.src='https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400'">
-                    <div class="book-info">
-                        <div>
-                            <h3 class="book-title">${book.title || ''}</h3>
-                            <div class="book-author">door ${book.author || ''}</div>
-                            <div class="book-tags">
-                                ${book.tags ? book.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('') : ''}
-                            </div>
-                        </div>
-                        <div class="book-meta">
-                            <div class="grade-badge">🎓 ${book.grade || ''}</div>
-                            <div class="location-badge">📍 ${book.location || ''}</div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+            books.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell ? cell.trim() : '';
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
         }
 
-        function filterBooks() {
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        function populateDropdowns(books) {
+            const locaties = new Set();
+            const graden = new Set();
+            const themas = new Set();
 
-            const selectedGrades = Array.from(document.querySelectorAll('input[name="grade"]:checked')).map(cb => cb.value.toLowerCase());
-            const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value.toLowerCase());
-            const selectedLocations = Array.from(document.querySelectorAll('input[name="location"]:checked')).map(cb => cb.value.toLowerCase());
-
-            const filtered = books.filter(book => {
-                const title = (book.title || "").toLowerCase();
-                const author = (book.author || "").toLowerCase();
-                const grade = (book.grade || "").toLowerCase();
-                const location = (book.location || "").toLowerCase();
-                const tags = (book.tags || "").toLowerCase();
-
-                const matchesSearch = title.includes(searchQuery) || author.includes(searchQuery);
-
-                const matchesGrade = selectedGrades.length === 0 || selectedGrades.includes(grade);
-                const matchesTag = selectedTags.length === 0 || selectedTags.some(t => tags.includes(t));
-                const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
-
-                return matchesSearch && matchesGrade && matchesTag && matchesLocation;
+            books.forEach(row => {
+                if (row[4]) locaties.add(row[4].trim());
+                if (row[3]) graden.add(row[3].trim());
+                if (row[2]) {
+                    row[2].split(',').forEach(tag => themas.add(tag.trim().toLowerCase()));
+                }
             });
 
-            displayBooks(filtered);
+            fillSelect('locatieFilter', Array.from(locaties).sort());
+            fillSelect('graadFilter', Array.from(graden).sort());
+            fillSelect('themaFilter', Array.from(themas).sort());
         }
 
-        // Start CSV inladen
-        loadCSV();
+        function fillSelect(elementId, items) {
+            const select = document.getElementById(elementId);
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                select.appendChild(option);
+            });
+        }
+
+        function filterTable() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const locatieVal = document.getElementById('locatieFilter').value.toLowerCase();
+            const graadVal = document.getElementById('graadFilter').value.toLowerCase();
+            const themaVal = document.getElementById('themaFilter').value.toLowerCase();
+
+            const filtered = allBooks.filter(row => {
+                const titel = (row[0] || '').toLowerCase();
+                const auteur = (row[1] || '').toLowerCase();
+                const tags = (row[2] || '').toLowerCase();
+                const graad = (row[3] || '').toLowerCase();
+                const locatie = (row[4] || '').toLowerCase();
+
+                const matchSearch = titel.includes(searchVal) || auteur.includes(searchVal);
+                const matchLocatie = !locatieVal || locatie === locatieVal;
+                const matchGraad = !graadVal || graad === graadVal;
+                const matchThema = !themaVal || tags.includes(themaVal);
+
+                return matchSearch && matchLocatie && matchGraad && matchThema;
+            });
+
+            displayTable(filtered);
+        }
     </script>
+
 </body>
 </html>
