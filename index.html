@@ -3,406 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schoolbibliotheek Sint-Pieters - Vind een boek</title>
-    <!-- Google Font & PapaParse -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-
+    <title>Boekenbende Sint-Pieters - Boekenzoeker</title>
+    <!-- Tailwind CSS voor modern en responsief design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PapaParse voor het inlezen van de CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        :root {
-            --primary: #1b365d;        /* Donkerblauw schoolstijl */
-            --accent: #ffd200;         /* Speels boekenzoeker-geel */
-            --coral: #ff5a5f;          /* Kleuraccent voor tags */
-            --bg: #f4f6f9;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --radius-lg: 20px;
-            --radius-sm: 12px;
-            --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 16px 28px rgba(0, 0, 0, 0.12);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            padding-bottom: 80px;
-        }
-
-        /* Hero / Header in Boekenzoeker stijl */
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, #0d1e36 100%);
-            padding: 30px 20px 80px;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
-
-        .header-brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 16px;
-            background: rgba(255, 255, 255, 0.12);
-            padding: 10px 24px;
-            border-radius: 999px;
-            backdrop-filter: blur(8px);
-            margin-bottom: 24px;
-        }
-
-        .header-brand img {
-            height: 42px;
-            width: auto;
-            border-radius: 6px;
-            background: white;
-            padding: 3px;
-        }
-
-        .header-brand span {
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        header h1 {
-            font-size: clamp(24px, 4vw, 38px);
-            font-weight: 800;
-            max-width: 780px;
-            margin: 0 auto 12px;
-            line-height: 1.25;
-        }
-
-        header p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 16px;
-            max-width: 580px;
-            margin: 0 auto;
-        }
-
-        /* Zoek & Filter module (zwevend over header) */
-        .filter-wrapper {
-            max-width: 1060px;
-            margin: -45px auto 40px;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .filter-card {
-            background: var(--surface);
-            padding: 24px 30px;
-            border-radius: var(--radius-lg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            display: grid;
-            grid-template-columns: 2fr 1fr 1.2fr;
-            gap: 20px;
-            align-items: center;
-        }
-
-        @media (max-width: 820px) {
-            .filter-card {
-                grid-template-columns: 1fr;
-                padding: 20px;
-                gap: 15px;
-            }
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .input-group label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text-muted);
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            height: 48px;
-            padding: 0 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-main);
-            background-color: #fafafa;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .input-group input:focus, .input-group select:focus {
-            border-color: var(--primary);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(27, 54, 93, 0.1);
-        }
-
-        /* Resultatensectie & Grid */
-        .catalog-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .counter-bar {
-            margin-bottom: 24px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 30px;
-        }
-
-        /* Boekenkaart in Boekenzoeker look */
-        .book-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow-subtle);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            position: relative;
-        }
-
-        .book-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        /* Cover & Labels */
-        .cover-area {
-            position: relative;
-            width: 100%;
-            height: 320px;
-            background: #eef2f6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .cover-area img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .book-card:hover .cover-area img {
-            transform: scale(1.04);
-        }
-
-        .badge-graad {
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            background: var(--primary);
-            color: white;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            padding: 6px 12px;
-            border-radius: 999px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 2;
-        }
-
-        .badge-locatie {
-            position: absolute;
-            bottom: 14px;
-            right: 14px;
-            background: var(--accent);
-            color: #222;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 5px 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            z-index: 2;
-        }
-
-        .no-cover-box {
-            padding: 20px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        /* Kaartcontent */
-        .card-details {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            line-height: 1.35;
-            color: var(--primary);
-            margin-bottom: 4px;
-        }
-
-        .card-author {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 14px;
-        }
-
-        .card-tags {
-            margin-top: auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .tag-pill {
-            background-color: var(--bg);
-            color: #4b5563;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 6px;
-            line-height: 1;
-        }
-
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: var(--radius-lg);
-            color: var(--text-muted);
-        }
+        .tag-pill { transition: all 0.2s ease; }
+        .tag-pill:hover, .tag-pill.active { background-color: #1e293b; color: white; transform: translateY(-1px); }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <header>
-        <div class="header-brand">
-            <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
-            <span>Schoolbibliotheek Sint-Pieters</span>
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-slate-100 py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="logo.jpg" alt="Logo Boekenbende Sint-Pieters" class="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200">
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Boekenbende Sint-Pieters</h1>
+                    <p class="text-sm text-slate-500">Ontdek je volgende favoriete boek!</p>
+                </div>
+            </div>
+            <!-- Zoekbalk -->
+            <div class="w-full md:w-96 relative">
+                <input type="text" id="searchInput" placeholder="Zoek op titel of auteur..." 
+                    class="w-full pl-11 pr-4 py-2.5 bg-slate-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition">
+                <svg class="w-5 h-5 text-slate-400 absolute left-4 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
         </div>
-        <h1>Vind jouw volgende lievelingsboek</h1>
-        <p>Doorzoek de catalogus op trefwoord, leeftijd of ontdek boeken rond jouw favoriete thema.</p>
     </header>
 
-    <div class="filter-wrapper">
-        <div class="filter-card">
-            <div class="input-group">
-                <label for="searchInput">Zoekopdracht</label>
-                <input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="Titel of auteur...">
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar / Filters -->
+        <aside class="lg:col-span-1 space-y-6">
+            <!-- Filter op Graad -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Graad
+                </h3>
+                <div class="space-y-1.5" id="graadFilters">
+                    <button data-graad="all" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium bg-pink-50 text-pink-700 transition">Alle graden</button>
+                    <button data-graad="Eerste graad" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition">Eerste graad</button>
+                    <button data-graad="Tweede graad" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition">Tweede graad</button>
+                    <button data-graad="Derde graad" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition">Derde graad</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="graadFilter">Leeftijd</label>
-                <select id="graadFilter" onchange="applyFilters()">
-                    <option value="">Alle graden</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="themaFilter">Thema</label>
-                <select id="themaFilter" onchange="applyFilters()">
-                    <option value="">Alle thema's</option>
-                </select>
-            </div>
-        </div>
-    </div>
 
-    <div class="catalog-container">
-        <div class="counter-bar" id="resultCount">Boeken laden...</div>
-        <div class="book-grid" id="bookGrid"></div>
-    </div>
+            <!-- Populaire Tags -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                    Thema's & Tags
+                </h3>
+                <div class="flex flex-wrap gap-1.5 max-h-72 overflow-y-auto pr-1" id="tagContainer">
+                    <!-- Wordt dynamisch gevuld -->
+                </div>
+            </div>
 
+            <button id="resetFilters" class="w-full py-2.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-sm font-medium transition">
+                Filters wissen
+            </button>
+        </aside>
+
+        <!-- Book Grid -->
+        <section class="lg:col-span-3 flex flex-col gap-6">
+            <div class="flex justify-between items-center bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-100">
+                <span id="bookCount" class="text-sm font-medium text-slate-600">Boeken laden...</span>
+            </div>
+
+            <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-5">
+                <!-- Boekenkaarten komen hier -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-6 text-center text-sm text-slate-400 mt-auto">
+        <p>&copy; 2026 Boekenbende Sint-Pieters • Gemaakt met ❤️ voor leerlingen</p>
+    </footer>
+
+    <!-- JavaScript logica -->
     <script>
         let allBooks = [];
+        let selectedGraad = 'all';
+        let selectedTag = null;
+        let searchQuery = '';
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // Leest automatisch 'boeken.csv' in dezelfde map uit
-            Papa.parse('boeken.csv', {
-                download: true,
-                header: false,
-                complete: function(results) {
-                    allBooks = results.data.filter(row => 
-                        row.length >= 5 && row[0] && row[0].trim() !== '' && !row[0].toLowerCase().includes('titel')
-                    );
-                    initDropdowns(allBooks);
-                    renderBooks(allBooks);
-                },
-                error: function(err) {
-                    document.getElementById('resultCount').textContent = 'Fout bij het laden van het bestand boeken.csv.';
-                }
-            });
+        // Laad de CSV
+        Papa.parse('boeken.csv', {
+            download: true,
+            header: true,
+            delimiter: ';',
+            skipEmptyLines: true,
+            complete: function(results) {
+                allBooks = results.data;
+                initTags();
+                filterAndRender();
+            }
         });
 
-        function renderBooks(books) {
+        function initTags() {
+            const tagSet = new Set();
+            allBooks.forEach(book => {
+                if (book.Tags) {
+                    book.Tags.split(',').forEach(t => tagSet.add(t.trim().toLowerCase()));
+                }
+            });
+
+            const container = document.getElementById('tagContainer');
+            container.innerHTML = '';
+            Array.from(tagSet).sort().forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = 'tag-pill text-xs bg-slate-100 text-slate-600 px-2.5 py-1.5 rounded-lg font-medium';
+                btn.textContent = tag;
+                btn.onclick = () => {
+                    selectedTag = selectedTag === tag ? null : tag;
+                    document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active', 'bg-slate-900', 'text-white'));
+                    if (selectedTag) btn.classList.add('active', 'bg-slate-900', 'text-white');
+                    filterAndRender();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function filterAndRender() {
+            const filtered = allBooks.filter(book => {
+                const matchGraad = selectedGraad === 'all' || book.Graad === selectedGraad;
+                const matchSearch = !searchQuery || 
+                    book.Titel.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                    book.Auteur.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchTag = !selectedTag || (book.Tags && book.Tags.toLowerCase().includes(selectedTag));
+                return matchGraad && matchSearch && matchTag;
+            });
+
+            document.getElementById('bookCount').textContent = `${filtered.length} boeken gevonden`;
+
             const grid = document.getElementById('bookGrid');
-            const counter = document.getElementById('resultCount');
             grid.innerHTML = '';
 
-            counter.textContent = `${books.length} boek${books.length === 1 ? '' : 'en'} gevonden`;
-
-            if (books.length === 0) {
-                grid.innerHTML = `<div class="empty-state">Geen boeken gevonden voor deze selectie.</div>`;
-                return;
-            }
-
-            books.forEach(row => {
-                const titel = row[0] ? row[0].trim() : '';
-                const auteur = row[1] ? row[1].trim() : '';
-                const rawTags = row[2] ? row[2].trim() : '';
-                const graad = row[3] ? row[3].trim() : '';
-                const locatie = row[4] ? row[4].trim() : '';
-                const cover = row[5] ? row[5].trim() : '';
-
-                // Automatische cover URL bepalen via Open Library
-                let coverImg = '';
-                if (cover) {
-                    const url = cover.startsWith('http') ? cover : `https://covers.openlibrary.org/b/isbn/${cover}-M.jpg`;
-                    coverImg = `<img src="${url}" alt="${titel}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'no-cover-box\\'>Geen cover</div>';">`;
-                } else {
-                    coverImg = `<div class="no-cover-box">Geen cover</div>`;
-                }
-
-                // Tag labels opsplitsen
-                const tagsList = rawTags ? rawTags.split(',').map(t => t.trim()).filter(Boolean) : [];
-                const tagsHtml = tagsList.map(t => `<span class="tag-pill">${t}</span>`).join('');
+            filtered.forEach(book => {
+                const isbn = book.cover;
+                // Open Library cover URL op basis van ISBN
+                const coverUrl = isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg` : 'https://via.placeholder.com/150x200?text=Geen+Cover';
 
                 const card = document.createElement('div');
-                card.className = 'book-card';
+                card.className = 'bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-md transition group';
                 card.innerHTML = `
-                    <div class="cover-area">
-                        ${graad ? `<span class="badge-graad">${graad}</span>` : ''}
-                        ${coverImg}
-                        ${locatie ? `<span class="badge-locatie">${locatie}</span>` : ''}
+                    <div class="h-52 bg-slate-100 relative overflow-hidden flex items-center justify-center">
+                        <img src="${coverUrl}" alt="${book.Titel}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://via.placeholder.com/150x200?text=Geen+Cover'">
+                        <span class="absolute top-2 right-2 bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-1 rounded-full">${book.Graad || ''}</span>
                     </div>
-                    <div class="card-details">
-                        <h3 class="card-title">${titel}</h3>
-                        <div class="card-author">${auteur}</div>
-                        <div class="card-tags">
-                            ${tagsHtml}
+                    <div class="p-4 flex flex-col flex-grow justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm line-clamp-1 mb-1" title="${book.Titel}">${book.Titel}</h4>
+                            <p class="text-xs text-slate-500 mb-2">${book.Auteur}</p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                ${book.Tags ? book.Tags.split(',').slice(0, 2).map(t => `<span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">${t.trim()}</span>`).join('') : ''}
+                            </div>
+                            <span class="inline-block text-[10px] font-medium text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg w-full text-center">${book.Locatie}</span>
                         </div>
                     </div>
                 `;
@@ -410,54 +177,30 @@
             });
         }
 
-        function initDropdowns(books) {
-            const graden = new Set();
-            const themas = new Set();
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            filterAndRender();
+        });
 
-            books.forEach(row => {
-                if (row[3]) graden.add(row[3].trim());
-                if (row[2]) {
-                    row[2].split(',').forEach(tag => {
-                        const clean = tag.trim().toLowerCase();
-                        if (clean) themas.add(clean);
-                    });
-                }
+        document.querySelectorAll('.graad-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.graad-btn').forEach(b => b.classList.remove('bg-pink-50', 'text-pink-700', 'font-semibold'));
+                document.querySelectorAll('.graad-btn').forEach(b => b.classList.add('text-slate-600'));
+                e.target.classList.add('bg-pink-50', 'text-pink-700', 'font-semibold');
+                selectedGraad = e.target.getAttribute('data-graad');
+                filterAndRender();
             });
+        });
 
-            populateSelect('graadFilter', Array.from(graden).sort());
-            populateSelect('themaFilter', Array.from(themas).sort());
-        }
-
-        function populateSelect(id, list) {
-            const select = document.getElementById(id);
-            list.forEach(val => {
-                const opt = document.createElement('option');
-                opt.value = val;
-                opt.textContent = val.charAt(0).toUpperCase() + val.slice(1);
-                select.appendChild(opt);
-            });
-        }
-
-        function applyFilters() {
-            const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            const graadVal = document.getElementById('graadFilter').value.toLowerCase();
-            const themaVal = document.getElementById('themaFilter').value.toLowerCase();
-
-            const filtered = allBooks.filter(row => {
-                const titel = (row[0] || '').toLowerCase();
-                const auteur = (row[1] || '').toLowerCase();
-                const tags = (row[2] || '').toLowerCase();
-                const graad = (row[3] || '').toLowerCase();
-
-                const matchSearch = titel.includes(searchVal) || auteur.includes(searchVal);
-                const matchGraad = !graadVal || graad === graadVal;
-                const matchThema = !themaVal || tags.includes(themaVal);
-
-                return matchSearch && matchGraad && matchThema;
-            });
-
-            renderBooks(filtered);
-        }
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            selectedGraad = 'all';
+            selectedTag = null;
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active', 'bg-slate-900', 'text-white'));
+            document.querySelector('[data-graad="all"]').click();
+        });
     </script>
 </body>
 </html>
