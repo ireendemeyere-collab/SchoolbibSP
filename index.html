@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boekenbende Sint-Pieters - Boekenzoeker</title>
-    <!-- Tailwind CSS voor modern en responsief design -->
+    <title>Schoolbibliotheek Sint-Pieters - Boekenzoeker</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse voor het inlezen van de CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
@@ -22,7 +22,7 @@
                 <img src="logo.jpg" alt="Logo Boekenbende Sint-Pieters" class="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200">
                 <div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Boekenbende Sint-Pieters</h1>
-                    <p class="text-sm text-slate-500">Ontdek je volgende favoriete boek!</p>
+                    <p class="text-sm font-medium text-pink-600">Officiële catalogus van de schoolbibliotheek</p>
                 </div>
             </div>
             <!-- Zoekbalk -->
@@ -86,7 +86,7 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-100 py-6 text-center text-sm text-slate-400 mt-auto">
-        <p>&copy; 2026 Boekenbende Sint-Pieters • Gemaakt met ❤️ voor leerlingen</p>
+        <p>&copy; 2026 Schoolbibliotheek Sint-Pieters • Boekenbende</p>
     </footer>
 
     <!-- JavaScript logica -->
@@ -150,14 +150,22 @@
 
             filtered.forEach(book => {
                 const isbn = book.cover;
-                // Open Library cover URL op basis van ISBN
-                const coverUrl = isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg` : 'https://via.placeholder.com/150x200?text=Geen+Cover';
+                // Open Library URL
+                const coverUrl = isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg` : '';
 
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-md transition group';
+                
+                // Als de afbeelding niet laadt, tonen we een stijlvol alternatief met de titel
                 card.innerHTML = `
                     <div class="h-52 bg-slate-100 relative overflow-hidden flex items-center justify-center">
-                        <img src="${coverUrl}" alt="${book.Titel}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://via.placeholder.com/150x200?text=Geen+Cover'">
+                        <img src="${coverUrl}" alt="${book.Titel}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 text-white p-4 flex-col justify-between items-center text-center hidden">
+                            <svg class="w-8 h-8 text-pink-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <span class="text-xs font-bold line-clamp-3">${book.Titel}</span>
+                            <span class="text-[10px] text-slate-300">${book.Auteur}</span>
+                        </div>
                         <span class="absolute top-2 right-2 bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-1 rounded-full">${book.Graad || ''}</span>
                     </div>
                     <div class="p-4 flex flex-col flex-grow justify-between">
