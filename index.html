@@ -3,300 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schoolbibliotheek Sint-Pieters - Catalogus</title>
+    <title>Schoolbibliotheek Sint-Pieters - Vind een boek</title>
+    <!-- Google Font & PapaParse -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
     <style>
         :root {
-            --primary-color: #1b365d;
-            --accent-color: #d99b26;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --tag-bg: #eef2f7;
+            --primary: #1b365d;        /* Donkerblauw schoolstijl */
+            --accent: #ffd200;         /* Speels boekenzoeker-geel */
+            --coral: #ff5a5f;          /* Kleuraccent voor tags */
+            --bg: #f4f6f9;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --radius-lg: 20px;
+            --radius-sm: 12px;
+            --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 16px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding-bottom: 80px;
         }
 
+        /* Hero / Header in Boekenzoeker stijl */
         header {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary) 0%, #0d1e36 100%);
+            padding: 30px 20px 80px;
+            text-align: center;
             color: white;
-            padding: 20px 40px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        header img {
-            height: 60px;
-            width: auto;
-            border-radius: 4px;
-            background: white;
-            padding: 4px;
-        }
-
-        header h1 {
-            font-size: 24px;
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .search-filters {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .search-filters {
-                grid-template-columns: 1fr;
-            }
-            header {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: var(--primary-color);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input[type="text"], select {
-            padding: 10px 14px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus, select:focus {
-            border-color: var(--accent-color);
-        }
-
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
-        }
-
-        .book-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .book-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-        }
-
-        .book-cover-container {
-            height: 260px;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
             position: relative;
         }
 
-        .book-cover {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .header-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 10px 24px;
+            border-radius: 999px;
+            backdrop-filter: blur(8px);
+            margin-bottom: 24px;
         }
 
-        .no-cover {
-            font-size: 13px;
-            color: #888;
-            text-align: center;
-            padding: 20px;
+        .header-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+            background: white;
+            padding: 3px;
         }
 
-        .book-info {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .book-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin: 0 0 5px 0;
-            line-height: 1.3;
-        }
-
-        .book-author {
+        .header-brand span {
             font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        .book-meta {
-            margin-top: auto;
-            font-size: 12px;
+        header h1 {
+            font-size: clamp(24px, 4vw, 38px);
+            font-weight: 800;
+            max-width: 780px;
+            margin: 0 auto 12px;
+            line-height: 1.25;
+        }
+
+        header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            max-width: 580px;
+            margin: 0 auto;
+        }
+
+        /* Zoek & Filter module (zwevend over header) */
+        .filter-wrapper {
+            max-width: 1060px;
+            margin: -45px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .filter-card {
+            background: var(--surface);
+            padding: 24px 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.2fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        @media (max-width: 820px) {
+            .filter-card {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 15px;
+            }
+        }
+
+        .input-group {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
 
-        .badge-location {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            align-self: flex-start;
+        .input-group label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
         }
 
-        .book-tags {
-            color: #555;
-            font-style: italic;
+        .input-group input, .input-group select {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            background-color: #fafafa;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(27, 54, 93, 0.1);
+        }
+
+        /* Resultatensectie & Grid */
+        .catalog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .counter-bar {
+            margin-bottom: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 30px;
+        }
+
+        /* Boekenkaart in Boekenzoeker look */
+        .book-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-subtle);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
         }
 
-        .loading, .no-results {
+        .book-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Cover & Labels */
+        .cover-area {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            background: #eef2f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .cover-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover .cover-area img {
+            transform: scale(1.04);
+        }
+
+        .badge-graad {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        .badge-locatie {
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
+            background: var(--accent);
+            color: #222;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            z-index: 2;
+        }
+
+        .no-cover-box {
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Kaartcontent */
+        .card-details {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.35;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .card-author {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .card-tags {
+            margin-top: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag-pill {
+            background-color: var(--bg);
+            color: #4b5563;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            line-height: 1;
+        }
+
+        .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 40px;
-            font-size: 16px;
-            color: #666;
-            background: var(--card-bg);
-            border-radius: 8px;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--radius-lg);
+            color: var(--text-muted);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <img src="logo.jpg" alt="Logo Schoolbibliotheek Sint-Pieters" onerror="this.style.display='none'">
-        <h1>Schoolbibliotheek Sint-Pieters - vind een boek in onze catalogus</h1>
+        <div class="header-brand">
+            <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
+            <span>Schoolbibliotheek Sint-Pieters</span>
+        </div>
+        <h1>Vind jouw volgende lievelingsboek</h1>
+        <p>Doorzoek de catalogus op trefwoord, leeftijd of ontdek boeken rond jouw favoriete thema.</p>
     </header>
 
-    <div class="main-container">
-        
-        <div class="search-filters">
-            <div class="filter-group">
-                <label for="searchInput">Zoek op titel of auteur</label>
-                <input type="text" id="searchInput" onkeyup="filterBooks()" placeholder="Typ een trefwoord...">
+    <div class="filter-wrapper">
+        <div class="filter-card">
+            <div class="input-group">
+                <label for="searchInput">Zoekopdracht</label>
+                <input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="Titel of auteur...">
             </div>
-            <div class="filter-group">
-                <label for="leeftijdFilter">Leeftijd (Graad)</label>
-                <select id="leeftijdFilter" onchange="filterBooks()">
+            <div class="input-group">
+                <label for="graadFilter">Leeftijd</label>
+                <select id="graadFilter" onchange="applyFilters()">
                     <option value="">Alle graden</option>
                 </select>
             </div>
-            <div class="filter-group">
-                <label for="themaFilter">Thema (Tags)</label>
-                <select id="themaFilter" onchange="filterBooks()">
+            <div class="input-group">
+                <label for="themaFilter">Thema</label>
+                <select id="themaFilter" onchange="applyFilters()">
                     <option value="">Alle thema's</option>
                 </select>
             </div>
         </div>
+    </div>
 
-        <div class="book-grid" id="bookGrid">
-            <div class="loading">Catalogus laden...</div>
-        </div>
-
+    <div class="catalog-container">
+        <div class="counter-bar" id="resultCount">Boeken laden...</div>
+        <div class="book-grid" id="bookGrid"></div>
     </div>
 
     <script>
         let allBooks = [];
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Leest automatisch 'boeken.csv' in dezelfde map uit
             Papa.parse('boeken.csv', {
                 download: true,
                 header: false,
                 complete: function(results) {
-                    // Filter lege rijen eruit en sla over if headers bestaan
-                    allBooks = results.data.filter(row => row.length >= 5 && row[0] && row[0].trim() !== '' && !row[0].toLowerCase().includes('titel'));
-                    populateDropdowns(allBooks);
-                    displayBooks(allBooks);
+                    allBooks = results.data.filter(row => 
+                        row.length >= 5 && row[0] && row[0].trim() !== '' && !row[0].toLowerCase().includes('titel')
+                    );
+                    initDropdowns(allBooks);
+                    renderBooks(allBooks);
                 },
                 error: function(err) {
-                    document.getElementById('bookGrid').innerHTML = `<div class="loading" style="color: red;">Fout bij het laden van boeken.csv: ${err.message}</div>`;
+                    document.getElementById('resultCount').textContent = 'Fout bij het laden van het bestand boeken.csv.';
                 }
             });
         });
 
-        function displayBooks(books) {
+        function renderBooks(books) {
             const grid = document.getElementById('bookGrid');
+            const counter = document.getElementById('resultCount');
             grid.innerHTML = '';
 
+            counter.textContent = `${books.length} boek${books.length === 1 ? '' : 'en'} gevonden`;
+
             if (books.length === 0) {
-                grid.innerHTML = `<div class="no-results">Geen boeken gevonden die aan je zoekopdracht voldoen.</div>`;
+                grid.innerHTML = `<div class="empty-state">Geen boeken gevonden voor deze selectie.</div>`;
                 return;
             }
 
             books.forEach(row => {
                 const titel = row[0] ? row[0].trim() : '';
                 const auteur = row[1] ? row[1].trim() : '';
-                const tags = row[2] ? row[2].trim() : '';
+                const rawTags = row[2] ? row[2].trim() : '';
                 const graad = row[3] ? row[3].trim() : '';
                 const locatie = row[4] ? row[4].trim() : '';
-                const coverVal = row[5] ? row[5].trim() : '';
+                const cover = row[5] ? row[5].trim() : '';
 
-                // Bepaal de cover afbeelding via ISBN of directe link
-                let coverHtml = '';
-                if (coverVal) {
-                    // Check of het een ISBN nummer is of een volledige URL
-                    let coverUrl = coverVal;
-                    if (/^\d{10,13}X?$/i.test(coverVal)) {
-                        coverUrl = `https://covers.openlibrary.org/b/isbn/${coverVal}-M.jpg`;
-                    }
-                    coverHtml = `<img src="${coverUrl}" class="book-cover" alt="Cover van ${titel}" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'no-cover\'>Cover niet beschikbaar</div>';">`;
+                // Automatische cover URL bepalen via Open Library
+                let coverImg = '';
+                if (cover) {
+                    const url = cover.startsWith('http') ? cover : `https://covers.openlibrary.org/b/isbn/${cover}-M.jpg`;
+                    coverImg = `<img src="${url}" alt="${titel}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'no-cover-box\\'>Geen cover</div>';">`;
                 } else {
-                    coverHtml = `<div class="no-cover">Geen cover</div>`;
+                    coverImg = `<div class="no-cover-box">Geen cover</div>`;
                 }
+
+                // Tag labels opsplitsen
+                const tagsList = rawTags ? rawTags.split(',').map(t => t.trim()).filter(Boolean) : [];
+                const tagsHtml = tagsList.map(t => `<span class="tag-pill">${t}</span>`).join('');
 
                 const card = document.createElement('div');
                 card.className = 'book-card';
                 card.innerHTML = `
-                    <div class="book-cover-container">
-                        ${coverHtml}
+                    <div class="cover-area">
+                        ${graad ? `<span class="badge-graad">${graad}</span>` : ''}
+                        ${coverImg}
+                        ${locatie ? `<span class="badge-locatie">${locatie}</span>` : ''}
                     </div>
-                    <div class="book-info">
-                        <h3 class="book-title">${titel}</h3>
-                        <div class="book-author">${auteur}</div>
-                        <div class="book-meta">
-                            ${locatie ? `<span class="badge-location">${locatie}</span>` : ''}
-                            ${tags ? `<span class="book-tags" title="${tags}">Thema: ${tags}</span>` : ''}
+                    <div class="card-details">
+                        <h3 class="card-title">${titel}</h3>
+                        <div class="card-author">${auteur}</div>
+                        <div class="card-tags">
+                            ${tagsHtml}
                         </div>
                     </div>
                 `;
@@ -304,35 +410,37 @@
             });
         }
 
-        function populateDropdowns(books) {
+        function initDropdowns(books) {
             const graden = new Set();
             const themas = new Set();
 
             books.forEach(row => {
                 if (row[3]) graden.add(row[3].trim());
                 if (row[2]) {
-                    row[2].split(',').forEach(tag => themas.add(tag.trim().toLowerCase()));
+                    row[2].split(',').forEach(tag => {
+                        const clean = tag.trim().toLowerCase();
+                        if (clean) themas.add(clean);
+                    });
                 }
             });
 
-            fillSelect('leeftijdFilter', Array.from(graden).sort());
-            fillSelect('themaFilter', Array.from(themas).sort());
+            populateSelect('graadFilter', Array.from(graden).sort());
+            populateSelect('themaFilter', Array.from(themas).sort());
         }
 
-        function fillSelect(elementId, items) {
-            const select = document.getElementById(elementId);
-            items.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item;
-                // Eerste letter hoofdletter maken voor netheid
-                option.textContent = item.charAt(0).toUpperCase() + item.slice(1);
-                select.appendChild(option);
+        function populateSelect(id, list) {
+            const select = document.getElementById(id);
+            list.forEach(val => {
+                const opt = document.createElement('option');
+                opt.value = val;
+                opt.textContent = val.charAt(0).toUpperCase() + val.slice(1);
+                select.appendChild(opt);
             });
         }
 
-        function filterBooks() {
+        function applyFilters() {
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            const leeftijdVal = document.getElementById('leeftijdFilter').value.toLowerCase();
+            const graadVal = document.getElementById('graadFilter').value.toLowerCase();
             const themaVal = document.getElementById('themaFilter').value.toLowerCase();
 
             const filtered = allBooks.filter(row => {
@@ -342,15 +450,14 @@
                 const graad = (row[3] || '').toLowerCase();
 
                 const matchSearch = titel.includes(searchVal) || auteur.includes(searchVal);
-                const matchLeeftijd = !leeftijdVal || graad === leeftijdVal;
+                const matchGraad = !graadVal || graad === graadVal;
                 const matchThema = !themaVal || tags.includes(themaVal);
 
-                return matchSearch && matchLeeftijd && matchThema;
+                return matchSearch && matchGraad && matchThema;
             });
 
-            displayBooks(filtered);
+            renderBooks(filtered);
         }
     </script>
-
 </body>
 </html>
