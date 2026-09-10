@@ -9,8 +9,7 @@
     <!-- PapaParse voor het inlezen van de CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        .tag-pill { transition: all 0.2s ease; }
-        .tag-pill:hover, .tag-pill.active { background-color: #1e293b; color: white; transform: translateY(-1px); }
+        .custom-checkbox { accent-color: #db2777; width: 1.1rem; height: 1.1rem; cursor: pointer; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
@@ -39,36 +38,56 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        <!-- Sidebar / Filters -->
+        <!-- Sidebar / Filters met Checkboxes -->
         <aside class="lg:col-span-1 space-y-6">
-            <!-- Filter op Graad -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Graad
-                </h3>
-                <div class="space-y-1.5" id="graadFilters">
-                    <button data-graad="all" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium bg-pink-50 text-pink-700 transition">Alle graden</button>
-                    <button data-graad="Eerste graad" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition">Eerste graad</button>
-                    <button data-graad="Tweede graad" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition">Tweede graad</button>
-                    <button data-graad="Derde graad" class="graad-btn w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition">Derde graad</button>
-                </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center">
+                <h3 class="font-bold text-slate-900">Filters</h3>
+                <button id="resetFilters" class="text-xs text-pink-600 hover:text-pink-800 font-semibold transition">Alles wissen</button>
             </div>
 
-            <!-- Populaire Tags -->
+            <!-- Filter op Taal -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                    Thema's & Tags
-                </h3>
-                <div class="flex flex-wrap gap-1.5 max-h-72 overflow-y-auto pr-1" id="tagContainer">
+                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                    Taal
+                </h4>
+                <div class="space-y-2" id="taalCheckboxes">
                     <!-- Wordt dynamisch gevuld -->
                 </div>
             </div>
 
-            <button id="resetFilters" class="w-full py-2.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-sm font-medium transition">
-                Filters wissen
-            </button>
+            <!-- Filter op Graad -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Graad
+                </h4>
+                <div class="space-y-2" id="graadCheckboxes">
+                    <!-- Wordt dynamisch gevuld -->
+                </div>
+            </div>
+
+            <!-- Filter op Locatie / Rubriek -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Rubriek / Locatie
+                </h4>
+                <div class="space-y-2 max-h-48 overflow-y-auto pr-1" id="locatieCheckboxes">
+                    <!-- Wordt dynamisch gevuld -->
+                </div>
+            </div>
+
+            <!-- Filter op Tags / Thema's -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                    Thema's & Tags
+                </h4>
+                <div class="space-y-2 max-h-60 overflow-y-auto pr-1" id="tagCheckboxes">
+                    <!-- Wordt dynamisch gevuld -->
+                </div>
+            </div>
         </aside>
 
         <!-- Book Grid -->
@@ -77,8 +96,8 @@
                 <span id="bookCount" class="text-sm font-medium text-slate-600">Boeken laden...</span>
             </div>
 
-            <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-5">
-                <!-- Boekenkaarten komen hier -->
+            <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                <!-- Stijlvolle boekenkaarten komen hier -->
             </div>
         </section>
 
@@ -92,9 +111,17 @@
     <!-- JavaScript logica -->
     <script>
         let allBooks = [];
-        let selectedGraad = 'all';
-        let selectedTag = null;
         let searchQuery = '';
+
+        // Bepaal de taal op basis van de locatie
+        function bepaalTaal(locatie) {
+            if (!locatie) return 'Nederlands';
+            const loc = locatie.toLowerCase();
+            if (loc.includes('engels')) return 'Engels';
+            if (loc.includes('frans')) return 'Frans';
+            if (loc.includes('duits')) return 'Duits';
+            return 'Nederlands'; // Standaardwaarde voor Boektoppers, Graphic novels, NL fictie, etc.
+        }
 
         // Laad de CSV
         Papa.parse('boeken.csv', {
@@ -103,44 +130,101 @@
             delimiter: ';',
             skipEmptyLines: true,
             complete: function(results) {
-                allBooks = results.data;
-                initTags();
+                // Voeg het Taal veld automatisch toe aan elk boek
+                allBooks = results.data.map(book => ({
+                    ...book,
+                    Taal: bepaalTaal(book.Locatie)
+                }));
+                initFilters();
                 filterAndRender();
             }
         });
 
-        function initTags() {
+        function initFilters() {
+            // 1. Talen vullen
+            const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort().reverse(); // Nederlands bovenaan
+            const taalContainer = document.getElementById('taalCheckboxes');
+            taalContainer.innerHTML = '';
+            talen.forEach(taal => {
+                taalContainer.innerHTML += `
+                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
+                        <input type="checkbox" name="taal" value="${taal}" class="custom-checkbox filter-input">
+                        <span>${taal}</span>
+                    </label>
+                `;
+            });
+
+            // 2. Graden vullen
+            const graden = [...new Set(allBooks.map(b => b.Graad))].filter(Boolean).sort();
+            const graadContainer = document.getElementById('graadCheckboxes');
+            graadContainer.innerHTML = '';
+            graden.forEach(graad => {
+                graadContainer.innerHTML += `
+                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
+                        <input type="checkbox" name="graad" value="${graad}" class="custom-checkbox filter-input">
+                        <span>${graad}</span>
+                    </label>
+                `;
+            });
+
+            // 3. Locaties vullen
+            const locaties = [...new Set(allBooks.map(b => b.Locatie))].filter(Boolean).sort();
+            const locatieContainer = document.getElementById('locatieCheckboxes');
+            locatieContainer.innerHTML = '';
+            locaties.forEach(locatie => {
+                locatieContainer.innerHTML += `
+                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
+                        <input type="checkbox" name="locatie" value="${locatie}" class="custom-checkbox filter-input">
+                        <span class="truncate" title="${locatie}">${locatie}</span>
+                    </label>
+                `;
+            });
+
+            // 4. Tags vullen
             const tagSet = new Set();
             allBooks.forEach(book => {
                 if (book.Tags) {
                     book.Tags.split(',').forEach(t => tagSet.add(t.trim().toLowerCase()));
                 }
             });
-
-            const container = document.getElementById('tagContainer');
-            container.innerHTML = '';
+            const tagContainer = document.getElementById('tagCheckboxes');
+            tagContainer.innerHTML = '';
             Array.from(tagSet).sort().forEach(tag => {
-                const btn = document.createElement('button');
-                btn.className = 'tag-pill text-xs bg-slate-100 text-slate-600 px-2.5 py-1.5 rounded-lg font-medium';
-                btn.textContent = tag;
-                btn.onclick = () => {
-                    selectedTag = selectedTag === tag ? null : tag;
-                    document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active', 'bg-slate-900', 'text-white'));
-                    if (selectedTag) btn.classList.add('active', 'bg-slate-900', 'text-white');
-                    filterAndRender();
-                };
-                container.appendChild(btn);
+                tagContainer.innerHTML += `
+                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
+                        <input type="checkbox" name="tag" value="${tag}" class="custom-checkbox filter-input">
+                        <span class="capitalize">${tag}</span>
+                    </label>
+                `;
+            });
+
+            // Event listeners koppelen aan alle checkboxes
+            document.querySelectorAll('.filter-input').forEach(input => {
+                input.addEventListener('change', filterAndRender);
             });
         }
 
         function filterAndRender() {
+            const selectedTalen = Array.from(document.querySelectorAll('input[name="taal"]:checked')).map(cb => cb.value);
+            const selectedGraden = Array.from(document.querySelectorAll('input[name="graad"]:checked')).map(cb => cb.value);
+            const selectedLocaties = Array.from(document.querySelectorAll('input[name="locatie"]:checked')).map(cb => cb.value);
+            const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
+
             const filtered = allBooks.filter(book => {
-                const matchGraad = selectedGraad === 'all' || book.Graad === selectedGraad;
                 const matchSearch = !searchQuery || 
                     book.Titel.toLowerCase().includes(searchQuery.toLowerCase()) || 
                     book.Auteur.toLowerCase().includes(searchQuery.toLowerCase());
-                const matchTag = !selectedTag || (book.Tags && book.Tags.toLowerCase().includes(selectedTag));
-                return matchGraad && matchSearch && matchTag;
+                const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
+                const matchGraad = selectedGraden.length === 0 || selectedGraden.includes(book.Graad);
+                const matchLocatie = selectedLocaties.length === 0 || selectedLocaties.includes(book.Locatie);
+                
+                let matchTag = true;
+                if (selectedTags.length > 0) {
+                    const bookTags = book.Tags ? book.Tags.toLowerCase() : '';
+                    matchTag = selectedTags.some(t => bookTags.includes(t));
+                }
+
+                return matchSearch && matchTaal && matchGraad && matchLocatie && matchTag;
             });
 
             document.getElementById('bookCount').textContent = `${filtered.length} boeken gevonden`;
@@ -148,36 +232,38 @@
             const grid = document.getElementById('bookGrid');
             grid.innerHTML = '';
 
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-400">
+                        <p class="text-base font-semibold">Geen boeken gevonden met deze filters.</p>
+                        <p class="text-sm mt-1">Probeer andere filters of wis je selectie.</p>
+                    </div>
+                `;
+                return;
+            }
+
             filtered.forEach(book => {
-                const isbn = book.cover;
-                // Open Library URL
-                const coverUrl = isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg` : '';
+                const tagsHtml = book.Tags 
+                    ? book.Tags.split(',').map(t => `<span class="text-[10px] bg-pink-50 text-pink-700 px-2 py-0.5 rounded-md font-medium">${t.trim()}</span>`).join('') 
+                    : '';
 
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col hover:shadow-md transition group';
-                
-                // Als de afbeelding niet laadt, tonen we een stijlvol alternatief met de titel
+                card.className = 'bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-pink-200 transition group';
                 card.innerHTML = `
-                    <div class="h-52 bg-slate-100 relative overflow-hidden flex items-center justify-center">
-                        <img src="${coverUrl}" alt="${book.Titel}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300" 
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 text-white p-4 flex-col justify-between items-center text-center hidden">
-                            <svg class="w-8 h-8 text-pink-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                            <span class="text-xs font-bold line-clamp-3">${book.Titel}</span>
-                            <span class="text-[10px] text-slate-300">${book.Auteur}</span>
-                        </div>
-                        <span class="absolute top-2 right-2 bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-1 rounded-full">${book.Graad || ''}</span>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow justify-between">
-                        <div>
-                            <h4 class="font-bold text-slate-900 text-sm line-clamp-1 mb-1" title="${book.Titel}">${book.Titel}</h4>
-                            <p class="text-xs text-slate-500 mb-2">${book.Auteur}</p>
-                        </div>
-                        <div>
-                            <div class="flex flex-wrap gap-1 mb-3">
-                                ${book.Tags ? book.Tags.split(',').slice(0, 2).map(t => `<span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">${t.trim()}</span>`).join('') : ''}
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-3">
+                            <div class="flex gap-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-lg">${book.Graad || ''}</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider bg-pink-100 text-pink-800 px-2.5 py-1 rounded-lg">${book.Taal}</span>
                             </div>
-                            <span class="inline-block text-[10px] font-medium text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg w-full text-center">${book.Locatie}</span>
+                            <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg truncate max-w-[120px]" title="${book.Locatie}">${book.Locatie}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-base leading-snug mb-1 group-hover:text-pink-600 transition">${book.Titel}</h4>
+                        <p class="text-xs text-slate-500 font-medium mb-4">door ${book.Auteur}</p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                            ${tagsHtml}
                         </div>
                     </div>
                 `;
@@ -185,29 +271,18 @@
             });
         }
 
-        // Event listeners
+        // Zoekbalk event listener
         document.getElementById('searchInput').addEventListener('input', (e) => {
             searchQuery = e.target.value;
             filterAndRender();
         });
 
-        document.querySelectorAll('.graad-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.graad-btn').forEach(b => b.classList.remove('bg-pink-50', 'text-pink-700', 'font-semibold'));
-                document.querySelectorAll('.graad-btn').forEach(b => b.classList.add('text-slate-600'));
-                e.target.classList.add('bg-pink-50', 'text-pink-700', 'font-semibold');
-                selectedGraad = e.target.getAttribute('data-graad');
-                filterAndRender();
-            });
-        });
-
+        // Alles wissen knop
         document.getElementById('resetFilters').addEventListener('click', () => {
-            selectedGraad = 'all';
-            selectedTag = null;
-            searchQuery = '';
+            document.querySelectorAll('.filter-input').forEach(input => input.checked = false);
             document.getElementById('searchInput').value = '';
-            document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active', 'bg-slate-900', 'text-white'));
-            document.querySelector('[data-graad="all"]').click();
+            searchQuery = '';
+            filterAndRender();
         });
     </script>
 </body>
