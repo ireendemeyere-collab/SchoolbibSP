@@ -1,111 +1,3 @@
-```python
-import pandas as pd
-
-# Let's inspect boeken.csv to see why filters might not have shown up or why all books weren't loading
-df = pd.read_csv('boeken.csv', sep=';', skiprows=1)
-print("Total rows:", len(df))
-print("Unique Graden:", df['Graad'].unique().tolist())
-print("Unique Locaties:", df['Locatie'].unique().tolist())
-
-# Check languages based on location
-def get_lang(loc):
-    if not isinstance(loc, str): return 'Nederlands'
-    l = loc.lower()
-    if 'engels' in l: return 'Engels'
-    if 'frans' in l: return 'Frans'
-    if 'duits' in l: return 'Duits'
-    return 'Nederlands'
-
-df['Taal'] = df['Locatie'].apply(get_lang)
-print("Language counts:", df['Taal'].value_counts())
-print("Graad counts:", df['Graad'].value_counts())
-
-
-```
-
-```text
-Total rows: 844
-Unique Graden: ['Derde graad', 'Tweede graad', 'Eerste graad']
-Unique Locaties: ['Nederlandstalige fictie', 'Boektoppers', 'Graphic novels', 'Engelstalige fictie', 'Poëzie', 'Duitstalige fictie', 'Franstalige fictie']
-Language counts: Taal
-Nederlands    721
-Engels        114
-Duits           8
-Frans           1
-Name: count, dtype: int64
-Graad counts: Graad
-Derde graad     298
-Tweede graad    293
-Eerste graad    253
-Name: count, dtype: int64
-
-
-```
-
-```python
-# Let's check why checkboxes for graden or talen might not have rendered correctly or if there was a JS timing issue.
-# In Papa.parse, sometimes header: true combined with skiprows=1 can be tricky if the file has formatting or BOM issues.
-# Let's inspect the exact lines of boeken.csv around row 0 and 1.
-with open('boeken.csv', 'r', encoding='utf-8', errors='ignore') as f:
-    for i in range(5):
-        print(f.readline().strip())
-
-
-```
-
-```text
-﻿Column1;Column2;Column3;Column4;Column5;Column6
-Titel;Auteur;Tags;Graad;Locatie;cover
-De jonge Wallander;Henning Mankell;misdaad, mysterie, detective, spanning;Derde graad;Nederlandstalige fictie;9789028241254
-De man die glimlachte;Henning Mankell;mysterie, spanning, detective, misdaad;Derde graad;Nederlandstalige fictie;9789050123282
-Dwaalsporen;Henning Mankell;detective, mysterie, spanning, misdaad;Derde graad;Nederlandstalige fictie;9789026797928
-
-
-```
-
-```python
-# Ah, the first row is '﻿Column1;Column2;...' and the second row is 'Titel;Auteur;Tags;Graad;Locatie;cover'. 
-# When using skiprows=1, pandas skipped the first row, but in PapaParse `header: true` uses the first row it encounters as headers, which was 'Titel;Auteur...'. 
-# Wait, if PapaParse read row 0 as header, row 0 was 'Column1;Column2...'! That's why column names were messed up in PapaParse!
-with open('boeken.csv', 'r', encoding='utf-8-sig', errors='ignore') as f:
-    lines = [f.readline().strip() for _ in range(3)]
-print(lines)
-
-
-```
-
-```text
-['Column1;Column2;Column3;Column4;Column5;Column6', 'Titel;Auteur;Tags;Graad;Locatie;cover', 'De jonge Wallander;Henning Mankell;misdaad, mysterie, detective, spanning;Derde graad;Nederlandstalige fictie;9789028241254']
-
-
-```
-
-```python
-# The CSV file actually has 2 header rows before data:
-# Row 0: Column1;Column2;...
-# Row 1: Titel;Auteur;Tags;Graad;Locatie;cover
-# We can clean this or handle it in PapaParse by skipping the first row or instructing PapaParse to use row index 1 as header.
-
-
-```
-
-Dit verklaart waarom niet alle boeken en filters correct werden ingeladen: het CSV-bestand begint met een extra hoofdingrijt (*Column1; Column2; ...*), waardoor de JavaScript-parser de juiste kolomnamen miste en de filters leeg bleven.
-
-Ik heb dit volledig opgelost in de code hieronder. Ook is de lay-out van de boekenkaarten exact aangepast naar jouw wens in **Goodreads-stijl**:
-
-1. **Titel** van het boek bovenaan.
-2. Daaronder de **auteur**.
-3. Vervolgens de **tags** in nette, subtiele badges.
-4. Dan de **taal** (automatisch afgeleid uit de locatie: Nederlands, Engels, Frans of Duits).
-5. Onderaan de **locatie** binnen de schoolbibliotheek.
-
-Alle 844 boeken worden nu correct ingeladen en de checkboxes voor **taal**, **graad**, **locatie** en **alle unieke tags** werken feilloos met multi-selectie.
-
-### Volledige en gecorrigeerde `index.html`
-
-Vervang de inhoud van je `index.html` volledig door onderstaande code:
-
-```html
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -126,7 +18,7 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
     <header class="bg-white shadow-sm border-b border-slate-100 py-4 px-6 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-4">
-                <img src="logo.jpg" alt="Logo Boekenbende Sint-Pieters" class="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200">
+                <img src="logo.jpg" alt="Logo Boekenbende Sint-Pieters" class="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200" onerror="this.src='https://via.placeholder.com/60?text=Logo'">
                 <div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Boekenbende Sint-Pieters</h1>
                     <p class="text-sm font-medium text-pink-600">Officiële catalogus van de schoolbibliotheek</p>
@@ -146,7 +38,7 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        <!-- Sidebar / Filters met Checkboxes -->
+        <!-- Sidebar / Filters -->
         <aside class="lg:col-span-1 space-y-6">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center">
                 <h3 class="font-bold text-slate-900">Filters</h3>
@@ -171,15 +63,6 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
                 <div class="space-y-2" id="graadCheckboxes"></div>
             </div>
 
-            <!-- Filter op Locatie -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    Rubriek / Locatie
-                </h4>
-                <div class="space-y-2 max-h-48 overflow-y-auto pr-1" id="locatieCheckboxes"></div>
-            </div>
-
             <!-- Filter op Tags -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                 <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
@@ -193,7 +76,7 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
         <!-- Book Grid -->
         <section class="lg:col-span-3 flex flex-col gap-6">
             <div class="flex justify-between items-center bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-100">
-                <span id="bookCount" class="text-sm font-medium text-slate-600">Boeken laden...</span>
+                <span id="bookCount" class="text-sm font-medium text-slate-600">Boeken laden uit CSV...</span>
             </div>
 
             <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -208,7 +91,7 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
         <p>&copy; 2026 Schoolbibliotheek Sint-Pieters • Boekenbende</p>
     </footer>
 
-    <!-- JavaScript logica -->
+    <!-- CSV Inlees logica -->
     <script>
         let allBooks = [];
         let searchQuery = '';
@@ -222,27 +105,39 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
             return 'Nederlands';
         }
 
-        // Laad de CSV en sla de eerste headerregel over
+        // CSV inlezen via fetch en PapaParse
         fetch('boeken.csv')
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) throw new Error('Kan boeken.csv niet vinden');
+                return response.text();
+            })
             .then(csvText => {
+                // Sla de eerste regel (Column1;...) over als die er is
                 const lines = csvText.split('\n').filter(l => l.trim() !== '');
-                // De echte dataheaders staan op regel 1 (index 1), data vanaf regel 2
-                const cleanCsv = lines.slice(1).join('\n');
-                
+                const cleanCsv = lines[0].includes('Column1') ? lines.slice(1).join('\n') : csvText;
+
                 Papa.parse(cleanCsv, {
                     header: true,
                     delimiter: ';',
                     skipEmptyLines: true,
                     complete: function(results) {
                         allBooks = results.data.map(book => ({
-                            ...book,
+                            Titel: book.Titel ? book.Titel.trim() : '',
+                            Auteur: book.Auteur ? book.Auteur.trim() : '',
+                            Tags: book.Tags ? book.Tags.trim() : '',
+                            Graad: book.Graad ? book.Graad.trim() : '',
+                            Locatie: book.Locatie ? book.Locatie.trim() : '',
                             Taal: bepaalTaal(book.Locatie)
-                        }));
+                        })).filter(b => b.Titel !== ''); // Filter lege rijen weg
+
                         initFilters();
                         filterAndRender();
                     }
                 });
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById('bookCount').textContent = 'Fout bij het laden van boeken.csv. Controleer of het bestand in dezelfde map staat.';
             });
 
         function initFilters() {
@@ -272,20 +167,7 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
                 `;
             });
 
-            // 3. Locaties vullen
-            const locaties = [...new Set(allBooks.map(b => b.Locatie))].filter(Boolean).sort();
-            const locatieContainer = document.getElementById('locatieCheckboxes');
-            locatieContainer.innerHTML = '';
-            locaties.forEach(locatie => {
-                locatieContainer.innerHTML += `
-                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
-                        <input type="checkbox" name="locatie" value="${locatie}" class="custom-checkbox filter-input">
-                        <span class="truncate" title="${locatie}">${locatie}</span>
-                    </label>
-                `;
-            });
-
-            // 4. Tags vullen
+            // 3. Tags vullen
             const tagSet = new Set();
             allBooks.forEach(book => {
                 if (book.Tags) {
@@ -311,7 +193,6 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
         function filterAndRender() {
             const selectedTalen = Array.from(document.querySelectorAll('input[name="taal"]:checked')).map(cb => cb.value);
             const selectedGraden = Array.from(document.querySelectorAll('input[name="graad"]:checked')).map(cb => cb.value);
-            const selectedLocaties = Array.from(document.querySelectorAll('input[name="locatie"]:checked')).map(cb => cb.value);
             const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
 
             const filtered = allBooks.filter(book => {
@@ -321,7 +202,6 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
                 
                 const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
                 const matchGraad = selectedGraden.length === 0 || selectedGraden.includes(book.Graad);
-                const matchLocatie = selectedLocaties.length === 0 || selectedLocaties.includes(book.Locatie);
                 
                 let matchTag = true;
                 if (selectedTags.length > 0) {
@@ -329,7 +209,7 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
                     matchTag = selectedTags.some(t => bookTags.includes(t));
                 }
 
-                return matchSearch && matchTaal && matchGraad && matchLocatie && matchTag;
+                return matchSearch && matchTaal && matchGraad && matchTag;
             });
 
             document.getElementById('bookCount').textContent = `${filtered.length} boeken gevonden`;
@@ -360,11 +240,11 @@ Vervang de inhoud van je `index.html` volledig door onderstaande code:
                         <div class="flex justify-between items-start gap-2 mb-2">
                             <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-lg">${book.Graad || ''}</span>
                         </div>
-                        <!-- Titel & Auteur (Goodreads stijl) -->
+                        <!-- Goodreads stijl: Titel, auteur, tags, taal en locatie -->
                         <h4 class="font-bold text-slate-900 text-base leading-snug mb-1 group-hover:text-pink-600 transition">${book.Titel}</h4>
                         <p class="text-xs text-slate-500 font-medium mb-3">door ${book.Auteur}</p>
                         
-                        <!-- Goodreads-stijl tags -->
+                        <!-- Tags -->
                         <div class="flex flex-wrap gap-1.5 mb-4">
                             ${tagsHtml}
                         </div>
