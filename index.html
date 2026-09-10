@@ -51,9 +51,7 @@
                     <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
                     Taal
                 </h4>
-                <div class="space-y-2" id="taalCheckboxes">
-                    <!-- Wordt dynamisch gevuld -->
-                </div>
+                <div class="space-y-2" id="taalCheckboxes"></div>
             </div>
 
             <!-- Filter op Graad -->
@@ -62,31 +60,25 @@
                     <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     Graad
                 </h4>
-                <div class="space-y-2" id="graadCheckboxes">
-                    <!-- Wordt dynamisch gevuld -->
-                </div>
+                <div class="space-y-2" id="graadCheckboxes"></div>
             </div>
 
-            <!-- Filter op Locatie / Rubriek -->
+            <!-- Filter op Locatie -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                 <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
                     <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     Rubriek / Locatie
                 </h4>
-                <div class="space-y-2 max-h-48 overflow-y-auto pr-1" id="locatieCheckboxes">
-                    <!-- Wordt dynamisch gevuld -->
-                </div>
+                <div class="space-y-2 max-h-48 overflow-y-auto pr-1" id="locatieCheckboxes"></div>
             </div>
 
-            <!-- Filter op Tags / Thema's -->
+            <!-- Filter op Tags -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                 <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
                     <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                     Thema's & Tags
                 </h4>
-                <div class="space-y-2 max-h-60 overflow-y-auto pr-1" id="tagCheckboxes">
-                    <!-- Wordt dynamisch gevuld -->
-                </div>
+                <div class="space-y-2 max-h-60 overflow-y-auto pr-1" id="tagCheckboxes"></div>
             </div>
         </aside>
 
@@ -97,7 +89,7 @@
             </div>
 
             <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                <!-- Stijlvolle boekenkaarten komen hier -->
+                <!-- Boekenkaarten komen hier -->
             </div>
         </section>
 
@@ -113,36 +105,41 @@
         let allBooks = [];
         let searchQuery = '';
 
-        // Bepaal de taal op basis van de locatie
         function bepaalTaal(locatie) {
             if (!locatie) return 'Nederlands';
-            const loc = locatie.toLowerCase();
-            if (loc.includes('engels')) return 'Engels';
-            if (loc.includes('frans')) return 'Frans';
-            if (loc.includes('duits')) return 'Duits';
-            return 'Nederlands'; // Standaardwaarde voor Boektoppers, Graphic novels, NL fictie, etc.
+            const l = locatie.toLowerCase();
+            if (l.includes('engels')) return 'Engels';
+            if (l.includes('frans')) return 'Frans';
+            if (l.includes('duits')) return 'Duits';
+            return 'Nederlands';
         }
 
-        // Laad de CSV
-        Papa.parse('boeken.csv', {
-            download: true,
-            header: true,
-            delimiter: ';',
-            skipEmptyLines: true,
-            complete: function(results) {
-                // Voeg het Taal veld automatisch toe aan elk boek
-                allBooks = results.data.map(book => ({
-                    ...book,
-                    Taal: bepaalTaal(book.Locatie)
-                }));
-                initFilters();
-                filterAndRender();
-            }
-        });
+        // Laad de CSV en sla de eerste headerregel over
+        fetch('boeken.csv')
+            .then(response => response.text())
+            .then(csvText => {
+                const lines = csvText.split('\n').filter(l => l.trim() !== '');
+                // De echte dataheaders staan op regel 1 (index 1), data vanaf regel 2
+                const cleanCsv = lines.slice(1).join('\n');
+                
+                Papa.parse(cleanCsv, {
+                    header: true,
+                    delimiter: ';',
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        allBooks = results.data.map(book => ({
+                            ...book,
+                            Taal: bepaalTaal(book.Locatie)
+                        }));
+                        initFilters();
+                        filterAndRender();
+                    }
+                });
+            });
 
         function initFilters() {
             // 1. Talen vullen
-            const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort().reverse(); // Nederlands bovenaan
+            const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort();
             const taalContainer = document.getElementById('taalCheckboxes');
             taalContainer.innerHTML = '';
             talen.forEach(taal => {
@@ -198,7 +195,6 @@
                 `;
             });
 
-            // Event listeners koppelen aan alle checkboxes
             document.querySelectorAll('.filter-input').forEach(input => {
                 input.addEventListener('change', filterAndRender);
             });
@@ -212,8 +208,9 @@
 
             const filtered = allBooks.filter(book => {
                 const matchSearch = !searchQuery || 
-                    book.Titel.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                    book.Auteur.toLowerCase().includes(searchQuery.toLowerCase());
+                    (book.Titel && book.Titel.toLowerCase().includes(searchQuery.toLowerCase())) || 
+                    (book.Auteur && book.Auteur.toLowerCase().includes(searchQuery.toLowerCase()));
+                
                 const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
                 const matchGraad = selectedGraden.length === 0 || selectedGraden.includes(book.Graad);
                 const matchLocatie = selectedLocaties.length === 0 || selectedLocaties.includes(book.Locatie);
@@ -244,40 +241,41 @@
 
             filtered.forEach(book => {
                 const tagsHtml = book.Tags 
-                    ? book.Tags.split(',').map(t => `<span class="text-[10px] bg-pink-50 text-pink-700 px-2 py-0.5 rounded-md font-medium">${t.trim()}</span>`).join('') 
+                    ? book.Tags.split(',').map(t => `<span class="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium hover:bg-slate-200 transition">${t.trim()}</span>`).join('') 
                     : '';
 
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-pink-200 transition group';
                 card.innerHTML = `
                     <div>
-                        <div class="flex justify-between items-start gap-2 mb-3">
-                            <div class="flex gap-2">
-                                <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-lg">${book.Graad || ''}</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider bg-pink-100 text-pink-800 px-2.5 py-1 rounded-lg">${book.Taal}</span>
-                            </div>
-                            <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg truncate max-w-[120px]" title="${book.Locatie}">${book.Locatie}</span>
+                        <!-- Graad badge bovenaan -->
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-lg">${book.Graad || ''}</span>
                         </div>
+                        <!-- Titel & Auteur (Goodreads stijl) -->
                         <h4 class="font-bold text-slate-900 text-base leading-snug mb-1 group-hover:text-pink-600 transition">${book.Titel}</h4>
-                        <p class="text-xs text-slate-500 font-medium mb-4">door ${book.Auteur}</p>
-                    </div>
-                    <div>
-                        <div class="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                        <p class="text-xs text-slate-500 font-medium mb-3">door ${book.Auteur}</p>
+                        
+                        <!-- Goodreads-stijl tags -->
+                        <div class="flex flex-wrap gap-1.5 mb-4">
                             ${tagsHtml}
                         </div>
+                    </div>
+                    <!-- Taal en Locatie onderaan -->
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                        <span class="font-semibold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg">${book.Taal}</span>
+                        <span class="truncate max-w-[160px] bg-slate-50 px-2.5 py-1 rounded-lg" title="${book.Locatie}">${book.Locatie}</span>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Zoekbalk event listener
         document.getElementById('searchInput').addEventListener('input', (e) => {
             searchQuery = e.target.value;
             filterAndRender();
         });
 
-        // Alles wissen knop
         document.getElementById('resetFilters').addEventListener('click', () => {
             document.querySelectorAll('.filter-input').forEach(input => input.checked = false);
             document.getElementById('searchInput').value = '';
