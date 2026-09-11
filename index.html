@@ -1084,8 +1084,9 @@
                         const rawTags = (book.Tags || book.tags || '').trim();
                         const graad = (book.Graad || book.graad || '').trim();
                         const locatie = (book.Locatie || book.locatie || '').trim();
-                        const isbnRaw = (book.ISBN || book.isbn || book.cover || '').toString().trim();
+                        const isbnRaw = (book.ISBN || book.isbn || (!book.cover?.startsWith('http') ? book.cover : '') || '').toString().trim();
                         const isbn = isbnRaw.replace(/[^0-9X]/gi, '');
+                        const coverRaw = (book.Cover || (book.cover?.startsWith('http') ? book.cover : '') || book['Cover URL'] || book.Weblink || '').toString().trim();
                         const exemplaar = (book.Exemplaar || book.exemplaar || '').trim();
 
                         // Normaliseer en ontdubbel tags direct
@@ -1113,6 +1114,7 @@
                             Graad: graad || 'Alle graden',
                             Locatie: locatie || 'Nederlandstalige fictie',
                             ISBN: isbn,
+                            Cover: coverRaw,
                             Exemplaar: exemplaar,
                             Taal: bepaalTaal(locatie)
                         };
@@ -1134,12 +1136,14 @@
                                 Graad: item.Graad,
                                 Locatie: item.Locatie,
                                 ISBN: item.ISBN,
+                                Cover: item.Cover,
                                 Taal: item.Taal,
                                 copies: []
                             });
                         }
                         const entry = bookMap.get(key);
                         if (!entry.ISBN && item.ISBN) entry.ISBN = item.ISBN;
+                        if (!entry.Cover && item.Cover) entry.Cover = item.Cover;
                         if (!entry.Tags && item.Tags) {
                             entry.Tags = item.Tags;
                             entry.rawTagList = item.rawTagList;
@@ -1180,9 +1184,23 @@
         }
 
         // 2. COVERS
-        function getBookCoverUrl(isbn) {
-            if (!isbn || isbn.length < 9) return null;
-            return `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`;
+        function getBookCoverUrl(book) {
+            if (!book) return null;
+            if (typeof book === 'object') {
+                if (book.Cover && book.Cover.startsWith('http')) return book.Cover;
+                const isbn = (book.ISBN || '').toString().replace(/[^0-9X]/gi, '');
+                if (isbn.length >= 9) {
+                    return `https://books.google.com/books/content?vid=isbn:${isbn}&printsec=frontcover&img=1&zoom=1`;
+                }
+            } else if (typeof book === 'string') {
+                const s = book.trim();
+                if (s.startsWith('http')) return s;
+                const isbn = s.replace(/[^0-9X]/gi, '');
+                if (isbn.length >= 9) {
+                    return `https://books.google.com/books/content?vid=isbn:${isbn}&printsec=frontcover&img=1&zoom=1`;
+                }
+            }
+            return null;
         }
 
         const GRADIENTS = [
@@ -1209,7 +1227,7 @@
         }
 
         function renderCoverHtml(book) {
-            const coverUrl = getBookCoverUrl(book.ISBN);
+            const coverUrl = getBookCoverUrl(book);
             const gradient = getCoverGradient(book.Titel);
             const safeTitle = escapeHtml(book.Titel);
             const safeAuthor = escapeHtml(book.Auteur);
@@ -1221,6 +1239,7 @@
                         <img src="${coverUrl}" 
                              alt="${safeTitle}" 
                              loading="lazy" 
+                             referrerpolicy="no-referrer"
                              class="w-full h-full object-cover transition duration-300 group-hover:scale-105"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="w-full h-full p-4 flex flex-col justify-between items-center text-center text-white" 
