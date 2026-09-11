@@ -14,75 +14,422 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-slate-100 py-4 px-6 sticky top-0 z-50">
+    <!-- Header met Top Navigatiemenu -->
+    <header class="bg-white shadow-sm border-b border-slate-100 py-3.5 px-4 sm:px-6 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-                <img src="logo.jpg" alt="Logo Boekenbende Sint-Pieters" class="w-14 h-14 rounded-2xl object-cover shadow-md border border-slate-200" onerror="this.src='https://via.placeholder.com/60?text=Logo'">
-                <div>
-                    <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Boekenbende Sint-Pieters</h1>
-                    <p class="text-sm font-medium text-pink-600">Officiële catalogus van de schoolbibliotheek</p>
+            
+            <!-- Logo & Schoolnaam -->
+            <div class="flex items-center gap-3.5 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center gap-3">
+                    <img src="logo.jpg" alt="Logo Boekenbende Sint-Pieters" 
+                         class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-slate-200" 
+                         onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?w=100&auto=format&fit=crop&q=80'">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Boekenbende Sint-Pieters</h1>
+                        <p class="text-xs font-semibold text-pink-600">Schoolbibliotheek Don Bosco Gent • Campus Sint-Pieters</p>
+                    </div>
+                </div>
+
+                <!-- Navigatie Knoppen (Mobiel) -->
+                <div class="flex items-center gap-1.5 md:hidden">
+                    <button id="btnMobCatalog" class="nav-tab-btn active-nav px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-pink-600 text-white">
+                        📚 Catalogus
+                    </button>
+                    <button id="btnMobAdmin" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200">
+                        ⚙️ Beheer
+                    </button>
                 </div>
             </div>
-            <!-- Zoekbalk -->
-            <div class="w-full md:w-96 relative">
-                <input type="text" id="searchInput" placeholder="Zoek op titel of auteur..." 
-                    class="w-full pl-11 pr-4 py-2.5 bg-slate-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition">
-                <svg class="w-5 h-5 text-slate-400 absolute left-4 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+
+            <!-- Desktop Navigatie Knoppen -->
+            <div class="hidden md:flex items-center gap-2.5">
+                <button id="btnDeskCatalog" class="nav-tab-btn active-nav px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-pink-600 text-white shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>Catalogus</span>
+                </button>
+                <button id="btnDeskAdmin" class="nav-tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-pink-50 hover:text-pink-700">
+                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>Beheerder</span>
+                </button>
             </div>
+
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- ============================================================= -->
+    <!-- WEERGAVE 1: CATALOGUS (VOOR LEERLINGEN EN LEERKRACHTEN)       -->
+    <!-- ============================================================= -->
+    <main id="catalogView" class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
         
-        <!-- Sidebar / Filters -->
-        <aside class="lg:col-span-1 space-y-6">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center">
-                <h3 class="font-bold text-slate-900">Filters</h3>
-                <button id="resetFilters" class="text-xs text-pink-600 hover:text-pink-800 font-semibold transition">Alles wissen</button>
+        <!-- Zoekbalk & Live Teller -->
+        <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+            <div class="w-full sm:w-96 relative">
+                <input type="text" id="searchInput" placeholder="Zoek op titel, auteur of onderwerp..." 
+                    class="w-full pl-11 pr-4 py-2.5 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition">
+                <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                <span id="syncBadge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Google Sheet live
+                </span>
+                <span id="bookCount" class="text-sm font-bold text-slate-700">Boeken laden...</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar / Filters -->
+            <aside class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        Filters
+                    </h3>
+                    <button id="resetFilters" class="text-xs text-pink-600 hover:text-pink-800 font-semibold transition">Alles wissen</button>
+                </div>
+
+                <!-- Filter op Taal -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                        Taal
+                    </h4>
+                    <div class="space-y-2" id="taalCheckboxes"></div>
+                </div>
+
+                <!-- Filter op Graad -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        Graad
+                    </h4>
+                    <div class="space-y-2" id="graadCheckboxes"></div>
+                </div>
+
+                <!-- Filter op Tags -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                        Thema's & Tags
+                    </h4>
+                    <div class="space-y-2 max-h-64 overflow-y-auto pr-1" id="tagCheckboxes"></div>
+                </div>
+            </aside>
+
+            <!-- Boeken Grid -->
+            <section class="lg:col-span-3 flex flex-col gap-6">
+                <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <!-- Boekenkaarten komen hier -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ============================================================= -->
+    <!-- WEERGAVE 2: BEHEERDER (PINCODE BEVEILIGD VOOR LEERKRACHTEN)  -->
+    <!-- ============================================================= -->
+    <main id="adminView" class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full hidden">
+        
+        <!-- Inlogscherm met pincode -->
+        <div id="adminLoginSection" class="max-w-md mx-auto my-12 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
+            <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Beheerderspaneel</h2>
+            <p class="text-sm text-slate-500 mb-6">Voer de schoolpincode in om boeken toe te voegen of uitleningen te beheren.</p>
+
+            <form id="adminLoginForm" class="space-y-4">
+                <div>
+                    <input type="password" id="adminPinInput" placeholder="Pincode (standaard: donbosco)" 
+                           class="w-full text-center tracking-widest text-lg px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition" required>
+                    <p id="pinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1 hidden">Onjuiste pincode. Probeer het opnieuw.</p>
+                </div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-sm">
+                    Inloggen als Beheerder
+                </button>
+            </form>
+            <p class="text-xs text-slate-400 mt-4">Standaard pincode: <span class="font-mono font-bold text-slate-600">donbosco</span></p>
+        </div>
+
+        <!-- Beheerders Dashboard (zichtbaar na inloggen) -->
+        <div id="adminDashboardSection" class="hidden space-y-6">
+            
+            <!-- Dashboard Header Bar -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center font-bold">
+                        ⚙️
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Beheer Schoolbibliotheek</h2>
+                        <p class="text-xs text-slate-500">Don Bosco Gent • Campus Sint-Pieters</p>
+                    </div>
+                </div>
+
+                <!-- Sub-tabs in beheer -->
+                <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
+                    <button id="tabBtnAddBook" class="admin-subtab active-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-white text-pink-600 shadow-xs">
+                        📖 Boek Toevoegen
+                    </button>
+                    <button id="tabBtnLoans" class="admin-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        🔄 Boeken Ontlenen
+                    </button>
+                    <button id="tabBtnSettings" class="admin-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        ⚙️ Instellingen & Sheet
+                    </button>
+                </div>
+
+                <!-- Uitloggen -->
+                <button id="adminLogoutBtn" class="text-xs font-bold text-slate-500 hover:text-rose-600 transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Uitloggen
+                </button>
             </div>
 
-            <!-- Filter op Taal -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                    Taal
-                </h4>
-                <div class="space-y-2" id="taalCheckboxes"></div>
+            <!-- ================= SUB-TAB 1: BOEK TOEVOEGEN ================= -->
+            <div id="subtabAddBook" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
+                <div class="max-w-3xl mx-auto space-y-6">
+                    
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900">Nieuw boek toevoegen aan de catalogus</h3>
+                        <p class="text-sm text-slate-500">Nieuwe boeken worden direct getoond op de website en veilig opgeslagen in jullie Google Sheet.</p>
+                    </div>
+
+                    <!-- Snelle ISBN-zoeker -->
+                    <div class="bg-pink-50/60 border border-pink-100 p-4 rounded-2xl flex flex-col sm:flex-row items-center gap-3">
+                        <div class="flex-grow w-full">
+                            <label class="block text-xs font-bold text-pink-900 uppercase tracking-wider mb-1">⚡ Supersnel invullen via ISBN of Barcode</label>
+                            <input type="text" id="lookupIsbnInput" placeholder="Typ of scan het ISBN-nummer (bijv. 9789028241254)..." 
+                                   class="w-full text-sm px-3.5 py-2 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
+                        </div>
+                        <button type="button" id="btnLookupIsbn" class="w-full sm:w-auto mt-2 sm:mt-5 bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <span>Gegevens ophalen</span>
+                        </button>
+                    </div>
+                    <p id="isbnLookupStatus" class="text-xs font-semibold text-pink-700 hidden"></p>
+
+                    <!-- Invoerformulier -->
+                    <form id="addBookForm" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            
+                            <!-- Titel -->
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Titel van het boek <span class="text-rose-500">*</span></label>
+                                <input type="text" id="fTitel" required placeholder="Bijv. De jonge Wallander" 
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                            </div>
+
+                            <!-- Auteur -->
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Auteur <span class="text-rose-500">*</span></label>
+                                <input type="text" id="fAuteur" required placeholder="Bijv. Henning Mankell" 
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                            </div>
+
+                            <!-- Graad -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Graad</label>
+                                <select id="fGraad" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                    <option value="Eerste graad">Eerste graad</option>
+                                    <option value="Tweede graad">Tweede graad</option>
+                                    <option value="Derde graad" selected>Derde graad</option>
+                                    <option value="Alle graden">Alle graden</option>
+                                </select>
+                            </div>
+
+                            <!-- Locatie / Categorie -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Locatie / Taal</label>
+                                <input type="text" id="fLocatie" list="locatieSuggesties" placeholder="Bijv. Nederlandstalige fictie" value="Nederlandstalige fictie"
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                <datalist id="locatieSuggesties">
+                                    <option value="Nederlandstalige fictie">
+                                    <option value="Engelstalige fictie">
+                                    <option value="Franstalige fictie">
+                                    <option value="Duitstalige fictie">
+                                    <option value="Graphic novels">
+                                    <option value="Boektoppers">
+                                    <option value="Poëzie">
+                                    <option value="Non-fictie">
+                                </datalist>
+                            </div>
+
+                            <!-- Tags / Thema's -->
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Thema's & Tags (gescheiden door komma's)</label>
+                                <input type="text" id="fTags" placeholder="Bijv. spanning, misdaad, mysterie, detective" 
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                
+                                <!-- Snelle tags chips -->
+                                <div class="flex flex-wrap gap-1.5 mt-2">
+                                    <span class="text-xs text-slate-400 mr-1 self-center">Snel toevoegen:</span>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="spanning">+ spanning</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="avontuur">+ avontuur</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="liefde">+ liefde</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="vriendschap">+ vriendschap</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="fantasy">+ fantasy</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="geschiedenis">+ geschiedenis</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="humor">+ humor</button>
+                                </div>
+                            </div>
+
+                            <!-- ISBN -->
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">ISBN / Barcode (optioneel)</label>
+                                <input type="text" id="fIsbn" placeholder="Bijv. 9789028241254" 
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                            </div>
+                        </div>
+
+                        <!-- Statusbericht -->
+                        <div id="addBookStatus" class="hidden p-4 rounded-xl text-sm font-semibold"></div>
+
+                        <!-- Knoppen -->
+                        <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
+                            <button type="reset" class="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition">Wissen</button>
+                            <button type="submit" id="btnAddBookSubmit" class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-6 py-2.5 rounded-xl transition shadow-sm flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                <span>Boek toevoegen en opslaan</span>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
             </div>
 
-            <!-- Filter op Graad -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Graad
-                </h4>
-                <div class="space-y-2" id="graadCheckboxes"></div>
+            <!-- ================= SUB-TAB 2: BOEKEN ONTLENEN ================= -->
+            <div id="subtabLoans" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 hidden">
+                <div class="space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-slate-900">Boeken Ontlenen & Inleveren</h3>
+                            <p class="text-sm text-slate-500">Registreer eenvoudig wie welk boek heeft meegenomen en houd zicht op openstaande uitleningen.</p>
+                        </div>
+                        <span id="activeLoansCount" class="text-xs font-bold bg-pink-100 text-pink-700 px-3 py-1.5 rounded-xl self-start sm:self-auto">
+                            0 actieve uitleningen
+                        </span>
+                    </div>
+
+                    <!-- Registratieformulier uitlening -->
+                    <form id="loanForm" class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-4">
+                        <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Nieuwe uitlening registreren
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leerkracht <span class="text-rose-500">*</span></label>
+                                <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
+                                <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel van het boek <span class="text-rose-500">*</span></label>
+                                <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                                <datalist id="loanBooksList"></datalist>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum</label>
+                                <input type="date" id="loanDueDate" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Uitlening opslaan</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Tabel met lopende uitleningen -->
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Leerling / Leraar</th>
+                                    <th class="px-4 py-3">Klas</th>
+                                    <th class="px-4 py-3">Boek</th>
+                                    <th class="px-4 py-3">Uitleendatum</th>
+                                    <th class="px-4 py-3">Inleverdatum</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3 text-right">Actie</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loansTableBody" class="divide-y divide-slate-100 bg-white">
+                                <!-- Dynamische rijen -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
 
-            <!-- Filter op Tags -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                    Thema's & Tags
-                </h4>
-                <div class="space-y-2 max-h-60 overflow-y-auto pr-1" id="tagCheckboxes"></div>
-            </div>
-        </aside>
+            <!-- ================= SUB-TAB 3: INSTELLINGEN & GOOGLE SHEET ================= -->
+            <div id="subtabSettings" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 hidden">
+                <div class="max-w-2xl mx-auto space-y-6">
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900">Instellingen & Google Spreadsheet</h3>
+                        <p class="text-sm text-slate-500">Beheer de koppeling met Google Sheets en de beheerderscode van de school.</p>
+                    </div>
 
-        <!-- Book Grid -->
-        <section class="lg:col-span-3 flex flex-col gap-6">
-            <div class="flex justify-between items-center bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-100">
-                <span id="bookCount" class="text-sm font-medium text-slate-600">Boeken laden uit CSV...</span>
+                    <!-- Directe link naar Google Sheet -->
+                    <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
+                                📊
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-emerald-900 text-sm">Google Spreadsheet van de School</h4>
+                                <p class="text-xs text-emerald-700">Bekijk of bewerk de catalogus rechtstreeks in Google Sheets.</p>
+                            </div>
+                        </div>
+                        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRpWPRhterrkdMeJ3qZlLFshWIZ6I3yR5gIJSMNTdG_fXXAVL8YZgrK-mEDLfN5Qb3rYPamLYgMfb4K/pubhtml" 
+                           target="_blank" rel="noopener noreferrer"
+                           class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition whitespace-nowrap">
+                            Openen in Google Drive ↗
+                        </a>
+                    </div>
+
+                    <!-- Google Apps Script Web App URL -->
+                    <div class="space-y-3 pt-4 border-t border-slate-100">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            Google Apps Script Web-app URL (voor automatisch opslaan)
+                        </label>
+                        <p class="text-xs text-slate-500">Plak hier de Web-app-URL die je hebt aangemaakt in Google Sheets (Extensies > Apps Script > Implementeren).</p>
+                        <div class="flex gap-2">
+                            <input type="url" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" 
+                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-500">
+                            <button type="button" id="btnSaveScriptUrl" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                                Opslaan
+                            </button>
+                        </div>
+                        <p id="scriptUrlSavedMsg" class="text-xs text-emerald-600 font-bold hidden">✅ Web-app URL succesvol opgeslagen!</p>
+                    </div>
+
+                    <!-- Pincode wijzigen -->
+                    <div class="space-y-3 pt-4 border-t border-slate-100">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            Schoolpincode wijzigen
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="text" id="newPinInput" placeholder="Nieuwe pincode invoeren" 
+                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-500">
+                            <button type="button" id="btnSavePin" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                                Wijzigen
+                            </button>
+                        </div>
+                        <p id="pinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">✅ Pincode aangepast!</p>
+                    </div>
+
+                </div>
             </div>
 
-            <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                <!-- Boekenkaarten komen hier -->
-            </div>
-        </section>
+        </div>
 
     </main>
 
@@ -91,10 +438,97 @@
         <p>&copy; 2026 Schoolbibliotheek Sint-Pieters • Boekenbende</p>
     </footer>
 
-    <!-- CSV Inlees logica -->
+    <!-- ============================================================= -->
+    <!-- JAVASCRIPT LOGICA                                             -->
+    <!-- ============================================================= -->
     <script>
+        // CONFIGURATIE
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpWPRhterrkdMeJ3qZlLFshWIZ6I3yR5gIJSMNTdG_fXXAVL8YZgrK-mEDLfN5Qb3rYPamLYgMfb4K/pub?output=csv";
+        const DEFAULT_PIN = "donbosco";
+
         let allBooks = [];
         let searchQuery = '';
+        let currentPin = localStorage.getItem('schoolbib_pin') || DEFAULT_PIN;
+        let scriptUrl = localStorage.getItem('schoolbib_script_url') || '';
+        let loans = JSON.parse(localStorage.getItem('schoolbib_loans') || '[]');
+
+        // Inladen bij starten
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            initAdminAuth();
+            initAddBook();
+            initLoans();
+            initSettings();
+            loadBooks();
+        });
+
+        // -------------------------------------------------------------
+        // 1. BOEKEN INLADEN UIT GOOGLE SHEETS OF CSV FALLBACK
+        // -------------------------------------------------------------
+        function loadBooks() {
+            const countEl = document.getElementById('bookCount');
+            const syncEl = document.getElementById('syncBadge');
+            countEl.textContent = 'Boeken laden uit Google Sheet...';
+
+            fetch(GOOGLE_SHEET_CSV_URL)
+                .then(res => {
+                    if (!res.ok) throw new Error('Kon Google Sheet niet ophalen');
+                    return res.text();
+                })
+                .then(csvText => {
+                    parseAndDisplayBooks(csvText, true);
+                })
+                .catch(err => {
+                    console.warn('Google Sheet niet bereikbaar, lokale fallback proberen:', err);
+                    if (syncEl) {
+                        syncEl.className = 'inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200';
+                        syncEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span> Lokale catalogus';
+                    }
+                    // Fallback naar lokaal boeken.csv
+                    fetch('boeken.csv')
+                        .then(res => res.text())
+                        .then(csvText => parseAndDisplayBooks(csvText, false))
+                        .catch(fallbackErr => {
+                            countEl.textContent = 'Fout bij het laden van de catalogus.';
+                            console.error(fallbackErr);
+                        });
+                });
+        }
+
+        function parseAndDisplayBooks(csvText, isLive) {
+            // Eventuele 'Column1;...' header opruimen
+            const lines = csvText.split('\n').filter(l => l.trim() !== '');
+            const cleanCsv = lines[0] && lines[0].includes('Column1') ? lines.slice(1).join('\n') : csvText;
+
+            Papa.parse(cleanCsv, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    allBooks = results.data.map(book => {
+                        const titel = (book.Titel || book.titel || '').trim();
+                        const auteur = (book.Auteur || book.auteur || '').trim();
+                        const tags = (book.Tags || book.tags || '').trim();
+                        const graad = (book.Graad || book.graad || '').trim();
+                        const locatie = (book.Locatie || book.locatie || '').trim();
+                        const isbn = (book.ISBN || book.isbn || book.cover || '').trim();
+
+                        return {
+                            Titel: titel,
+                            Auteur: auteur,
+                            Tags: tags,
+                            Graad: graad,
+                            Locatie: locatie,
+                            ISBN: isbn,
+                            Taal: bepaalTaal(locatie)
+                        };
+                    }).filter(b => b.Titel !== '');
+
+                    initFilters();
+                    filterAndRender();
+                    updateLoanBookList();
+                }
+            });
+        }
 
         function bepaalTaal(locatie) {
             if (!locatie) return 'Nederlands';
@@ -105,43 +539,11 @@
             return 'Nederlands';
         }
 
-        // CSV inlezen via fetch en PapaParse
-        fetch('boeken.csv')
-            .then(response => {
-                if (!response.ok) throw new Error('Kan boeken.csv niet vinden');
-                return response.text();
-            })
-            .then(csvText => {
-                // Sla de eerste regel (Column1;...) over als die er is
-                const lines = csvText.split('\n').filter(l => l.trim() !== '');
-                const cleanCsv = lines[0].includes('Column1') ? lines.slice(1).join('\n') : csvText;
-
-                Papa.parse(cleanCsv, {
-                    header: true,
-                    delimiter: ';',
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        allBooks = results.data.map(book => ({
-                            Titel: book.Titel ? book.Titel.trim() : '',
-                            Auteur: book.Auteur ? book.Auteur.trim() : '',
-                            Tags: book.Tags ? book.Tags.trim() : '',
-                            Graad: book.Graad ? book.Graad.trim() : '',
-                            Locatie: book.Locatie ? book.Locatie.trim() : '',
-                            Taal: bepaalTaal(book.Locatie)
-                        })).filter(b => b.Titel !== ''); // Filter lege rijen weg
-
-                        initFilters();
-                        filterAndRender();
-                    }
-                });
-            })
-            .catch(error => {
-                console.error(error);
-                document.getElementById('bookCount').textContent = 'Fout bij het laden van boeken.csv. Controleer of het bestand in dezelfde map staat.';
-            });
-
+        // -------------------------------------------------------------
+        // 2. FILTERS & ZOEKFUNCTIE VOOR CATALOGUS
+        // -------------------------------------------------------------
         function initFilters() {
-            // 1. Talen vullen
+            // Talen
             const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort();
             const taalContainer = document.getElementById('taalCheckboxes');
             taalContainer.innerHTML = '';
@@ -154,7 +556,7 @@
                 `;
             });
 
-            // 2. Graden vullen
+            // Graden
             const graden = [...new Set(allBooks.map(b => b.Graad))].filter(Boolean).sort();
             const graadContainer = document.getElementById('graadCheckboxes');
             graadContainer.innerHTML = '';
@@ -167,11 +569,14 @@
                 `;
             });
 
-            // 3. Tags vullen
+            // Tags
             const tagSet = new Set();
             allBooks.forEach(book => {
                 if (book.Tags) {
-                    book.Tags.split(',').forEach(t => tagSet.add(t.trim().toLowerCase()));
+                    book.Tags.split(',').forEach(t => {
+                        const trimmed = t.trim().toLowerCase();
+                        if (trimmed) tagSet.add(trimmed);
+                    });
                 }
             });
             const tagContainer = document.getElementById('tagCheckboxes');
@@ -196,9 +601,11 @@
             const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
 
             const filtered = allBooks.filter(book => {
+                const q = searchQuery.toLowerCase();
                 const matchSearch = !searchQuery || 
-                    (book.Titel && book.Titel.toLowerCase().includes(searchQuery.toLowerCase())) || 
-                    (book.Auteur && book.Auteur.toLowerCase().includes(searchQuery.toLowerCase()));
+                    (book.Titel && book.Titel.toLowerCase().includes(q)) || 
+                    (book.Auteur && book.Auteur.toLowerCase().includes(q)) ||
+                    (book.Tags && book.Tags.toLowerCase().includes(q));
                 
                 const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
                 const matchGraad = selectedGraden.length === 0 || selectedGraden.includes(book.Graad);
@@ -219,9 +626,9 @@
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center text-slate-400">
-                        <p class="text-base font-semibold">Geen boeken gevonden met deze filters.</p>
-                        <p class="text-sm mt-1">Probeer andere filters of wis je selectie.</p>
+                    <div class="col-span-full py-16 text-center text-slate-400 bg-white rounded-3xl border border-slate-100">
+                        <p class="text-lg font-bold text-slate-700">Geen boeken gevonden</p>
+                        <p class="text-sm mt-1">Probeer een andere zoekterm of wis een van de filters.</p>
                     </div>
                 `;
                 return;
@@ -229,30 +636,27 @@
 
             filtered.forEach(book => {
                 const tagsHtml = book.Tags 
-                    ? book.Tags.split(',').map(t => `<span class="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium hover:bg-slate-200 transition">${t.trim()}</span>`).join('') 
+                    ? book.Tags.split(',').map(t => `<span class="tag-badge text-[11px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-medium">${t.trim()}</span>`).join(' ') 
                     : '';
 
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-pink-200 transition group';
+                card.className = 'bg-white rounded-2xl p-5 shadow-xs border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-pink-200 transition group';
                 card.innerHTML = `
                     <div>
-                        <!-- Graad badge bovenaan -->
                         <div class="flex justify-between items-start gap-2 mb-2">
-                            <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-lg">${book.Graad || ''}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-lg">${book.Graad || 'Alle graden'}</span>
+                            ${book.ISBN ? `<span class="text-[10px] text-slate-400 font-mono" title="ISBN">#${book.ISBN}</span>` : ''}
                         </div>
-                        <!-- Goodreads stijl: Titel, auteur, tags, taal en locatie -->
                         <h4 class="font-bold text-slate-900 text-base leading-snug mb-1 group-hover:text-pink-600 transition">${book.Titel}</h4>
-                        <p class="text-xs text-slate-500 font-medium mb-3">door ${book.Auteur}</p>
+                        <p class="text-xs text-slate-500 font-medium mb-3">door <span class="text-slate-700 font-semibold">${book.Auteur}</span></p>
                         
-                        <!-- Tags -->
                         <div class="flex flex-wrap gap-1.5 mb-4">
                             ${tagsHtml}
                         </div>
                     </div>
-                    <!-- Taal en Locatie onderaan -->
                     <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                         <span class="font-semibold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg">${book.Taal}</span>
-                        <span class="truncate max-w-[160px] bg-slate-50 px-2.5 py-1 rounded-lg" title="${book.Locatie}">${book.Locatie}</span>
+                        <span class="truncate max-w-[160px] bg-slate-50 px-2.5 py-1 rounded-lg text-slate-600" title="${book.Locatie}">${book.Locatie}</span>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -270,6 +674,421 @@
             searchQuery = '';
             filterAndRender();
         });
+
+        // -------------------------------------------------------------
+        // 3. TOP NAVIGATIEMENU (CATALOGUS <-> BEHEERDER)
+        // -------------------------------------------------------------
+        function initNavigation() {
+            const catalogBtns = [document.getElementById('btnDeskCatalog'), document.getElementById('btnMobCatalog')];
+            const adminBtns = [document.getElementById('btnDeskAdmin'), document.getElementById('btnMobAdmin')];
+
+            const catalogView = document.getElementById('catalogView');
+            const adminView = document.getElementById('adminView');
+
+            function showCatalog() {
+                catalogView.classList.remove('hidden');
+                adminView.classList.add('hidden');
+
+                catalogBtns.forEach(btn => {
+                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-pink-600 text-white shadow-sm';
+                });
+                adminBtns.forEach(btn => {
+                    btn.className = 'nav-tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-pink-50 hover:text-pink-700';
+                });
+            }
+
+            function showAdmin() {
+                catalogView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+
+                adminBtns.forEach(btn => {
+                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-pink-600 text-white shadow-sm';
+                });
+                catalogBtns.forEach(btn => {
+                    btn.className = 'nav-tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-pink-50 hover:text-pink-700';
+                });
+
+                // Controleer of beheerder al ingelogd is
+                if (sessionStorage.getItem('schoolbib_logged_in') === 'true') {
+                    document.getElementById('adminLoginSection').classList.add('hidden');
+                    document.getElementById('adminDashboardSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('adminLoginSection').classList.remove('hidden');
+                    document.getElementById('adminDashboardSection').classList.add('hidden');
+                }
+            }
+
+            catalogBtns.forEach(btn => btn.addEventListener('click', showCatalog));
+            adminBtns.forEach(btn => btn.addEventListener('click', showAdmin));
+        }
+
+        // -------------------------------------------------------------
+        // 4. BEHEERDER INLOGGEN & SESSIE
+        // -------------------------------------------------------------
+        function initAdminAuth() {
+            const loginForm = document.getElementById('adminLoginForm');
+            const pinInput = document.getElementById('adminPinInput');
+            const pinError = document.getElementById('pinErrorMsg');
+            const logoutBtn = document.getElementById('adminLogoutBtn');
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (pinInput.value.trim() === currentPin) {
+                    sessionStorage.setItem('schoolbib_logged_in', 'true');
+                    pinError.classList.add('hidden');
+                    pinInput.value = '';
+                    document.getElementById('adminLoginSection').classList.add('hidden');
+                    document.getElementById('adminDashboardSection').classList.remove('hidden');
+                } else {
+                    pinError.classList.remove('hidden');
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('schoolbib_logged_in');
+                document.getElementById('adminDashboardSection').classList.add('hidden');
+                document.getElementById('adminLoginSection').classList.remove('hidden');
+            });
+
+            // Sub-tabs beheerder
+            const tabs = [
+                { btn: document.getElementById('tabBtnAddBook'), el: document.getElementById('subtabAddBook') },
+                { btn: document.getElementById('tabBtnLoans'), el: document.getElementById('subtabLoans') },
+                { btn: document.getElementById('tabBtnSettings'), el: document.getElementById('subtabSettings') }
+            ];
+
+            tabs.forEach(({ btn, el }) => {
+                btn.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        t.el.classList.add('hidden');
+                        t.btn.className = 'admin-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+                    });
+                    el.classList.remove('hidden');
+                    btn.className = 'admin-subtab active-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-white text-pink-600 shadow-xs';
+                });
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 5. BOEK TOEVOEGEN & AUTOMATISCH OPSLAAN NAAR GOOGLE SHEETS
+        // -------------------------------------------------------------
+        function initAddBook() {
+            const form = document.getElementById('addBookForm');
+            const statusBox = document.getElementById('addBookStatus');
+            const submitBtn = document.getElementById('btnAddBookSubmit');
+
+            // Snelle tags toevoegen via klik op chip
+            document.querySelectorAll('.quick-tag').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tag = btn.getAttribute('data-tag');
+                    const tagsInput = document.getElementById('fTags');
+                    const currentTags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
+                    if (!currentTags.includes(tag)) {
+                        currentTags.push(tag);
+                        tagsInput.value = currentTags.join(', ');
+                    }
+                });
+            });
+
+            // ISBN Lookup via Google Books API
+            const lookupBtn = document.getElementById('btnLookupIsbn');
+            const lookupInput = document.getElementById('lookupIsbnInput');
+            const lookupStatus = document.getElementById('isbnLookupStatus');
+
+            lookupBtn.addEventListener('click', async () => {
+                const isbn = lookupInput.value.replace(/[^0-9X]/gi, '').trim();
+                if (!isbn) {
+                    alert('Voer eerst een geldig ISBN-nummer in.');
+                    return;
+                }
+
+                lookupStatus.textContent = 'Gegevens zoeken via Google Books...';
+                lookupStatus.className = 'text-xs font-semibold text-slate-500';
+                lookupStatus.classList.remove('hidden');
+
+                try {
+                    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+                    const data = await res.json();
+
+                    if (data.totalItems > 0 && data.items[0].volumeInfo) {
+                        const info = data.items[0].volumeInfo;
+                        document.getElementById('fTitel').value = info.title || '';
+                        document.getElementById('fAuteur').value = (info.authors && info.authors.join(', ')) || '';
+                        document.getElementById('fIsbn').value = isbn;
+
+                        if (info.categories && info.categories.length > 0) {
+                            const currentTags = document.getElementById('fTags').value;
+                            const newTag = info.categories[0].toLowerCase();
+                            document.getElementById('fTags').value = currentTags ? `${currentTags}, ${newTag}` : newTag;
+                        }
+
+                        lookupStatus.textContent = `✅ Boek gevonden: "${info.title}" (${info.authors ? info.authors.join(', ') : 'onbekend'})`;
+                        lookupStatus.className = 'text-xs font-semibold text-emerald-600';
+                    } else {
+                        // Alternatief proberen via OpenLibrary API
+                        const olRes = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+                        const olData = await olRes.json();
+                        const bookKey = `ISBN:${isbn}`;
+
+                        if (olData[bookKey]) {
+                            const b = olData[bookKey];
+                            document.getElementById('fTitel').value = b.title || '';
+                            document.getElementById('fAuteur').value = (b.authors && b.authors.map(a => a.name).join(', ')) || '';
+                            document.getElementById('fIsbn').value = isbn;
+                            lookupStatus.textContent = `✅ Boek gevonden: "${b.title}"`;
+                            lookupStatus.className = 'text-xs font-semibold text-emerald-600';
+                        } else {
+                            lookupStatus.textContent = 'ℹ️ Geen gegevens gevonden voor dit ISBN. Je kunt de velden handmatig invullen.';
+                            lookupStatus.className = 'text-xs font-semibold text-amber-600';
+                            document.getElementById('fIsbn').value = isbn;
+                        }
+                    }
+                } catch (e) {
+                    lookupStatus.textContent = 'Kon gegevens niet ophalen. Vul het formulier handmatig in.';
+                    lookupStatus.className = 'text-xs font-semibold text-slate-500';
+                }
+            });
+
+            // Formulier verzenden
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `
+                    <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                    <span>Bezig met opslaan...</span>
+                `;
+
+                const newBook = {
+                    Titel: document.getElementById('fTitel').value.trim(),
+                    Auteur: document.getElementById('fAuteur').value.trim(),
+                    Graad: document.getElementById('fGraad').value.trim(),
+                    Locatie: document.getElementById('fLocatie').value.trim(),
+                    Tags: document.getElementById('fTags').value.trim(),
+                    ISBN: document.getElementById('fIsbn').value.trim(),
+                    Taal: bepaalTaal(document.getElementById('fLocatie').value.trim())
+                };
+
+                // Voeg meteen toe aan lokale weergave (instant feedback!)
+                allBooks.unshift(newBook);
+                initFilters();
+                filterAndRender();
+                updateLoanBookList();
+
+                // Probeer door te sturen naar Google Sheet via Apps Script
+                const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
+
+                if (activeScriptUrl) {
+                    try {
+                        await fetch(activeScriptUrl, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify({
+                                titel: newBook.Titel,
+                                auteur: newBook.Auteur,
+                                tags: newBook.Tags,
+                                graad: newBook.Graad,
+                                locatie: newBook.Locatie,
+                                isbn: newBook.ISBN
+                            })
+                        });
+
+                        statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex items-center gap-2';
+                        statusBox.innerHTML = `
+                            <span>🎉 Boek <strong>"${newBook.Titel}"</strong> is succesvol toegevoegd en opgeslagen in jullie Google Sheet!</span>
+                        `;
+                    } catch (err) {
+                        statusBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold';
+                        statusBox.innerHTML = `
+                            <span>Boek is lokaal toegevoegd. Kon het niet automatisch naar Google Sheets sturen. Controleer de Web-app URL bij Instellingen.</span>
+                        `;
+                    }
+                } else {
+                    statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex flex-col gap-1';
+                    statusBox.innerHTML = `
+                        <span>🎉 Boek <strong>"${newBook.Titel}"</strong> is direct toegevoegd aan de website!</span>
+                        <span class="text-xs font-normal text-slate-600">Tip: Koppel de Google Apps Script Web-app URL onder het tabblad 'Instellingen & Sheet' om het ook automatisch in Google Sheets op te slaan.</span>
+                    `;
+                }
+
+                statusBox.classList.remove('hidden');
+                form.reset();
+                lookupInput.value = '';
+                lookupStatus.classList.add('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Boek toevoegen en opslaan</span>
+                `;
+
+                setTimeout(() => {
+                    statusBox.classList.add('hidden');
+                }, 8000);
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 6. BOEKEN ONTLENEN & INLEVEREN
+        // -------------------------------------------------------------
+        function initLoans() {
+            const loanForm = document.getElementById('loanForm');
+            const dueDateInput = document.getElementById('loanDueDate');
+
+            // Standaard inleverdatum instellen op 3 weken vanaf vandaag
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 21);
+            dueDateInput.value = defaultDate.toISOString().split('T')[0];
+
+            loanForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const student = document.getElementById('loanStudent').value.trim();
+                const klas = document.getElementById('loanClass').value.trim();
+                const bookTitle = document.getElementById('loanBookTitle').value.trim();
+                const dueDate = document.getElementById('loanDueDate').value;
+
+                const newLoan = {
+                    id: Date.now(),
+                    student,
+                    klas,
+                    bookTitle,
+                    loanDate: new Date().toISOString().split('T')[0],
+                    dueDate,
+                    returned: false
+                };
+
+                loans.unshift(newLoan);
+                saveLoans();
+                renderLoans();
+
+                loanForm.reset();
+                dueDateInput.value = defaultDate.toISOString().split('T')[0];
+            });
+
+            renderLoans();
+        }
+
+        function updateLoanBookList() {
+            const datalist = document.getElementById('loanBooksList');
+            if (!datalist) return;
+            datalist.innerHTML = '';
+            allBooks.slice(0, 300).forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.Titel;
+                opt.textContent = `${b.Titel} - ${b.Auteur}`;
+                datalist.appendChild(opt);
+            });
+        }
+
+        function saveLoans() {
+            localStorage.setItem('schoolbib_loans', JSON.stringify(loans));
+            renderLoans();
+        }
+
+        function renderLoans() {
+            const tbody = document.getElementById('loansTableBody');
+            const countBadge = document.getElementById('activeLoansCount');
+            if (!tbody) return;
+
+            const activeLoans = loans.filter(l => !l.returned);
+            countBadge.textContent = `${activeLoans.length} actieve uitleningen`;
+
+            tbody.innerHTML = '';
+            if (loans.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-4 py-8 text-center text-slate-400">
+                            Nog geen boeken uitgeleend. Gebruik het bovenstaande formulier om een uitlening te registreren.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+
+            loans.forEach(loan => {
+                const isOverdue = !loan.returned && loan.dueDate && loan.dueDate < today;
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition';
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-semibold text-slate-900">${loan.student}</td>
+                    <td class="px-4 py-3 font-medium text-slate-600">${loan.klas}</td>
+                    <td class="px-4 py-3 font-medium text-slate-800">${loan.bookTitle}</td>
+                    <td class="px-4 py-3 text-slate-500">${loan.loanDate || '-'}</td>
+                    <td class="px-4 py-3 ${isOverdue ? 'text-rose-600 font-bold' : 'text-slate-600'}">${loan.dueDate || '-'}</td>
+                    <td class="px-4 py-3">
+                        ${loan.returned 
+                            ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Ingeleverd</span>' 
+                            : (isOverdue 
+                                ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">Te laat</span>'
+                                : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Uitgeleend</span>')}
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                        ${!loan.returned ? `
+                            <button onclick="markLoanReturned(${loan.id})" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1 rounded-lg transition">
+                                Inleveren ✓
+                            </button>
+                        ` : `
+                            <button onclick="deleteLoan(${loan.id})" class="text-xs text-slate-400 hover:text-rose-600 transition" title="Verwijderen uit historiek">
+                                ✕
+                            </button>
+                        `}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.markLoanReturned = function(id) {
+            const loan = loans.find(l => l.id === id);
+            if (loan) {
+                loan.returned = true;
+                loan.returnDate = new Date().toISOString().split('T')[0];
+                saveLoans();
+            }
+        };
+
+        window.deleteLoan = function(id) {
+            loans = loans.filter(l => l.id !== id);
+            saveLoans();
+        };
+
+        // -------------------------------------------------------------
+        // 7. INSTELLINGEN (SCRIPT URL & PINCODE)
+        // -------------------------------------------------------------
+        function initSettings() {
+            const scriptInput = document.getElementById('scriptUrlInput');
+            const saveScriptBtn = document.getElementById('btnSaveScriptUrl');
+            const scriptSavedMsg = document.getElementById('scriptUrlSavedMsg');
+
+            if (scriptUrl) scriptInput.value = scriptUrl;
+
+            saveScriptBtn.addEventListener('click', () => {
+                const val = scriptInput.value.trim();
+                localStorage.setItem('schoolbib_script_url', val);
+                scriptUrl = val;
+                scriptSavedMsg.classList.remove('hidden');
+                setTimeout(() => scriptSavedMsg.classList.add('hidden'), 3000);
+            });
+
+            const pinInput = document.getElementById('newPinInput');
+            const savePinBtn = document.getElementById('btnSavePin');
+            const pinSavedMsg = document.getElementById('pinSavedMsg');
+
+            savePinBtn.addEventListener('click', () => {
+                const val = pinInput.value.trim();
+                if (val.length < 3) {
+                    alert('Kies een pincode van minimaal 3 tekens.');
+                    return;
+                }
+                localStorage.setItem('schoolbib_pin', val);
+                currentPin = val;
+                pinSavedMsg.classList.remove('hidden');
+                pinInput.value = '';
+                setTimeout(() => pinSavedMsg.classList.add('hidden'), 3000);
+            });
+        }
     </script>
 </body>
 </html>
