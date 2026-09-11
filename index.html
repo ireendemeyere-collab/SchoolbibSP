@@ -218,23 +218,43 @@
                 <div class="flex flex-wrap items-center gap-2">
                     <span class="text-xs font-black uppercase text-brand-700 tracking-wider mr-1">Filter:</span>
 
-                    <!-- 1. Dropdown Taal -->
+                    <!-- 1. Dropdown Genre -->
                     <div class="relative dropdown-container">
-                        <button type="button" id="btnDropdownTaal" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
-                            <span>Taal</span>
-                            <span id="badgeTaalCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                        <button type="button" id="btnDropdownGenre" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Genre</span>
+                            <span id="badgeGenreCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div id="menuTaal" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                        <div id="menuGenre" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-72 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
                             <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Taal</span>
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Genre / Boektype</span>
                                 <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
                             </div>
-                            <div class="space-y-2 max-h-60 overflow-y-auto clean-scroll" id="taalCheckboxes"></div>
+                            <input type="text" id="filterGenreSearch" placeholder="Typ genre (bv. fantasy, thriller)..." 
+                                   class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
+                            <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1 clean-scroll" id="genreCheckboxes"></div>
                         </div>
                     </div>
 
-                    <!-- 2. Dropdown Leeftijd -->
+                    <!-- 2. Dropdown Thema -->
+                    <div class="relative dropdown-container">
+                        <button type="button" id="btnDropdownThema" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Thema</span>
+                            <span id="badgeThemaCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="menuThema" class="dropdown-menu hidden absolute left-0 sm:left-auto top-full mt-2 w-80 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Thema's</span>
+                                <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
+                            </div>
+                            <input type="text" id="filterTagSearch" placeholder="Typ thema (bv. vriendschap, migratie)..." 
+                                   class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
+                            <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1 clean-scroll" id="tagCheckboxes"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Dropdown Leeftijd -->
                     <div class="relative dropdown-container">
                         <button type="button" id="btnDropdownLeeftijd" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
                             <span>Leeftijd</span>
@@ -250,21 +270,19 @@
                         </div>
                     </div>
 
-                    <!-- 3. Dropdown Thema -->
+                    <!-- 4. Dropdown Taal -->
                     <div class="relative dropdown-container">
-                        <button type="button" id="btnDropdownThema" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
-                            <span>Thema</span>
-                            <span id="badgeThemaCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                        <button type="button" id="btnDropdownTaal" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Taal</span>
+                            <span id="badgeTaalCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div id="menuThema" class="dropdown-menu hidden absolute left-0 sm:left-auto top-full mt-2 w-80 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                        <div id="menuTaal" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
                             <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Thema's</span>
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Taal</span>
                                 <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
                             </div>
-                            <input type="text" id="filterTagSearch" placeholder="Typ thema (bv. spanning, humor)..." 
-                                   class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
-                            <div class="space-y-2 max-h-64 overflow-y-auto pr-1 clean-scroll" id="tagCheckboxes"></div>
+                            <div class="space-y-2 max-h-60 overflow-y-auto clean-scroll" id="taalCheckboxes"></div>
                         </div>
                     </div>
 
@@ -631,19 +649,16 @@
 
                     <!-- LIVE DUPLICAAT WAARSCHUWINGSBANNER -->
                     <div id="duplicateWarningBox" class="hidden p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-900 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
-                        <div class="flex items-start gap-3">
-                            <span class="text-2xl mt-0.5">⚠️</span>
-                            <div>
-                                <h4 class="text-xs sm:text-sm font-extrabold text-amber-950 flex items-center gap-2">
-                                    <span>Dit boek staat al in de catalogus!</span>
-                                    <span id="dupCountBadge" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-200 text-amber-900"></span>
-                                </h4>
-                                <p id="dupDetailsText" class="text-xs text-amber-800 mt-0.5"></p>
-                            </div>
+                        <div>
+                            <h4 class="text-xs sm:text-sm font-extrabold text-amber-950 flex items-center gap-2">
+                                <span>Dit boek staat al in de catalogus</span>
+                                <span id="dupCountBadge" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-200 text-amber-900"></span>
+                            </h4>
+                            <p id="dupDetailsText" class="text-xs text-amber-800 mt-0.5"></p>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto shrink-0 justify-end">
-                            <button type="button" id="btnDupAutoFill" class="text-xs font-extrabold px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white transition flex items-center gap-1 shadow-2xs">
-                                <span>➕ Extra exemplaar toevoegen</span>
+                            <button type="button" id="btnDupAutoFill" class="text-xs font-extrabold px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white transition shadow-2xs">
+                                <span>Extra exemplaar toevoegen</span>
                             </button>
                             <button type="button" id="btnDupCancel" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-white border border-amber-300 hover:bg-amber-100 text-amber-800 transition">
                                 <span>Wissen</span>
@@ -692,22 +707,35 @@
                                 </datalist>
                             </div>
 
-                            <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Thema's & Tags (gescheiden door komma's)</label>
-                                <input type="text" id="fTags" placeholder="Bijv. spanning, misdaad, mysterie, detective" 
-                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
-                                
-                                <div class="flex flex-wrap gap-1.5 mt-2">
-                                    <span class="text-xs text-slate-400 mr-1 self-center">Snel toevoegen:</span>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="spanning">+ spanning</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="avontuur">+ avontuur</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="liefde">+ liefde</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="vriendschap">+ vriendschap</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="fantasy">+ fantasy</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="geschiedenis">+ geschiedenis</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="humor">+ humor</button>
+                            <!-- 1. GENRE SELECTIE VOOR BEHEERDERS -->
+                            <div class="sm:col-span-2 bg-slate-50/90 p-4 rounded-2xl border border-slate-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider">
+                                        1. Genre / Boektype <span class="text-brand-600 font-bold normal-case">(klik om te selecteren)</span>
+                                    </label>
+                                    <span class="text-[11px] text-slate-400 font-medium">Selecteer 1 of meer</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5" id="adminGenreChips"></div>
+                            </div>
+
+                            <!-- 2. THEMA SELECTIE VOOR BEHEERDERS -->
+                            <div class="sm:col-span-2 bg-slate-50/90 p-4 rounded-2xl border border-slate-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider">
+                                        2. Inhoudelijke Thema's <span class="text-brand-600 font-bold normal-case">(waar gaat het verhaal over?)</span>
+                                    </label>
+                                    <span class="text-[11px] text-slate-400 font-medium">Selecteer 1 of meer</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 mb-3" id="adminThemaChips"></div>
+                                <div class="pt-2 border-t border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                                    <label for="adminExtraTagInput" class="text-xs font-semibold text-slate-600 shrink-0">Extra specifiek onderwerp:</label>
+                                    <input type="text" id="adminExtraTagInput" placeholder="Bijv. schaken, klimaat, ruimte (optioneel)" 
+                                           class="w-full sm:flex-1 text-xs px-3 py-1.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                                 </div>
                             </div>
+
+                            <!-- Automatisch gegenereerd tagveld voor compatibiliteit -->
+                            <input type="hidden" id="fTags" value="">
 
                             <div class="sm:col-span-2">
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">ISBN / Barcode (voor coverafbeelding en Boekenzoeker)</label>
@@ -874,14 +902,9 @@
         <!-- MODAL: DUPLICAAT BEVESTIGING BIJ OPSLAAN -->
     <dialog id="duplicateConfirmModal" class="rounded-3xl p-0 shadow-2xl backdrop:bg-slate-900/60 max-w-lg w-full overflow-hidden border border-slate-200">
         <div class="bg-white p-6 sm:p-7 space-y-5">
-            <div class="flex items-center gap-3.5">
-                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0">
-                    ⚠️
-                </div>
-                <div>
-                    <h3 class="text-lg font-extrabold text-slate-900 leading-tight">Dit boek bestaat al in de catalogus!</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Is dit een extra exemplaar of had je het per ongeluk al ingegeven?</p>
-                </div>
+            <div>
+                <h3 class="text-lg font-extrabold text-slate-900 leading-tight">Dit boek bestaat al in de catalogus</h3>
+                <p class="text-xs text-slate-500 mt-1">Is dit een extra exemplaar of had je het per ongeluk al ingegeven?</p>
             </div>
 
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs text-slate-700">
@@ -894,18 +917,18 @@
             <div class="space-y-2 pt-1">
                 <!-- Keuze 1: Ja, extra exemplaar -->
                 <button type="button" id="btnModalConfirmAddCopy" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-4 rounded-2xl transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm">
-                    <span>➕ Ja, voeg toe als nieuw exemplaar</span>
-                    <span id="modalDupNextCopyLabel" class="text-[11px] bg-emerald-700/80 px-2 py-0.5 rounded-lg"></span>
+                    <span>Ja, voeg toe als nieuw exemplaar</span>
+                    <span id="modalDupNextCopyLabel" class="text-[11px] bg-emerald-700/80 px-2 py-0.5 rounded-lg font-semibold"></span>
                 </button>
 
                 <!-- Keuze 2: Oeps, al ingegeven / annuleren -->
-                <button type="button" id="btnModalCancelDuplicate" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-2xl transition text-xs flex items-center justify-center gap-1.5">
-                    <span>❌ Oeps, al ingegeven! Niet toevoegen</span>
+                <button type="button" id="btnModalCancelDuplicate" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-2xl transition text-xs flex items-center justify-center">
+                    <span>Oeps, al ingegeven (Niet toevoegen)</span>
                 </button>
 
                 <!-- Keuze 3: Bestaand boek bekijken -->
-                <button type="button" id="btnModalViewExisting" class="w-full text-brand-600 hover:text-brand-800 font-bold py-2 px-4 rounded-xl transition text-xs flex items-center justify-center gap-1">
-                    <span>🔍 Bekijk bestaand boek in catalogus</span>
+                <button type="button" id="btnModalViewExisting" class="w-full text-brand-600 hover:text-brand-800 font-bold py-2 px-4 rounded-xl transition text-xs flex items-center justify-center">
+                    <span>Bekijk bestaand boek in catalogus</span>
                 </button>
             </div>
         </div>
@@ -971,6 +994,52 @@
             loadBooks();
         });
 
+        // TAXONOMIE VOOR GENRES & THEMA'S (HELDER & OVERZICHTELIJK VOOR LEERLINGEN)
+        const GENRE_DEFINITIONS = [
+            { id: 'young-adult', label: 'Young adult (YA)', icon: '📖', keywords: ['young adult', 'ya', 'jeugd'] },
+            { id: 'graphic-novel', label: 'Graphic novel / Strip', icon: '🎨', keywords: ['graphic novel', 'graphic-novel', 'strip', 'beeldverhaal', 'comics'] },
+            { id: 'spanning-detective', label: 'Spanning & Detective', icon: '🔍', keywords: ['spanning', 'thriller', 'detective', 'misdaad', 'mysterie', 'spionnen'] },
+            { id: 'fantasy', label: 'Fantasy & Magie', icon: '🐉', keywords: ['fantasy', 'fantasie', 'magisch realisme', 'mythologie'] },
+            { id: 'sciencefiction', label: 'Sciencefiction & Dystopie', icon: '🚀', keywords: ['sciencefiction', 'science-fiction', 'science fiction', 'dystopisch', 'buitenaards', 'technologie'] },
+            { id: 'romance', label: 'Liefde & Romantiek', icon: '💘', keywords: ['romance', 'liefde', 'relaties'] },
+            { id: 'historisch', label: 'Historische fictie', icon: '⏳', keywords: ['historisch', 'geschiedenis', 'middeleeuwen'] },
+            { id: 'humor', label: 'Humor & Satire', icon: '😂', keywords: ['humor', 'satire'] },
+            { id: 'coming-of-age', label: 'Coming of age / Opgroeien', icon: '🌱', keywords: ['coming of age'] },
+            { id: 'non-fictie', label: 'Non-fictie & Biografie', icon: '💡', keywords: ['non fictie', 'non-fictie', 'biografie', 'biografisch', 'autobiografie', 'filosofie', 'essay', 'wetenschap', 'educatief'] },
+            { id: 'poezie-toneel', label: 'Poëzie, Toneel & Literaire vormen', icon: '🎭', keywords: ['poëzie', 'poǮzie', 'poƮzie', 'poezie', 'toneelstuk', 'kortverhalen', 'brieven', 'novelle', 'tragedie', 'klassieker', 'literatuur'] }
+        ];
+
+        const THEMA_DEFINITIONS = [
+            { id: 'vriendschap', label: 'Vriendschap & School', icon: '🤝', keywords: ['vriendschap', 'school'] },
+            { id: 'familie', label: 'Familie & Gezin', icon: '👨‍👩‍👧', keywords: ['familie'] },
+            { id: 'verlies', label: 'Verlies & Rouw', icon: '💔', keywords: ['verlies', 'rouw', 'overlijden', 'dood'] },
+            { id: 'migratie', label: 'Migratie & Vluchten', icon: '🌍', keywords: ['migratie', 'vertrek', 'vluchteling', 'reizen', 'cultuur'] },
+            { id: 'oorlog', label: 'Oorlog & Vrede', icon: '⚔️', keywords: ['oorlog', 'vrede'] },
+            { id: 'identiteit', label: 'Identiteit & Wie ben ik?', icon: '🪞', keywords: ['identiteit', 'queer', 'keuzes'] },
+            { id: 'mentaal-welzijn', label: 'Mentaal welzijn & Emoties', icon: '🧠', keywords: ['mental health', 'psychologisch', 'geheimen'] },
+            { id: 'sport', label: 'Sport & Hobby', icon: '⚽', keywords: ['sport', 'hobby'] },
+            { id: 'natuur-dieren', label: 'Natuur & Dieren', icon: '🌿', keywords: ['natuur', 'dieren', 'milieu'] },
+            { id: 'maatschappij', label: 'Maatschappij & Politiek', icon: '⚖️', keywords: ['politiek', 'maatschappij', 'sociaal', 'ras', 'ethiek', 'actueel'] },
+            { id: 'kunst-cultuur', label: 'Kunst, Cultuur & Muziek', icon: '🏛️', keywords: ['kunst', 'muziek', 'film', 'talen'] },
+            { id: 'avontuur', label: 'Avontuur', icon: '🧭', keywords: ['avontuur'] }
+        ];
+
+        // Slimme automatische tag-opschoning: fixt typefouten, streepjes en hoofdletters on-the-fly
+        function cleanRawTag(raw) {
+            if (!raw) return '';
+            let t = raw.trim().toLowerCase();
+            if (t.includes('po') && (t.includes('zie') || t.includes('ze') || t.includes('Ʈ') || t.includes('Ǯ'))) return 'poëzie';
+            if (t === 'graphic-novel') return 'graphic novel';
+            if (t === 'science-fiction' || t === 'science fiction') return 'sciencefiction';
+            if (t === 'fantasie') return 'fantasy';
+            if (t === 'geschiedenis' || t === 'middeleeuwen') return 'historisch';
+            if (t === 'biografisch') return 'biografie';
+            if (t === 'relaties' || t === 'liefde') return 'romance';
+            if (t === 'vertrek') return 'migratie';
+            if (t === 'carl hauptmann') return '';
+            return t.replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+
         // 1. BOEKEN INLADEN
         function loadBooks() {
             const countEl = document.getElementById('bookCount');
@@ -1012,18 +1081,35 @@
                     const rawItems = results.data.map((book, idx) => {
                         const titel = (book.Titel || book.titel || '').trim();
                         const auteur = (book.Auteur || book.auteur || '').trim();
-                        const tags = (book.Tags || book.tags || '').trim();
+                        const rawTags = (book.Tags || book.tags || '').trim();
                         const graad = (book.Graad || book.graad || '').trim();
                         const locatie = (book.Locatie || book.locatie || '').trim();
                         const isbnRaw = (book.ISBN || book.isbn || book.cover || '').toString().trim();
                         const isbn = isbnRaw.replace(/[^0-9X]/gi, '');
                         const exemplaar = (book.Exemplaar || book.exemplaar || '').trim();
 
+                        // Normaliseer en ontdubbel tags direct
+                        const cleanTagList = rawTags.split(',').map(cleanRawTag).filter(Boolean);
+                        const uniqueCleanTags = [...new Set(cleanTagList)];
+                        const cleanTagsString = uniqueCleanTags.join(', ');
+
+                        // Bepaal genres en thema's
+                        const bookGenres = GENRE_DEFINITIONS.filter(g => 
+                            uniqueCleanTags.some(t => g.keywords.some(k => t === k || t.includes(k) || k.includes(t)))
+                        ).map(g => g.id);
+
+                        const bookThemes = THEMA_DEFINITIONS.filter(th => 
+                            uniqueCleanTags.some(t => th.keywords.some(k => t === k || t.includes(k) || k.includes(t)))
+                        ).map(th => th.id);
+
                         return {
                             rowId: idx + 1,
                             Titel: titel,
                             Auteur: auteur,
-                            Tags: tags,
+                            Tags: cleanTagsString,
+                            rawTagList: uniqueCleanTags,
+                            genres: bookGenres,
+                            themes: bookThemes,
                             Graad: graad || 'Alle graden',
                             Locatie: locatie || 'Nederlandstalige fictie',
                             ISBN: isbn,
@@ -1042,6 +1128,9 @@
                                 Titel: item.Titel,
                                 Auteur: item.Auteur,
                                 Tags: item.Tags,
+                                rawTagList: item.rawTagList,
+                                genres: item.genres,
+                                themes: item.themes,
                                 Graad: item.Graad,
                                 Locatie: item.Locatie,
                                 ISBN: item.ISBN,
@@ -1051,7 +1140,12 @@
                         }
                         const entry = bookMap.get(key);
                         if (!entry.ISBN && item.ISBN) entry.ISBN = item.ISBN;
-                        if (!entry.Tags && item.Tags) entry.Tags = item.Tags;
+                        if (!entry.Tags && item.Tags) {
+                            entry.Tags = item.Tags;
+                            entry.rawTagList = item.rawTagList;
+                            entry.genres = item.genres;
+                            entry.themes = item.themes;
+                        }
 
                         const copyNum = entry.copies.length + 1;
                         const copyLabel = item.Exemplaar || `Exemplaar ${copyNum}`;
@@ -2480,14 +2574,14 @@
                         });
 
                         statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex items-center gap-2';
-                        statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is succesvol opgeslagen in Google Sheets!</span>`;
+                        statusBox.innerHTML = `<span>Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is succesvol opgeslagen in Google Sheets!</span>`;
                     } catch (err) {
                         statusBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold';
                         statusBox.innerHTML = `<span>Boek is lokaal toegevoegd als ${copyLabel}. Kon niet automatisch naar Google Sheets verzonden worden.</span>`;
                     }
                 } else {
                     statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex flex-col gap-1';
-                    statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is direct toegevoegd aan de website!</span>`;
+                    statusBox.innerHTML = `<span>Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is direct toegevoegd aan de website!</span>`;
                 }
 
                 statusBox.classList.remove('hidden');
