@@ -3,51 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schoolbibliotheek Sint-Pieters - Boekenzoeker</title>
-    <!-- Tailwind CSS -->
+    <title>Boekenbende Sint-Pieters - Schoolbibliotheek Don Bosco Gent Campus Sint-Pieters</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans voor een frisse, moderne Boekenzoeker look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9f8',
+                            100: '#dcf2ef',
+                            200: '#b8e5df',
+                            300: '#86d1c7',
+                            400: '#48999d',
+                            500: '#1ea896',
+                            600: '#107075',
+                            700: '#0d5b5f',
+                            800: '#0a494c',
+                            900: '#073235',
+                        },
+                        coral: {
+                            50: '#fff5f2',
+                            100: '#ffe8e4',
+                            200: '#ffd4cb',
+                            300: '#ffb2a2',
+                            400: '#ff826b',
+                            500: '#ff6b57',
+                            600: '#ea4d36',
+                            700: '#c53823',
+                            800: '#9e301d',
+                            900: '#802b1c',
+                        },
+                        sunny: {
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <!-- PapaParse voor het inlezen van de CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
     <style>
-        .custom-checkbox { accent-color: #db2777; width: 1.1rem; height: 1.1rem; cursor: pointer; }
+        .custom-checkbox { 
+            accent-color: #107075; 
+            width: 1.15rem; 
+            height: 1.15rem; 
+            cursor: pointer; 
+        }
+        .card-hover {
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+        }
+        .clean-scroll::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .clean-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 999px;
+        }
+        .clean-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+        .clean-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .star-rating .star {
+            cursor: pointer;
+            transition: color 0.15s ease, transform 0.15s ease;
+        }
+        .star-rating .star:hover,
+        .star-rating .star:hover ~ .star {
+            transform: scale(1.15);
+        }
+        dialog::backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="bg-[#f7faf9] text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-100 selection:text-brand-900">
 
-    <!-- Header met Top Navigatiemenu -->
-    <header class="bg-white shadow-sm border-b border-slate-100 py-3.5 px-4 sm:px-6 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <!-- HEADER: SPEELSE BOEKENZOEKER STIJL MET BOEKENBENDE LOGO -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-brand-100/70 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
             
             <!-- Logo & Schoolnaam -->
-            <div class="flex items-center gap-3.5 w-full md:w-auto justify-between md:justify-start">
-                <div class="flex items-center gap-3">
-                    <img src="logo.jpg" alt="Logo Boekenbende Sint-Pieters" 
-                         class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-slate-200" 
-                         onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?w=100&auto=format&fit=crop&q=80'">
+            <div class="flex items-center justify-between w-full md:w-auto gap-3.5">
+                <a href="#" onclick="resetCatalogFilters(); return false;" class="flex items-center gap-3 group">
+                    <img src="logo.jpg" alt="Logo Boekenbende Don Bosco Gent" 
+                         class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl object-cover shadow-sm border-2 border-brand-100 group-hover:scale-105 transition"
+                         onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?w=120&auto=format&fit=crop&q=80'">
                     <div>
-                        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Boekenbende Sint-Pieters</h1>
-                        <p class="text-xs font-semibold text-pink-600">Schoolbibliotheek Don Bosco Gent • Campus Sint-Pieters</p>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 leading-tight group-hover:text-brand-600 transition">Boekenbende Sint-Pieters</h1>
+                        <p class="text-xs font-semibold text-brand-600">Schoolbibliotheek Don Bosco Gent • Campus Sint-Pieters</p>
                     </div>
-                </div>
+                </a>
 
-                <!-- Navigatie Knoppen (Mobiel) -->
+                <!-- Mobiele navigatieknoppen -->
                 <div class="flex items-center gap-1.5 md:hidden">
-                    <button id="btnMobCatalog" class="nav-tab-btn active-nav px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-pink-600 text-white">
-                        📚 Catalogus
+                    <button id="btnMobCatalog" class="nav-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-brand-600 text-white shadow-xs">
+                        📚 Boeken
                     </button>
-                    <button id="btnMobAdmin" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    <button id="btnMobAdmin" class="nav-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200">
                         ⚙️ Beheer
                     </button>
                 </div>
             </div>
 
-            <!-- Desktop Navigatie Knoppen -->
-            <div class="hidden md:flex items-center gap-2.5">
-                <button id="btnDeskCatalog" class="nav-tab-btn active-nav px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-pink-600 text-white shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span>Catalogus</span>
+            <!-- Desktop Navigatie -->
+            <div class="hidden md:flex items-center gap-3">
+                <button id="btnDeskCatalog" class="nav-tab-btn active-nav px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm hover:bg-brand-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>Boekenzoeker Bib</span>
                 </button>
-                <button id="btnDeskAdmin" class="nav-tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-pink-50 hover:text-pink-700">
+                <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" 
+                   class="px-3.5 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 border border-transparent hover:border-brand-200" 
+                   title="Open officiële Boekenzoeker.be website in nieuw scherm">
+                    <span>Naar Boekenzoeker.be</span>
+                    <span class="text-slate-400">↗</span>
+                </a>
+                <button id="btnDeskAdmin" class="nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-coral-50 hover:text-coral-700 border border-slate-200">
                     <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     <span>Beheerder</span>
                 </button>
@@ -56,127 +152,387 @@
         </div>
     </header>
 
-    <!-- ============================================================= -->
-    <!-- WEERGAVE 1: CATALOGUS (VOOR LEERLINGEN EN LEERKRACHTEN)       -->
-    <!-- ============================================================= -->
-    <main id="catalogView" class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
-        
-        <!-- Zoekbalk & Live Teller -->
-        <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-            <div class="w-full sm:w-96 relative">
-                <input type="text" id="searchInput" placeholder="Zoek op titel, auteur of onderwerp..." 
-                    class="w-full pl-11 pr-4 py-2.5 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition">
-                <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+    <!-- WEERGAVE 1: CATALOGUS -->
+    <main id="catalogView" class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-grow w-full space-y-7">
+
+        <!-- HERO BANNER IN BOEKENZOEKER STIJL MET SNELLE ZOEKER -->
+        <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white p-6 sm:p-10 shadow-lg shadow-brand-900/10">
+            <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute right-1/4 -top-10 w-48 h-48 bg-coral-400/20 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-extrabold uppercase tracking-wider mb-3">
+                    <span>📚 Catalogus Schoolbibliotheek</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-2">
+                    Vind je volgende boek in onze schoolbib!
+                </h2>
+                <p class="text-sm sm:text-base text-brand-50 font-medium mb-6 leading-relaxed">
+                    Dit is de catalogus van onze schoolbib. We helpen je graag bij het kiezen van je volgende boek en tonen wat er allemaal aanwezig is in onze bib. Klik op een cover voor de achterflap of geef sterren. Voor uitgebreide leestips en inspiratie kun je ook altijd terecht op <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" class="underline font-bold text-white hover:text-sunny-300">Boekenzoeker.be ↗</a>.
+                </p>
+
+                <!-- Hoofd Zoekbalk in de Hero -->
+                <div class="relative flex items-center bg-white rounded-2xl p-1.5 shadow-xl">
+                    <div class="pl-3.5 text-brand-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Zoek op titel, auteur, thema (bv. spanning, vriendschap)..." 
+                           class="w-full pl-3 pr-4 py-2.5 sm:py-3 text-slate-800 placeholder-slate-400 font-medium text-sm sm:text-base rounded-xl focus:outline-none bg-transparent">
+                    <button id="btnClearSearch" class="hidden text-slate-400 hover:text-slate-600 px-3 text-sm font-bold">✕</button>
+                </div>
             </div>
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+        </section>
+
+        <!-- DYNAMISCH THEMA IN DE KIJKER (DOOR BEHEERDERS INGESTELD) -->
+        <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 transition border shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2" id="featuredThemeBadge">
+                        <span>🌟 In de kijker</span>
+                    </div>
+                    <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
+                    <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnScrollFeaturedLeft" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">‹</button>
+                    <button id="btnScrollFeaturedRight" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">›</button>
+                </div>
+            </div>
+
+            <!-- Horizontale boekenplank van het thema -->
+            <div id="featuredBooksCarousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 clean-scroll scroll-smooth"></div>
+        </section>
+
+        <!-- SNELKEUZE / SNELFILTERS -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl shadow-xs border border-slate-200/70">
+            <div class="flex flex-wrap items-center gap-2" id="quickFilterPills">
+                <button data-filter="all" class="quick-filter-btn active-filter px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-brand-600 text-white shadow-xs">
+                    📚 Alle boeken
+                </button>
+                <button data-filter="top-rated" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-sunny-100 hover:text-sunny-500">
+                    ⭐ Top beoordeeld door leerlingen
+                </button>
+                <button data-filter="my-favorites" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-coral-100 hover:text-coral-600">
+                    ❤️ Mijn favorieten (<span id="favCount">0</span>)
+                </button>
+                <button data-filter="new-books" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-teal-100 hover:text-teal-700">
+                    ✨ Nieuw in de bib
+                </button>
+            </div>
+
+            <!-- Live Status & Teller -->
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
                 <span id="syncBadge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     Google Sheet live
                 </span>
-                <span id="bookCount" class="text-sm font-bold text-slate-700">Boeken laden...</span>
+                <span id="bookCount" class="text-xs sm:text-sm font-extrabold text-brand-700">Boeken laden...</span>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- Sidebar / Filters -->
-            <aside class="lg:col-span-1 space-y-6">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                        Filters
-                    </h3>
-                    <button id="resetFilters" class="text-xs text-pink-600 hover:text-pink-800 font-semibold transition">Alles wissen</button>
+        <!-- INTERACTIEVE FILTERBALK: OPENVOUWENDE DROPDOWNS IN BOEKENZOEKER STIJL -->
+        <div class="relative z-30 bg-white p-4 rounded-3xl shadow-xs border border-slate-200/80">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-black uppercase text-brand-700 tracking-wider mr-1">Filter:</span>
+
+                    <!-- 1. Dropdown Taal -->
+                    <div class="relative dropdown-container">
+                        <button type="button" id="btnDropdownTaal" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Taal</span>
+                            <span id="badgeTaalCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <!-- Openvouw menu -->
+                        <div id="menuTaal" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Taal</span>
+                                <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
+                            </div>
+                            <div class="space-y-2 max-h-60 overflow-y-auto clean-scroll" id="taalCheckboxes"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Dropdown Leeftijd -->
+                    <div class="relative dropdown-container">
+                        <button type="button" id="btnDropdownLeeftijd" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Leeftijd</span>
+                            <span id="badgeLeeftijdCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="menuLeeftijd" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-72 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Leeftijd / Graad</span>
+                                <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
+                            </div>
+                            <div class="space-y-2.5 max-h-60 overflow-y-auto clean-scroll" id="leeftijdCheckboxes"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Dropdown Thema -->
+                    <div class="relative dropdown-container">
+                        <button type="button" id="btnDropdownThema" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Thema</span>
+                            <span id="badgeThemaCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="menuThema" class="dropdown-menu hidden absolute left-0 sm:left-auto top-full mt-2 w-80 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Thema's</span>
+                                <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
+                            </div>
+                            <!-- Zoekthema's inputje -->
+                            <input type="text" id="filterTagSearch" placeholder="Typ thema (bv. spanning, humor)..." 
+                                   class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
+                            <div class="space-y-2 max-h-64 overflow-y-auto pr-1 clean-scroll" id="tagCheckboxes"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Dropdown Beschikbaar -->
+                    <div class="relative dropdown-container">
+                        <button type="button" id="btnDropdownBeschikbaar" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Beschikbaar</span>
+                            <span id="badgeBeschikbaarCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="menuBeschikbaar" class="dropdown-menu hidden absolute left-0 sm:left-auto top-full mt-2 w-72 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Beschikbaarheid</span>
+                                <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
+                            </div>
+                            <div class="space-y-2.5" id="beschikbaarCheckboxes">
+                                <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                                    <input type="checkbox" name="beschikbaar" value="available" class="custom-checkbox filter-input rounded-md">
+                                    <span class="flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                        <span>Nu in de bib aanwezig</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                                    <input type="checkbox" name="beschikbaar" value="loaned" class="custom-checkbox filter-input rounded-md">
+                                    <span class="flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                        <span>Momenteel uitgeleend</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wis filters knop -->
+                    <button id="resetFilters" class="hidden px-3 py-1.5 rounded-xl text-xs font-extrabold transition text-coral-600 hover:bg-coral-50 flex items-center gap-1">
+                        <span>✕ Wis filters</span>
+                    </button>
                 </div>
 
-                <!-- Filter op Taal -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
-                        Taal
-                    </h4>
-                    <div class="space-y-2" id="taalCheckboxes"></div>
+                <!-- Sorteren op dropdown -->
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                    <label for="sortSelect" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Sorteren:</label>
+                    <select id="sortSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="default">Standaard</option>
+                        <option value="rating-desc">⭐ Hoogste beoordeling</option>
+                        <option value="title-asc">Titel (A-Z)</option>
+                        <option value="author-asc">Auteur (A-Z)</option>
+                    </select>
                 </div>
+            </div>
 
-                <!-- Filter op Graad -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        Graad
-                    </h4>
-                    <div class="space-y-2" id="graadCheckboxes"></div>
-                </div>
-
-                <!-- Filter op Tags -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                        Thema's & Tags
-                    </h4>
-                    <div class="space-y-2 max-h-64 overflow-y-auto pr-1" id="tagCheckboxes"></div>
-                </div>
-            </aside>
-
-            <!-- Boeken Grid -->
-            <section class="lg:col-span-3 flex flex-col gap-6">
-                <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                    <!-- Boekenkaarten komen hier -->
-                </div>
-            </section>
+            <!-- Actieve filter tags badges balk -->
+            <div id="activeFilterTagsBar" class="hidden flex flex-wrap items-center gap-1.5 pt-3 mt-3 border-t border-slate-100">
+                <span class="text-[11px] font-bold text-slate-400 mr-1">Actief gefilterd op:</span>
+                <div id="activeFilterTagsList" class="flex flex-wrap items-center gap-1.5"></div>
+            </div>
         </div>
+
+        <!-- BOEKEN GRID (VOLLE BREEDTE IN BOEKENZOEKER STIJL) -->
+        <section class="flex flex-col gap-6">
+            <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+                <span id="activeFilterFeedback" class="font-semibold text-slate-600">Alle boeken uit de catalogus</span>
+            </div>
+            <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
+        </section>
+
+        <!-- SECTIE: ✨ NIEUW IN DE BIB -->
+        <section id="newBooksSection" class="mt-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-extrabold uppercase tracking-wider mb-1">
+                        <span>✨ Nieuwe Aanwinsten</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Pas toegevoegd aan de bib</h3>
+                    <p class="text-xs sm:text-sm text-slate-500">Ontdek de allernieuwste boeken in onze schoolbibliotheek!</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnScrollNewLeft" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-700 flex items-center justify-center font-bold text-sm transition">‹</button>
+                    <button id="btnScrollNewRight" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-700 flex items-center justify-center font-bold text-sm transition">›</button>
+                </div>
+            </div>
+
+            <div id="newBooksCarousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 clean-scroll scroll-smooth"></div>
+        </section>
+
     </main>
 
-    <!-- ============================================================= -->
-    <!-- WEERGAVE 2: BEHEERDER (PINCODE BEVEILIGD VOOR LEERKRACHTEN)  -->
-    <!-- ============================================================= -->
-    <main id="adminView" class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full hidden">
+    <!-- MODAL POPUP: ACHTERFLAP & BOEKENZOEKER LINK -->
+    <dialog id="bookDetailModal" class="rounded-3xl p-0 shadow-2xl border-0 max-w-2xl w-full mx-auto backdrop:bg-slate-900/60 overflow-hidden">
+        <div class="bg-white flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100 bg-brand-50/50">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-black uppercase tracking-wider bg-brand-600 text-white px-3 py-1 rounded-full" id="modalGraadBadge">Graad</span>
+                    <span class="text-xs font-bold text-brand-700 bg-white px-2.5 py-1 rounded-full border border-brand-100" id="modalTaalBadge">Taal</span>
+                </div>
+                <button id="btnCloseModal" class="w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center font-extrabold text-lg transition shadow-2xs">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Modal Inhoud -->
+            <div class="p-5 sm:p-7 overflow-y-auto clean-scroll space-y-6">
+                <div class="flex flex-col sm:flex-row gap-6 items-start">
+                    
+                    <!-- Cover weergave in modal -->
+                    <div class="w-36 sm:w-44 shrink-0 mx-auto sm:mx-0 rounded-2xl overflow-hidden shadow-md border border-slate-200/80 aspect-[2/3] relative bg-slate-100 flex items-center justify-center" id="modalCoverContainer"></div>
+
+                    <!-- Titel, auteur & sterren -->
+                    <div class="flex-grow space-y-3 text-center sm:text-left w-full">
+                        <h3 id="modalTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">Titel van het boek</h3>
+                        <p class="text-sm font-semibold text-slate-500">
+                            Geschreven door <span id="modalAuthor" class="text-slate-800 font-bold">Auteur</span>
+                        </p>
+
+                        <!-- Locatie en beschikbaarheid in de bib -->
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 inline-block">
+                                📍 <strong>Locatie in bib:</strong> <span id="modalLocation">-</span>
+                            </div>
+                            <div id="modalAvailability" class="text-xs font-bold px-3 py-2.5 rounded-xl border inline-block"></div>
+                        </div>
+
+                        <!-- Fysieke Exemplaren & Status per exemplaar -->
+                        <div id="modalCopiesContainer" class="p-3.5 rounded-2xl bg-brand-50/60 border border-brand-100 space-y-2 text-left">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                                    <span>📚 Fysieke exemplaren in de schoolbib:</span>
+                                </span>
+                                <span id="modalCopiesBadge" class="text-[11px] font-extrabold text-brand-700 bg-white px-2.5 py-0.5 rounded-full border border-brand-200"></span>
+                            </div>
+                            <div id="modalCopiesList" class="space-y-1.5 text-xs"></div>
+                        </div>
+
+                        <!-- Beoordeling door leerlingen -->
+                        <div class="bg-sunny-100/50 border border-sunny-200 p-3.5 rounded-2xl">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-xs font-extrabold text-slate-800">⭐ Geef dit boek sterren:</span>
+                                <span id="modalRatingScoreText" class="text-xs font-bold text-sunny-500">Nog geen score</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 text-2xl star-rating" id="modalStarWidget">
+                                <span class="star text-slate-300 hover:text-sunny-400" data-star="1">★</span>
+                                <span class="star text-slate-300 hover:text-sunny-400" data-star="2">★</span>
+                                <span class="star text-slate-300 hover:text-sunny-400" data-star="3">★</span>
+                                <span class="star text-slate-300 hover:text-sunny-400" data-star="4">★</span>
+                                <span class="star text-slate-300 hover:text-sunny-400" data-star="5">★</span>
+                            </div>
+                            <p id="modalRatingFeedback" class="text-[11px] font-bold text-brand-700 mt-1 hidden">Bedankt voor je beoordeling! 🌟</p>
+                        </div>
+
+                        <!-- Favorieten knop -->
+                        <div>
+                            <button id="modalFavBtn" class="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 border">
+                                <span id="modalFavIcon">🤍</span>
+                                <span id="modalFavLabel">Toevoegen aan mijn favorieten</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Tags / Onderwerpen -->
+                <div>
+                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-2">Thema's & Trefwoorden:</h4>
+                    <div id="modalTags" class="flex flex-wrap gap-1.5"></div>
+                </div>
+
+                <!-- Achterflap / Samenvatting -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/70">
+                    <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider mb-2 flex items-center gap-2">
+                        📖 De Achterflap (Korte Inhoud)
+                    </h4>
+                    <p id="modalSynopsis" class="text-sm text-slate-600 leading-relaxed">
+                        Bezig met samenvatting ophalen...
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="text-xs text-slate-500 text-center sm:text-left">
+                    <span class="font-bold">ISBN:</span> <span id="modalIsbn" class="font-mono text-slate-700">-</span>
+                </div>
+                <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                    <a id="btnOpenBoekenzoeker" href="#" target="_blank" rel="noopener noreferrer" 
+                       class="w-full sm:w-auto bg-coral-500 hover:bg-coral-600 text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-2xl transition shadow-sm flex items-center justify-center gap-2">
+                        <span>Lees meer op Boekenzoeker.be</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </dialog>
+
+    <!-- WEERGAVE 2: BEHEERDER -->
+    <main id="adminView" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full hidden">
         
         <!-- Inlogscherm met pincode -->
         <div id="adminLoginSection" class="max-w-md mx-auto my-12 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
-            <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div class="w-16 h-16 bg-brand-100 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Beheerderspaneel</h2>
-            <p class="text-sm text-slate-500 mb-6">Voer de schoolpincode in om boeken toe te voegen of uitleningen te beheren.</p>
+            <p class="text-sm text-slate-500 mb-6">Voer de schoolpincode in om boeken toe te voegen, uitleningen te beheren of een thema uit te lichten.</p>
 
             <form id="adminLoginForm" class="space-y-4">
                 <div>
                     <input type="password" id="adminPinInput" placeholder="Pincode (standaard: donbosco)" 
-                           class="w-full text-center tracking-widest text-lg px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition" required>
-                    <p id="pinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1 hidden">Onjuiste pincode. Probeer het opnieuw.</p>
+                           class="w-full text-center tracking-widest text-lg px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" required>
+                    <p id="pinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1.5 hidden">Onjuiste pincode. Probeer opnieuw.</p>
                 </div>
-                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-sm">
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3 px-6 rounded-2xl transition shadow-sm">
                     Inloggen als Beheerder
                 </button>
             </form>
             <p class="text-xs text-slate-400 mt-4">Standaard pincode: <span class="font-mono font-bold text-slate-600">donbosco</span></p>
         </div>
 
-        <!-- Beheerders Dashboard (zichtbaar na inloggen) -->
+        <!-- Beheerders Dashboard -->
         <div id="adminDashboardSection" class="hidden space-y-6">
             
             <!-- Dashboard Header Bar -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center font-bold">
-                        ⚙️
-                    </div>
+            <div class="bg-white p-5 rounded-3xl shadow-xs border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <img src="logo.jpg" alt="Logo" class="w-12 h-12 rounded-2xl object-cover border border-slate-200">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900">Beheer Schoolbibliotheek</h2>
-                        <p class="text-xs text-slate-500">Don Bosco Gent • Campus Sint-Pieters</p>
+                        <h2 class="text-lg font-extrabold text-slate-900">Beheer Schoolbibliotheek Boekenbende</h2>
+                        <p class="text-xs font-semibold text-brand-600">Don Bosco Gent • Campus Sint-Pieters</p>
                     </div>
                 </div>
 
-                <!-- Sub-tabs in beheer -->
-                <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
-                    <button id="tabBtnAddBook" class="admin-subtab active-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-white text-pink-600 shadow-xs">
+                <!-- Sub-tabs -->
+                <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl">
+                    <button id="tabBtnFeatured" class="admin-subtab active-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white text-brand-700 shadow-xs">
+                        🌟 Thema in de Kijker
+                    </button>
+                    <button id="tabBtnAddBook" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
                         📖 Boek Toevoegen
                     </button>
-                    <button id="tabBtnLoans" class="admin-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
-                        🔄 Boeken Ontlenen
+                    <button id="tabBtnLoans" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        🔄 Ontlenen & Inleveren
                     </button>
-                    <button id="tabBtnSettings" class="admin-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                    <button id="tabBtnSettings" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
                         ⚙️ Instellingen & Sheet
                     </button>
                 </div>
@@ -188,51 +544,110 @@
                 </button>
             </div>
 
-            <!-- ================= SUB-TAB 1: BOEK TOEVOEGEN ================= -->
-            <div id="subtabAddBook" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
-                <div class="max-w-3xl mx-auto space-y-6">
-                    
+            <!-- SUB-TAB 0: THEMA IN DE KIJKER -->
+            <div id="subtabFeatured" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80">
+                <div class="max-w-2xl mx-auto space-y-6">
                     <div>
-                        <h3 class="text-xl font-extrabold text-slate-900">Nieuw boek toevoegen aan de catalogus</h3>
-                        <p class="text-sm text-slate-500">Nieuwe boeken worden direct getoond op de website en veilig opgeslagen in jullie Google Sheet.</p>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-100 text-coral-600 text-xs font-extrabold uppercase tracking-wider mb-2">
+                            <span>Campagnes & Seizoenen</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-slate-900">Thema in de kijker instellen</h3>
+                        <p class="text-xs sm:text-sm text-slate-500">Kies welk thema bovenaan de website uitgelicht wordt voor leerlingen (bijvoorbeeld <em>"Spannende boeken in november 🎃👻"</em>, <em>"Jeugdboekenmaand 🚀"</em> of <em>"Graphic Novels in de kijker"</em>).</p>
                     </div>
 
-                    <!-- Snelle ISBN-zoeker -->
-                    <div class="bg-pink-50/60 border border-pink-100 p-4 rounded-2xl flex flex-col sm:flex-row items-center gap-3">
-                        <div class="flex-grow w-full">
-                            <label class="block text-xs font-bold text-pink-900 uppercase tracking-wider mb-1">⚡ Supersnel invullen via ISBN of Barcode</label>
-                            <input type="text" id="lookupIsbnInput" placeholder="Typ of scan het ISBN-nummer (bijv. 9789028241254)..." 
-                                   class="w-full text-sm px-3.5 py-2 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white">
+                    <form id="featuredThemeForm" class="space-y-4">
+                        <div class="p-4 rounded-2xl bg-brand-50/70 border border-brand-100 flex items-center justify-between">
+                            <div>
+                                <label for="fThemeEnabled" class="text-sm font-bold text-slate-800 cursor-pointer">Thema-banner activeren op de website</label>
+                                <p class="text-xs text-slate-500">Als dit aanstaat, zien leerlingen direct bovenaan de geselecteerde boekenplank.</p>
+                            </div>
+                            <input type="checkbox" id="fThemeEnabled" class="custom-checkbox h-5 w-5" checked>
                         </div>
-                        <button type="button" id="btnLookupIsbn" class="w-full sm:w-auto mt-2 sm:mt-5 bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Titel van het thema</label>
+                            <input type="text" id="fThemeTitle" placeholder="Bijv. Spannende boeken in november 🎃👻" value="Spannende boeken in november 🎃👻"
+                                   class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Korte wervende tekst / ondertitel</label>
+                            <textarea id="fThemeDesc" rows="2" placeholder="Bijv. Griezelen en spanning voor de donkere herfstdagen! Ontdek onze bloedstollende thrillers en detectives."
+                                      class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">Griezelen en spanning voor de donkere herfstdagen! Ontdek onze bloedstollende thrillers en detectives in de bib.</textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Trefwoord / Tag om uit te lichten</label>
+                                <input type="text" id="fThemeTag" placeholder="Bijv. spanning" value="spanning"
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition" required>
+                                <p class="text-[11px] text-slate-400 mt-1">Alle boeken met deze tag worden op de plank getoond.</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kleursfeer van de banner</label>
+                                <select id="fThemeStyle" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
+                                    <option value="night" selected>🎃 Mysterieus & Donker (Donkerblauw & Koraal)</option>
+                                    <option value="coral">🔥 Warm Koraalrood (Energiek & Opvallend)</option>
+                                    <option value="teal">🌿 Boekenzoeker Teal (Fris & Uitnodigend)</option>
+                                    <option value="sunny">☀️ Zonnig Geel / Goud (Vrolijk)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="themeSavedMsg" class="hidden p-3 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold">
+                            ✅ Thema-instellingen succesvol opgeslagen!
+                        </div>
+
+                        <div class="pt-3 flex justify-end">
+                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs px-6 py-2.5 rounded-2xl transition shadow-xs">
+                                💾 Thema Opslaan & Publiceren
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 1: BOEK TOEVOEGEN -->
+            <div id="subtabAddBook" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden">
+                <div class="max-w-3xl mx-auto space-y-6">
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900">Nieuw boek toevoegen aan de catalogus</h3>
+                        <p class="text-xs sm:text-sm text-slate-500">Nieuwe boeken worden direct getoond in de catalogus en opgeslagen in jullie Google Sheet.</p>
+                    </div>
+
+                    <!-- ISBN-zoeker -->
+                    <div class="bg-brand-50/70 border border-brand-100 p-4 rounded-2xl flex flex-col sm:flex-row items-center gap-3">
+                        <div class="flex-grow w-full">
+                            <label class="block text-xs font-bold text-brand-900 uppercase tracking-wider mb-1">⚡ Supersnel invullen via ISBN of Barcode</label>
+                            <input type="text" id="lookupIsbnInput" placeholder="Typ of scan het ISBN-nummer (bijv. 9789028241254)..." 
+                                   class="w-full text-sm px-3.5 py-2 rounded-xl border border-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                        </div>
+                        <button type="button" id="btnLookupIsbn" class="w-full sm:w-auto mt-2 sm:mt-5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 whitespace-nowrap">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             <span>Gegevens ophalen</span>
                         </button>
                     </div>
-                    <p id="isbnLookupStatus" class="text-xs font-semibold text-pink-700 hidden"></p>
+                    <p id="isbnLookupStatus" class="text-xs font-semibold text-brand-700 hidden"></p>
 
                     <!-- Invoerformulier -->
                     <form id="addBookForm" class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            
-                            <!-- Titel -->
                             <div class="sm:col-span-2">
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Titel van het boek <span class="text-rose-500">*</span></label>
                                 <input type="text" id="fTitel" required placeholder="Bijv. De jonge Wallander" 
-                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                             </div>
 
-                            <!-- Auteur -->
                             <div class="sm:col-span-2">
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Auteur <span class="text-rose-500">*</span></label>
                                 <input type="text" id="fAuteur" required placeholder="Bijv. Henning Mankell" 
-                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                             </div>
 
-                            <!-- Graad -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Graad</label>
-                                <select id="fGraad" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                <select id="fGraad" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                                     <option value="Eerste graad">Eerste graad</option>
                                     <option value="Tweede graad">Tweede graad</option>
                                     <option value="Derde graad" selected>Derde graad</option>
@@ -240,11 +655,10 @@
                                 </select>
                             </div>
 
-                            <!-- Locatie / Categorie -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Locatie / Taal</label>
                                 <input type="text" id="fLocatie" list="locatieSuggesties" placeholder="Bijv. Nederlandstalige fictie" value="Nederlandstalige fictie"
-                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                                 <datalist id="locatieSuggesties">
                                     <option value="Nederlandstalige fictie">
                                     <option value="Engelstalige fictie">
@@ -257,96 +671,94 @@
                                 </datalist>
                             </div>
 
-                            <!-- Tags / Thema's -->
                             <div class="sm:col-span-2">
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Thema's & Tags (gescheiden door komma's)</label>
                                 <input type="text" id="fTags" placeholder="Bijv. spanning, misdaad, mysterie, detective" 
-                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                                 
-                                <!-- Snelle tags chips -->
                                 <div class="flex flex-wrap gap-1.5 mt-2">
                                     <span class="text-xs text-slate-400 mr-1 self-center">Snel toevoegen:</span>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="spanning">+ spanning</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="avontuur">+ avontuur</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="liefde">+ liefde</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="vriendschap">+ vriendschap</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="fantasy">+ fantasy</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="geschiedenis">+ geschiedenis</button>
-                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-pink-100 hover:text-pink-700 px-2 py-0.5 rounded-md font-medium text-slate-600 transition" data-tag="humor">+ humor</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="spanning">+ spanning</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="avontuur">+ avontuur</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="liefde">+ liefde</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="vriendschap">+ vriendschap</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="fantasy">+ fantasy</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="geschiedenis">+ geschiedenis</button>
+                                    <button type="button" class="quick-tag text-[11px] bg-slate-100 hover:bg-brand-100 hover:text-brand-700 px-2.5 py-0.5 rounded-lg font-medium text-slate-600 transition" data-tag="humor">+ humor</button>
                                 </div>
                             </div>
 
-                            <!-- ISBN -->
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">ISBN / Barcode (optioneel)</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">ISBN / Barcode (voor coverafbeelding en Boekenzoeker)</label>
                                 <input type="text" id="fIsbn" placeholder="Bijv. 9789028241254" 
-                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-slate-50 focus:bg-white transition">
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                             </div>
                         </div>
 
-                        <!-- Statusbericht -->
-                        <div id="addBookStatus" class="hidden p-4 rounded-xl text-sm font-semibold"></div>
+                        <div id="addBookStatus" class="hidden p-4 rounded-2xl text-sm font-bold"></div>
 
-                        <!-- Knoppen -->
                         <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
                             <button type="reset" class="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition">Wissen</button>
-                            <button type="submit" id="btnAddBookSubmit" class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-6 py-2.5 rounded-xl transition shadow-sm flex items-center gap-2">
+                            <button type="submit" id="btnAddBookSubmit" class="bg-brand-600 hover:bg-brand-700 text-white font-extrabold px-6 py-2.5 rounded-2xl transition shadow-xs flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                 <span>Boek toevoegen en opslaan</span>
                             </button>
                         </div>
                     </form>
-
                 </div>
             </div>
 
-            <!-- ================= SUB-TAB 2: BOEKEN ONTLENEN ================= -->
-            <div id="subtabLoans" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 hidden">
+            <!-- SUB-TAB 2: BOEKEN ONTLENEN -->
+            <div id="subtabLoans" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden">
                 <div class="space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <h3 class="text-xl font-extrabold text-slate-900">Boeken Ontlenen & Inleveren</h3>
-                            <p class="text-sm text-slate-500">Registreer eenvoudig wie welk boek heeft meegenomen en houd zicht op openstaande uitleningen.</p>
+                            <p class="text-xs sm:text-sm text-slate-500">Registreer wie welk boek heeft meegenomen en bewaar overzicht over inleverdata.</p>
                         </div>
-                        <span id="activeLoansCount" class="text-xs font-bold bg-pink-100 text-pink-700 px-3 py-1.5 rounded-xl self-start sm:self-auto">
+                        <span id="activeLoansCount" class="text-xs font-extrabold bg-brand-100 text-brand-700 px-3.5 py-1.5 rounded-xl self-start sm:self-auto">
                             0 actieve uitleningen
                         </span>
                     </div>
 
-                    <!-- Registratieformulier uitlening -->
                     <form id="loanForm" class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-4">
                         <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
-                            <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Nieuwe uitlening registreren
                         </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                             <div>
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leerkracht <span class="text-rose-500">*</span></label>
-                                <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
+                                <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
-                                <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                                <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
                             </div>
-                            <div>
+                            <div class="lg:col-span-1">
                                 <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel van het boek <span class="text-rose-500">*</span></label>
-                                <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                                <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
                                 <datalist id="loanBooksList"></datalist>
                             </div>
                             <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Specifiek Exemplaar & Locatie <span class="text-rose-500">*</span></label>
+                                <select id="loanCopySelect" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                    <option value="">-- Kies eerst een titel --</option>
+                                </select>
+                            </div>
+                            <div>
                                 <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum</label>
-                                <input type="date" id="loanDueDate" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white">
+                                <input type="date" id="loanDueDate" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
                             </div>
                         </div>
                         <div class="flex justify-end">
-                            <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5">
+                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 <span>Uitlening opslaan</span>
                             </button>
                         </div>
                     </form>
 
-                    <!-- Tabel met lopende uitleningen -->
                     <div class="overflow-x-auto rounded-2xl border border-slate-200">
                         <table class="w-full text-left text-xs text-slate-600">
                             <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
@@ -354,71 +766,65 @@
                                     <th class="px-4 py-3">Leerling / Leraar</th>
                                     <th class="px-4 py-3">Klas</th>
                                     <th class="px-4 py-3">Boek</th>
+                                    <th class="px-4 py-3">Exemplaar & Locatie</th>
                                     <th class="px-4 py-3">Uitleendatum</th>
                                     <th class="px-4 py-3">Inleverdatum</th>
                                     <th class="px-4 py-3">Status</th>
                                     <th class="px-4 py-3 text-right">Actie</th>
                                 </tr>
                             </thead>
-                            <tbody id="loansTableBody" class="divide-y divide-slate-100 bg-white">
-                                <!-- Dynamische rijen -->
-                            </tbody>
+                            <tbody id="loansTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
 
-            <!-- ================= SUB-TAB 3: INSTELLINGEN & GOOGLE SHEET ================= -->
-            <div id="subtabSettings" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 hidden">
+            <!-- SUB-TAB 3: INSTELLINGEN & GOOGLE SHEET -->
+            <div id="subtabSettings" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden">
                 <div class="max-w-2xl mx-auto space-y-6">
                     <div>
                         <h3 class="text-xl font-extrabold text-slate-900">Instellingen & Google Spreadsheet</h3>
-                        <p class="text-sm text-slate-500">Beheer de koppeling met Google Sheets en de beheerderscode van de school.</p>
+                        <p class="text-xs sm:text-sm text-slate-500">Koppeling met Google Sheets en de beheerderscode van de school.</p>
                     </div>
 
-                    <!-- Directe link naar Google Sheet -->
-                    <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-4">
+                    <div class="p-5 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
+                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold">
                                 📊
                             </div>
                             <div>
-                                <h4 class="font-bold text-emerald-900 text-sm">Google Spreadsheet van de School</h4>
-                                <p class="text-xs text-emerald-700">Bekijk of bewerk de catalogus rechtstreeks in Google Sheets.</p>
+                                <h4 class="font-bold text-brand-900 text-sm">Google Spreadsheet van de School</h4>
+                                <p class="text-xs text-brand-700">Bekijk of bewerk de catalogus rechtstreeks in Google Sheets.</p>
                             </div>
                         </div>
                         <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRpWPRhterrkdMeJ3qZlLFshWIZ6I3yR5gIJSMNTdG_fXXAVL8YZgrK-mEDLfN5Qb3rYPamLYgMfb4K/pubhtml" 
                            target="_blank" rel="noopener noreferrer"
-                           class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition whitespace-nowrap">
+                           class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition whitespace-nowrap">
                             Openen in Google Drive ↗
                         </a>
                     </div>
 
-                    <!-- Google Apps Script Web App URL -->
                     <div class="space-y-3 pt-4 border-t border-slate-100">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Google Apps Script Web-app URL (voor automatisch opslaan)
+                            Google Apps Script Web-app URL (voor automatisch opslaan van nieuwe boeken)
                         </label>
-                        <p class="text-xs text-slate-500">Plak hier de Web-app-URL die je hebt aangemaakt in Google Sheets (Extensies > Apps Script > Implementeren).</p>
                         <div class="flex gap-2">
                             <input type="url" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" 
-                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-500">
-                            <button type="button" id="btnSaveScriptUrl" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <button type="button" id="btnSaveScriptUrl" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">
                                 Opslaan
                             </button>
                         </div>
                         <p id="scriptUrlSavedMsg" class="text-xs text-emerald-600 font-bold hidden">✅ Web-app URL succesvol opgeslagen!</p>
                     </div>
 
-                    <!-- Pincode wijzigen -->
                     <div class="space-y-3 pt-4 border-t border-slate-100">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
                             Schoolpincode wijzigen
                         </label>
                         <div class="flex gap-2">
                             <input type="text" id="newPinInput" placeholder="Nieuwe pincode invoeren" 
-                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                             <button type="button" id="btnSavePin" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">
                                 Wijzigen
                             </button>
@@ -433,42 +839,82 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-100 py-6 text-center text-sm text-slate-400 mt-auto">
-        <p>&copy; 2026 Schoolbibliotheek Sint-Pieters • Boekenbende</p>
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200/70 py-6 text-center text-xs text-slate-500 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <img src="logo.jpg" alt="Logo Boekenbende" class="w-6 h-6 rounded-lg object-cover">
+                <span class="font-bold text-slate-700">&copy; 2026 Boekenbende Sint-Pieters</span>
+            </div>
+            <p>Met ❤️ gemaakt voor onze leerlingen • Laatste update: september 2026 • Geïnspireerd op <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Boekenzoeker.be ↗</a></p>
+        </div>
     </footer>
 
-    <!-- ============================================================= -->
-    <!-- JAVASCRIPT LOGICA                                             -->
-    <!-- ============================================================= -->
+    <!-- JAVASCRIPT LOGICA -->
     <script>
         // CONFIGURATIE
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpWPRhterrkdMeJ3qZlLFshWIZ6I3yR5gIJSMNTdG_fXXAVL8YZgrK-mEDLfN5Qb3rYPamLYgMfb4K/pub?output=csv";
         const DEFAULT_PIN = "donbosco";
 
+        // STATE
         let allBooks = [];
         let searchQuery = '';
+        let activeQuickFilter = 'all';
+        let currentSort = 'default';
         let currentPin = localStorage.getItem('schoolbib_pin') || DEFAULT_PIN;
         let scriptUrl = localStorage.getItem('schoolbib_script_url') || '';
         let loans = JSON.parse(localStorage.getItem('schoolbib_loans') || '[]');
 
-        // Inladen bij starten
+        // STERREN & FAVORIETEN STATE
+        let ratingsStore = JSON.parse(localStorage.getItem('schoolbib_ratings') || '{}');
+        let favoritesList = JSON.parse(localStorage.getItem('schoolbib_favorites') || '[]');
+
+        // UITGELICHT THEMA CONFIGURATIE
+        const DEFAULT_FEATURED = {
+            enabled: true,
+            title: "Spannende boeken in november 🎃👻",
+            description: "Griezelen en spanning voor de donkere herfstdagen! Ontdek onze bloedstollende thrillers en detectives in de bib.",
+            tag: "spanning",
+            style: "night"
+        };
+        let featuredTheme = JSON.parse(localStorage.getItem('schoolbib_featured_theme') || JSON.stringify(DEFAULT_FEATURED));
+
+        let currentModalBook = null;
+
+        function initRatingsSeed() {
+            if (Object.keys(ratingsStore).length === 0) {
+                ratingsStore = {
+                    "De jonge Wallander": { count: 8, total: 38, avg: 4.8 },
+                    "De avonturen van Tom Sawyer": { count: 12, total: 56, avg: 4.7 },
+                    "Honderd uur nacht": { count: 9, total: 42, avg: 4.7 },
+                    "Maus Compleet": { count: 15, total: 74, avg: 4.9 },
+                    "Zijde": { count: 6, total: 27, avg: 4.5 },
+                    "De man die glimlachte": { count: 7, total: 32, avg: 4.6 },
+                    "Dwaalsporen": { count: 5, total: 23, avg: 4.6 }
+                };
+                localStorage.setItem('schoolbib_ratings', JSON.stringify(ratingsStore));
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            initRatingsSeed();
             initNavigation();
             initAdminAuth();
             initAddBook();
             initLoans();
             initSettings();
+            initFeaturedTheme();
+            initModalEvents();
+            initQuickFilters();
+            initDropdownMenus();
             loadBooks();
         });
 
-        // -------------------------------------------------------------
-        // 1. BOEKEN INLADEN UIT GOOGLE SHEETS OF CSV FALLBACK
-        // -------------------------------------------------------------
+        // 1. BOEKEN INLADEN
         function loadBooks() {
             const countEl = document.getElementById('bookCount');
             const syncEl = document.getElementById('syncBadge');
-            countEl.textContent = 'Boeken laden uit Google Sheet...';
+            countEl.textContent = 'Boeken laden...';
 
             fetch(GOOGLE_SHEET_CSV_URL)
                 .then(res => {
@@ -479,12 +925,11 @@
                     parseAndDisplayBooks(csvText, true);
                 })
                 .catch(err => {
-                    console.warn('Google Sheet niet bereikbaar, lokale fallback proberen:', err);
+                    console.warn('Google Sheet niet bereikbaar, lokale fallback boeken.csv gebruiken:', err);
                     if (syncEl) {
                         syncEl.className = 'inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200';
                         syncEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span> Lokale catalogus';
                     }
-                    // Fallback naar lokaal boeken.csv
                     fetch('boeken.csv')
                         .then(res => res.text())
                         .then(csvText => parseAndDisplayBooks(csvText, false))
@@ -496,7 +941,6 @@
         }
 
         function parseAndDisplayBooks(csvText, isLive) {
-            // Eventuele 'Column1;...' header opruimen
             const lines = csvText.split('\n').filter(l => l.trim() !== '');
             const cleanCsv = lines[0] && lines[0].includes('Column1') ? lines.slice(1).join('\n') : csvText;
 
@@ -504,26 +948,67 @@
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    allBooks = results.data.map(book => {
+                    const rawItems = results.data.map((book, idx) => {
                         const titel = (book.Titel || book.titel || '').trim();
                         const auteur = (book.Auteur || book.auteur || '').trim();
                         const tags = (book.Tags || book.tags || '').trim();
                         const graad = (book.Graad || book.graad || '').trim();
                         const locatie = (book.Locatie || book.locatie || '').trim();
-                        const isbn = (book.ISBN || book.isbn || book.cover || '').trim();
+                        const isbnRaw = (book.ISBN || book.isbn || book.cover || '').toString().trim();
+                        const isbn = isbnRaw.replace(/[^0-9X]/gi, '');
+                        const exemplaar = (book.Exemplaar || book.exemplaar || '').trim();
 
                         return {
+                            rowId: idx + 1,
                             Titel: titel,
                             Auteur: auteur,
                             Tags: tags,
-                            Graad: graad,
-                            Locatie: locatie,
+                            Graad: graad || 'Alle graden',
+                            Locatie: locatie || 'Nederlandstalige fictie',
                             ISBN: isbn,
+                            Exemplaar: exemplaar,
                             Taal: bepaalTaal(locatie)
                         };
                     }).filter(b => b.Titel !== '');
 
+                    // Groepeer identieke boeken (titel + auteur) met al hun individuele exemplaren
+                    const bookMap = new Map();
+                    rawItems.forEach(item => {
+                        const key = `${item.Titel.toLowerCase().trim()}|||${item.Auteur.toLowerCase().trim()}`;
+                        if (!bookMap.has(key)) {
+                            bookMap.set(key, {
+                                id: item.rowId,
+                                Titel: item.Titel,
+                                Auteur: item.Auteur,
+                                Tags: item.Tags,
+                                Graad: item.Graad,
+                                Locatie: item.Locatie,
+                                ISBN: item.ISBN,
+                                Taal: item.Taal,
+                                copies: []
+                            });
+                        }
+                        const entry = bookMap.get(key);
+                        if (!entry.ISBN && item.ISBN) entry.ISBN = item.ISBN;
+                        if (!entry.Tags && item.Tags) entry.Tags = item.Tags;
+
+                        const copyNum = entry.copies.length + 1;
+                        const copyLabel = item.Exemplaar || `Exemplaar ${copyNum}`;
+                        entry.copies.push({
+                            copyId: item.rowId,
+                            copyNumber: copyNum,
+                            copyLabel: copyLabel,
+                            locatie: item.Locatie,
+                            isbn: item.ISBN
+                        });
+                    });
+
+                    allBooks = Array.from(bookMap.values());
+
                     initFilters();
+                    updateFavoritesCount();
+                    renderFeaturedTheme();
+                    renderNewBooksShelf();
                     filterAndRender();
                     updateLoanBookList();
                 }
@@ -539,37 +1024,564 @@
             return 'Nederlands';
         }
 
-        // -------------------------------------------------------------
-        // 2. FILTERS & ZOEKFUNCTIE VOOR CATALOGUS
-        // -------------------------------------------------------------
+        // 2. COVERS
+        function getBookCoverUrl(isbn) {
+            if (!isbn || isbn.length < 9) return null;
+            return `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`;
+        }
+
+        const GRADIENTS = [
+            'linear-gradient(135deg, #107075 0%, #084c4f 100%)',
+            'linear-gradient(135deg, #ff6b57 0%, #c43c29 100%)',
+            'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)',
+            'linear-gradient(135deg, #8b5cf6 0%, #5b21b6 100%)',
+            'linear-gradient(135deg, #14b8a6 0%, #0f766e 100%)',
+            'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)'
+        ];
+
+        function getCoverGradient(title) {
+            let hash = 0;
+            for (let i = 0; i < title.length; i++) hash = title.charCodeAt(i) + ((hash << 5) - hash);
+            const index = Math.abs(hash) % GRADIENTS.length;
+            return GRADIENTS[index];
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[m]);
+        }
+
+        function renderCoverHtml(book) {
+            const coverUrl = getBookCoverUrl(book.ISBN);
+            const gradient = getCoverGradient(book.Titel);
+            const safeTitle = escapeHtml(book.Titel);
+            const safeAuthor = escapeHtml(book.Auteur);
+            const safeGraad = escapeHtml(book.Graad);
+
+            if (coverUrl) {
+                return `
+                    <div class="w-full h-full relative overflow-hidden bg-slate-100 flex items-center justify-center">
+                        <img src="${coverUrl}" 
+                             alt="${safeTitle}" 
+                             loading="lazy" 
+                             class="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="w-full h-full p-4 flex flex-col justify-between items-center text-center text-white" 
+                             style="display: none; background: ${gradient};">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider bg-white/20 backdrop-blur-xs px-2.5 py-0.5 rounded-full">${safeGraad}</span>
+                            <div class="my-auto py-2">
+                                <div class="text-2xl sm:text-3xl mb-1">📖</div>
+                                <p class="font-extrabold text-xs sm:text-sm leading-snug line-clamp-3">${safeTitle}</p>
+                            </div>
+                            <p class="text-[10px] sm:text-[11px] font-medium text-white/90 truncate w-full">${safeAuthor}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="w-full h-full p-4 flex flex-col justify-between items-center text-center text-white" 
+                         style="background: ${gradient};">
+                        <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider bg-white/20 backdrop-blur-xs px-2.5 py-0.5 rounded-full">${safeGraad}</span>
+                        <div class="my-auto py-2">
+                            <div class="text-2xl sm:text-3xl mb-1">📖</div>
+                            <p class="font-extrabold text-xs sm:text-sm leading-snug line-clamp-3">${safeTitle}</p>
+                        </div>
+                        <p class="text-[10px] sm:text-[11px] font-medium text-white/90 truncate w-full">${safeAuthor}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 3. STERREN & FAVORIETEN
+        function getBookRating(title) {
+            const data = ratingsStore[title];
+            if (!data || !data.avg) return { avg: 0, count: 0 };
+            return { avg: Math.round(data.avg * 10) / 10, count: data.count };
+        }
+
+        function isBookFavorite(title) {
+            return favoritesList.includes(title);
+        }
+
+        function toggleFavorite(title) {
+            if (isBookFavorite(title)) {
+                favoritesList = favoritesList.filter(t => t !== title);
+            } else {
+                favoritesList.push(title);
+            }
+            localStorage.setItem('schoolbib_favorites', JSON.stringify(favoritesList));
+            updateFavoritesCount();
+            if (activeQuickFilter === 'my-favorites') {
+                filterAndRender();
+            }
+            if (currentModalBook && currentModalBook.Titel === title) {
+                updateModalFavState();
+            }
+        }
+
+        function updateFavoritesCount() {
+            const countEl = document.getElementById('favCount');
+            if (countEl) countEl.textContent = favoritesList.length;
+        }
+
+        function saveBookRating(title, stars) {
+            if (!ratingsStore[title]) {
+                ratingsStore[title] = { count: 0, total: 0, avg: 0 };
+            }
+            const item = ratingsStore[title];
+            item.count += 1;
+            item.total += stars;
+            item.avg = item.total / item.count;
+            item.myRating = stars;
+
+            localStorage.setItem('schoolbib_ratings', JSON.stringify(ratingsStore));
+
+            const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
+            if (activeScriptUrl) {
+                try {
+                    fetch(activeScriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'rate', titel: title, rating: stars })
+                    }).catch(() => {});
+                } catch(e) {}
+            }
+
+            filterAndRender();
+        }
+
+        // 4. THEMA IN DE KIJKER
+        function initFeaturedTheme() {
+            const form = document.getElementById('featuredThemeForm');
+            const enabledInput = document.getElementById('fThemeEnabled');
+            const titleInput = document.getElementById('fThemeTitle');
+            const descInput = document.getElementById('fThemeDesc');
+            const tagInput = document.getElementById('fThemeTag');
+            const styleInput = document.getElementById('fThemeStyle');
+            const savedMsg = document.getElementById('themeSavedMsg');
+
+            enabledInput.checked = featuredTheme.enabled;
+            titleInput.value = featuredTheme.title || '';
+            descInput.value = featuredTheme.description || '';
+            tagInput.value = featuredTheme.tag || '';
+            styleInput.value = featuredTheme.style || 'night';
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                featuredTheme = {
+                    enabled: enabledInput.checked,
+                    title: titleInput.value.trim(),
+                    description: descInput.value.trim(),
+                    tag: tagInput.value.trim().toLowerCase(),
+                    style: styleInput.value
+                };
+                localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
+                savedMsg.classList.remove('hidden');
+                setTimeout(() => savedMsg.classList.add('hidden'), 3500);
+
+                renderFeaturedTheme();
+            });
+
+            document.getElementById('btnScrollFeaturedLeft').addEventListener('click', () => {
+                document.getElementById('featuredBooksCarousel').scrollBy({ left: -320, behavior: 'smooth' });
+            });
+            document.getElementById('btnScrollFeaturedRight').addEventListener('click', () => {
+                document.getElementById('featuredBooksCarousel').scrollBy({ left: 320, behavior: 'smooth' });
+            });
+        }
+
+        function renderFeaturedTheme() {
+            const section = document.getElementById('featuredThemeSection');
+            if (!section) return;
+
+            if (!featuredTheme.enabled) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            const badge = document.getElementById('featuredThemeBadge');
+            const titleEl = document.getElementById('featuredThemeTitle');
+            const descEl = document.getElementById('featuredThemeDesc');
+
+            titleEl.textContent = featuredTheme.title;
+            descEl.textContent = featuredTheme.description;
+
+            if (featuredTheme.style === 'night') {
+                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 text-white shadow-md border border-slate-700/60';
+                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-coral-500 text-white shadow-xs';
+                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-white leading-snug';
+                descEl.className = 'text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl';
+            } else if (featuredTheme.style === 'coral') {
+                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-coral-500 via-coral-600 to-rose-700 text-white shadow-md';
+                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-white text-coral-700 shadow-xs';
+                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-white leading-snug';
+                descEl.className = 'text-xs sm:text-sm text-coral-100 mt-1 max-w-2xl';
+            } else if (featuredTheme.style === 'sunny') {
+                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-amber-50 via-yellow-100 to-amber-100 border border-amber-200 text-slate-900 shadow-sm';
+                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-amber-500 text-white';
+                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug';
+                descEl.className = 'text-xs sm:text-sm text-slate-700 mt-1 max-w-2xl';
+            } else {
+                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-brand-50 via-teal-100/60 to-brand-100/40 border border-brand-200 text-slate-900 shadow-sm';
+                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-brand-600 text-white';
+                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug';
+                descEl.className = 'text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl';
+            }
+
+            const targetTag = (featuredTheme.tag || 'spanning').toLowerCase();
+            const matchingBooks = allBooks.filter(b => b.Tags && b.Tags.toLowerCase().includes(targetTag)).slice(0, 12);
+
+            const carousel = document.getElementById('featuredBooksCarousel');
+            carousel.innerHTML = '';
+
+            if (matchingBooks.length === 0) {
+                carousel.innerHTML = `<p class="text-xs text-slate-400 py-3 italic">Geen boeken gevonden met het thema "${escapeHtml(targetTag)}".</p>`;
+            } else {
+                matchingBooks.forEach(book => {
+                    const card = createMiniBookCard(book, featuredTheme.style === 'night');
+                    carousel.appendChild(card);
+                });
+            }
+
+            section.classList.remove('hidden');
+        }
+
+        function createMiniBookCard(book, isDarkTheme = false) {
+            const card = document.createElement('div');
+            card.className = 'shrink-0 w-36 sm:w-44 group cursor-pointer flex flex-col justify-between';
+            card.onclick = () => openBookDetailModal(book);
+
+            card.innerHTML = `
+                <div class="aspect-[2/3] w-full rounded-2xl overflow-hidden shadow-xs group-hover:shadow-md border ${isDarkTheme ? 'border-slate-700/80' : 'border-slate-200'} transition card-hover mb-2 relative">
+                    ${renderCoverHtml(book)}
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition flex items-center justify-center">
+                        <span class="opacity-0 group-hover:opacity-100 transition bg-white/95 text-slate-800 text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-sm">
+                            Achterflap 📖
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-xs font-bold ${isDarkTheme ? 'text-white' : 'text-slate-900'} truncate group-hover:text-coral-500 transition" title="${escapeHtml(book.Titel)}">
+                        ${escapeHtml(book.Titel)}
+                    </h5>
+                    <p class="text-[11px] ${isDarkTheme ? 'text-slate-400' : 'text-slate-500'} truncate">${escapeHtml(book.Auteur)}</p>
+                </div>
+            `;
+            return card;
+        }
+
+        // 5. NIEUWE BOEKEN CARROUSEL
+        function renderNewBooksShelf() {
+            const carousel = document.getElementById('newBooksCarousel');
+            if (!carousel) return;
+            carousel.innerHTML = '';
+
+            const newBooks = allBooks.slice(-14).reverse();
+
+            newBooks.forEach(book => {
+                const card = createMiniBookCard(book, false);
+                const label = document.createElement('span');
+                label.className = 'absolute top-2 left-2 text-[9px] font-black uppercase tracking-wider bg-coral-500 text-white px-2 py-0.5 rounded-full shadow-xs z-10';
+                label.textContent = 'Nieuw ✨';
+                card.querySelector('.relative').appendChild(label);
+
+                carousel.appendChild(card);
+            });
+
+            document.getElementById('btnScrollNewLeft').addEventListener('click', () => {
+                carousel.scrollBy({ left: -320, behavior: 'smooth' });
+            });
+            document.getElementById('btnScrollNewRight').addEventListener('click', () => {
+                carousel.scrollBy({ left: 320, behavior: 'smooth' });
+            });
+        }
+
+        // 6. SNELFILTERS
+        function initQuickFilters() {
+            const buttons = document.querySelectorAll('.quick-filter-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => {
+                        b.className = 'quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-slate-200';
+                    });
+                    btn.className = 'quick-filter-btn active-filter px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-brand-600 text-white shadow-xs';
+
+                    activeQuickFilter = btn.getAttribute('data-filter');
+                    filterAndRender();
+                });
+            });
+
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', (e) => {
+                    currentSort = e.target.value;
+                    filterAndRender();
+                });
+            }
+        }
+
+        function resetCatalogFilters() {
+            document.querySelectorAll('.filter-input').forEach(input => input.checked = false);
+            document.getElementById('searchInput').value = '';
+            searchQuery = '';
+            activeQuickFilter = 'all';
+            document.querySelectorAll('.quick-filter-btn').forEach((b, idx) => {
+                b.className = idx === 0 
+                    ? 'quick-filter-btn active-filter px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-brand-600 text-white shadow-xs'
+                    : 'quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-slate-200';
+            });
+            const tagSearch = document.getElementById('filterTagSearch');
+            if (tagSearch) {
+                tagSearch.value = '';
+                document.querySelectorAll('#tagCheckboxes label').forEach(label => label.style.display = 'flex');
+            }
+            filterAndRender();
+        }
+
+        // 7. DROPDOWN FILTERBALK (BOEKENZOEKER STIJL)
+        function initDropdownMenus() {
+            const dropdownConfigs = [
+                { btnId: 'btnDropdownTaal', menuId: 'menuTaal' },
+                { btnId: 'btnDropdownLeeftijd', menuId: 'menuLeeftijd' },
+                { btnId: 'btnDropdownThema', menuId: 'menuThema' },
+                { btnId: 'btnDropdownBeschikbaar', menuId: 'menuBeschikbaar' }
+            ];
+
+            dropdownConfigs.forEach(({ btnId, menuId }) => {
+                const btn = document.getElementById(btnId);
+                const menu = document.getElementById(menuId);
+                if (!btn || !menu) return;
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isClosed = menu.classList.contains('hidden');
+                    closeAllDropdowns();
+                    if (isClosed) {
+                        menu.classList.remove('hidden');
+                        const arrow = btn.querySelector('.dropdown-arrow');
+                        if (arrow) arrow.classList.add('rotate-180');
+                    }
+                });
+
+                // Klikken in het dropdownvenster zelf sluit het niet
+                menu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            });
+
+            // Sluit dropdowns bij klikken buiten dropdown
+            document.addEventListener('click', () => {
+                closeAllDropdowns();
+            });
+
+            // Sluit bij Escape toets
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeAllDropdowns();
+            });
+
+            // Thema zoekbalk in thema dropdown
+            const tagSearchInput = document.getElementById('filterTagSearch');
+            if (tagSearchInput) {
+                tagSearchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    const tagLabels = document.querySelectorAll('#tagCheckboxes label');
+                    tagLabels.forEach(label => {
+                        const text = label.textContent.toLowerCase();
+                        label.style.display = text.includes(query) ? 'flex' : 'none';
+                    });
+                });
+            }
+
+            // Wis filters knop koppelen
+            const resetBtn = document.getElementById('resetFilters');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', resetCatalogFilters);
+            }
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+            document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
+                arrow.classList.remove('rotate-180');
+            });
+        }
+        window.closeAllDropdowns = closeAllDropdowns;
+
+        function updateDropdownButtonState(btnId, badgeId, count) {
+            const btn = document.getElementById(btnId);
+            const badge = document.getElementById(badgeId);
+            if (!btn || !badge) return;
+
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove('hidden');
+                btn.classList.remove('bg-slate-50', 'text-slate-700', 'border-slate-200');
+                btn.classList.add('bg-brand-50', 'text-brand-800', 'border-brand-300', 'ring-2', 'ring-brand-200');
+            } else {
+                badge.classList.add('hidden');
+                btn.classList.add('bg-slate-50', 'text-slate-700', 'border-slate-200');
+                btn.classList.remove('bg-brand-50', 'text-brand-800', 'border-brand-300', 'ring-2', 'ring-brand-200');
+            }
+        }
+
+        function renderActiveFilterTags(talen, leeftijden, tags, beschikbaar) {
+            const bar = document.getElementById('activeFilterTagsBar');
+            const list = document.getElementById('activeFilterTagsList');
+            if (!bar || !list) return;
+
+            list.innerHTML = '';
+            let total = 0;
+
+            const leeftijdFriendly = {
+                'Eerste graad': '1ste graad (12-14j)',
+                'Tweede graad': '2de graad (14-16j)',
+                'Derde graad': '3de graad (16+j)',
+                'Alle graden': 'Alle leeftijden'
+            };
+
+            talen.forEach(val => {
+                total++;
+                list.appendChild(createFilterChip(`Taal: ${val}`, 'taal', val));
+            });
+
+            leeftijden.forEach(val => {
+                total++;
+                const lbl = leeftijdFriendly[val] || val;
+                list.appendChild(createFilterChip(`Leeftijd: ${lbl}`, 'leeftijd', val));
+            });
+
+            tags.forEach(val => {
+                total++;
+                list.appendChild(createFilterChip(`Thema: ${val}`, 'tag', val));
+            });
+
+            beschikbaar.forEach(val => {
+                total++;
+                const lbl = val === 'available' ? 'Aanwezig in bib' : 'Uitgeleend';
+                list.appendChild(createFilterChip(lbl, 'beschikbaar', val));
+            });
+
+            if (total > 0) {
+                bar.classList.remove('hidden');
+            } else {
+                bar.classList.add('hidden');
+            }
+        }
+
+        function createFilterChip(labelText, filterName, filterValue) {
+            const chip = document.createElement('span');
+            chip.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-800 border border-brand-200 hover:bg-brand-100 transition cursor-pointer select-none';
+            chip.innerHTML = `
+                <span>${escapeHtml(labelText)}</span>
+                <span class="text-brand-400 hover:text-coral-600 font-black ml-0.5" title="Verwijder filter">✕</span>
+            `;
+            chip.addEventListener('click', () => {
+                const targetInput = document.querySelector(`input[name="${filterName}"][value="${filterValue}"]`);
+                if (targetInput) {
+                    targetInput.checked = false;
+                    filterAndRender();
+                }
+            });
+            return chip;
+        }
+
+        // 8. FILTERS & ZOEKFUNCTIE MET EXEMPLAREN
+        function isCopyLoaned(title, copyLabel, copyId) {
+            if (!title || !loans) return false;
+            const t = title.toLowerCase().trim();
+            return loans.some(l => {
+                if (l.returned) return false;
+                if (!l.bookTitle || l.bookTitle.toLowerCase().trim() !== t) return false;
+                if (copyId && l.copyId && String(l.copyId) === String(copyId)) return true;
+                if (copyLabel && l.copyLabel && l.copyLabel.toLowerCase() === copyLabel.toLowerCase()) return true;
+                return false;
+            });
+        }
+
+        function getCopyLoanInfo(title, copyLabel, copyId) {
+            if (!title || !loans) return null;
+            const t = title.toLowerCase().trim();
+            return loans.find(l => {
+                if (l.returned) return false;
+                if (!l.bookTitle || l.bookTitle.toLowerCase().trim() !== t) return false;
+                if (copyId && l.copyId && String(l.copyId) === String(copyId)) return true;
+                if (copyLabel && l.copyLabel && l.copyLabel.toLowerCase() === copyLabel.toLowerCase()) return true;
+                return false;
+            });
+        }
+
+        function getBookAvailability(book) {
+            const total = (book.copies && book.copies.length > 0) ? book.copies.length : 1;
+            let loaned = 0;
+            if (book.copies && book.copies.length > 0) {
+                book.copies.forEach(c => {
+                    if (isCopyLoaned(book.Titel, c.copyLabel, c.copyId)) {
+                        loaned++;
+                    }
+                });
+            } else {
+                if (loans.some(l => !l.returned && l.bookTitle && l.bookTitle.toLowerCase().trim() === book.Titel.toLowerCase().trim())) {
+                    loaned = 1;
+                }
+            }
+            const available = Math.max(0, total - loaned);
+            return {
+                total,
+                loaned,
+                available,
+                isFullyAvailable: loaned === 0,
+                isPartiallyAvailable: available > 0 && loaned > 0,
+                isAllLoaned: available === 0
+            };
+        }
+
+        function isBookLoanedOut(title) {
+            const book = allBooks.find(b => b.Titel.toLowerCase().trim() === (title || '').toLowerCase().trim());
+            if (!book) return false;
+            const avail = getBookAvailability(book);
+            return avail.isAllLoaned;
+        }
+
         function initFilters() {
-            // Talen
+            // 1. Filter op Taal
             const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort();
             const taalContainer = document.getElementById('taalCheckboxes');
             taalContainer.innerHTML = '';
             talen.forEach(taal => {
                 taalContainer.innerHTML += `
-                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
-                        <input type="checkbox" name="taal" value="${taal}" class="custom-checkbox filter-input">
-                        <span>${taal}</span>
+                    <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                        <input type="checkbox" name="taal" value="${escapeHtml(taal)}" class="custom-checkbox filter-input rounded-md">
+                        <span>${escapeHtml(taal)}</span>
                     </label>
                 `;
             });
 
-            // Graden
+            // 2. Filter op Leeftijd (vriendelijke labels op basis van graad)
+            const leeftijdLabels = {
+                'Eerste graad': '12 - 14 jaar (1ste graad)',
+                'Tweede graad': '14 - 16 jaar (2de graad)',
+                'Derde graad': '16+ jaar (3de graad)',
+                'Alle graden': 'Alle leeftijden'
+            };
             const graden = [...new Set(allBooks.map(b => b.Graad))].filter(Boolean).sort();
-            const graadContainer = document.getElementById('graadCheckboxes');
-            graadContainer.innerHTML = '';
+            const leeftijdContainer = document.getElementById('leeftijdCheckboxes');
+            leeftijdContainer.innerHTML = '';
             graden.forEach(graad => {
-                graadContainer.innerHTML += `
-                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
-                        <input type="checkbox" name="graad" value="${graad}" class="custom-checkbox filter-input">
-                        <span>${graad}</span>
+                const label = leeftijdLabels[graad] || graad;
+                leeftijdContainer.innerHTML += `
+                    <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                        <input type="checkbox" name="leeftijd" value="${escapeHtml(graad)}" class="custom-checkbox filter-input rounded-md">
+                        <span>${escapeHtml(label)}</span>
                     </label>
                 `;
             });
 
-            // Tags
+            // 3. Filter op Thema
             const tagSet = new Set();
             allBooks.forEach(book => {
                 if (book.Tags) {
@@ -583,32 +1595,51 @@
             tagContainer.innerHTML = '';
             Array.from(tagSet).sort().forEach(tag => {
                 tagContainer.innerHTML += `
-                    <label class="flex items-center gap-2.5 text-sm text-slate-600 cursor-pointer hover:text-slate-900">
-                        <input type="checkbox" name="tag" value="${tag}" class="custom-checkbox filter-input">
-                        <span class="capitalize">${tag}</span>
+                    <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                        <input type="checkbox" name="tag" value="${escapeHtml(tag)}" class="custom-checkbox filter-input rounded-md">
+                        <span class="capitalize">${escapeHtml(tag)}</span>
                     </label>
                 `;
             });
 
+            // 4. Beschikbaarheid & alle checkbox listeners koppelen
             document.querySelectorAll('.filter-input').forEach(input => {
-                input.addEventListener('change', filterAndRender);
+                input.onchange = filterAndRender;
             });
         }
 
         function filterAndRender() {
             const selectedTalen = Array.from(document.querySelectorAll('input[name="taal"]:checked')).map(cb => cb.value);
-            const selectedGraden = Array.from(document.querySelectorAll('input[name="graad"]:checked')).map(cb => cb.value);
+            const selectedLeeftijd = Array.from(document.querySelectorAll('input[name="leeftijd"]:checked')).map(cb => cb.value);
             const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
+            const selectedBeschikbaar = Array.from(document.querySelectorAll('input[name="beschikbaar"]:checked')).map(cb => cb.value);
 
-            const filtered = allBooks.filter(book => {
+            // Update dropdown knoppen (teller-badges & actieve ring)
+            updateDropdownButtonState('btnDropdownTaal', 'badgeTaalCount', selectedTalen.length);
+            updateDropdownButtonState('btnDropdownLeeftijd', 'badgeLeeftijdCount', selectedLeeftijd.length);
+            updateDropdownButtonState('btnDropdownThema', 'badgeThemaCount', selectedTags.length);
+            updateDropdownButtonState('btnDropdownBeschikbaar', 'badgeBeschikbaarCount', selectedBeschikbaar.length);
+
+            // Render actieve filter chips onder de dropdowns
+            renderActiveFilterTags(selectedTalen, selectedLeeftijd, selectedTags, selectedBeschikbaar);
+
+            // Toon/verberg de "Wis filters" knop
+            const resetBtn = document.getElementById('resetFilters');
+            if (resetBtn) {
+                const hasActive = selectedTalen.length > 0 || selectedLeeftijd.length > 0 || selectedTags.length > 0 || selectedBeschikbaar.length > 0 || searchQuery !== '' || activeQuickFilter !== 'all';
+                resetBtn.classList.toggle('hidden', !hasActive);
+            }
+
+            let filtered = allBooks.filter(book => {
                 const q = searchQuery.toLowerCase();
                 const matchSearch = !searchQuery || 
                     (book.Titel && book.Titel.toLowerCase().includes(q)) || 
                     (book.Auteur && book.Auteur.toLowerCase().includes(q)) ||
-                    (book.Tags && book.Tags.toLowerCase().includes(q));
+                    (book.Tags && book.Tags.toLowerCase().includes(q)) ||
+                    (book.ISBN && book.ISBN.includes(q));
                 
                 const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
-                const matchGraad = selectedGraden.length === 0 || selectedGraden.includes(book.Graad);
+                const matchLeeftijd = selectedLeeftijd.length === 0 || selectedLeeftijd.includes(book.Graad);
                 
                 let matchTag = true;
                 if (selectedTags.length > 0) {
@@ -616,8 +1647,50 @@
                     matchTag = selectedTags.some(t => bookTags.includes(t));
                 }
 
-                return matchSearch && matchTaal && matchGraad && matchTag;
+                let matchBeschikbaar = true;
+                const isLoaned = isBookLoanedOut(book.Titel);
+                if (selectedBeschikbaar.length === 1) {
+                    const bAvail = getBookAvailability(book);
+                    if (selectedBeschikbaar.includes('available')) {
+                        matchBeschikbaar = bAvail.available > 0;
+                    } else if (selectedBeschikbaar.includes('loaned')) {
+                        matchBeschikbaar = bAvail.loaned > 0;
+                    }
+                }
+
+                let matchQuick = true;
+                if (activeQuickFilter === 'top-rated') {
+                    const r = getBookRating(book.Titel);
+                    matchQuick = r.avg >= 4.0;
+                } else if (activeQuickFilter === 'my-favorites') {
+                    matchQuick = isBookFavorite(book.Titel);
+                } else if (activeQuickFilter === 'new-books') {
+                    matchQuick = book.id > (allBooks.length - 25);
+                }
+
+                return matchSearch && matchTaal && matchLeeftijd && matchTag && matchBeschikbaar && matchQuick;
             });
+
+            if (currentSort === 'rating-desc') {
+                filtered.sort((a, b) => getBookRating(b.Titel).avg - getBookRating(a.Titel).avg);
+            } else if (currentSort === 'title-asc') {
+                filtered.sort((a, b) => a.Titel.localeCompare(b.Titel));
+            } else if (currentSort === 'author-asc') {
+                filtered.sort((a, b) => a.Auteur.localeCompare(b.Auteur));
+            }
+
+            const feedbackEl = document.getElementById('activeFilterFeedback');
+            if (activeQuickFilter === 'top-rated') {
+                feedbackEl.textContent = '⭐ Gefilterd op: Hoogst beoordeelde boeken door leerlingen (4+ sterren)';
+            } else if (activeQuickFilter === 'my-favorites') {
+                feedbackEl.textContent = `❤️ Mijn bewaarde favorieten (${favoritesList.length} boeken)`;
+            } else if (activeQuickFilter === 'new-books') {
+                feedbackEl.textContent = '✨ Gefilterd op: Recent toegevoegde boeken in de schoolbib';
+            } else if (searchQuery) {
+                feedbackEl.textContent = `Zoekresultaten voor "${escapeHtml(searchQuery)}"`;
+            } else {
+                feedbackEl.textContent = 'Alle boeken uit de catalogus';
+            }
 
             document.getElementById('bookCount').textContent = `${filtered.length} boeken gevonden`;
 
@@ -626,58 +1699,346 @@
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center text-slate-400 bg-white rounded-3xl border border-slate-100">
-                        <p class="text-lg font-bold text-slate-700">Geen boeken gevonden</p>
-                        <p class="text-sm mt-1">Probeer een andere zoekterm of wis een van de filters.</p>
+                    <div class="col-span-full py-16 text-center text-slate-400 bg-white rounded-3xl border border-slate-200/80 p-8">
+                        <div class="text-4xl mb-2">🔍</div>
+                        <p class="text-base font-extrabold text-slate-800">Geen boeken gevonden</p>
+                        <p class="text-xs sm:text-sm mt-1 max-w-sm mx-auto text-slate-500">
+                            ${activeQuickFilter === 'my-favorites' 
+                                ? 'Je hebt nog geen boeken aan je favorieten toegevoegd. Klik op het hartje bij een boek om het te bewaren!' 
+                                : 'Probeer een andere zoekterm of wis een van de filters in het menu.'}
+                        </p>
+                        <button onclick="resetCatalogFilters()" class="mt-4 px-4 py-2 rounded-xl text-xs font-extrabold bg-brand-50 text-brand-700 hover:bg-brand-100 transition">
+                            Alle filters wissen
+                        </button>
                     </div>
                 `;
                 return;
             }
 
             filtered.forEach(book => {
+                const rating = getBookRating(book.Titel);
+                const isFav = isBookFavorite(book.Titel);
+                const avail = getBookAvailability(book);
+                
+                // Formatteer locaties
+                const locCounts = {};
+                (book.copies || []).forEach(c => {
+                    locCounts[c.locatie] = (locCounts[c.locatie] || 0) + 1;
+                });
+                const locSummary = Object.entries(locCounts).map(([loc, cnt]) => cnt > 1 ? `${cnt}x ${loc}` : loc).join(', ');
+
+                // Status badge
+                let statusBadgeHtml = '';
+                if (avail.total === 1) {
+                    statusBadgeHtml = avail.available > 0
+                        ? `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs bg-emerald-600 text-white">Aanwezig</span>`
+                        : `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs bg-rose-600 text-white">Uitgeleend</span>`;
+                } else {
+                    if (avail.isFullyAvailable) {
+                        statusBadgeHtml = `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs bg-emerald-600 text-white">Alle ${avail.total} aanwezig</span>`;
+                    } else if (avail.isPartiallyAvailable) {
+                        statusBadgeHtml = `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs bg-amber-500 text-white">${avail.available}/${avail.total} aanwezig</span>`;
+                    } else {
+                        statusBadgeHtml = `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs bg-rose-600 text-white">Alle uitgeleend</span>`;
+                    }
+                }
+
                 const tagsHtml = book.Tags 
-                    ? book.Tags.split(',').map(t => `<span class="tag-badge text-[11px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-medium">${t.trim()}</span>`).join(' ') 
+                    ? book.Tags.split(',').slice(0, 3).map(t => `<span class="text-[10px] font-semibold bg-brand-50 text-brand-700 px-2 py-0.5 rounded-md">${escapeHtml(t.trim())}</span>`).join(' ') 
                     : '';
 
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl p-5 shadow-xs border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-pink-200 transition group';
+                card.className = 'bg-white rounded-3xl p-3.5 sm:p-4 shadow-xs border border-slate-200/80 flex flex-col justify-between card-hover hover:border-brand-200 group relative transition';
+                
                 card.innerHTML = `
                     <div>
-                        <div class="flex justify-between items-start gap-2 mb-2">
-                            <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-lg">${book.Graad || 'Alle graden'}</span>
-                            ${book.ISBN ? `<span class="text-[10px] text-slate-400 font-mono" title="ISBN">#${book.ISBN}</span>` : ''}
+                        <!-- Cover Container -->
+                        <div class="aspect-[2/3] w-full rounded-2xl overflow-hidden shadow-xs group-hover:shadow-md mb-3 relative cursor-pointer" onclick="openBookDetailModal(${JSON.stringify(book).replace(/"/g, '&quot;')})">
+                            ${renderCoverHtml(book)}
+                            
+                            <div class="absolute top-2 left-2 z-10 flex flex-col gap-1 items-start">
+                                <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md">
+                                    ${escapeHtml(book.Graad)}
+                                </span>
+                                ${statusBadgeHtml}
+                            </div>
+
+                            <button onclick="event.stopPropagation(); toggleCardFavorite('${escapeHtml(book.Titel)}')" 
+                                    class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs hover:bg-white text-coral-500 flex items-center justify-center text-sm shadow-xs transition hover:scale-110"
+                                    title="Opslaan in favorieten">
+                                ${isFav ? '❤️' : '🤍'}
+                            </button>
+
+                            <div class="absolute inset-0 bg-brand-900/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center pointer-events-none">
+                                <span class="bg-white/95 backdrop-blur-xs text-brand-700 text-xs font-black uppercase px-3 py-1.5 rounded-xl shadow-md">
+                                    Achterflap 📖
+                                </span>
+                            </div>
                         </div>
-                        <h4 class="font-bold text-slate-900 text-base leading-snug mb-1 group-hover:text-pink-600 transition">${book.Titel}</h4>
-                        <p class="text-xs text-slate-500 font-medium mb-3">door <span class="text-slate-700 font-semibold">${book.Auteur}</span></p>
-                        
-                        <div class="flex flex-wrap gap-1.5 mb-4">
+
+                        <h4 class="font-extrabold text-slate-900 text-sm sm:text-base leading-snug mb-1 group-hover:text-brand-600 transition line-clamp-2 cursor-pointer" onclick="openBookDetailModal(${JSON.stringify(book).replace(/"/g, '&quot;')})">
+                            ${escapeHtml(book.Titel)}
+                        </h4>
+                        <p class="text-xs text-slate-500 font-medium mb-2.5">
+                            door <span class="text-slate-700 font-semibold">${escapeHtml(book.Auteur)}</span>
+                        </p>
+
+                        <div class="flex flex-wrap gap-1 mb-3">
                             ${tagsHtml}
                         </div>
                     </div>
-                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                        <span class="font-semibold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg">${book.Taal}</span>
-                        <span class="truncate max-w-[160px] bg-slate-50 px-2.5 py-1 rounded-lg text-slate-600" title="${book.Locatie}">${book.Locatie}</span>
+
+                    <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-1 cursor-pointer" onclick="openBookDetailModal(${JSON.stringify(book).replace(/"/g, '&quot;')})" title="${rating.count > 0 ? rating.avg + ' / 5 (' + rating.count + ' stemmen)' : 'Nog niet beoordeeld'}">
+                            <span class="text-sunny-400 text-xs">★</span>
+                            <span class="text-xs font-extrabold text-slate-700">${rating.avg > 0 ? rating.avg : '-'}</span>
+                            <span class="text-[10px] text-slate-400 font-medium">(${rating.count})</span>
+                        </div>
+
+                        <button onclick="openBookDetailModal(${JSON.stringify(book).replace(/"/g, '&quot;')})" 
+                                class="text-[11px] font-extrabold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                            <span>Info</span>
+                            <span>→</span>
+                        </button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
+        window.toggleCardFavorite = function(title) {
+            toggleFavorite(title);
+        };
+
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('btnClearSearch');
+
+        searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value;
+            if (searchQuery) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
             filterAndRender();
         });
 
-        document.getElementById('resetFilters').addEventListener('click', () => {
-            document.querySelectorAll('.filter-input').forEach(input => input.checked = false);
-            document.getElementById('searchInput').value = '';
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
             searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
             filterAndRender();
         });
 
-        // -------------------------------------------------------------
-        // 3. TOP NAVIGATIEMENU (CATALOGUS <-> BEHEERDER)
-        // -------------------------------------------------------------
+        document.getElementById('resetFilters').addEventListener('click', resetCatalogFilters);
+
+        // 8. ACHTERFLAP MODAL
+        function initModalEvents() {
+            const modal = document.getElementById('bookDetailModal');
+            const closeBtn = document.getElementById('btnCloseModal');
+
+            closeBtn.addEventListener('click', () => modal.close());
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.close();
+            });
+
+            const starElements = document.querySelectorAll('#modalStarWidget .star');
+            starElements.forEach(star => {
+                star.addEventListener('click', () => {
+                    const stars = parseInt(star.getAttribute('data-star'), 10);
+                    if (currentModalBook) {
+                        saveBookRating(currentModalBook.Titel, stars);
+                        updateModalStars(stars);
+                        const fb = document.getElementById('modalRatingFeedback');
+                        fb.textContent = `Bedankt voor je score van ${stars} sterren! 🌟`;
+                        fb.classList.remove('hidden');
+                    }
+                });
+            });
+
+            document.getElementById('modalFavBtn').addEventListener('click', () => {
+                if (currentModalBook) {
+                    toggleFavorite(currentModalBook.Titel);
+                    updateModalFavState();
+                }
+            });
+        }
+
+        function openBookDetailModal(book) {
+            currentModalBook = book;
+            const modal = document.getElementById('bookDetailModal');
+
+            document.getElementById('modalTitle').textContent = book.Titel;
+            document.getElementById('modalAuthor').textContent = book.Auteur;
+            document.getElementById('modalGraadBadge').textContent = book.Graad || 'Alle graden';
+            document.getElementById('modalTaalBadge').textContent = book.Taal;
+            document.getElementById('modalLocation').textContent = book.Locatie;
+            document.getElementById('modalIsbn').textContent = book.ISBN ? `#${book.ISBN}` : 'Geen ISBN geregistreerd';
+            document.getElementById('modalRatingFeedback').classList.add('hidden');
+
+            const avail = getBookAvailability(book);
+            const availEl = document.getElementById('modalAvailability');
+            if (availEl) {
+                if (avail.total === 1) {
+                    if (avail.available > 0) {
+                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 inline-flex items-center gap-1.5';
+                        availEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Aanwezig in de bib</span>';
+                    } else {
+                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-rose-50 border-rose-200 text-rose-800 inline-flex items-center gap-1.5';
+                        availEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Momenteel uitgeleend</span>';
+                    }
+                } else {
+                    if (avail.isFullyAvailable) {
+                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 inline-flex items-center gap-1.5';
+                        availEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Alle ${avail.total} exemplaren aanwezig</span>`;
+                    } else if (avail.isPartiallyAvailable) {
+                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-amber-50 border-amber-200 text-amber-800 inline-flex items-center gap-1.5';
+                        availEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>${avail.available} van de ${avail.total} exemplaren aanwezig (${avail.loaned} ontleend)</span>`;
+                    } else {
+                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-rose-50 border-rose-200 text-rose-800 inline-flex items-center gap-1.5';
+                        availEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Alle ${avail.total} exemplaren momenteel uitgeleend</span>`;
+                    }
+                }
+            }
+
+            // Exemplaren lijst vullen in de modal
+            const copiesListEl = document.getElementById('modalCopiesList');
+            const copiesBadgeEl = document.getElementById('modalCopiesBadge');
+            if (copiesListEl && copiesBadgeEl) {
+                const copies = book.copies || [{ copyId: book.id, copyLabel: 'Exemplaar 1 van 1', locatie: book.Locatie }];
+                copiesBadgeEl.textContent = `${copies.length} ${copies.length === 1 ? 'exemplaar' : 'exemplaren'}`;
+                
+                copiesListEl.innerHTML = '';
+                copies.forEach((c, idx) => {
+                    const isLent = isCopyLoaned(book.Titel, c.copyLabel, c.copyId);
+                    const loanInfo = getCopyLoanInfo(book.Titel, c.copyLabel, c.copyId);
+
+                    const div = document.createElement('div');
+                    div.className = `p-2.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${isLent ? 'bg-rose-50/70 border-rose-200 text-rose-900' : 'bg-white border-brand-100 text-slate-800'}`;
+                    
+                    div.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold text-xs text-brand-900">${escapeHtml(c.copyLabel || ('Exemplaar ' + (idx + 1)))}:</span>
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200/80">
+                                ðŸ“ Locatie: <strong>${escapeHtml(c.locatie || 'Bibliotheek')}</strong>
+                            </span>
+                        </div>
+                        <div>
+                            ${isLent 
+                                ? `<span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-rose-600 bg-rose-100/70 px-2.5 py-1 rounded-lg">
+                                    <span>ðŸ”´ Uitgeleend aan ${escapeHtml(loanInfo ? loanInfo.klas : '')}</span>
+                                    <span class="text-[10px] text-rose-500 font-medium">(terug: ${loanInfo ? loanInfo.dueDate : ''})</span>
+                                   </span>`
+                                : `<span class="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                                    <span>ðŸŸ¢ Aanwezig in rek</span>
+                                   </span>`}
+                        </div>
+                    `;
+                    copiesListEl.appendChild(div);
+                });
+            }
+
+            const coverContainer = document.getElementById('modalCoverContainer');
+            coverContainer.innerHTML = renderCoverHtml(book, true);
+
+            const tagsContainer = document.getElementById('modalTags');
+            tagsContainer.innerHTML = '';
+            if (book.Tags) {
+                book.Tags.split(',').forEach(t => {
+                    const span = document.createElement('span');
+                    span.className = 'text-xs font-semibold bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg';
+                    span.textContent = t.trim();
+                    tagsContainer.appendChild(span);
+                });
+            } else {
+                tagsContainer.innerHTML = '<span class="text-xs text-slate-400 italic">Geen tags opgegeven</span>';
+            }
+
+            const rating = getBookRating(book.Titel);
+            const scoreText = document.getElementById('modalRatingScoreText');
+            scoreText.textContent = rating.avg > 0 ? `${rating.avg} / 5 (${rating.count} beoordelingen)` : 'Nog niet beoordeeld';
+            
+            const userRating = ratingsStore[book.Titel] && ratingsStore[book.Titel].myRating;
+            updateModalStars(userRating || Math.round(rating.avg));
+
+            updateModalFavState();
+
+            const boekenzoekerBtn = document.getElementById('btnOpenBoekenzoeker');
+            const boekenzoekerSearchQuery = encodeURIComponent(`${book.Titel} ${book.Auteur}`);
+            boekenzoekerBtn.href = `https://www.boekenzoeker.be/zoek?q=${boekenzoekerSearchQuery}`;
+
+            fetchBookSynopsis(book);
+
+            modal.showModal();
+        }
+
+        function updateModalStars(selectedStars) {
+            const starElements = document.querySelectorAll('#modalStarWidget .star');
+            starElements.forEach(s => {
+                const val = parseInt(s.getAttribute('data-star'), 10);
+                if (val <= selectedStars) {
+                    s.className = 'star text-sunny-400 font-bold';
+                } else {
+                    s.className = 'star text-slate-300 hover:text-sunny-400';
+                }
+            });
+        }
+
+        function updateModalFavState() {
+            if (!currentModalBook) return;
+            const isFav = isBookFavorite(currentModalBook.Titel);
+            const btn = document.getElementById('modalFavBtn');
+            const icon = document.getElementById('modalFavIcon');
+            const label = document.getElementById('modalFavLabel');
+
+            if (isFav) {
+                btn.className = 'w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 bg-coral-50 border-coral-200 text-coral-600 hover:bg-coral-100';
+                icon.textContent = '❤️';
+                label.textContent = 'Bewaard in mijn favorieten';
+            } else {
+                btn.className = 'w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 bg-slate-50 border-slate-200 text-slate-700 hover:bg-coral-50 hover:text-coral-600';
+                icon.textContent = '🤍';
+                label.textContent = 'Toevoegen aan mijn favorieten';
+            }
+        }
+
+        async function fetchBookSynopsis(book) {
+            const synopsisEl = document.getElementById('modalSynopsis');
+            synopsisEl.textContent = 'Bezig met het ophalen van de achterflap...';
+
+            if (!book.ISBN && !book.Titel) {
+                synopsisEl.textContent = 'Geen achterflaptekst beschikbaar voor dit boek.';
+                return;
+            }
+
+            try {
+                const q = book.ISBN ? `isbn:${book.ISBN}` : `intitle:${encodeURIComponent(book.Titel)}+inauthor:${encodeURIComponent(book.Auteur)}`;
+                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}`);
+                const data = await res.json();
+
+                if (data.items && data.items.length > 0 && data.items[0].volumeInfo) {
+                    const info = data.items[0].volumeInfo;
+                    if (info.description) {
+                        const cleanDesc = info.description.replace(/<[^>]*>?/gm, '');
+                        synopsisEl.textContent = cleanDesc;
+                        return;
+                    }
+                }
+
+                synopsisEl.innerHTML = `
+                    Dit boek staat geregistreerd in onze schoolbibliotheek onder de categorie <strong>${escapeHtml(book.Locatie)}</strong> 
+                    en is geschikt voor de <strong>${escapeHtml(book.Graad)}</strong>.<br><br>
+                    Wil je de volledige samenvatting, leestips of recensies bekijken? Klik dan hieronder op de oranje knop om dit boek meteen te openen op <strong>Boekenzoeker.be</strong>!
+                `;
+            } catch (err) {
+                synopsisEl.innerHTML = `
+                    Dit boek staat geregistreerd in de schoolbibliotheek voor de <strong>${escapeHtml(book.Graad)}</strong>.<br><br>
+                    Bekijk meer informatie en leestips rechtstreeks op <strong>Boekenzoeker.be</strong> via de knop hieronder!
+                `;
+            }
+        }
+
+        // 9. TOP NAVIGATIE
         function initNavigation() {
             const catalogBtns = [document.getElementById('btnDeskCatalog'), document.getElementById('btnMobCatalog')];
             const adminBtns = [document.getElementById('btnDeskAdmin'), document.getElementById('btnMobAdmin')];
@@ -690,10 +2051,10 @@
                 adminView.classList.add('hidden');
 
                 catalogBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-pink-600 text-white shadow-sm';
+                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm';
                 });
                 adminBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-pink-50 hover:text-pink-700';
+                    btn.className = 'nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-coral-50 hover:text-coral-700 border border-slate-200';
                 });
             }
 
@@ -702,13 +2063,12 @@
                 adminView.classList.remove('hidden');
 
                 adminBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-pink-600 text-white shadow-sm';
+                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm';
                 });
                 catalogBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-pink-50 hover:text-pink-700';
+                    btn.className = 'nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 border border-slate-200';
                 });
 
-                // Controleer of beheerder al ingelogd is
                 if (sessionStorage.getItem('schoolbib_logged_in') === 'true') {
                     document.getElementById('adminLoginSection').classList.add('hidden');
                     document.getElementById('adminDashboardSection').classList.remove('hidden');
@@ -722,9 +2082,7 @@
             adminBtns.forEach(btn => btn.addEventListener('click', showAdmin));
         }
 
-        // -------------------------------------------------------------
-        // 4. BEHEERDER INLOGGEN & SESSIE
-        // -------------------------------------------------------------
+        // 10. BEHEERDER AUTH
         function initAdminAuth() {
             const loginForm = document.getElementById('adminLoginForm');
             const pinInput = document.getElementById('adminPinInput');
@@ -750,34 +2108,32 @@
                 document.getElementById('adminLoginSection').classList.remove('hidden');
             });
 
-            // Sub-tabs beheerder
             const tabs = [
+                { btn: document.getElementById('tabBtnFeatured'), el: document.getElementById('subtabFeatured') },
                 { btn: document.getElementById('tabBtnAddBook'), el: document.getElementById('subtabAddBook') },
                 { btn: document.getElementById('tabBtnLoans'), el: document.getElementById('subtabLoans') },
                 { btn: document.getElementById('tabBtnSettings'), el: document.getElementById('subtabSettings') }
             ];
 
             tabs.forEach(({ btn, el }) => {
+                if (!btn || !el) return;
                 btn.addEventListener('click', () => {
                     tabs.forEach(t => {
-                        t.el.classList.add('hidden');
-                        t.btn.className = 'admin-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+                        if (t.el) t.el.classList.add('hidden');
+                        if (t.btn) t.btn.className = 'admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900';
                     });
                     el.classList.remove('hidden');
-                    btn.className = 'admin-subtab active-subtab px-3.5 py-1.5 rounded-lg text-xs font-bold transition bg-white text-pink-600 shadow-xs';
+                    btn.className = 'admin-subtab active-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white text-brand-700 shadow-xs';
                 });
             });
         }
 
-        // -------------------------------------------------------------
-        // 5. BOEK TOEVOEGEN & AUTOMATISCH OPSLAAN NAAR GOOGLE SHEETS
-        // -------------------------------------------------------------
+        // 11. BOEK TOEVOEGEN
         function initAddBook() {
             const form = document.getElementById('addBookForm');
             const statusBox = document.getElementById('addBookStatus');
             const submitBtn = document.getElementById('btnAddBookSubmit');
 
-            // Snelle tags toevoegen via klik op chip
             document.querySelectorAll('.quick-tag').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const tag = btn.getAttribute('data-tag');
@@ -790,7 +2146,6 @@
                 });
             });
 
-            // ISBN Lookup via Google Books API
             const lookupBtn = document.getElementById('btnLookupIsbn');
             const lookupInput = document.getElementById('lookupIsbnInput');
             const lookupStatus = document.getElementById('isbnLookupStatus');
@@ -825,7 +2180,6 @@
                         lookupStatus.textContent = `✅ Boek gevonden: "${info.title}" (${info.authors ? info.authors.join(', ') : 'onbekend'})`;
                         lookupStatus.className = 'text-xs font-semibold text-emerald-600';
                     } else {
-                        // Alternatief proberen via OpenLibrary API
                         const olRes = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
                         const olData = await olRes.json();
                         const bookKey = `ISBN:${isbn}`;
@@ -849,7 +2203,6 @@
                 }
             });
 
-            // Formulier verzenden
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 submitBtn.disabled = true;
@@ -859,22 +2212,23 @@
                 `;
 
                 const newBook = {
+                    id: allBooks.length + 1,
                     Titel: document.getElementById('fTitel').value.trim(),
                     Auteur: document.getElementById('fAuteur').value.trim(),
                     Graad: document.getElementById('fGraad').value.trim(),
                     Locatie: document.getElementById('fLocatie').value.trim(),
                     Tags: document.getElementById('fTags').value.trim(),
-                    ISBN: document.getElementById('fIsbn').value.trim(),
+                    ISBN: document.getElementById('fIsbn').value.trim().replace(/[^0-9X]/gi, ''),
                     Taal: bepaalTaal(document.getElementById('fLocatie').value.trim())
                 };
 
-                // Voeg meteen toe aan lokale weergave (instant feedback!)
-                allBooks.unshift(newBook);
+                allBooks.push(newBook);
                 initFilters();
+                renderFeaturedTheme();
+                renderNewBooksShelf();
                 filterAndRender();
                 updateLoanBookList();
 
-                // Probeer door te sturen naar Google Sheet via Apps Script
                 const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
 
                 if (activeScriptUrl) {
@@ -894,21 +2248,14 @@
                         });
 
                         statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex items-center gap-2';
-                        statusBox.innerHTML = `
-                            <span>🎉 Boek <strong>"${newBook.Titel}"</strong> is succesvol toegevoegd en opgeslagen in jullie Google Sheet!</span>
-                        `;
+                        statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> is toegevoegd en opgeslagen in jullie Google Sheet!</span>`;
                     } catch (err) {
                         statusBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold';
-                        statusBox.innerHTML = `
-                            <span>Boek is lokaal toegevoegd. Kon het niet automatisch naar Google Sheets sturen. Controleer de Web-app URL bij Instellingen.</span>
-                        `;
+                        statusBox.innerHTML = `<span>Boek is lokaal toegevoegd. Kon het niet automatisch naar Google Sheets sturen.</span>`;
                     }
                 } else {
                     statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex flex-col gap-1';
-                    statusBox.innerHTML = `
-                        <span>🎉 Boek <strong>"${newBook.Titel}"</strong> is direct toegevoegd aan de website!</span>
-                        <span class="text-xs font-normal text-slate-600">Tip: Koppel de Google Apps Script Web-app URL onder het tabblad 'Instellingen & Sheet' om het ook automatisch in Google Sheets op te slaan.</span>
-                    `;
+                    statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> is direct toegevoegd aan de website!</span>`;
                 }
 
                 statusBox.classList.remove('hidden');
@@ -921,36 +2268,53 @@
                     <span>Boek toevoegen en opslaan</span>
                 `;
 
-                setTimeout(() => {
-                    statusBox.classList.add('hidden');
-                }, 8000);
+                setTimeout(() => statusBox.classList.add('hidden'), 8000);
             });
         }
 
-        // -------------------------------------------------------------
-        // 6. BOEKEN ONTLENEN & INLEVEREN
-        // -------------------------------------------------------------
+        // 12. ONTLENEN MET SPECIFIEKE EXEMPLAREN
         function initLoans() {
             const loanForm = document.getElementById('loanForm');
+            const titleInput = document.getElementById('loanBookTitle');
+            const copySelect = document.getElementById('loanCopySelect');
             const dueDateInput = document.getElementById('loanDueDate');
 
-            // Standaard inleverdatum instellen op 3 weken vanaf vandaag
             const defaultDate = new Date();
             defaultDate.setDate(defaultDate.getDate() + 21);
             dueDateInput.value = defaultDate.toISOString().split('T')[0];
+
+            // Wanneer titel gekozen of getypt wordt, toon de exemplaren
+            titleInput.addEventListener('input', () => {
+                updateCopySelectOptions(titleInput.value.trim());
+            });
+            titleInput.addEventListener('change', () => {
+                updateCopySelectOptions(titleInput.value.trim());
+            });
 
             loanForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const student = document.getElementById('loanStudent').value.trim();
                 const klas = document.getElementById('loanClass').value.trim();
-                const bookTitle = document.getElementById('loanBookTitle').value.trim();
-                const dueDate = document.getElementById('loanDueDate').value;
+                const bookTitle = titleInput.value.trim();
+                const selectedCopyVal = copySelect ? copySelect.value : '';
+                const dueDate = dueDateInput.value;
+
+                if (!selectedCopyVal) {
+                    alert('Selecteer a.u.b. welk specifiek exemplaar wordt uitgeleend.');
+                    return;
+                }
+
+                // selectedCopyVal format: "copyId|||copyLabel|||locatie"
+                const [copyId, copyLabel, copyLoc] = selectedCopyVal.split('|||');
 
                 const newLoan = {
                     id: Date.now(),
                     student,
                     klas,
                     bookTitle,
+                    copyId: copyId || '',
+                    copyLabel: copyLabel || 'Exemplaar 1',
+                    copyLoc: copyLoc || '',
                     loanDate: new Date().toISOString().split('T')[0],
                     dueDate,
                     returned: false
@@ -959,22 +2323,71 @@
                 loans.unshift(newLoan);
                 saveLoans();
                 renderLoans();
+                filterAndRender();
 
                 loanForm.reset();
                 dueDateInput.value = defaultDate.toISOString().split('T')[0];
+                if (copySelect) copySelect.innerHTML = '<option value="">-- Kies eerst een titel --</option>';
             });
 
             renderLoans();
+        }
+
+        function updateCopySelectOptions(title) {
+            const copySelect = document.getElementById('loanCopySelect');
+            if (!copySelect) return;
+
+            if (!title) {
+                copySelect.innerHTML = '<option value="">-- Kies eerst een titel --</option>';
+                return;
+            }
+
+            const book = allBooks.find(b => b.Titel.toLowerCase().trim() === title.toLowerCase().trim());
+            if (!book || !book.copies || book.copies.length === 0) {
+                copySelect.innerHTML = `<option value="1|||Exemplaar 1|||${book ? escapeHtml(book.Locatie) : ''}">Exemplaar 1 (${book ? escapeHtml(book.Locatie) : 'Bib'}) - Beschikbaar</option>`;
+                return;
+            }
+
+            copySelect.innerHTML = '';
+            let hasAvailable = false;
+
+            book.copies.forEach((c, idx) => {
+                const isLent = isCopyLoaned(book.Titel, c.copyLabel, c.copyId);
+                const opt = document.createElement('option');
+                opt.value = `${c.copyId}|||${c.copyLabel}|||${c.locatie}`;
+                
+                if (isLent) {
+                    const loanInfo = getCopyLoanInfo(book.Titel, c.copyLabel, c.copyId);
+                    opt.disabled = true;
+                    opt.textContent = `❌ ${c.copyLabel} (${c.locatie}) — Al uitgeleend aan ${loanInfo ? loanInfo.student : 'leerling'}`;
+                } else {
+                    opt.textContent = `🟢 ${c.copyLabel} (${c.locatie}) — Beschikbaar`;
+                    if (!hasAvailable) {
+                        opt.selected = true;
+                        hasAvailable = true;
+                    }
+                }
+                copySelect.appendChild(opt);
+            });
+
+            if (!hasAvailable) {
+                const warnOpt = document.createElement('option');
+                warnOpt.value = "";
+                warnOpt.disabled = true;
+                warnOpt.selected = true;
+                warnOpt.textContent = "⚠️ Alle exemplaren van dit boek zijn momenteel uitgeleend!";
+                copySelect.prepend(warnOpt);
+            }
         }
 
         function updateLoanBookList() {
             const datalist = document.getElementById('loanBooksList');
             if (!datalist) return;
             datalist.innerHTML = '';
-            allBooks.slice(0, 300).forEach(b => {
+            allBooks.forEach(b => {
                 const opt = document.createElement('option');
                 opt.value = b.Titel;
-                opt.textContent = `${b.Titel} - ${b.Auteur}`;
+                opt.textContent = `${b.Titel} - ${b.Auteur} (${b.copies ? b.copies.length : 1} ex.)`;
                 datalist.appendChild(opt);
             });
         }
@@ -982,6 +2395,7 @@
         function saveLoans() {
             localStorage.setItem('schoolbib_loans', JSON.stringify(loans));
             renderLoans();
+            filterAndRender();
         }
 
         function renderLoans() {
@@ -996,7 +2410,7 @@
             if (loans.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="px-4 py-8 text-center text-slate-400">
+                        <td colspan="8" class="px-4 py-8 text-center text-slate-400">
                             Nog geen boeken uitgeleend. Gebruik het bovenstaande formulier om een uitlening te registreren.
                         </td>
                     </tr>
@@ -1011,10 +2425,15 @@
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition';
 
+                const copyInfoHtml = loan.copyLabel 
+                    ? `<span class="font-extrabold text-slate-800">${escapeHtml(loan.copyLabel)}</span> <span class="text-[10px] text-slate-500 block">📍 ${escapeHtml(loan.copyLoc || 'Bib')}</span>`
+                    : `<span class="text-slate-500 italic">Exemplaar 1</span>`;
+
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-semibold text-slate-900">${loan.student}</td>
-                    <td class="px-4 py-3 font-medium text-slate-600">${loan.klas}</td>
-                    <td class="px-4 py-3 font-medium text-slate-800">${loan.bookTitle}</td>
+                    <td class="px-4 py-3 font-semibold text-slate-900">${escapeHtml(loan.student)}</td>
+                    <td class="px-4 py-3 font-medium text-slate-600">${escapeHtml(loan.klas)}</td>
+                    <td class="px-4 py-3 font-medium text-slate-800">${escapeHtml(loan.bookTitle)}</td>
+                    <td class="px-4 py-3 text-xs">${copyInfoHtml}</td>
                     <td class="px-4 py-3 text-slate-500">${loan.loanDate || '-'}</td>
                     <td class="px-4 py-3 ${isOverdue ? 'text-rose-600 font-bold' : 'text-slate-600'}">${loan.dueDate || '-'}</td>
                     <td class="px-4 py-3">
@@ -1026,7 +2445,7 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         ${!loan.returned ? `
-                            <button onclick="markLoanReturned(${loan.id})" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1 rounded-lg transition">
+                            <button onclick="markLoanReturned(${loan.id})" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1 rounded-xl transition">
                                 Inleveren ✓
                             </button>
                         ` : `
@@ -1054,9 +2473,7 @@
             saveLoans();
         };
 
-        // -------------------------------------------------------------
-        // 7. INSTELLINGEN (SCRIPT URL & PINCODE)
-        // -------------------------------------------------------------
+        // 13. INSTELLINGEN
         function initSettings() {
             const scriptInput = document.getElementById('scriptUrlInput');
             const saveScriptBtn = document.getElementById('btnSaveScriptUrl');
@@ -1092,3 +2509,4 @@
     </script>
 </body>
 </html>
+

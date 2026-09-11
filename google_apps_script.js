@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Google Apps Script voor SchoolbibSP (Schoolbibliotheek Don Bosco Gent campus Sint-Pieters)
  * 
  * INSTRUCTIES VOOR EENMALIGE INSTELLING:
@@ -22,16 +22,29 @@ function doPost(e) {
   lock.tryLock(15000);
   
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
     var data = JSON.parse(e.postData.contents);
     
-    // Zorg ervoor dat de data in dezelfde kolomvolgorde wordt toegevoegd:
-    // Kolom 1: Titel
-    // Kolom 2: Auteur
-    // Kolom 3: Tags
-    // Kolom 4: Graad
-    // Kolom 5: Locatie
-    // Kolom 6: ISBN
+    // Actie 1: Sterrenbeoordeling van leerling opslaan
+    if (data.action === 'rate') {
+      var reviewsSheet = ss.getSheetByName("Beoordelingen");
+      if (!reviewsSheet) {
+        reviewsSheet = ss.insertSheet("Beoordelingen");
+        reviewsSheet.appendRow(["Tijdstip", "Titel", "Sterren (1-5)"]);
+      }
+      reviewsSheet.appendRow([
+        new Date(),
+        data.titel ? data.titel.toString().trim() : '',
+        data.rating ? Number(data.rating) : ''
+      ]);
+      
+      return ContentService
+        .createTextOutput(JSON.stringify({ status: 'success', message: 'Beoordeling opgeslagen!' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // Actie 2: Nieuw boek toevoegen aan de catalogus
+    var sheet = ss.getActiveSheet();
     sheet.appendRow([
       data.titel ? data.titel.toString().trim() : '',
       data.auteur ? data.auteur.toString().trim() : '',
