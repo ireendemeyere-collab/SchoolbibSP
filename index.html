@@ -1488,6 +1488,11 @@
                     ? 'quick-filter-btn active-filter px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-brand-600 text-white shadow-xs'
                     : 'quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-slate-200';
             });
+            const genreSearch = document.getElementById('filterGenreSearch');
+            if (genreSearch) {
+                genreSearch.value = '';
+                document.querySelectorAll('#genreCheckboxes label').forEach(label => label.style.display = 'flex');
+            }
             const tagSearch = document.getElementById('filterTagSearch');
             if (tagSearch) {
                 tagSearch.value = '';
@@ -1499,9 +1504,10 @@
         // 7. DROPDOWN FILTERBALK (BOEKENZOEKER STIJL)
         function initDropdownMenus() {
             const dropdownConfigs = [
-                { btnId: 'btnDropdownTaal', menuId: 'menuTaal' },
-                { btnId: 'btnDropdownLeeftijd', menuId: 'menuLeeftijd' },
+                { btnId: 'btnDropdownGenre', menuId: 'menuGenre' },
                 { btnId: 'btnDropdownThema', menuId: 'menuThema' },
+                { btnId: 'btnDropdownLeeftijd', menuId: 'menuLeeftijd' },
+                { btnId: 'btnDropdownTaal', menuId: 'menuTaal' },
                 { btnId: 'btnDropdownBeschikbaar', menuId: 'menuBeschikbaar' }
             ];
 
@@ -1536,6 +1542,19 @@
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeAllDropdowns();
             });
+
+            // Genre zoekbalk
+            const genreSearchInput = document.getElementById('filterGenreSearch');
+            if (genreSearchInput) {
+                genreSearchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    const genreLabels = document.querySelectorAll('#genreCheckboxes label');
+                    genreLabels.forEach(label => {
+                        const text = label.textContent.toLowerCase();
+                        label.style.display = text.includes(query) ? 'flex' : 'none';
+                    });
+                });
+            }
 
             // Thema zoekbalk in thema dropdown
             const tagSearchInput = document.getElementById('filterTagSearch');
@@ -1584,13 +1603,27 @@
             }
         }
 
-        function renderActiveFilterTags(talen, leeftijden, tags, beschikbaar) {
+        function renderActiveFilterTags(genres, themas, leeftijden, talen, beschikbaar) {
             const bar = document.getElementById('activeFilterTagsBar');
             const list = document.getElementById('activeFilterTagsList');
             if (!bar || !list) return;
 
             list.innerHTML = '';
             let total = 0;
+
+            genres.forEach(val => {
+                total++;
+                const gObj = GENRE_DEFINITIONS.find(g => g.id === val);
+                const lbl = gObj ? `${gObj.icon} ${gObj.label}` : val;
+                list.appendChild(createFilterChip(`Genre: ${lbl}`, 'genre', val));
+            });
+
+            themas.forEach(val => {
+                total++;
+                const thObj = THEMA_DEFINITIONS.find(t => t.id === val);
+                const lbl = thObj ? `${thObj.icon} ${thObj.label}` : val;
+                list.appendChild(createFilterChip(`Thema: ${lbl}`, 'tag', val));
+            });
 
             const leeftijdFriendly = {
                 'Eerste graad': '1ste graad (12-14j)',
@@ -1599,20 +1632,15 @@
                 'Alle graden': 'Alle leeftijden'
             };
 
-            talen.forEach(val => {
-                total++;
-                list.appendChild(createFilterChip(`Taal: ${val}`, 'taal', val));
-            });
-
             leeftijden.forEach(val => {
                 total++;
                 const lbl = leeftijdFriendly[val] || val;
                 list.appendChild(createFilterChip(`Leeftijd: ${lbl}`, 'leeftijd', val));
             });
 
-            tags.forEach(val => {
+            talen.forEach(val => {
                 total++;
-                list.appendChild(createFilterChip(`Thema: ${val}`, 'tag', val));
+                list.appendChild(createFilterChip(`Taal: ${val}`, 'taal', val));
             });
 
             beschikbaar.forEach(val => {
@@ -1703,20 +1731,77 @@
         }
 
         function initFilters() {
-            // 1. Filter op Taal
-            const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort();
-            const taalContainer = document.getElementById('taalCheckboxes');
-            taalContainer.innerHTML = '';
-            talen.forEach(taal => {
-                taalContainer.innerHTML += `
-                    <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
-                        <input type="checkbox" name="taal" value="${escapeHtml(taal)}" class="custom-checkbox filter-input rounded-md">
-                        <span>${escapeHtml(taal)}</span>
-                    </label>
-                `;
-            });
+            // 1. Filter op Genre
+            const genreContainer = document.getElementById('genreCheckboxes');
+            if (genreContainer) {
+                genreContainer.innerHTML = '';
+                GENRE_DEFINITIONS.forEach(g => {
+                    const count = allBooks.filter(b => b.genres && b.genres.includes(g.id)).length;
+                    if (count > 0) {
+                        genreContainer.innerHTML += `
+                            <label class="flex items-center justify-between gap-2 text-xs text-slate-600 cursor-pointer hover:text-slate-900 font-medium py-1 px-1.5 rounded-xl hover:bg-slate-50 transition">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" name="genre" value="${escapeHtml(g.id)}" class="custom-checkbox filter-input rounded-md">
+                                    <span>${g.icon} ${escapeHtml(g.label)}</span>
+                                </div>
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">${count}</span>
+                            </label>
+                        `;
+                    }
+                });
+            }
 
-            // 2. Filter op Leeftijd (vriendelijke labels op basis van graad)
+            // 2. Filter op Thema
+            const tagContainer = document.getElementById('tagCheckboxes');
+            if (tagContainer) {
+                tagContainer.innerHTML = '';
+                THEMA_DEFINITIONS.forEach(th => {
+                    const count = allBooks.filter(b => b.themes && b.themes.includes(th.id)).length;
+                    if (count > 0) {
+                        tagContainer.innerHTML += `
+                            <label class="flex items-center justify-between gap-2 text-xs text-slate-600 cursor-pointer hover:text-slate-900 font-medium py-1 px-1.5 rounded-xl hover:bg-slate-50 transition">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" name="tag" value="${escapeHtml(th.id)}" class="custom-checkbox filter-input rounded-md">
+                                    <span>${th.icon} ${escapeHtml(th.label)}</span>
+                                </div>
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">${count}</span>
+                            </label>
+                        `;
+                    }
+                });
+
+                // Zoek naar eventuele extra unieke thema's die niet in de standaard lijst zitten
+                const knownKeywords = new Set([
+                    ...GENRE_DEFINITIONS.flatMap(g => g.keywords),
+                    ...THEMA_DEFINITIONS.flatMap(th => th.keywords)
+                ]);
+                const extraTags = new Set();
+                allBooks.forEach(b => {
+                    (b.rawTagList || []).forEach(t => {
+                        if (!knownKeywords.has(t) && t.length > 2) {
+                            extraTags.add(t);
+                        }
+                    });
+                });
+                if (extraTags.size > 0) {
+                    Array.from(extraTags).sort().forEach(t => {
+                        const count = allBooks.filter(b => b.rawTagList && b.rawTagList.includes(t)).length;
+                        if (count > 0) {
+                            tagContainer.innerHTML += `
+                                <label class="flex items-center justify-between gap-2 text-xs text-slate-600 cursor-pointer hover:text-slate-900 font-medium py-1 px-1.5 rounded-xl hover:bg-slate-50 transition">
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" name="tag" value="${escapeHtml(t)}" class="custom-checkbox filter-input rounded-md">
+                                        <span class="capitalize">🏷️ ${escapeHtml(t)}</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">${count}</span>
+                                </label>
+                            `;
+                        }
+                    });
+                }
+            }
+
+            // 3. Filter op Leeftijd (vriendelijke labels op basis van graad)
             const leeftijdLabels = {
                 'Eerste graad': '12 - 14 jaar (1ste graad)',
                 'Tweede graad': '14 - 16 jaar (2de graad)',
@@ -1725,63 +1810,61 @@
             };
             const graden = [...new Set(allBooks.map(b => b.Graad))].filter(Boolean).sort();
             const leeftijdContainer = document.getElementById('leeftijdCheckboxes');
-            leeftijdContainer.innerHTML = '';
-            graden.forEach(graad => {
-                const label = leeftijdLabels[graad] || graad;
-                leeftijdContainer.innerHTML += `
-                    <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
-                        <input type="checkbox" name="leeftijd" value="${escapeHtml(graad)}" class="custom-checkbox filter-input rounded-md">
-                        <span>${escapeHtml(label)}</span>
-                    </label>
-                `;
-            });
+            if (leeftijdContainer) {
+                leeftijdContainer.innerHTML = '';
+                graden.forEach(graad => {
+                    const label = leeftijdLabels[graad] || graad;
+                    leeftijdContainer.innerHTML += `
+                        <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                            <input type="checkbox" name="leeftijd" value="${escapeHtml(graad)}" class="custom-checkbox filter-input rounded-md">
+                            <span>${escapeHtml(label)}</span>
+                        </label>
+                    `;
+                });
+            }
 
-            // 3. Filter op Thema
-            const tagSet = new Set();
-            allBooks.forEach(book => {
-                if (book.Tags) {
-                    book.Tags.split(',').forEach(t => {
-                        const trimmed = t.trim().toLowerCase();
-                        if (trimmed) tagSet.add(trimmed);
-                    });
-                }
-            });
-            const tagContainer = document.getElementById('tagCheckboxes');
-            tagContainer.innerHTML = '';
-            Array.from(tagSet).sort().forEach(tag => {
-                tagContainer.innerHTML += `
-                    <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
-                        <input type="checkbox" name="tag" value="${escapeHtml(tag)}" class="custom-checkbox filter-input rounded-md">
-                        <span class="capitalize">${escapeHtml(tag)}</span>
-                    </label>
-                `;
-            });
+            // 4. Filter op Taal
+            const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort();
+            const taalContainer = document.getElementById('taalCheckboxes');
+            if (taalContainer) {
+                taalContainer.innerHTML = '';
+                talen.forEach(taal => {
+                    taalContainer.innerHTML += `
+                        <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                            <input type="checkbox" name="taal" value="${escapeHtml(taal)}" class="custom-checkbox filter-input rounded-md">
+                            <span>${escapeHtml(taal)}</span>
+                        </label>
+                    `;
+                });
+            }
 
-            // 4. Beschikbaarheid & alle checkbox listeners koppelen
+            // 5. Beschikbaarheid & alle checkbox listeners koppelen
             document.querySelectorAll('.filter-input').forEach(input => {
                 input.onchange = filterAndRender;
             });
         }
 
         function filterAndRender() {
-            const selectedTalen = Array.from(document.querySelectorAll('input[name="taal"]:checked')).map(cb => cb.value);
+            const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(cb => cb.value);
+            const selectedThemes = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
             const selectedLeeftijd = Array.from(document.querySelectorAll('input[name="leeftijd"]:checked')).map(cb => cb.value);
-            const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
+            const selectedTalen = Array.from(document.querySelectorAll('input[name="taal"]:checked')).map(cb => cb.value);
             const selectedBeschikbaar = Array.from(document.querySelectorAll('input[name="beschikbaar"]:checked')).map(cb => cb.value);
 
             // Update dropdown knoppen (teller-badges & actieve ring)
-            updateDropdownButtonState('btnDropdownTaal', 'badgeTaalCount', selectedTalen.length);
+            updateDropdownButtonState('btnDropdownGenre', 'badgeGenreCount', selectedGenres.length);
+            updateDropdownButtonState('btnDropdownThema', 'badgeThemaCount', selectedThemes.length);
             updateDropdownButtonState('btnDropdownLeeftijd', 'badgeLeeftijdCount', selectedLeeftijd.length);
-            updateDropdownButtonState('btnDropdownThema', 'badgeThemaCount', selectedTags.length);
+            updateDropdownButtonState('btnDropdownTaal', 'badgeTaalCount', selectedTalen.length);
             updateDropdownButtonState('btnDropdownBeschikbaar', 'badgeBeschikbaarCount', selectedBeschikbaar.length);
 
             // Render actieve filter chips onder de dropdowns
-            renderActiveFilterTags(selectedTalen, selectedLeeftijd, selectedTags, selectedBeschikbaar);
+            renderActiveFilterTags(selectedGenres, selectedThemes, selectedLeeftijd, selectedTalen, selectedBeschikbaar);
 
             // Toon/verberg de "Wis filters" knop
             const resetBtn = document.getElementById('resetFilters');
             if (resetBtn) {
-                const hasActive = selectedTalen.length > 0 || selectedLeeftijd.length > 0 || selectedTags.length > 0 || selectedBeschikbaar.length > 0 || searchQuery !== '' || activeQuickFilter !== 'all';
+                const hasActive = selectedGenres.length > 0 || selectedThemes.length > 0 || selectedTalen.length > 0 || selectedLeeftijd.length > 0 || selectedBeschikbaar.length > 0 || searchQuery !== '' || activeQuickFilter !== 'all';
                 resetBtn.classList.toggle('hidden', !hasActive);
             }
 
@@ -1796,10 +1879,18 @@
                 const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
                 const matchLeeftijd = selectedLeeftijd.length === 0 || selectedLeeftijd.includes(book.Graad);
                 
-                let matchTag = true;
-                if (selectedTags.length > 0) {
-                    const bookTags = book.Tags ? book.Tags.toLowerCase() : '';
-                    matchTag = selectedTags.some(t => bookTags.includes(t));
+                let matchGenre = true;
+                if (selectedGenres.length > 0) {
+                    matchGenre = selectedGenres.some(gId => book.genres && book.genres.includes(gId));
+                }
+
+                let matchThema = true;
+                if (selectedThemes.length > 0) {
+                    matchThema = selectedThemes.some(thId => 
+                        (book.themes && book.themes.includes(thId)) ||
+                        (book.rawTagList && book.rawTagList.includes(thId)) ||
+                        (book.Tags && book.Tags.toLowerCase().includes(thId))
+                    );
                 }
 
                 let matchBeschikbaar = true;
@@ -1823,7 +1914,7 @@
                     matchQuick = book.id > (allBooks.length - 25);
                 }
 
-                return matchSearch && matchTaal && matchLeeftijd && matchTag && matchBeschikbaar && matchQuick;
+                return matchSearch && matchTaal && matchLeeftijd && matchGenre && matchThema && matchBeschikbaar && matchQuick;
             });
 
             if (currentSort === 'rating-desc') {
@@ -1899,7 +1990,7 @@
                 }
 
                 const tagsHtml = book.Tags 
-                    ? book.Tags.split(',').slice(0, 3).map(t => `<span class="text-[10px] font-semibold bg-brand-50 text-brand-700 px-2 py-0.5 rounded-md">${escapeHtml(t.trim())}</span>`).join(' ') 
+                    ? book.Tags.split(',').slice(0, 3).map(t => `<span class="text-[10px] font-semibold bg-brand-50 text-brand-700 px-2 py-0.5 rounded-md capitalize">${escapeHtml(t.trim())}</span>`).join(' ') 
                     : '';
 
                 const card = document.createElement('div');
@@ -2101,7 +2192,7 @@
             if (book.Tags) {
                 book.Tags.split(',').forEach(t => {
                     const span = document.createElement('span');
-                    span.className = 'text-xs font-semibold bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg';
+                    span.className = 'text-xs font-semibold bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg capitalize';
                     span.textContent = t.trim();
                     tagsContainer.appendChild(span);
                 });
@@ -2289,16 +2380,123 @@
             const statusBox = document.getElementById('addBookStatus');
             const submitBtn = document.getElementById('btnAddBookSubmit');
 
-            document.querySelectorAll('.quick-tag').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tag = btn.getAttribute('data-tag');
-                    const tagsInput = document.getElementById('fTags');
-                    const currentTags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
-                    if (!currentTags.includes(tag)) {
-                        currentTags.push(tag);
-                        tagsInput.value = currentTags.join(', ');
+            // Admin chips voor Genre en Thema
+            const ADMIN_GENRES = [
+                { id: 'young adult', label: '📖 Young Adult' },
+                { id: 'graphic novel', label: '🎨 Graphic Novel' },
+                { id: 'spanning', label: '🔍 Spanning & Thriller' },
+                { id: 'detective', label: '🕵️ Detective' },
+                { id: 'fantasy', label: '🐉 Fantasy' },
+                { id: 'sciencefiction', label: '🚀 Sciencefiction' },
+                { id: 'historisch', label: '⏳ Historische fictie' },
+                { id: 'romance', label: '💘 Romantiek' },
+                { id: 'humor', label: '😂 Humor' },
+                { id: 'coming of age', label: '🌱 Coming of Age' },
+                { id: 'non fictie', label: '💡 Non-fictie' },
+                { id: 'biografie', label: '👤 Biografie' },
+                { id: 'poëzie', label: '✒️ Poëzie' },
+                { id: 'toneelstuk', label: '🎭 Toneel' }
+            ];
+
+            const ADMIN_THEMAS = [
+                { id: 'vriendschap', label: '🤝 Vriendschap' },
+                { id: 'familie', label: '👨‍👩‍👧 Familie' },
+                { id: 'verlies', label: '💔 Verlies & Rouw' },
+                { id: 'migratie', label: '🌍 Migratie & Vluchten' },
+                { id: 'oorlog', label: '⚔️ Oorlog & Vrede' },
+                { id: 'identiteit', label: '🪞 Identiteit & Queer' },
+                { id: 'mental health', label: '🧠 Mentaal welzijn' },
+                { id: 'sport', label: '⚽ Sport' },
+                { id: 'school', label: '🎒 School & Pesten' },
+                { id: 'dieren', label: '🐾 Dieren' },
+                { id: 'natuur', label: '🌿 Natuur & Milieu' },
+                { id: 'politiek', label: '⚖️ Maatschappij' },
+                { id: 'kunst', label: '🏛️ Kunst & Cultuur' },
+                { id: 'muziek', label: '🎵 Muziek' },
+                { id: 'avontuur', label: '🧭 Avontuur' }
+            ];
+
+            const genreContainer = document.getElementById('adminGenreChips');
+            const themaContainer = document.getElementById('adminThemaChips');
+            const extraTagInput = document.getElementById('adminExtraTagInput');
+            const tagsInput = document.getElementById('fTags');
+
+            function syncAdminTags() {
+                const selectedGenres = Array.from(document.querySelectorAll('#adminGenreChips .admin-chip.active')).map(c => c.getAttribute('data-tag'));
+                const selectedThemas = Array.from(document.querySelectorAll('#adminThemaChips .admin-chip.active')).map(c => c.getAttribute('data-tag'));
+                const extraVal = extraTagInput ? extraTagInput.value : '';
+                const extraList = extraVal.split(',').map(cleanRawTag).filter(Boolean);
+
+                const allCombined = [...new Set([...selectedGenres, ...selectedThemas, ...extraList])];
+                if (tagsInput) tagsInput.value = allCombined.join(', ');
+            }
+
+            function toggleAdminChip(chip) {
+                const isActive = chip.classList.contains('active');
+                if (isActive) {
+                    chip.classList.remove('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-xs');
+                    chip.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+                } else {
+                    chip.classList.add('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-xs');
+                    chip.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                }
+                syncAdminTags();
+            }
+
+            function activateChipsFromTagString(tagStr) {
+                const cleanList = (tagStr || '').split(',').map(cleanRawTag).filter(Boolean);
+                document.querySelectorAll('.admin-chip').forEach(c => {
+                    const t = c.getAttribute('data-tag');
+                    if (cleanList.some(tag => tag === t || tag.includes(t) || t.includes(tag))) {
+                        c.classList.add('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-xs');
+                        c.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                    } else {
+                        c.classList.remove('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-xs');
+                        c.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
                     }
                 });
+                syncAdminTags();
+            }
+
+            if (genreContainer) {
+                genreContainer.innerHTML = '';
+                ADMIN_GENRES.forEach(g => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'admin-chip px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition flex items-center gap-1 cursor-pointer';
+                    btn.setAttribute('data-tag', g.id);
+                    btn.textContent = g.label;
+                    btn.addEventListener('click', () => toggleAdminChip(btn));
+                    genreContainer.appendChild(btn);
+                });
+            }
+
+            if (themaContainer) {
+                themaContainer.innerHTML = '';
+                ADMIN_THEMAS.forEach(th => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'admin-chip px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition flex items-center gap-1 cursor-pointer';
+                    btn.setAttribute('data-tag', th.id);
+                    btn.textContent = th.label;
+                    btn.addEventListener('click', () => toggleAdminChip(btn));
+                    themaContainer.appendChild(btn);
+                });
+            }
+
+            if (extraTagInput) {
+                extraTagInput.addEventListener('input', syncAdminTags);
+            }
+
+            form.addEventListener('reset', () => {
+                setTimeout(() => {
+                    document.querySelectorAll('.admin-chip').forEach(c => {
+                        c.classList.remove('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-xs');
+                        c.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+                    });
+                    if (tagsInput) tagsInput.value = '';
+                    if (extraTagInput) extraTagInput.value = '';
+                }, 10);
             });
 
             const lookupBtn = document.getElementById('btnLookupIsbn');
@@ -2327,9 +2525,7 @@
                         document.getElementById('fIsbn').value = isbn;
 
                         if (info.categories && info.categories.length > 0) {
-                            const currentTags = document.getElementById('fTags').value;
-                            const newTag = info.categories[0].toLowerCase();
-                            document.getElementById('fTags').value = currentTags ? `${currentTags}, ${newTag}` : newTag;
+                            activateChipsFromTagString(info.categories.join(', '));
                         }
 
                         lookupStatus.textContent = `✅ Boek gevonden: "${info.title}" (${info.authors ? info.authors.join(', ') : 'onbekend'})`;
@@ -2427,6 +2623,7 @@
                     document.getElementById('fAuteur').value = currentDetectedBook.Auteur || '';
                     document.getElementById('fGraad').value = currentDetectedBook.Graad || 'Alle graden';
                     document.getElementById('fTags').value = currentDetectedBook.Tags || '';
+                    activateChipsFromTagString(currentDetectedBook.Tags || '');
                     if (currentDetectedBook.ISBN) isbnInput.value = currentDetectedBook.ISBN;
                     document.getElementById('fLocatie').focus();
                 }
@@ -2444,6 +2641,7 @@
             // Submit handler (Enter of klik op knop)
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                syncAdminTags();
 
                 const t = titleInput.value.trim();
                 const i = isbnInput.value.trim().replace(/[^0-9X]/gi, '');
