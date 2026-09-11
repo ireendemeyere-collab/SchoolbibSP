@@ -185,40 +185,20 @@
             </div>
         </section>
 
-        <!-- DYNAMISCH THEMA IN DE KIJKER (DOOR BEHEERDERS INGESTELD) -->
-        <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 transition border shadow-sm">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
-                <div>
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2" id="featuredThemeBadge">
-                        <span>🌟 In de kijker</span>
-                    </div>
-                    <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
-                    <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button id="btnScrollFeaturedLeft" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">‹</button>
-                    <button id="btnScrollFeaturedRight" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">›</button>
-                </div>
-            </div>
-
-            <!-- Horizontale boekenplank van het thema -->
-            <div id="featuredBooksCarousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 clean-scroll scroll-smooth"></div>
-        </section>
-
-        <!-- SNELKEUZE / SNELFILTERS -->
+        <!-- 1. SNELKEUZE & FILTERS BOVENAAN -->
         <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl shadow-xs border border-slate-200/70">
             <div class="flex flex-wrap items-center gap-2" id="quickFilterPills">
                 <button data-filter="all" class="quick-filter-btn active-filter px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-brand-600 text-white shadow-xs">
-                    📚 Alle boeken
+                    Alle boeken
                 </button>
-                <button data-filter="top-rated" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-sunny-100 hover:text-sunny-500">
-                    ⭐ Top beoordeeld door leerlingen
+                <button data-filter="top-rated" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+                    Top beoordeeld
                 </button>
-                <button data-filter="my-favorites" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-coral-100 hover:text-coral-600">
-                    ❤️ Mijn favorieten (<span id="favCount">0</span>)
+                <button data-filter="my-favorites" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-coral-50 hover:text-coral-600">
+                    Mijn favorieten (<span id="favCount">0</span>)
                 </button>
-                <button data-filter="new-books" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-teal-100 hover:text-teal-700">
-                    ✨ Nieuw in de bib
+                <button data-filter="new-books" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-teal-50 hover:text-teal-700">
+                    Nieuw in de bib
                 </button>
             </div>
 
@@ -232,7 +212,7 @@
             </div>
         </div>
 
-        <!-- INTERACTIEVE FILTERBALK: OPENVOUWENDE DROPDOWNS IN BOEKENZOEKER STIJL -->
+        <!-- 2. INTERACTIEVE FILTERBALK: OPENVOUWENDE DROPDOWNS -->
         <div class="relative z-30 bg-white p-4 rounded-3xl shadow-xs border border-slate-200/80">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div class="flex flex-wrap items-center gap-2">
@@ -245,7 +225,6 @@
                             <span id="badgeTaalCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <!-- Openvouw menu -->
                         <div id="menuTaal" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
                             <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
                                 <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Taal</span>
@@ -283,7 +262,6 @@
                                 <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Thema's</span>
                                 <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
                             </div>
-                            <!-- Zoekthema's inputje -->
                             <input type="text" id="filterTagSearch" placeholder="Typ thema (bv. spanning, humor)..." 
                                    class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
                             <div class="space-y-2 max-h-64 overflow-y-auto pr-1 clean-scroll" id="tagCheckboxes"></div>
@@ -305,17 +283,11 @@
                             <div class="space-y-2.5" id="beschikbaarCheckboxes">
                                 <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
                                     <input type="checkbox" name="beschikbaar" value="available" class="custom-checkbox filter-input rounded-md">
-                                    <span class="flex items-center gap-1.5">
-                                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                                        <span>Nu in de bib aanwezig</span>
-                                    </span>
+                                    <span>Nu in de bib aanwezig</span>
                                 </label>
                                 <label class="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
                                     <input type="checkbox" name="beschikbaar" value="loaned" class="custom-checkbox filter-input rounded-md">
-                                    <span class="flex items-center gap-1.5">
-                                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                                        <span>Momenteel uitgeleend</span>
-                                    </span>
+                                    <span>Momenteel uitgeleend</span>
                                 </label>
                             </div>
                         </div>
@@ -332,7 +304,7 @@
                     <label for="sortSelect" class="text-xs font-extrabold text-slate-600 whitespace-nowrap">Sorteren:</label>
                     <select id="sortSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
                         <option value="default">Standaard</option>
-                        <option value="rating-desc">⭐ Hoogste beoordeling</option>
+                        <option value="rating-desc">Hoogste beoordeling</option>
                         <option value="title-asc">Titel (A-Z)</option>
                         <option value="author-asc">Auteur (A-Z)</option>
                     </select>
@@ -346,135 +318,162 @@
             </div>
         </div>
 
-        <!-- BOEKEN GRID (VOLLE BREEDTE IN BOEKENZOEKER STIJL) -->
-        <section class="flex flex-col gap-6">
+        <!-- 3. CATALOGUS SECTIE -->
+        <!-- A. Standaard weergave: 1 rij met 10 boeken en pijltjessysteem -->
+        <section id="catalogDefaultCarouselSection" class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Catalogus schoolbibliotheek</h3>
+                    <p class="text-xs text-slate-500">Blader door 10 boeken uit onze collectie</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnScrollCatalogLeft" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-700 flex items-center justify-center font-bold text-sm transition">‹</button>
+                    <button id="btnScrollCatalogRight" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-700 flex items-center justify-center font-bold text-sm transition">›</button>
+                </div>
+            </div>
+            <div id="catalogDefaultCarousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 clean-scroll scroll-smooth"></div>
+        </section>
+
+        <!-- B. Gefilterde weergave: Uitgebreid raster bij zoeken of filteren -->
+        <section id="catalogGridSection" class="hidden flex flex-col gap-6">
             <div class="flex items-center justify-between text-xs text-slate-500 px-1">
-                <span id="activeFilterFeedback" class="font-semibold text-slate-600">Alle boeken uit de catalogus</span>
+                <span id="activeFilterFeedback" class="font-semibold text-slate-600">Gefilterde boeken</span>
             </div>
             <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
         </section>
 
-        <!-- SECTIE: ✨ NIEUW IN DE BIB -->
-        <section id="newBooksSection" class="mt-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
-            <div class="flex items-center justify-between mb-5">
+        <!-- 4. UITGELICHTE BOEKEN (DROOG, ZONDER EMOTICONS, 1 PER GRAAD BOVENAAN, MAX 8 BOEKEN) -->
+        <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 bg-slate-50 border border-slate-200/90 shadow-xs text-slate-900">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-extrabold uppercase tracking-wider mb-1">
-                        <span>✨ Nieuwe Aanwinsten</span>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Pas toegevoegd aan de bib</h3>
-                    <p class="text-xs sm:text-sm text-slate-500">Ontdek de allernieuwste boeken in onze schoolbibliotheek!</p>
+                    <span class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-brand-100 text-brand-800 mb-2">Thema in de kijker</span>
+                    <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
+                    <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnScrollFeaturedLeft" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">‹</button>
+                    <button id="btnScrollFeaturedRight" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">›</button>
+                </div>
+            </div>
+
+            <!-- 1 Boek per graad bovenaan -->
+            <div class="mb-6">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Aanbevolen per graad</h4>
+                <div id="featuredGradePicks" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- Overige boeken van het thema (scrollbaar, max 8 totaal) -->
+            <div id="featuredMoreContainer">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Meer binnen dit thema</h4>
+                <div id="featuredBooksCarousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 clean-scroll scroll-smooth"></div>
+            </div>
+        </section>
+
+        <!-- 5. NIEUW IN DE BIB -->
+        <section id="newBooksSection" class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Pas toegevoegd aan de bib</h3>
+                    <p class="text-xs text-slate-500">De nieuwste aanwinsten in onze schoolbibliotheek</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button id="btnScrollNewLeft" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-700 flex items-center justify-center font-bold text-sm transition">‹</button>
                     <button id="btnScrollNewRight" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-700 flex items-center justify-center font-bold text-sm transition">›</button>
                 </div>
             </div>
-
             <div id="newBooksCarousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 clean-scroll scroll-smooth"></div>
         </section>
 
     </main>
 
-    <!-- MODAL POPUP: ACHTERFLAP & BOEKENZOEKER LINK -->
-    <dialog id="bookDetailModal" class="rounded-3xl p-0 shadow-2xl border-0 max-w-2xl w-full mx-auto backdrop:bg-slate-900/60 overflow-hidden">
+    <!-- MODAL POPUP: ACHTERFLAP & BOEKENZOEKER LINK (RUSTIG & MINDER DRUK) -->
+    <dialog id="bookDetailModal" class="rounded-3xl p-0 shadow-2xl border-0 max-w-xl w-full mx-auto backdrop:bg-slate-900/60 overflow-hidden">
         <div class="bg-white flex flex-col max-h-[90vh]">
             
             <!-- Modal Header -->
-            <div class="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100 bg-brand-50/50">
+            <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-100 bg-slate-50/80">
                 <div class="flex items-center gap-2">
-                    <span class="text-xs font-black uppercase tracking-wider bg-brand-600 text-white px-3 py-1 rounded-full" id="modalGraadBadge">Graad</span>
-                    <span class="text-xs font-bold text-brand-700 bg-white px-2.5 py-1 rounded-full border border-brand-100" id="modalTaalBadge">Taal</span>
+                    <span class="text-xs font-bold bg-brand-600 text-white px-3 py-1 rounded-full" id="modalGraadBadge">Graad</span>
+                    <span class="text-xs font-bold text-slate-700 bg-white px-2.5 py-1 rounded-full border border-slate-200" id="modalTaalBadge">Taal</span>
                 </div>
-                <button id="btnCloseModal" class="w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center font-extrabold text-lg transition shadow-2xs">
+                <button id="btnCloseModal" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center font-extrabold text-base transition shadow-2xs border border-slate-200">
                     ✕
                 </button>
             </div>
 
             <!-- Modal Inhoud -->
-            <div class="p-5 sm:p-7 overflow-y-auto clean-scroll space-y-6">
-                <div class="flex flex-col sm:flex-row gap-6 items-start">
+            <div class="p-5 sm:p-6 overflow-y-auto clean-scroll space-y-5">
+                <div class="flex flex-col sm:flex-row gap-5 items-start">
                     
                     <!-- Cover weergave in modal -->
-                    <div class="w-36 sm:w-44 shrink-0 mx-auto sm:mx-0 rounded-2xl overflow-hidden shadow-md border border-slate-200/80 aspect-[2/3] relative bg-slate-100 flex items-center justify-center" id="modalCoverContainer"></div>
+                    <div class="w-32 sm:w-36 shrink-0 mx-auto sm:mx-0 rounded-2xl overflow-hidden shadow-xs border border-slate-200/80 aspect-[2/3] relative bg-slate-100 flex items-center justify-center" id="modalCoverContainer"></div>
 
-                    <!-- Titel, auteur & sterren -->
-                    <div class="flex-grow space-y-3 text-center sm:text-left w-full">
-                        <h3 id="modalTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">Titel van het boek</h3>
-                        <p class="text-sm font-semibold text-slate-500">
+                    <!-- Titel, auteur & details -->
+                    <div class="flex-grow space-y-2.5 text-center sm:text-left w-full">
+                        <h3 id="modalTitle" class="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight">Titel van het boek</h3>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-500">
                             Geschreven door <span id="modalAuthor" class="text-slate-800 font-bold">Auteur</span>
                         </p>
 
                         <!-- Locatie en beschikbaarheid in de bib -->
-                        <div class="flex flex-wrap items-center gap-2">
-                            <div class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 inline-block">
-                                📍 <strong>Locatie in bib:</strong> <span id="modalLocation">-</span>
+                        <div class="flex flex-wrap items-center gap-2 pt-1">
+                            <div class="text-xs text-slate-700 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 inline-block font-semibold">
+                                Locatie: <span id="modalLocation">-</span>
                             </div>
-                            <div id="modalAvailability" class="text-xs font-bold px-3 py-2.5 rounded-xl border inline-block"></div>
+                            <div id="modalAvailability" class="text-xs font-bold px-3 py-1.5 rounded-xl border inline-block"></div>
                         </div>
 
                         <!-- Fysieke Exemplaren & Status per exemplaar -->
-                        <div id="modalCopiesContainer" class="p-3.5 rounded-2xl bg-brand-50/60 border border-brand-100 space-y-2 text-left">
+                        <div id="modalCopiesContainer" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-left">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-                                    <span>📚 Fysieke exemplaren in de schoolbib:</span>
+                                <span class="text-xs font-bold text-slate-700">
+                                    Exemplaren in de schoolbib:
                                 </span>
-                                <span id="modalCopiesBadge" class="text-[11px] font-extrabold text-brand-700 bg-white px-2.5 py-0.5 rounded-full border border-brand-200"></span>
+                                <span id="modalCopiesBadge" class="text-[11px] font-bold text-slate-600 bg-white px-2 py-0.5 rounded-full border border-slate-200"></span>
                             </div>
                             <div id="modalCopiesList" class="space-y-1.5 text-xs"></div>
                         </div>
 
-                        <!-- Beoordeling door leerlingen -->
-                        <div class="bg-sunny-100/50 border border-sunny-200 p-3.5 rounded-2xl">
-                            <div class="flex items-center justify-between mb-1.5">
-                                <span class="text-xs font-extrabold text-slate-800">⭐ Geef dit boek sterren:</span>
-                                <span id="modalRatingScoreText" class="text-xs font-bold text-sunny-500">Nog geen score</span>
+                        <!-- Subtiel, klein sterren balkje -->
+                        <div class="flex items-center gap-3 pt-1">
+                            <span class="text-xs font-semibold text-slate-500">Beoordeling:</span>
+                            <div class="flex items-center gap-1 text-base star-rating" id="modalStarWidget">
+                                <span class="star text-slate-300 hover:text-amber-400 cursor-pointer" data-star="1">★</span>
+                                <span class="star text-slate-300 hover:text-amber-400 cursor-pointer" data-star="2">★</span>
+                                <span class="star text-slate-300 hover:text-amber-400 cursor-pointer" data-star="3">★</span>
+                                <span class="star text-slate-300 hover:text-amber-400 cursor-pointer" data-star="4">★</span>
+                                <span class="star text-slate-300 hover:text-amber-400 cursor-pointer" data-star="5">★</span>
                             </div>
-                            <div class="flex items-center gap-1.5 text-2xl star-rating" id="modalStarWidget">
-                                <span class="star text-slate-300 hover:text-sunny-400" data-star="1">★</span>
-                                <span class="star text-slate-300 hover:text-sunny-400" data-star="2">★</span>
-                                <span class="star text-slate-300 hover:text-sunny-400" data-star="3">★</span>
-                                <span class="star text-slate-300 hover:text-sunny-400" data-star="4">★</span>
-                                <span class="star text-slate-300 hover:text-sunny-400" data-star="5">★</span>
-                            </div>
-                            <p id="modalRatingFeedback" class="text-[11px] font-bold text-brand-700 mt-1 hidden">Bedankt voor je beoordeling! 🌟</p>
+                            <span id="modalRatingScoreText" class="text-xs font-bold text-slate-500"></span>
                         </div>
+                        <p id="modalRatingFeedback" class="text-[11px] font-bold text-brand-700 hidden">Score opgeslagen!</p>
 
                         <!-- Favorieten knop -->
-                        <div>
-                            <button id="modalFavBtn" class="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 border">
+                        <div class="pt-1">
+                            <button id="modalFavBtn" class="w-full sm:w-auto px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 border">
                                 <span id="modalFavIcon">🤍</span>
-                                <span id="modalFavLabel">Toevoegen aan mijn favorieten</span>
+                                <span id="modalFavLabel">Opslaan in favorieten</span>
                             </button>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- Tags / Onderwerpen -->
-                <div>
-                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-2">Thema's & Trefwoorden:</h4>
+                <!-- Tags / Thema's -->
+                <div class="pt-2 border-t border-slate-100">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Thema's:</h4>
                     <div id="modalTags" class="flex flex-wrap gap-1.5"></div>
-                </div>
-
-                <!-- Achterflap / Samenvatting -->
-                <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/70">
-                    <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider mb-2 flex items-center gap-2">
-                        📖 De Achterflap (Korte Inhoud)
-                    </h4>
-                    <p id="modalSynopsis" class="text-sm text-slate-600 leading-relaxed">
-                        Bezig met samenvatting ophalen...
-                    </p>
                 </div>
             </div>
 
             <!-- Modal Footer -->
-            <div class="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div class="text-xs text-slate-500 text-center sm:text-left">
-                    <span class="font-bold">ISBN:</span> <span id="modalIsbn" class="font-mono text-slate-700">-</span>
+                    <span class="font-semibold">ISBN:</span> <span id="modalIsbn" class="font-mono text-slate-700">-</span>
                 </div>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto">
                     <a id="btnOpenBoekenzoeker" href="#" target="_blank" rel="noopener noreferrer" 
-                       class="w-full sm:w-auto bg-coral-500 hover:bg-coral-600 text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-2xl transition shadow-sm flex items-center justify-center gap-2">
+                       class="w-full sm:w-auto bg-coral-500 hover:bg-coral-600 text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2">
                         <span>Lees meer op Boekenzoeker.be</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -629,6 +628,28 @@
                         </button>
                     </div>
                     <p id="isbnLookupStatus" class="text-xs font-semibold text-brand-700 hidden"></p>
+
+                    <!-- LIVE DUPLICAAT WAARSCHUWINGSBANNER -->
+                    <div id="duplicateWarningBox" class="hidden p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-900 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl mt-0.5">⚠️</span>
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-extrabold text-amber-950 flex items-center gap-2">
+                                    <span>Dit boek staat al in de catalogus!</span>
+                                    <span id="dupCountBadge" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-200 text-amber-900"></span>
+                                </h4>
+                                <p id="dupDetailsText" class="text-xs text-amber-800 mt-0.5"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto shrink-0 justify-end">
+                            <button type="button" id="btnDupAutoFill" class="text-xs font-extrabold px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white transition flex items-center gap-1 shadow-2xs">
+                                <span>➕ Extra exemplaar toevoegen</span>
+                            </button>
+                            <button type="button" id="btnDupCancel" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-white border border-amber-300 hover:bg-amber-100 text-amber-800 transition">
+                                <span>Wissen</span>
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- Invoerformulier -->
                     <form id="addBookForm" class="space-y-4">
@@ -849,6 +870,46 @@
             <p>Met ❤️ gemaakt voor onze leerlingen • Laatste update: september 2026 • Geïnspireerd op <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Boekenzoeker.be ↗</a></p>
         </div>
     </footer>
+
+        <!-- MODAL: DUPLICAAT BEVESTIGING BIJ OPSLAAN -->
+    <dialog id="duplicateConfirmModal" class="rounded-3xl p-0 shadow-2xl backdrop:bg-slate-900/60 max-w-lg w-full overflow-hidden border border-slate-200">
+        <div class="bg-white p-6 sm:p-7 space-y-5">
+            <div class="flex items-center gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0">
+                    ⚠️
+                </div>
+                <div>
+                    <h3 class="text-lg font-extrabold text-slate-900 leading-tight">Dit boek bestaat al in de catalogus!</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Is dit een extra exemplaar of had je het per ongeluk al ingegeven?</p>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs text-slate-700">
+                <p><strong>Titel:</strong> <span id="modalDupTitle" class="font-bold text-slate-900"></span></p>
+                <p><strong>Auteur:</strong> <span id="modalDupAuthor" class="font-semibold text-slate-800"></span></p>
+                <p><strong>Reeds aanwezig:</strong> <span id="modalDupCopies" class="font-bold text-brand-700"></span></p>
+                <p class="text-[11px] text-slate-500 pt-1.5 border-t border-slate-200">Nieuw toe te voegen locatie: <span id="modalDupNewLoc" class="font-bold text-slate-900"></span></p>
+            </div>
+
+            <div class="space-y-2 pt-1">
+                <!-- Keuze 1: Ja, extra exemplaar -->
+                <button type="button" id="btnModalConfirmAddCopy" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-4 rounded-2xl transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm">
+                    <span>➕ Ja, voeg toe als nieuw exemplaar</span>
+                    <span id="modalDupNextCopyLabel" class="text-[11px] bg-emerald-700/80 px-2 py-0.5 rounded-lg"></span>
+                </button>
+
+                <!-- Keuze 2: Oeps, al ingegeven / annuleren -->
+                <button type="button" id="btnModalCancelDuplicate" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-2xl transition text-xs flex items-center justify-center gap-1.5">
+                    <span>❌ Oeps, al ingegeven! Niet toevoegen</span>
+                </button>
+
+                <!-- Keuze 3: Bestaand boek bekijken -->
+                <button type="button" id="btnModalViewExisting" class="w-full text-brand-600 hover:text-brand-800 font-bold py-2 px-4 rounded-xl transition text-xs flex items-center justify-center gap-1">
+                    <span>🔍 Bekijk bestaand boek in catalogus</span>
+                </button>
+            </div>
+        </div>
+    </dialog>
 
     <!-- JAVASCRIPT LOGICA -->
     <script>
@@ -2197,32 +2258,202 @@
                             document.getElementById('fIsbn').value = isbn;
                         }
                     }
+                    checkDuplicateLive();
                 } catch (e) {
                     lookupStatus.textContent = 'Kon gegevens niet ophalen. Vul het formulier handmatig in.';
                     lookupStatus.className = 'text-xs font-semibold text-slate-500';
                 }
             });
 
+            // --- DUPLICAAT DETECTIE & POP-UP LOGICA ---
+            const titleInput = document.getElementById('fTitel');
+            const isbnInput = document.getElementById('fIsbn');
+            const warningBox = document.getElementById('duplicateWarningBox');
+            const dupCountBadge = document.getElementById('dupCountBadge');
+            const dupDetailsText = document.getElementById('dupDetailsText');
+            const btnDupAutoFill = document.getElementById('btnDupAutoFill');
+            const btnDupCancel = document.getElementById('btnDupCancel');
+
+            const dupModal = document.getElementById('duplicateConfirmModal');
+            const btnModalConfirmAddCopy = document.getElementById('btnModalConfirmAddCopy');
+            const btnModalCancelDuplicate = document.getElementById('btnModalCancelDuplicate');
+            const btnModalViewExisting = document.getElementById('btnModalViewExisting');
+
+            let currentDetectedBook = null;
+            let pendingSaveData = null;
+
+            // Zoek bestaand boek op ISBN of titel
+            function findExistingBook(titel, isbn) {
+                const cleanT = (titel || '').toLowerCase().trim().replace(/[^a-z0-9]/gi, '');
+                const cleanI = (isbn || '').replace(/[^0-9X]/gi, '').trim();
+
+                return allBooks.find(b => {
+                    // Match op ISBN indien minstens 9 tekens
+                    if (cleanI && cleanI.length >= 9) {
+                        if (b.ISBN && b.ISBN.replace(/[^0-9X]/gi, '').trim() === cleanI) return true;
+                        if (b.copies && b.copies.some(c => c.isbn && c.isbn.replace(/[^0-9X]/gi, '').trim() === cleanI)) return true;
+                    }
+                    // Match op genormaliseerde titel
+                    if (cleanT && cleanT.length >= 3) {
+                        const bT = (b.Titel || '').toLowerCase().trim().replace(/[^a-z0-9]/gi, '');
+                        if (bT === cleanT) return true;
+                    }
+                    return false;
+                });
+            }
+
+            // Live check tijdens het typen of scannen
+            function checkDuplicateLive() {
+                const t = titleInput.value.trim();
+                const i = isbnInput.value.trim() || lookupInput.value.trim();
+                currentDetectedBook = findExistingBook(t, i);
+
+                if (currentDetectedBook) {
+                    const copies = currentDetectedBook.copies && currentDetectedBook.copies.length > 0 
+                        ? currentDetectedBook.copies 
+                        : [{ copyLabel: 'Exemplaar 1', locatie: currentDetectedBook.Locatie }];
+                    
+                    const locsSummary = copies.map(c => `${c.copyLabel || 'Exemplaar'}: ${c.locatie || 'Onbekend'}`).join(' • ');
+                    dupCountBadge.textContent = `${copies.length} ${copies.length === 1 ? 'exemplaar' : 'exemplaren'} in bib`;
+                    dupDetailsText.innerHTML = `<strong>${escapeHtml(currentDetectedBook.Titel)}</strong> (${escapeHtml(currentDetectedBook.Auteur)}) staat al geregistreerd op: <span class="font-bold text-amber-950">${escapeHtml(locsSummary)}</span>.`;
+                    warningBox.classList.remove('hidden');
+                } else {
+                    warningBox.classList.add('hidden');
+                }
+            }
+
+            titleInput.addEventListener('input', checkDuplicateLive);
+            isbnInput.addEventListener('input', checkDuplicateLive);
+            lookupInput.addEventListener('input', checkDuplicateLive);
+
+            // Knop 'Extra exemplaar toevoegen': vul auteur, graad, tags, isbn automatisch aan
+            btnDupAutoFill.addEventListener('click', () => {
+                if (currentDetectedBook) {
+                    titleInput.value = currentDetectedBook.Titel;
+                    document.getElementById('fAuteur').value = currentDetectedBook.Auteur || '';
+                    document.getElementById('fGraad').value = currentDetectedBook.Graad || 'Alle graden';
+                    document.getElementById('fTags').value = currentDetectedBook.Tags || '';
+                    if (currentDetectedBook.ISBN) isbnInput.value = currentDetectedBook.ISBN;
+                    document.getElementById('fLocatie').focus();
+                }
+            });
+
+            // Knop 'Wissen': maak invoer leeg
+            btnDupCancel.addEventListener('click', () => {
+                form.reset();
+                lookupInput.value = '';
+                lookupStatus.classList.add('hidden');
+                warningBox.classList.add('hidden');
+                currentDetectedBook = null;
+            });
+
+            // Submit handler (Enter of klik op knop)
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                const t = titleInput.value.trim();
+                const i = isbnInput.value.trim().replace(/[^0-9X]/gi, '');
+                const existing = findExistingBook(t, i);
+
+                const newBookData = {
+                    Titel: t,
+                    Auteur: document.getElementById('fAuteur').value.trim(),
+                    Graad: document.getElementById('fGraad').value.trim(),
+                    Locatie: document.getElementById('fLocatie').value.trim(),
+                    Tags: document.getElementById('fTags').value.trim(),
+                    ISBN: i,
+                    Taal: bepaalTaal(document.getElementById('fLocatie').value.trim())
+                };
+
+                // Als het boek al bestaat -> Toon pop-up bevestiging alvorens op te slaan!
+                if (existing) {
+                    pendingSaveData = { newBook: newBookData, existingBook: existing };
+
+                    document.getElementById('modalDupTitle').textContent = existing.Titel;
+                    document.getElementById('modalDupAuthor').textContent = existing.Auteur;
+                    
+                    const copies = existing.copies && existing.copies.length > 0 
+                        ? existing.copies 
+                        : [{ copyLabel: 'Exemplaar 1', locatie: existing.Locatie }];
+                    const count = copies.length;
+                    const locsText = copies.map(c => `${c.copyLabel || 'Exemplaar'}: ${c.locatie}`).join(', ');
+
+                    document.getElementById('modalDupCopies').textContent = `${count} ${count === 1 ? 'exemplaar' : 'exemplaren'} (${locsText})`;
+                    document.getElementById('modalDupNewLoc').textContent = newBookData.Locatie || '(geen locatie ingevuld)';
+                    document.getElementById('modalDupNextCopyLabel').textContent = `(Exemplaar ${count + 1})`;
+
+                    dupModal.showModal();
+                    return;
+                }
+
+                // Boek bestaat nog niet -> Direct opslaan
+                await executeSaveBook(newBookData, null);
+            });
+
+            // Modal Actie 1: Bevestig toevoegen als nieuw exemplaar
+            btnModalConfirmAddCopy.addEventListener('click', async () => {
+                dupModal.close();
+                if (pendingSaveData) {
+                    await executeSaveBook(pendingSaveData.newBook, pendingSaveData.existingBook);
+                    pendingSaveData = null;
+                }
+            });
+
+            // Modal Actie 2: Annuleren / Oeps al ingegeven
+            btnModalCancelDuplicate.addEventListener('click', () => {
+                dupModal.close();
+                pendingSaveData = null;
+                warningBox.classList.remove('hidden');
+            });
+
+            // Modal Actie 3: Bekijk bestaand boek in catalogus
+            btnModalViewExisting.addEventListener('click', () => {
+                dupModal.close();
+                if (pendingSaveData && pendingSaveData.existingBook) {
+                    openBookDetailModal(pendingSaveData.existingBook);
+                }
+            });
+
+            // Daadwerkelijke opslagfunctie
+            async function executeSaveBook(newBook, existingBook) {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `
                     <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
                     <span>Bezig met opslaan...</span>
                 `;
 
-                const newBook = {
-                    id: allBooks.length + 1,
-                    Titel: document.getElementById('fTitel').value.trim(),
-                    Auteur: document.getElementById('fAuteur').value.trim(),
-                    Graad: document.getElementById('fGraad').value.trim(),
-                    Locatie: document.getElementById('fLocatie').value.trim(),
-                    Tags: document.getElementById('fTags').value.trim(),
-                    ISBN: document.getElementById('fIsbn').value.trim().replace(/[^0-9X]/gi, ''),
-                    Taal: bepaalTaal(document.getElementById('fLocatie').value.trim())
-                };
+                let copyLabel = 'Exemplaar 1';
+                if (existingBook) {
+                    if (!existingBook.copies || existingBook.copies.length === 0) {
+                        existingBook.copies = [{
+                            copyId: existingBook.id,
+                            copyNumber: 1,
+                            copyLabel: 'Exemplaar 1',
+                            locatie: existingBook.Locatie,
+                            isbn: existingBook.ISBN
+                        }];
+                    }
+                    const nextNum = existingBook.copies.length + 1;
+                    copyLabel = `Exemplaar ${nextNum}`;
+                    existingBook.copies.push({
+                        copyId: allBooks.length + 1,
+                        copyNumber: nextNum,
+                        copyLabel: copyLabel,
+                        locatie: newBook.Locatie,
+                        isbn: newBook.ISBN
+                    });
+                } else {
+                    newBook.id = allBooks.length + 1;
+                    newBook.copies = [{
+                        copyId: newBook.id,
+                        copyNumber: 1,
+                        copyLabel: 'Exemplaar 1',
+                        locatie: newBook.Locatie,
+                        isbn: newBook.ISBN
+                    }];
+                    allBooks.push(newBook);
+                }
 
-                allBooks.push(newBook);
                 initFilters();
                 renderFeaturedTheme();
                 renderNewBooksShelf();
@@ -2243,25 +2474,29 @@
                                 tags: newBook.Tags,
                                 graad: newBook.Graad,
                                 locatie: newBook.Locatie,
-                                isbn: newBook.ISBN
+                                isbn: newBook.ISBN,
+                                exemplaar: copyLabel
                             })
                         });
 
                         statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex items-center gap-2';
-                        statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> is toegevoegd en opgeslagen in jullie Google Sheet!</span>`;
+                        statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is succesvol opgeslagen in Google Sheets!</span>`;
                     } catch (err) {
                         statusBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold';
-                        statusBox.innerHTML = `<span>Boek is lokaal toegevoegd. Kon het niet automatisch naar Google Sheets sturen.</span>`;
+                        statusBox.innerHTML = `<span>Boek is lokaal toegevoegd als ${copyLabel}. Kon niet automatisch naar Google Sheets verzonden worden.</span>`;
                     }
                 } else {
                     statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex flex-col gap-1';
-                    statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> is direct toegevoegd aan de website!</span>`;
+                    statusBox.innerHTML = `<span>🎉 Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is direct toegevoegd aan de website!</span>`;
                 }
 
                 statusBox.classList.remove('hidden');
                 form.reset();
                 lookupInput.value = '';
                 lookupStatus.classList.add('hidden');
+                warningBox.classList.add('hidden');
+                currentDetectedBook = null;
+
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -2269,7 +2504,7 @@
                 `;
 
                 setTimeout(() => statusBox.classList.add('hidden'), 8000);
-            });
+            }
         }
 
         // 12. ONTLENEN MET SPECIFIEKE EXEMPLAREN
@@ -2509,4 +2744,5 @@
     </script>
 </body>
 </html>
+
 
