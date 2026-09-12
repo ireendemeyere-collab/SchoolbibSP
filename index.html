@@ -349,30 +349,18 @@
             <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
         </section>
 
-        <!-- 4. UITGELICHTE BOEKEN (DROOG, ZONDER EMOTICONS, 1 PER GRAAD BOVENAAN, MAX 8 BOEKEN) -->
+        <!-- 4. UITGELICHTE BOEKEN (ENKEL AANBEVOLEN PER GRAAD) -->
         <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 bg-slate-50 border border-slate-200/90 shadow-xs text-slate-900">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                <div>
-                    <span class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-brand-100 text-brand-800 mb-2">Thema in de kijker</span>
-                    <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
-                    <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button id="btnScrollFeaturedLeft" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">‹</button>
-                    <button id="btnScrollFeaturedRight" class="w-9 h-9 rounded-full bg-white shadow-xs border border-slate-200 text-slate-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center font-bold text-sm transition">›</button>
-                </div>
+            <div class="mb-5">
+                <span class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-brand-100 text-brand-800 mb-2">Thema in de kijker</span>
+                <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
+                <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
             </div>
 
-            <!-- 1 Boek per graad bovenaan -->
-            <div class="mb-6">
+            <!-- Enkel 1 boek per graad -->
+            <div>
                 <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Aanbevolen per graad</h4>
                 <div id="featuredGradePicks" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
-            </div>
-
-            <!-- Overige boeken van het thema (scrollbaar, max 8 totaal) -->
-            <div id="featuredMoreContainer">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Meer binnen dit thema</h4>
-                <div id="featuredBooksCarousel" class="flex gap-4 overflow-x-auto pb-3 pt-1 clean-scroll scroll-smooth"></div>
             </div>
         </section>
 
@@ -1505,12 +1493,6 @@
                 renderFeaturedTheme();
             });
 
-            document.getElementById('btnScrollFeaturedLeft').addEventListener('click', () => {
-                document.getElementById('featuredBooksCarousel').scrollBy({ left: -320, behavior: 'smooth' });
-            });
-            document.getElementById('btnScrollFeaturedRight').addEventListener('click', () => {
-                document.getElementById('featuredBooksCarousel').scrollBy({ left: 320, behavior: 'smooth' });
-            });
         }
 
         function renderFeaturedTheme() {
@@ -1538,7 +1520,7 @@
                 (b.themes && b.themes.some(th => th.includes(targetTag)))
             );
 
-            // 1. Kies 1 boek per graad bovenaan
+            // Kies exact 1 aanbevolen boek per graad
             const grade1Book = matchingBooks.find(b => b.Graad === 'Eerste graad') || allBooks.find(b => b.Graad === 'Eerste graad');
             const grade2Book = matchingBooks.find(b => b.Graad === 'Tweede graad' && b !== grade1Book) || allBooks.find(b => b.Graad === 'Tweede graad' && b !== grade1Book);
             const grade3Book = matchingBooks.find(b => b.Graad === 'Derde graad' && b !== grade1Book && b !== grade2Book) || allBooks.find(b => b.Graad === 'Derde graad' && b !== grade1Book && b !== grade2Book);
@@ -1569,26 +1551,6 @@
                     `;
                     gradeContainer.appendChild(card);
                 });
-            }
-
-            // 2. Overige boeken scrollbaar, met een maximum van 8 boeken in totaal
-            const pickedIds = new Set(gradePicks.map(p => p.book.id));
-            const remainingAllowed = Math.max(0, 8 - gradePicks.length);
-            const remainingBooks = matchingBooks.filter(b => !pickedIds.has(b.id)).slice(0, remainingAllowed);
-
-            const carousel = document.getElementById('featuredBooksCarousel');
-            const moreContainer = document.getElementById('featuredMoreContainer');
-            if (carousel && moreContainer) {
-                carousel.innerHTML = '';
-                if (remainingBooks.length === 0) {
-                    moreContainer.classList.add('hidden');
-                } else {
-                    moreContainer.classList.remove('hidden');
-                    remainingBooks.forEach(book => {
-                        const card = createMiniBookCard(book, false);
-                        carousel.appendChild(card);
-                    });
-                }
             }
 
             section.classList.remove('hidden');
