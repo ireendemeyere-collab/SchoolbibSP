@@ -349,7 +349,7 @@
             <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
         </section>
 
-        <!-- 4. UITGELICHTE BOEKEN (ENKEL AANBEVOLEN PER GRAAD) -->
+        <!-- 4. UITGELICHTE BOEKEN (AANBEVOLEN PER GRAAD MET CARROUSEL, MAX 5 PER GRAAD) -->
         <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 bg-slate-50 border border-slate-200/90 shadow-xs text-slate-900">
             <div class="mb-5">
                 <span class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-brand-100 text-brand-800 mb-2">Thema in de kijker</span>
@@ -357,11 +357,8 @@
                 <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
             </div>
 
-            <!-- Enkel 1 boek per graad -->
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Aanbevolen per graad</h4>
-                <div id="featuredGradePicks" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
-            </div>
+            <!-- Carrousels per graad (max 5 boeken per graad) -->
+            <div id="featuredGradesContainer" class="space-y-5"></div>
         </section>
 
         <!-- 5. NIEUW IN DE BIB -->
@@ -579,6 +576,65 @@
                                     <option value="teal">🌿 Boekenzoeker Teal (Fris & Uitnodigend)</option>
                                     <option value="sunny">☀️ Zonnig Geel / Goud (Vrolijk)</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- Selectie van max 5 boeken per graad -->
+                        <div class="pt-4 border-t border-slate-200/80 space-y-4">
+                            <div>
+                                <h4 class="text-xs font-black uppercase text-slate-800 tracking-wider">Aanbevolen boeken per graad (max. 5 per graad)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5">Kies tot 5 specifieke boeken per graad. Laat leeg om automatisch boeken met de gekozen tag te tonen.</p>
+                            </div>
+
+                            <!-- 1ste Graad -->
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-extrabold text-brand-800">1ste graad (12-14 jaar)</span>
+                                    <span id="fThemeGrade1Count" class="text-[11px] font-bold text-slate-500">0 / 5 gekozen</span>
+                                </div>
+                                <div id="fThemeGrade1Chips" class="flex flex-wrap gap-1.5 min-h-[28px]"></div>
+                                <div class="flex gap-2">
+                                    <input type="text" id="fThemeGrade1Input" list="fThemeBooksList1" placeholder="Zoek op titel of auteur..." 
+                                           class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                                    <datalist id="fThemeBooksList1"></datalist>
+                                    <button type="button" id="fThemeGrade1AddBtn" class="shrink-0 px-3.5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition">
+                                        + Toevoegen
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 2de Graad -->
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-extrabold text-brand-800">2de graad (14-16 jaar)</span>
+                                    <span id="fThemeGrade2Count" class="text-[11px] font-bold text-slate-500">0 / 5 gekozen</span>
+                                </div>
+                                <div id="fThemeGrade2Chips" class="flex flex-wrap gap-1.5 min-h-[28px]"></div>
+                                <div class="flex gap-2">
+                                    <input type="text" id="fThemeGrade2Input" list="fThemeBooksList2" placeholder="Zoek op titel of auteur..." 
+                                           class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                                    <datalist id="fThemeBooksList2"></datalist>
+                                    <button type="button" id="fThemeGrade2AddBtn" class="shrink-0 px-3.5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition">
+                                        + Toevoegen
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 3de Graad -->
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-extrabold text-brand-800">3de graad (16+ jaar)</span>
+                                    <span id="fThemeGrade3Count" class="text-[11px] font-bold text-slate-500">0 / 5 gekozen</span>
+                                </div>
+                                <div id="fThemeGrade3Chips" class="flex flex-wrap gap-1.5 min-h-[28px]"></div>
+                                <div class="flex gap-2">
+                                    <input type="text" id="fThemeGrade3Input" list="fThemeBooksList3" placeholder="Zoek op titel of auteur..." 
+                                           class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                                    <datalist id="fThemeBooksList3"></datalist>
+                                    <button type="button" id="fThemeGrade3AddBtn" class="shrink-0 px-3.5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition">
+                                        + Toevoegen
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -947,9 +1003,17 @@
             title: "Spannende boeken in november",
             description: "Griezelen en spanning voor de donkere herfstdagen! Ontdek onze bloedstollende thrillers en detectives in de bib.",
             tag: "spanning",
-            style: "night"
+            style: "night",
+            gradePicks: {
+                grade1: [],
+                grade2: [],
+                grade3: []
+            }
         };
         let featuredTheme = JSON.parse(localStorage.getItem('schoolbib_featured_theme') || JSON.stringify(DEFAULT_FEATURED));
+        if (!featuredTheme.gradePicks) {
+            featuredTheme.gradePicks = { grade1: [], grade2: [], grade3: [] };
+        }
 
         let currentModalBook = null;
 
@@ -1214,6 +1278,7 @@
                     initFilters();
                     updateFavoritesCount();
                     renderFeaturedTheme();
+                    updateFeaturedThemeAdminDatalists();
                     renderNewBooksShelf();
                     refreshRandomCatalogSample();
                     filterAndRender();
@@ -1462,6 +1527,109 @@
         }
 
         // 4. THEMA IN DE KIJKER
+        let currentGradePicks = {
+            grade1: [],
+            grade2: [],
+            grade3: []
+        };
+
+        function updateFeaturedThemeAdminDatalists() {
+            const list1 = document.getElementById('fThemeBooksList1');
+            const list2 = document.getElementById('fThemeBooksList2');
+            const list3 = document.getElementById('fThemeBooksList3');
+            if (!list1 || !list2 || !list3 || !allBooks || allBooks.length === 0) return;
+
+            const makeOptions = (graadName) => {
+                const filtered = allBooks.filter(b => !graadName || b.Graad === graadName || b.Graad === 'Alle graden');
+                const sorted = [...filtered].sort((a, b) => (a.Titel || '').localeCompare(b.Titel || '', 'nl'));
+                return sorted.map(b => `<option value="${escapeHtml(b.Titel)}">${escapeHtml(b.Auteur)} (${escapeHtml(b.Graad || 'Bib')})</option>`).join('');
+            };
+
+            list1.innerHTML = makeOptions('Eerste graad');
+            list2.innerHTML = makeOptions('Tweede graad');
+            list3.innerHTML = makeOptions('Derde graad');
+        }
+
+        function renderGradePickChips(gradeKey) {
+            const gradeNum = gradeKey === 'grade1' ? '1' : (gradeKey === 'grade2' ? '2' : '3');
+            const container = document.getElementById(`fThemeGrade${gradeNum}Chips`);
+            const countEl = document.getElementById(`fThemeGrade${gradeNum}Count`);
+            const inputEl = document.getElementById(`fThemeGrade${gradeNum}Input`);
+            const addBtn = document.getElementById(`fThemeGrade${gradeNum}AddBtn`);
+            if (!container) return;
+
+            const list = currentGradePicks[gradeKey] || [];
+            if (countEl) countEl.textContent = `${list.length} / 5 gekozen`;
+            
+            if (list.length >= 5) {
+                if (inputEl) { inputEl.disabled = true; inputEl.placeholder = 'Maximum 5 boeken bereikt'; }
+                if (addBtn) addBtn.disabled = true;
+            } else {
+                if (inputEl) { inputEl.disabled = false; inputEl.placeholder = 'Zoek op titel of auteur...'; }
+                if (addBtn) addBtn.disabled = false;
+            }
+
+            container.innerHTML = '';
+            if (list.length === 0) {
+                container.innerHTML = '<span class="text-[11px] text-slate-400 italic py-1">Geen specifieke boeken gekozen (automatisch max. 5 uit het thema)</span>';
+                return;
+            }
+
+            list.forEach((title, idx) => {
+                const bookObj = allBooks.find(b => b.Titel && b.Titel.toLowerCase() === title.toLowerCase());
+                const author = bookObj ? ` (${bookObj.Auteur})` : '';
+                const chip = document.createElement('span');
+                chip.className = 'inline-flex items-center gap-1.5 text-xs bg-white border border-slate-200/90 px-2.5 py-1 rounded-xl text-slate-800 font-semibold shadow-2xs';
+                chip.innerHTML = `
+                    <span class="max-w-[200px] truncate" title="${escapeHtml(title + author)}">${escapeHtml(title)}</span>
+                    <button type="button" class="text-slate-400 hover:text-rose-600 font-black ml-1 text-xs transition" title="Verwijderen">✕</button>
+                `;
+                chip.querySelector('button').onclick = () => {
+                    currentGradePicks[gradeKey].splice(idx, 1);
+                    renderGradePickChips(gradeKey);
+                };
+                container.appendChild(chip);
+            });
+        }
+
+        function setupGradePickInput(gradeKey) {
+            const gradeNum = gradeKey === 'grade1' ? '1' : (gradeKey === 'grade2' ? '2' : '3');
+            const inputEl = document.getElementById(`fThemeGrade${gradeNum}Input`);
+            const addBtn = document.getElementById(`fThemeGrade${gradeNum}AddBtn`);
+            if (!inputEl || !addBtn) return;
+
+            const doAdd = () => {
+                const val = inputEl.value.trim();
+                if (!val) return;
+                if (!currentGradePicks[gradeKey]) currentGradePicks[gradeKey] = [];
+                if (currentGradePicks[gradeKey].length >= 5) {
+                    alert('Je kunt maximaal 5 boeken per graad kiezen.');
+                    return;
+                }
+                const found = allBooks.find(b => b.Titel && b.Titel.toLowerCase() === val.toLowerCase());
+                const exactTitle = found ? found.Titel : val;
+                if (!currentGradePicks[gradeKey].includes(exactTitle)) {
+                    currentGradePicks[gradeKey].push(exactTitle);
+                    renderGradePickChips(gradeKey);
+                }
+                inputEl.value = '';
+            };
+
+            addBtn.onclick = doAdd;
+            inputEl.onkeydown = (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    doAdd();
+                }
+            };
+        }
+
+        function scrollGradeCarousel(id, offset) {
+            const el = document.getElementById(id);
+            if (el) el.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+        window.scrollGradeCarousel = scrollGradeCarousel;
+
         function initFeaturedTheme() {
             const form = document.getElementById('featuredThemeForm');
             const enabledInput = document.getElementById('fThemeEnabled');
@@ -1477,6 +1645,20 @@
             tagInput.value = featuredTheme.tag || '';
             styleInput.value = featuredTheme.style || 'night';
 
+            currentGradePicks = {
+                grade1: (featuredTheme.gradePicks && featuredTheme.gradePicks.grade1) ? [...featuredTheme.gradePicks.grade1] : [],
+                grade2: (featuredTheme.gradePicks && featuredTheme.gradePicks.grade2) ? [...featuredTheme.gradePicks.grade2] : [],
+                grade3: (featuredTheme.gradePicks && featuredTheme.gradePicks.grade3) ? [...featuredTheme.gradePicks.grade3] : []
+            };
+
+            updateFeaturedThemeAdminDatalists();
+            setupGradePickInput('grade1');
+            setupGradePickInput('grade2');
+            setupGradePickInput('grade3');
+            renderGradePickChips('grade1');
+            renderGradePickChips('grade2');
+            renderGradePickChips('grade3');
+
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 featuredTheme = {
@@ -1484,7 +1666,12 @@
                     title: titleInput.value.trim(),
                     description: descInput.value.trim(),
                     tag: tagInput.value.trim().toLowerCase(),
-                    style: styleInput.value
+                    style: styleInput.value,
+                    gradePicks: {
+                        grade1: [...(currentGradePicks.grade1 || [])],
+                        grade2: [...(currentGradePicks.grade2 || [])],
+                        grade3: [...(currentGradePicks.grade3 || [])]
+                    }
                 };
                 localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
                 savedMsg.classList.remove('hidden');
@@ -1492,7 +1679,6 @@
 
                 renderFeaturedTheme();
             });
-
         }
 
         function renderFeaturedTheme() {
@@ -1520,38 +1706,86 @@
                 (b.themes && b.themes.some(th => th.includes(targetTag)))
             );
 
-            // Kies exact 1 aanbevolen boek per graad
-            const grade1Book = matchingBooks.find(b => b.Graad === 'Eerste graad') || allBooks.find(b => b.Graad === 'Eerste graad');
-            const grade2Book = matchingBooks.find(b => b.Graad === 'Tweede graad' && b !== grade1Book) || allBooks.find(b => b.Graad === 'Tweede graad' && b !== grade1Book);
-            const grade3Book = matchingBooks.find(b => b.Graad === 'Derde graad' && b !== grade1Book && b !== grade2Book) || allBooks.find(b => b.Graad === 'Derde graad' && b !== grade1Book && b !== grade2Book);
+            const gradesConfig = [
+                { key: 'grade1', label: '1ste graad (12-14j)', graadFilter: 'Eerste graad' },
+                { key: 'grade2', label: '2de graad (14-16j)', graadFilter: 'Tweede graad' },
+                { key: 'grade3', label: '3de graad (16+j)', graadFilter: 'Derde graad' }
+            ];
 
-            const gradePicks = [
-                { graad: '1ste graad (12-14j)', book: grade1Book },
-                { graad: '2de graad (14-16j)', book: grade2Book },
-                { graad: '3de graad (16+j)', book: grade3Book }
-            ].filter(p => p.book);
+            const gradesContainer = document.getElementById('featuredGradesContainer');
+            if (!gradesContainer) return;
+            gradesContainer.innerHTML = '';
 
-            const gradeContainer = document.getElementById('featuredGradePicks');
-            if (gradeContainer) {
-                gradeContainer.innerHTML = '';
-                gradePicks.forEach(({ graad, book }) => {
-                    const card = document.createElement('div');
-                    card.className = 'bg-white rounded-2xl p-3 border border-slate-200/80 shadow-2xs flex gap-3.5 items-center cursor-pointer hover:border-brand-300 transition group';
-                    card.onclick = () => openBookDetailModal(book);
-                    card.innerHTML = `
-                        <div class="w-16 h-24 shrink-0 rounded-xl overflow-hidden shadow-2xs relative bg-slate-100">
-                            ${renderCoverHtml(book)}
-                        </div>
-                        <div class="min-w-0 flex-grow">
-                            <span class="text-[10px] font-black uppercase text-brand-700 bg-brand-50 px-2 py-0.5 rounded-md inline-block mb-1">${escapeHtml(graad)}</span>
-                            <h5 class="text-xs font-extrabold text-slate-900 truncate group-hover:text-brand-600 transition" title="${escapeHtml(book.Titel)}">${escapeHtml(book.Titel)}</h5>
-                            <p class="text-[11px] text-slate-500 truncate mb-2">${escapeHtml(book.Auteur)}</p>
-                            <span class="text-[10px] font-bold text-brand-600 hover:text-brand-700">Bekijk details →</span>
-                        </div>
-                    `;
-                    gradeContainer.appendChild(card);
+            const savedPicks = featuredTheme.gradePicks || {};
+
+            gradesConfig.forEach(({ key, label, graadFilter }) => {
+                let pickedBooks = [];
+                const explicitTitles = savedPicks[key] || [];
+
+                // 1. Handmatig gekozen boeken (max 5)
+                explicitTitles.forEach(t => {
+                    const found = allBooks.find(b => b.Titel && b.Titel.toLowerCase() === t.toLowerCase());
+                    if (found && !pickedBooks.some(b => b.id === found.id)) {
+                        pickedBooks.push(found);
+                    }
                 });
-            }
+
+                // 2. Indien niet handmatig gekozen: automatisch aanvullen met boeken binnen het thema voor deze graad (tot max 5)
+                if (explicitTitles.length === 0) {
+                    const autoMatches = matchingBooks.filter(b => 
+                        (b.Graad === graadFilter || b.Graad === 'Alle graden') &&
+                        !pickedBooks.some(p => p.id === b.id)
+                    );
+                    for (const b of autoMatches) {
+                        if (pickedBooks.length >= 5) break;
+                        pickedBooks.push(b);
+                    }
+
+                    // Indien nodig aanvullen met andere boeken van die graad
+                    if (pickedBooks.length < 3) {
+                        const fallbackBooks = allBooks.filter(b => 
+                            (b.Graad === graadFilter || b.Graad === 'Alle graden') &&
+                            !pickedBooks.some(p => p.id === b.id)
+                        );
+                        for (const b of fallbackBooks) {
+                            if (pickedBooks.length >= 5) break;
+                            pickedBooks.push(b);
+                        }
+                    }
+                }
+
+                pickedBooks = pickedBooks.slice(0, 5);
+                if (pickedBooks.length === 0) return;
+
+                const carouselId = `featuredGradeCarousel_${key}`;
+
+                const block = document.createElement('div');
+                block.className = 'bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-2xs';
+                
+                block.innerHTML = `
+                    <div class="flex items-center justify-between mb-3.5">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl">${escapeHtml(label)}</span>
+                            <span class="text-xs text-slate-400 font-bold">${pickedBooks.length} ${pickedBooks.length === 1 ? 'boek' : 'boeken'}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button class="w-7 h-7 rounded-full bg-slate-50 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-xs font-bold transition border border-slate-200 shadow-2xs" 
+                                    onclick="scrollGradeCarousel('${carouselId}', -300)" title="Vorige boeken">‹</button>
+                            <button class="w-7 h-7 rounded-full bg-slate-50 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-xs font-bold transition border border-slate-200 shadow-2xs" 
+                                    onclick="scrollGradeCarousel('${carouselId}', 300)" title="Volgende boeken">›</button>
+                        </div>
+                    </div>
+                    <div id="${carouselId}" class="flex gap-4 overflow-x-auto pb-2 pt-1 clean-scroll scroll-smooth"></div>
+                `;
+
+                const carousel = block.querySelector(`#${carouselId}`);
+                pickedBooks.forEach(book => {
+                    const card = createMiniBookCard(book, false);
+                    carousel.appendChild(card);
+                });
+
+                gradesContainer.appendChild(block);
+            });
 
             section.classList.remove('hidden');
         }
