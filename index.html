@@ -191,6 +191,9 @@
                 <button data-filter="all" class="quick-filter-btn active-filter px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-brand-600 text-white shadow-xs">
                     Alle boeken
                 </button>
+                <button data-filter="bekroond" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-amber-50 hover:text-amber-800">
+                    Bekroonde boeken
+                </button>
                 <button data-filter="top-rated" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
                     Top beoordeeld
                 </button>
@@ -218,43 +221,23 @@
                 <div class="flex flex-wrap items-center gap-2">
                     <span class="text-xs font-black uppercase text-brand-700 tracking-wider mr-1">Filter:</span>
 
-                    <!-- 1. Dropdown Genre -->
+                    <!-- 1. Dropdown Taal -->
                     <div class="relative dropdown-container">
-                        <button type="button" id="btnDropdownGenre" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
-                            <span>Genre</span>
-                            <span id="badgeGenreCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                        <button type="button" id="btnDropdownTaal" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Taal</span>
+                            <span id="badgeTaalCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div id="menuGenre" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-72 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                        <div id="menuTaal" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
                             <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Genre / Boektype</span>
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Taal</span>
                                 <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
                             </div>
-                            <input type="text" id="filterGenreSearch" placeholder="Typ genre (bv. fantasy, thriller)..." 
-                                   class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
-                            <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1 clean-scroll" id="genreCheckboxes"></div>
+                            <div class="space-y-2 max-h-60 overflow-y-auto clean-scroll" id="taalCheckboxes"></div>
                         </div>
                     </div>
 
-                    <!-- 2. Dropdown Thema -->
-                    <div class="relative dropdown-container">
-                        <button type="button" id="btnDropdownThema" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
-                            <span>Thema</span>
-                            <span id="badgeThemaCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
-                            <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div id="menuThema" class="dropdown-menu hidden absolute left-0 sm:left-auto top-full mt-2 w-80 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
-                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Thema's</span>
-                                <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
-                            </div>
-                            <input type="text" id="filterTagSearch" placeholder="Typ thema (bv. vriendschap, migratie)..." 
-                                   class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
-                            <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1 clean-scroll" id="tagCheckboxes"></div>
-                        </div>
-                    </div>
-
-                    <!-- 3. Dropdown Leeftijd -->
+                    <!-- 2. Dropdown Leeftijd -->
                     <div class="relative dropdown-container">
                         <button type="button" id="btnDropdownLeeftijd" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
                             <span>Leeftijd</span>
@@ -270,19 +253,21 @@
                         </div>
                     </div>
 
-                    <!-- 4. Dropdown Taal -->
+                    <!-- 3. Dropdown Thema -->
                     <div class="relative dropdown-container">
-                        <button type="button" id="btnDropdownTaal" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
-                            <span>Taal</span>
-                            <span id="badgeTaalCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
+                        <button type="button" id="btnDropdownThema" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>Thema</span>
+                            <span id="badgeThemaCount" class="hidden px-1.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] leading-none">0</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div id="menuTaal" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                        <div id="menuThema" class="dropdown-menu hidden absolute left-0 sm:left-auto top-full mt-2 w-80 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
                             <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Taal</span>
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Thema's</span>
                                 <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
                             </div>
-                            <div class="space-y-2 max-h-60 overflow-y-auto clean-scroll" id="taalCheckboxes"></div>
+                            <input type="text" id="filterTagSearch" placeholder="Typ thema (bv. spanning, humor)..." 
+                                   class="w-full text-xs px-3 py-1.5 rounded-xl border border-slate-200 mb-2 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50">
+                            <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1 clean-scroll" id="tagCheckboxes"></div>
                         </div>
                     </div>
 
@@ -410,9 +395,10 @@
             
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-100 bg-slate-50/80">
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                     <span class="text-xs font-bold bg-brand-600 text-white px-3 py-1 rounded-full" id="modalGraadBadge">Graad</span>
                     <span class="text-xs font-bold text-slate-700 bg-white px-2.5 py-1 rounded-full border border-slate-200" id="modalTaalBadge">Taal</span>
+                    <span class="hidden text-xs font-bold bg-amber-500 text-white px-2.5 py-1 rounded-full" id="modalBekroondBadge">Bekroond</span>
                 </div>
                 <button id="btnCloseModal" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center font-extrabold text-base transition shadow-2xs border border-slate-200">
                     ✕
@@ -469,7 +455,7 @@
                         <!-- Favorieten knop -->
                         <div class="pt-1">
                             <button id="modalFavBtn" class="w-full sm:w-auto px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 border">
-                                <span id="modalFavIcon">🤍</span>
+                                <span id="modalFavIcon" class="flex items-center justify-center"></span>
                                 <span id="modalFavLabel">Opslaan in favorieten</span>
                             </button>
                         </div>
@@ -734,6 +720,17 @@
                                 </div>
                             </div>
 
+                            <!-- 3. BIJZONDERHEDEN & EXTRA LABELS -->
+                            <div class="sm:col-span-2 bg-slate-50/90 p-4 rounded-2xl border border-slate-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider">
+                                        3. Bijzonderheden & Extra labels <span class="text-brand-600 font-bold normal-case">(optioneel)</span>
+                                    </label>
+                                    <span class="text-[11px] text-slate-400 font-medium">Klik om aan/uit te vinken</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5" id="adminKenmerkenChips"></div>
+                            </div>
+
                             <!-- Automatisch gegenereerd tagveld voor compatibiliteit -->
                             <input type="hidden" id="fTags" value="">
 
@@ -839,7 +836,7 @@
                     <div class="p-5 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold">
-                                📊
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                             </div>
                             <div>
                                 <h4 class="font-bold text-brand-900 text-sm">Google Spreadsheet van de School</h4>
@@ -864,7 +861,7 @@
                                 Opslaan
                             </button>
                         </div>
-                        <p id="scriptUrlSavedMsg" class="text-xs text-emerald-600 font-bold hidden">✅ Web-app URL succesvol opgeslagen!</p>
+                        <p id="scriptUrlSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Web-app URL succesvol opgeslagen!</p>
                     </div>
 
                     <div class="space-y-3 pt-4 border-t border-slate-100">
@@ -878,7 +875,7 @@
                                 Wijzigen
                             </button>
                         </div>
-                        <p id="pinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">✅ Pincode aangepast!</p>
+                        <p id="pinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Pincode aangepast!</p>
                     </div>
 
                 </div>
@@ -895,7 +892,7 @@
                 <img src="logo.jpg" alt="Logo Boekenbende" class="w-6 h-6 rounded-lg object-cover">
                 <span class="font-bold text-slate-700">&copy; 2026 Boekenbende Sint-Pieters</span>
             </div>
-            <p>Met ❤️ gemaakt voor onze leerlingen • Laatste update: september 2026 • Geïnspireerd op <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Boekenzoeker.be ↗</a></p>
+            <p>Met zorg gemaakt voor onze leerlingen • Laatste update: september 2026 • Geïnspireerd op <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Boekenzoeker.be ↗</a></p>
         </div>
     </footer>
 
@@ -956,7 +953,7 @@
         // UITGELICHT THEMA CONFIGURATIE
         const DEFAULT_FEATURED = {
             enabled: true,
-            title: "Spannende boeken in november 🎃👻",
+            title: "Spannende boeken in november",
             description: "Griezelen en spanning voor de donkere herfstdagen! Ontdek onze bloedstollende thrillers en detectives in de bib.",
             tag: "spanning",
             style: "night"
@@ -994,40 +991,43 @@
             loadBooks();
         });
 
-        // TAXONOMIE VOOR GENRES & THEMA'S (HELDER & OVERZICHTELIJK VOOR LEERLINGEN)
+        // TAXONOMIE VOOR GENRES & THEMA'S (TEXT-ONLY, OVERZICHTELIJK EN ZONDER ICOONTJES)
         const GENRE_DEFINITIONS = [
-            { id: 'young-adult', label: 'Young adult (YA)', icon: '📖', keywords: ['young adult', 'ya', 'jeugd'] },
-            { id: 'graphic-novel', label: 'Graphic novel / Strip', icon: '🎨', keywords: ['graphic novel', 'graphic-novel', 'strip', 'beeldverhaal', 'comics'] },
-            { id: 'spanning-detective', label: 'Spanning & Detective', icon: '🔍', keywords: ['spanning', 'thriller', 'detective', 'misdaad', 'mysterie', 'spionnen'] },
-            { id: 'fantasy', label: 'Fantasy & Magie', icon: '🐉', keywords: ['fantasy', 'fantasie', 'magisch realisme', 'mythologie'] },
-            { id: 'sciencefiction', label: 'Sciencefiction & Dystopie', icon: '🚀', keywords: ['sciencefiction', 'science-fiction', 'science fiction', 'dystopisch', 'buitenaards', 'technologie'] },
-            { id: 'romance', label: 'Liefde & Romantiek', icon: '💘', keywords: ['romance', 'liefde', 'relaties'] },
-            { id: 'historisch', label: 'Historische fictie', icon: '⏳', keywords: ['historisch', 'geschiedenis', 'middeleeuwen'] },
-            { id: 'humor', label: 'Humor & Satire', icon: '😂', keywords: ['humor', 'satire'] },
-            { id: 'coming-of-age', label: 'Coming of age / Opgroeien', icon: '🌱', keywords: ['coming of age'] },
-            { id: 'non-fictie', label: 'Non-fictie & Biografie', icon: '💡', keywords: ['non fictie', 'non-fictie', 'biografie', 'biografisch', 'autobiografie', 'filosofie', 'essay', 'wetenschap', 'educatief'] },
-            { id: 'poezie-toneel', label: 'Poëzie, Toneel & Literaire vormen', icon: '🎭', keywords: ['poëzie', 'poǮzie', 'poƮzie', 'poezie', 'toneelstuk', 'kortverhalen', 'brieven', 'novelle', 'tragedie', 'klassieker', 'literatuur'] }
+            { id: 'young-adult', label: 'Young adult (YA)', keywords: ['young adult', 'ya', 'jeugd'] },
+            { id: 'graphic-novel', label: 'Graphic novel / Strip', keywords: ['graphic novel', 'graphic-novel', 'strip', 'beeldverhaal', 'comics'] },
+            { id: 'spanning-detective', label: 'Spanning & Detective', keywords: ['spanning', 'thriller', 'detective', 'misdaad', 'mysterie', 'spionnen'] },
+            { id: 'actie-avontuur', label: 'Actie & Avontuur', keywords: ['actie', 'avontuur'] },
+            { id: 'horror', label: 'Horror & Griezelen', keywords: ['horror', 'griezelen'] },
+            { id: 'dark-academia', label: 'Dark academia', keywords: ['dark academia'] },
+            { id: 'fantasy', label: 'Fantasy & Magie', keywords: ['fantasy', 'fantasie', 'magisch realisme', 'mythologie'] },
+            { id: 'sciencefiction', label: 'Sciencefiction & Dystopie', keywords: ['sciencefiction', 'science-fiction', 'science fiction', 'dystopisch', 'buitenaards', 'technologie'] },
+            { id: 'romance', label: 'Liefde & Romantiek', keywords: ['romance', 'liefde', 'relaties'] },
+            { id: 'historisch', label: 'Historische fictie', keywords: ['historisch', 'geschiedenis', 'middeleeuwen'] },
+            { id: 'humor', label: 'Humor & Satire', keywords: ['humor', 'satire'] },
+            { id: 'coming-of-age', label: 'Coming of age / Opgroeien', keywords: ['coming of age'] },
+            { id: 'non-fictie', label: 'Non-fictie & Biografie', keywords: ['non fictie', 'non-fictie', 'biografie', 'biografisch', 'autobiografie', 'filosofie', 'essay', 'wetenschap', 'educatief'] },
+            { id: 'poezie-toneel', label: 'Poëzie, Toneel & Literatuur', keywords: ['poëzie', 'poǮzie', 'poƮzie', 'poezie', 'toneelstuk', 'kortverhalen', 'brieven', 'novelle', 'tragedie', 'klassieker', 'literatuur'] }
         ];
 
         const THEMA_DEFINITIONS = [
-            { id: 'vriendschap', label: 'Vriendschap & School', icon: '🤝', keywords: ['vriendschap', 'school'] },
-            { id: 'familie', label: 'Familie & Gezin', icon: '👨‍👩‍👧', keywords: ['familie'] },
-            { id: 'verlies', label: 'Verlies & Rouw', icon: '💔', keywords: ['verlies', 'rouw', 'overlijden', 'dood'] },
-            { id: 'migratie', label: 'Migratie & Vluchten', icon: '🌍', keywords: ['migratie', 'vertrek', 'vluchteling', 'reizen', 'cultuur'] },
-            { id: 'oorlog', label: 'Oorlog & Vrede', icon: '⚔️', keywords: ['oorlog', 'vrede'] },
-            { id: 'identiteit', label: 'Identiteit & Wie ben ik?', icon: '🪞', keywords: ['identiteit', 'queer', 'keuzes'] },
-            { id: 'mentaal-welzijn', label: 'Mentaal welzijn & Emoties', icon: '🧠', keywords: ['mental health', 'psychologisch', 'geheimen'] },
-            { id: 'sport', label: 'Sport & Hobby', icon: '⚽', keywords: ['sport', 'hobby'] },
-            { id: 'natuur-dieren', label: 'Natuur & Dieren', icon: '🌿', keywords: ['natuur', 'dieren', 'milieu'] },
-            { id: 'maatschappij', label: 'Maatschappij & Politiek', icon: '⚖️', keywords: ['politiek', 'maatschappij', 'sociaal', 'ras', 'ethiek', 'actueel'] },
-            { id: 'kunst-cultuur', label: 'Kunst, Cultuur & Muziek', icon: '🏛️', keywords: ['kunst', 'muziek', 'film', 'talen'] },
-            { id: 'avontuur', label: 'Avontuur', icon: '🧭', keywords: ['avontuur'] }
+            { id: 'vriendschap', label: 'Vriendschap & School', keywords: ['vriendschap', 'school'] },
+            { id: 'familie', label: 'Familie & Gezin', keywords: ['familie'] },
+            { id: 'verlies', label: 'Verlies & Rouw', keywords: ['verlies', 'rouw', 'overlijden', 'dood'] },
+            { id: 'migratie', label: 'Migratie & Vluchten', keywords: ['migratie', 'vertrek', 'vluchteling', 'reizen', 'cultuur'] },
+            { id: 'oorlog', label: 'Oorlog & Vrede', keywords: ['oorlog', 'vrede'] },
+            { id: 'identiteit', label: 'Identiteit & Zelfbeeld', keywords: ['identiteit', 'queer', 'keuzes'] },
+            { id: 'mentaal-welzijn', label: 'Mentaal welzijn & Emoties', keywords: ['mental health', 'psychologisch', 'geheimen'] },
+            { id: 'sport', label: 'Sport & Hobby', keywords: ['sport', 'hobby'] },
+            { id: 'natuur-dieren', label: 'Natuur & Dieren', keywords: ['natuur', 'dieren', 'milieu'] },
+            { id: 'maatschappij', label: 'Maatschappij & Politiek', keywords: ['politiek', 'maatschappij', 'sociaal', 'ras', 'ethiek', 'actueel'] },
+            { id: 'kunst-cultuur', label: 'Kunst, Cultuur & Muziek', keywords: ['kunst', 'muziek', 'film', 'talen'] }
         ];
 
-        // Slimme automatische tag-opschoning: fixt typefouten, streepjes en hoofdletters on-the-fly
+        // Slimme automatische tag-opschoning: fixt typefouten, streepjes, en filtert overbodige tags (fictie, drama, inspirerend)
         function cleanRawTag(raw) {
             if (!raw) return '';
             let t = raw.trim().toLowerCase();
+            if (t === 'inspirerend' || t === 'fictie' || t === 'drama') return '';
             if (t.includes('po') && (t.includes('zie') || t.includes('ze') || t.includes('Ʈ') || t.includes('Ǯ'))) return 'poëzie';
             if (t === 'graphic-novel') return 'graphic novel';
             if (t === 'science-fiction' || t === 'science fiction') return 'sciencefiction';
@@ -1037,7 +1037,57 @@
             if (t === 'relaties' || t === 'liefde') return 'romance';
             if (t === 'vertrek') return 'migratie';
             if (t === 'carl hauptmann') return '';
+            if (t === 'dark-academia') return 'dark academia';
             return t.replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+
+        // Automatische herkenning van bekroonde boeken (voor live Google Sheet synchronisatie)
+        function isKnownAwardedBook(title, author) {
+            const t = (title || '').toLowerCase();
+            const a = (author || '').toLowerCase();
+            if (/hunger games|mockingjay|catching fire/.test(t)) return true;
+            if (/divergent|insurgent|allegiant/.test(t)) return true;
+            if (/schaduw van de wind/.test(t)) return true;
+            if (/alle kleuren grijs/.test(t)) return true;
+            if (/vuurman/.test(t)) return true;
+            if (/tonke dragt/.test(a) || /brief voor de koning/.test(t)) return true;
+            if (/eleanor & park/.test(t)) return true;
+            if (/nooit meer thuis/.test(t)) return true;
+            if (/naar de top/.test(t) && /gemeinhart/.test(a)) return true;
+            if (/al wat goud op de bergen is/.test(t)) return true;
+            if (/de wetten/.test(t) && /palmen/.test(a)) return true;
+            if (/een revolverschot/.test(t)) return true;
+            if (/trofee/.test(t) && /schoeters/.test(a)) return true;
+            if (/the lovely bones/.test(t)) return true;
+            if (/the catcher in the rye/.test(t)) return true;
+            if (/john green/.test(a)) return true;
+            if (/het smelt/.test(t)) return true;
+            if (/dimitri verhulst/.test(a)) return true;
+            if (/figuranten/.test(t) && /grunberg/.test(a)) return true;
+            if (/de passievrucht/.test(t)) return true;
+            if (/de vliegeraar|vliegeraar/.test(t)) return true;
+            if (/de zwarte met het witte hart/.test(t)) return true;
+            if (/slaap!/.test(t) && /verbeke/.test(a)) return true;
+            if (/het verdriet van belgi/.test(t)) return true;
+            if (/vele hemels boven de zevende/.test(t)) return true;
+            if (/thea beckman/.test(a)) return true;
+            if (/dirk bracke/.test(a)) return true;
+            if (/lord of the flies/.test(t)) return true;
+            if (/dwaallicht/.test(t)) return true;
+            if (/annet schaap/.test(a)) return true;
+            if (/the hate u give/.test(t)) return true;
+            if (/bart moeyaert/.test(a)) return true;
+            if (/peter van gestel/.test(a)) return true;
+            if (/edward van de vendel/.test(a)) return true;
+            if (t === 'vallen' && /anne provoost/.test(a)) return true;
+            if (/carry slee/.test(a)) return true;
+            if (/alleen met de goden/.test(t)) return true;
+            if (/george orwell/.test(a) || /^1984$/.test(t) || /animal farm/.test(t)) return true;
+            if (/mockingbird|spaar de spotvogel/.test(t)) return true;
+            if (/de engelenmaker/.test(t)) return true;
+            if (/oorlog en terpentijn/.test(t)) return true;
+            if (/^legend/.test(t) && /marie lu/.test(a)) return true;
+            return false;
         }
 
         // 1. BOEKEN INLADEN
@@ -1084,14 +1134,20 @@
                         const rawTags = (book.Tags || book.tags || '').trim();
                         const graad = (book.Graad || book.graad || '').trim();
                         const locatie = (book.Locatie || book.locatie || '').trim();
-                        const isbnRaw = (book.ISBN || book.isbn || (!book.cover?.startsWith('http') ? book.cover : '') || '').toString().trim();
+                        const isbnRaw = (book.ISBN || book.isbn || book.cover || '').toString().trim();
                         const isbn = isbnRaw.replace(/[^0-9X]/gi, '');
-                        const coverRaw = (book.Cover || (book.cover?.startsWith('http') ? book.cover : '') || book['Cover URL'] || book.Weblink || '').toString().trim();
                         const exemplaar = (book.Exemplaar || book.exemplaar || '').trim();
 
                         // Normaliseer en ontdubbel tags direct
                         const cleanTagList = rawTags.split(',').map(cleanRawTag).filter(Boolean);
                         const uniqueCleanTags = [...new Set(cleanTagList)];
+
+                        // Bekroond detectie
+                        const isAwarded = uniqueCleanTags.includes('bekroond') || (rawTags && rawTags.toLowerCase().includes('bekroond')) || isKnownAwardedBook(titel, auteur);
+                        if (isAwarded && !uniqueCleanTags.includes('bekroond')) {
+                            uniqueCleanTags.unshift('bekroond');
+                        }
+
                         const cleanTagsString = uniqueCleanTags.join(', ');
 
                         // Bepaal genres en thema's
@@ -1111,10 +1167,10 @@
                             rawTagList: uniqueCleanTags,
                             genres: bookGenres,
                             themes: bookThemes,
+                            isBekroond: isAwarded,
                             Graad: graad || 'Alle graden',
                             Locatie: locatie || 'Nederlandstalige fictie',
                             ISBN: isbn,
-                            Cover: coverRaw,
                             Exemplaar: exemplaar,
                             Taal: bepaalTaal(locatie)
                         };
@@ -1133,17 +1189,17 @@
                                 rawTagList: item.rawTagList,
                                 genres: item.genres,
                                 themes: item.themes,
+                                isBekroond: item.isBekroond,
                                 Graad: item.Graad,
                                 Locatie: item.Locatie,
                                 ISBN: item.ISBN,
-                                Cover: item.Cover,
                                 Taal: item.Taal,
                                 copies: []
                             });
                         }
                         const entry = bookMap.get(key);
                         if (!entry.ISBN && item.ISBN) entry.ISBN = item.ISBN;
-                        if (!entry.Cover && item.Cover) entry.Cover = item.Cover;
+                        if (!entry.isBekroond && item.isBekroond) entry.isBekroond = true;
                         if (!entry.Tags && item.Tags) {
                             entry.Tags = item.Tags;
                             entry.rawTagList = item.rawTagList;
@@ -1184,23 +1240,9 @@
         }
 
         // 2. COVERS
-        function getBookCoverUrl(book) {
-            if (!book) return null;
-            if (typeof book === 'object') {
-                if (book.Cover && book.Cover.startsWith('http')) return book.Cover;
-                const isbn = (book.ISBN || '').toString().replace(/[^0-9X]/gi, '');
-                if (isbn.length >= 9) {
-                    return `https://books.google.com/books/content?vid=isbn:${isbn}&printsec=frontcover&img=1&zoom=1`;
-                }
-            } else if (typeof book === 'string') {
-                const s = book.trim();
-                if (s.startsWith('http')) return s;
-                const isbn = s.replace(/[^0-9X]/gi, '');
-                if (isbn.length >= 9) {
-                    return `https://books.google.com/books/content?vid=isbn:${isbn}&printsec=frontcover&img=1&zoom=1`;
-                }
-            }
-            return null;
+        function getBookCoverUrl(isbn) {
+            if (!isbn || isbn.length < 9) return null;
+            return `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`;
         }
 
         const GRADIENTS = [
@@ -1227,7 +1269,7 @@
         }
 
         function renderCoverHtml(book) {
-            const coverUrl = getBookCoverUrl(book);
+            const coverUrl = getBookCoverUrl(book.ISBN);
             const gradient = getCoverGradient(book.Titel);
             const safeTitle = escapeHtml(book.Titel);
             const safeAuthor = escapeHtml(book.Auteur);
@@ -1239,14 +1281,15 @@
                         <img src="${coverUrl}" 
                              alt="${safeTitle}" 
                              loading="lazy" 
-                             referrerpolicy="no-referrer"
                              class="w-full h-full object-cover transition duration-300 group-hover:scale-105"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="w-full h-full p-4 flex flex-col justify-between items-center text-center text-white" 
                              style="display: none; background: ${gradient};">
                             <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider bg-white/20 backdrop-blur-xs px-2.5 py-0.5 rounded-full">${safeGraad}</span>
                             <div class="my-auto py-2">
-                                <div class="text-2xl sm:text-3xl mb-1">📖</div>
+                                <div class="text-white/70 mb-1 flex items-center justify-center">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                </div>
                                 <p class="font-extrabold text-xs sm:text-sm leading-snug line-clamp-3">${safeTitle}</p>
                             </div>
                             <p class="text-[10px] sm:text-[11px] font-medium text-white/90 truncate w-full">${safeAuthor}</p>
@@ -1371,53 +1414,78 @@
             const section = document.getElementById('featuredThemeSection');
             if (!section) return;
 
-            if (!featuredTheme.enabled) {
+            if (!featuredTheme || !featuredTheme.enabled) {
                 section.classList.add('hidden');
                 return;
             }
 
-            const badge = document.getElementById('featuredThemeBadge');
             const titleEl = document.getElementById('featuredThemeTitle');
             const descEl = document.getElementById('featuredThemeDesc');
 
-            titleEl.textContent = featuredTheme.title;
-            descEl.textContent = featuredTheme.description;
+            // Strip emoticons voor een rustige en droge redactionele stijl
+            const stripEmojis = (str) => (str || '').replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
 
-            if (featuredTheme.style === 'night') {
-                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 text-white shadow-md border border-slate-700/60';
-                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-coral-500 text-white shadow-xs';
-                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-white leading-snug';
-                descEl.className = 'text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl';
-            } else if (featuredTheme.style === 'coral') {
-                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-coral-500 via-coral-600 to-rose-700 text-white shadow-md';
-                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-white text-coral-700 shadow-xs';
-                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-white leading-snug';
-                descEl.className = 'text-xs sm:text-sm text-coral-100 mt-1 max-w-2xl';
-            } else if (featuredTheme.style === 'sunny') {
-                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-amber-50 via-yellow-100 to-amber-100 border border-amber-200 text-slate-900 shadow-sm';
-                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-amber-500 text-white';
-                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug';
-                descEl.className = 'text-xs sm:text-sm text-slate-700 mt-1 max-w-2xl';
-            } else {
-                section.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-brand-50 via-teal-100/60 to-brand-100/40 border border-brand-200 text-slate-900 shadow-sm';
-                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 bg-brand-600 text-white';
-                titleEl.className = 'text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug';
-                descEl.className = 'text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl';
+            if (titleEl) titleEl.textContent = stripEmojis(featuredTheme.title) || 'Thema in de kijker';
+            if (descEl) descEl.textContent = stripEmojis(featuredTheme.description) || '';
+
+            const targetTag = (featuredTheme.tag || 'spanning').toLowerCase().trim();
+            const matchingBooks = allBooks.filter(b => 
+                (b.Tags && b.Tags.toLowerCase().includes(targetTag)) ||
+                (b.rawTagList && b.rawTagList.some(t => t.includes(targetTag))) ||
+                (b.themes && b.themes.some(th => th.includes(targetTag)))
+            );
+
+            // 1. Kies 1 boek per graad bovenaan
+            const grade1Book = matchingBooks.find(b => b.Graad === 'Eerste graad') || allBooks.find(b => b.Graad === 'Eerste graad');
+            const grade2Book = matchingBooks.find(b => b.Graad === 'Tweede graad' && b !== grade1Book) || allBooks.find(b => b.Graad === 'Tweede graad' && b !== grade1Book);
+            const grade3Book = matchingBooks.find(b => b.Graad === 'Derde graad' && b !== grade1Book && b !== grade2Book) || allBooks.find(b => b.Graad === 'Derde graad' && b !== grade1Book && b !== grade2Book);
+
+            const gradePicks = [
+                { graad: '1ste graad (12-14j)', book: grade1Book },
+                { graad: '2de graad (14-16j)', book: grade2Book },
+                { graad: '3de graad (16+j)', book: grade3Book }
+            ].filter(p => p.book);
+
+            const gradeContainer = document.getElementById('featuredGradePicks');
+            if (gradeContainer) {
+                gradeContainer.innerHTML = '';
+                gradePicks.forEach(({ graad, book }) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-2xl p-3 border border-slate-200/80 shadow-2xs flex gap-3.5 items-center cursor-pointer hover:border-brand-300 transition group';
+                    card.onclick = () => openBookDetailModal(book);
+                    card.innerHTML = `
+                        <div class="w-16 h-24 shrink-0 rounded-xl overflow-hidden shadow-2xs relative bg-slate-100">
+                            ${renderCoverHtml(book)}
+                        </div>
+                        <div class="min-w-0 flex-grow">
+                            <span class="text-[10px] font-black uppercase text-brand-700 bg-brand-50 px-2 py-0.5 rounded-md inline-block mb-1">${escapeHtml(graad)}</span>
+                            <h5 class="text-xs font-extrabold text-slate-900 truncate group-hover:text-brand-600 transition" title="${escapeHtml(book.Titel)}">${escapeHtml(book.Titel)}</h5>
+                            <p class="text-[11px] text-slate-500 truncate mb-2">${escapeHtml(book.Auteur)}</p>
+                            <span class="text-[10px] font-bold text-brand-600 hover:text-brand-700">Bekijk details →</span>
+                        </div>
+                    `;
+                    gradeContainer.appendChild(card);
+                });
             }
 
-            const targetTag = (featuredTheme.tag || 'spanning').toLowerCase();
-            const matchingBooks = allBooks.filter(b => b.Tags && b.Tags.toLowerCase().includes(targetTag)).slice(0, 12);
+            // 2. Overige boeken scrollbaar, met een maximum van 8 boeken in totaal
+            const pickedIds = new Set(gradePicks.map(p => p.book.id));
+            const remainingAllowed = Math.max(0, 8 - gradePicks.length);
+            const remainingBooks = matchingBooks.filter(b => !pickedIds.has(b.id)).slice(0, remainingAllowed);
 
             const carousel = document.getElementById('featuredBooksCarousel');
-            carousel.innerHTML = '';
-
-            if (matchingBooks.length === 0) {
-                carousel.innerHTML = `<p class="text-xs text-slate-400 py-3 italic">Geen boeken gevonden met het thema "${escapeHtml(targetTag)}".</p>`;
-            } else {
-                matchingBooks.forEach(book => {
-                    const card = createMiniBookCard(book, featuredTheme.style === 'night');
-                    carousel.appendChild(card);
-                });
+            const moreContainer = document.getElementById('featuredMoreContainer');
+            if (carousel && moreContainer) {
+                carousel.innerHTML = '';
+                if (remainingBooks.length === 0) {
+                    moreContainer.classList.add('hidden');
+                } else {
+                    moreContainer.classList.remove('hidden');
+                    remainingBooks.forEach(book => {
+                        const card = createMiniBookCard(book, false);
+                        carousel.appendChild(card);
+                    });
+                }
             }
 
             section.classList.remove('hidden');
@@ -1433,7 +1501,7 @@
                     ${renderCoverHtml(book)}
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition flex items-center justify-center">
                         <span class="opacity-0 group-hover:opacity-100 transition bg-white/95 text-slate-800 text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-sm">
-                            Achterflap 📖
+                            Achterflap
                         </span>
                     </div>
                 </div>
@@ -1459,7 +1527,7 @@
                 const card = createMiniBookCard(book, false);
                 const label = document.createElement('span');
                 label.className = 'absolute top-2 left-2 text-[9px] font-black uppercase tracking-wider bg-coral-500 text-white px-2 py-0.5 rounded-full shadow-xs z-10';
-                label.textContent = 'Nieuw ✨';
+                label.textContent = 'Nieuw';
                 card.querySelector('.relative').appendChild(label);
 
                 carousel.appendChild(card);
@@ -1523,10 +1591,9 @@
         // 7. DROPDOWN FILTERBALK (BOEKENZOEKER STIJL)
         function initDropdownMenus() {
             const dropdownConfigs = [
-                { btnId: 'btnDropdownGenre', menuId: 'menuGenre' },
-                { btnId: 'btnDropdownThema', menuId: 'menuThema' },
-                { btnId: 'btnDropdownLeeftijd', menuId: 'menuLeeftijd' },
                 { btnId: 'btnDropdownTaal', menuId: 'menuTaal' },
+                { btnId: 'btnDropdownLeeftijd', menuId: 'menuLeeftijd' },
+                { btnId: 'btnDropdownThema', menuId: 'menuThema' },
                 { btnId: 'btnDropdownBeschikbaar', menuId: 'menuBeschikbaar' }
             ];
 
@@ -1562,19 +1629,6 @@
                 if (e.key === 'Escape') closeAllDropdowns();
             });
 
-            // Genre zoekbalk
-            const genreSearchInput = document.getElementById('filterGenreSearch');
-            if (genreSearchInput) {
-                genreSearchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase().trim();
-                    const genreLabels = document.querySelectorAll('#genreCheckboxes label');
-                    genreLabels.forEach(label => {
-                        const text = label.textContent.toLowerCase();
-                        label.style.display = text.includes(query) ? 'flex' : 'none';
-                    });
-                });
-            }
-
             // Thema zoekbalk in thema dropdown
             const tagSearchInput = document.getElementById('filterTagSearch');
             if (tagSearchInput) {
@@ -1592,6 +1646,21 @@
             const resetBtn = document.getElementById('resetFilters');
             if (resetBtn) {
                 resetBtn.addEventListener('click', resetCatalogFilters);
+            }
+
+            // Scrollknoppen voor standaard 10-boeken catalogus carrousel
+            const btnCatLeft = document.getElementById('btnScrollCatalogLeft');
+            const btnCatRight = document.getElementById('btnScrollCatalogRight');
+            const catCarousel = document.getElementById('catalogDefaultCarousel');
+            if (btnCatLeft && catCarousel) {
+                btnCatLeft.addEventListener('click', () => {
+                    catCarousel.scrollBy({ left: -320, behavior: 'smooth' });
+                });
+            }
+            if (btnCatRight && catCarousel) {
+                btnCatRight.addEventListener('click', () => {
+                    catCarousel.scrollBy({ left: 320, behavior: 'smooth' });
+                });
             }
         }
 
@@ -1622,7 +1691,7 @@
             }
         }
 
-        function renderActiveFilterTags(genres, themas, leeftijden, talen, beschikbaar) {
+        function renderActiveFilterTags(genres, themas, leeftijden, talen, beschikbaar, isBekroondActive) {
             const bar = document.getElementById('activeFilterTagsBar');
             const list = document.getElementById('activeFilterTagsList');
             if (!bar || !list) return;
@@ -1630,17 +1699,22 @@
             list.innerHTML = '';
             let total = 0;
 
+            if (isBekroondActive) {
+                total++;
+                list.appendChild(createFilterChip('Bekroonde boeken', 'filterBekroond', '1'));
+            }
+
             genres.forEach(val => {
                 total++;
                 const gObj = GENRE_DEFINITIONS.find(g => g.id === val);
-                const lbl = gObj ? `${gObj.icon} ${gObj.label}` : val;
+                const lbl = gObj ? gObj.label : val;
                 list.appendChild(createFilterChip(`Genre: ${lbl}`, 'genre', val));
             });
 
             themas.forEach(val => {
                 total++;
                 const thObj = THEMA_DEFINITIONS.find(t => t.id === val);
-                const lbl = thObj ? `${thObj.icon} ${thObj.label}` : val;
+                const lbl = thObj ? thObj.label : val;
                 list.appendChild(createFilterChip(`Thema: ${lbl}`, 'tag', val));
             });
 
@@ -1750,38 +1824,19 @@
         }
 
         function initFilters() {
-            // 1. Filter op Genre
-            const genreContainer = document.getElementById('genreCheckboxes');
-            if (genreContainer) {
-                genreContainer.innerHTML = '';
-                GENRE_DEFINITIONS.forEach(g => {
-                    const count = allBooks.filter(b => b.genres && b.genres.includes(g.id)).length;
-                    if (count > 0) {
-                        genreContainer.innerHTML += `
-                            <label class="flex items-center justify-between gap-2 text-xs text-slate-600 cursor-pointer hover:text-slate-900 font-medium py-1 px-1.5 rounded-xl hover:bg-slate-50 transition">
-                                <div class="flex items-center gap-2">
-                                    <input type="checkbox" name="genre" value="${escapeHtml(g.id)}" class="custom-checkbox filter-input rounded-md">
-                                    <span>${g.icon} ${escapeHtml(g.label)}</span>
-                                </div>
-                                <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">${count}</span>
-                            </label>
-                        `;
-                    }
-                });
-            }
-
-            // 2. Filter op Thema
+            // 1. Filter op Thema (alfabetisch A-Z gesorteerd)
             const tagContainer = document.getElementById('tagCheckboxes');
             if (tagContainer) {
                 tagContainer.innerHTML = '';
-                THEMA_DEFINITIONS.forEach(th => {
+                const sortedThemas = [...THEMA_DEFINITIONS].sort((a, b) => a.label.localeCompare(b.label, 'nl'));
+                sortedThemas.forEach(th => {
                     const count = allBooks.filter(b => b.themes && b.themes.includes(th.id)).length;
                     if (count > 0) {
                         tagContainer.innerHTML += `
                             <label class="flex items-center justify-between gap-2 text-xs text-slate-600 cursor-pointer hover:text-slate-900 font-medium py-1 px-1.5 rounded-xl hover:bg-slate-50 transition">
                                 <div class="flex items-center gap-2">
                                     <input type="checkbox" name="tag" value="${escapeHtml(th.id)}" class="custom-checkbox filter-input rounded-md">
-                                    <span>${th.icon} ${escapeHtml(th.label)}</span>
+                                    <span>${escapeHtml(th.label)}</span>
                                 </div>
                                 <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">${count}</span>
                             </label>
@@ -1789,7 +1844,8 @@
                     }
                 });
 
-                // Zoek naar eventuele extra unieke thema's die niet in de standaard lijst zitten
+                // Zoek naar eventuele extra unieke thema's die niet in de standaard lijst zitten (ook A-Z)
+                const specialTags = new Set(['vertaling', 'bekroond', 'drama', 'fictie', 'inspirerend']);
                 const knownKeywords = new Set([
                     ...GENRE_DEFINITIONS.flatMap(g => g.keywords),
                     ...THEMA_DEFINITIONS.flatMap(th => th.keywords)
@@ -1797,20 +1853,20 @@
                 const extraTags = new Set();
                 allBooks.forEach(b => {
                     (b.rawTagList || []).forEach(t => {
-                        if (!knownKeywords.has(t) && t.length > 2) {
+                        if (!specialTags.has(t) && !knownKeywords.has(t) && t.length > 2) {
                             extraTags.add(t);
                         }
                     });
                 });
                 if (extraTags.size > 0) {
-                    Array.from(extraTags).sort().forEach(t => {
+                    Array.from(extraTags).sort((a, b) => a.localeCompare(b, 'nl')).forEach(t => {
                         const count = allBooks.filter(b => b.rawTagList && b.rawTagList.includes(t)).length;
                         if (count > 0) {
                             tagContainer.innerHTML += `
                                 <label class="flex items-center justify-between gap-2 text-xs text-slate-600 cursor-pointer hover:text-slate-900 font-medium py-1 px-1.5 rounded-xl hover:bg-slate-50 transition">
                                     <div class="flex items-center gap-2">
                                         <input type="checkbox" name="tag" value="${escapeHtml(t)}" class="custom-checkbox filter-input rounded-md">
-                                        <span class="capitalize">🏷️ ${escapeHtml(t)}</span>
+                                        <span class="capitalize">${escapeHtml(t)}</span>
                                     </div>
                                     <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">${count}</span>
                                 </label>
@@ -1820,14 +1876,22 @@
                 }
             }
 
-            // 3. Filter op Leeftijd (vriendelijke labels op basis van graad)
+            // 2. Filter op Leeftijd: strikt gesorteerd van jong naar oud
+            const orderLeeftijd = ['Eerste graad', 'Tweede graad', 'Derde graad', 'Alle graden'];
             const leeftijdLabels = {
                 'Eerste graad': '12 - 14 jaar (1ste graad)',
                 'Tweede graad': '14 - 16 jaar (2de graad)',
                 'Derde graad': '16+ jaar (3de graad)',
                 'Alle graden': 'Alle leeftijden'
             };
-            const graden = [...new Set(allBooks.map(b => b.Graad))].filter(Boolean).sort();
+            const graden = [...new Set(allBooks.map(b => b.Graad))].filter(Boolean).sort((a, b) => {
+                let iA = orderLeeftijd.indexOf(a);
+                let iB = orderLeeftijd.indexOf(b);
+                if (iA === -1) iA = 99;
+                if (iB === -1) iB = 99;
+                return iA - iB;
+            });
+
             const leeftijdContainer = document.getElementById('leeftijdCheckboxes');
             if (leeftijdContainer) {
                 leeftijdContainer.innerHTML = '';
@@ -1842,8 +1906,8 @@
                 });
             }
 
-            // 4. Filter op Taal
-            const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort();
+            // 3. Filter op Taal (alfabetisch A-Z)
+            const talen = [...new Set(allBooks.map(b => b.Taal))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'nl'));
             const taalContainer = document.getElementById('taalCheckboxes');
             if (taalContainer) {
                 taalContainer.innerHTML = '';
@@ -1857,35 +1921,70 @@
                 });
             }
 
-            // 5. Beschikbaarheid & alle checkbox listeners koppelen
+            // 4. Beschikbaarheid & alle checkbox listeners koppelen
             document.querySelectorAll('.filter-input').forEach(input => {
                 input.onchange = filterAndRender;
             });
         }
 
         function filterAndRender() {
-            const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(cb => cb.value);
             const selectedThemes = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
             const selectedLeeftijd = Array.from(document.querySelectorAll('input[name="leeftijd"]:checked')).map(cb => cb.value);
             const selectedTalen = Array.from(document.querySelectorAll('input[name="taal"]:checked')).map(cb => cb.value);
             const selectedBeschikbaar = Array.from(document.querySelectorAll('input[name="beschikbaar"]:checked')).map(cb => cb.value);
+            const filterBekroondChecked = !!document.querySelector('input[name="filterBekroond"]:checked');
+
+            const isBekroondActive = activeQuickFilter === 'bekroond' || filterBekroondChecked;
 
             // Update dropdown knoppen (teller-badges & actieve ring)
-            updateDropdownButtonState('btnDropdownGenre', 'badgeGenreCount', selectedGenres.length);
             updateDropdownButtonState('btnDropdownThema', 'badgeThemaCount', selectedThemes.length);
             updateDropdownButtonState('btnDropdownLeeftijd', 'badgeLeeftijdCount', selectedLeeftijd.length);
             updateDropdownButtonState('btnDropdownTaal', 'badgeTaalCount', selectedTalen.length);
             updateDropdownButtonState('btnDropdownBeschikbaar', 'badgeBeschikbaarCount', selectedBeschikbaar.length);
 
             // Render actieve filter chips onder de dropdowns
-            renderActiveFilterTags(selectedGenres, selectedThemes, selectedLeeftijd, selectedTalen, selectedBeschikbaar);
+            renderActiveFilterTags([], selectedThemes, selectedLeeftijd, selectedTalen, selectedBeschikbaar, isBekroondActive);
+
+            const isFiltering = (
+                selectedThemes.length > 0 ||
+                selectedLeeftijd.length > 0 ||
+                selectedTalen.length > 0 ||
+                selectedBeschikbaar.length > 0 ||
+                searchQuery.trim() !== '' ||
+                activeQuickFilter !== 'all' ||
+                isBekroondActive ||
+                currentSort !== 'default'
+            );
 
             // Toon/verberg de "Wis filters" knop
             const resetBtn = document.getElementById('resetFilters');
             if (resetBtn) {
-                const hasActive = selectedGenres.length > 0 || selectedThemes.length > 0 || selectedTalen.length > 0 || selectedLeeftijd.length > 0 || selectedBeschikbaar.length > 0 || searchQuery !== '' || activeQuickFilter !== 'all';
-                resetBtn.classList.toggle('hidden', !hasActive);
+                resetBtn.classList.toggle('hidden', !isFiltering);
             }
+
+            const defaultCarouselSection = document.getElementById('catalogDefaultCarouselSection');
+            const gridSection = document.getElementById('catalogGridSection');
+            const defaultCarousel = document.getElementById('catalogDefaultCarousel');
+
+            if (!isFiltering) {
+                // Standaard weergave: enkel 1 rij met 10 boeken en pijltjessysteem
+                if (defaultCarouselSection) defaultCarouselSection.classList.remove('hidden');
+                if (gridSection) gridSection.classList.add('hidden');
+
+                if (defaultCarousel) {
+                    defaultCarousel.innerHTML = '';
+                    const tenBooks = allBooks.slice(0, 10);
+                    tenBooks.forEach(book => {
+                        const card = createMiniBookCard(book, false);
+                        defaultCarousel.appendChild(card);
+                    });
+                }
+                return;
+            }
+
+            // Zoeken of filteren actief: toon het volledige zoekraster
+            if (defaultCarouselSection) defaultCarouselSection.classList.add('hidden');
+            if (gridSection) gridSection.classList.remove('hidden');
 
             let filtered = allBooks.filter(book => {
                 const q = searchQuery.toLowerCase();
@@ -1897,11 +1996,6 @@
                 
                 const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
                 const matchLeeftijd = selectedLeeftijd.length === 0 || selectedLeeftijd.includes(book.Graad);
-                
-                let matchGenre = true;
-                if (selectedGenres.length > 0) {
-                    matchGenre = selectedGenres.some(gId => book.genres && book.genres.includes(gId));
-                }
 
                 let matchThema = true;
                 if (selectedThemes.length > 0) {
@@ -1913,7 +2007,6 @@
                 }
 
                 let matchBeschikbaar = true;
-                const isLoaned = isBookLoanedOut(book.Titel);
                 if (selectedBeschikbaar.length === 1) {
                     const bAvail = getBookAvailability(book);
                     if (selectedBeschikbaar.includes('available')) {
@@ -1921,6 +2014,11 @@
                     } else if (selectedBeschikbaar.includes('loaned')) {
                         matchBeschikbaar = bAvail.loaned > 0;
                     }
+                }
+
+                let matchBekroond = true;
+                if (isBekroondActive) {
+                    matchBekroond = !!book.isBekroond;
                 }
 
                 let matchQuick = true;
@@ -1933,7 +2031,7 @@
                     matchQuick = book.id > (allBooks.length - 25);
                 }
 
-                return matchSearch && matchTaal && matchLeeftijd && matchGenre && matchThema && matchBeschikbaar && matchQuick;
+                return matchSearch && matchTaal && matchLeeftijd && matchThema && matchBeschikbaar && matchBekroond && matchQuick;
             });
 
             if (currentSort === 'rating-desc') {
@@ -1945,12 +2043,14 @@
             }
 
             const feedbackEl = document.getElementById('activeFilterFeedback');
-            if (activeQuickFilter === 'top-rated') {
-                feedbackEl.textContent = '⭐ Gefilterd op: Hoogst beoordeelde boeken door leerlingen (4+ sterren)';
+            if (activeQuickFilter === 'bekroond') {
+                feedbackEl.textContent = 'Gefilterd op: Bekroonde boeken in onze schoolbib';
+            } else if (activeQuickFilter === 'top-rated') {
+                feedbackEl.textContent = 'Gefilterd op: Hoogst beoordeelde boeken (4+ sterren)';
             } else if (activeQuickFilter === 'my-favorites') {
-                feedbackEl.textContent = `❤️ Mijn bewaarde favorieten (${favoritesList.length} boeken)`;
+                feedbackEl.textContent = `Mijn bewaarde favorieten (${favoritesList.length} boeken)`;
             } else if (activeQuickFilter === 'new-books') {
-                feedbackEl.textContent = '✨ Gefilterd op: Recent toegevoegde boeken in de schoolbib';
+                feedbackEl.textContent = 'Gefilterd op: Recent toegevoegd in de schoolbib';
             } else if (searchQuery) {
                 feedbackEl.textContent = `Zoekresultaten voor "${escapeHtml(searchQuery)}"`;
             } else {
@@ -1965,7 +2065,7 @@
             if (filtered.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full py-16 text-center text-slate-400 bg-white rounded-3xl border border-slate-200/80 p-8">
-                        <div class="text-4xl mb-2">🔍</div>
+                        <div class="w-12 h-12 mx-auto mb-2 text-slate-300 flex items-center justify-center"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
                         <p class="text-base font-extrabold text-slate-800">Geen boeken gevonden</p>
                         <p class="text-xs sm:text-sm mt-1 max-w-sm mx-auto text-slate-500">
                             ${activeQuickFilter === 'my-favorites' 
@@ -2026,17 +2126,20 @@
                                     ${escapeHtml(book.Graad)}
                                 </span>
                                 ${statusBadgeHtml}
+                                ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-xs">Bekroond</span>' : ''}
                             </div>
 
                             <button onclick="event.stopPropagation(); toggleCardFavorite('${escapeHtml(book.Titel)}')" 
                                     class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs hover:bg-white text-coral-500 flex items-center justify-center text-sm shadow-xs transition hover:scale-110"
                                     title="Opslaan in favorieten">
-                                ${isFav ? '❤️' : '🤍'}
+                                ${isFav 
+                                    ? '<svg class="w-4 h-4 fill-coral-500 text-coral-500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' 
+                                    : '<svg class="w-4 h-4 text-slate-400 hover:text-coral-500 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>'}
                             </button>
 
                             <div class="absolute inset-0 bg-brand-900/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center pointer-events-none">
                                 <span class="bg-white/95 backdrop-blur-xs text-brand-700 text-xs font-black uppercase px-3 py-1.5 rounded-xl shadow-md">
-                                    Achterflap 📖
+                                    Achterflap
                                 </span>
                             </div>
                         </div>
@@ -2141,32 +2244,36 @@
             document.getElementById('modalIsbn').textContent = book.ISBN ? `#${book.ISBN}` : 'Geen ISBN geregistreerd';
             document.getElementById('modalRatingFeedback').classList.add('hidden');
 
+            const bekroondBadge = document.getElementById('modalBekroondBadge');
+            if (bekroondBadge) bekroondBadge.classList.toggle('hidden', !book.isBekroond);
+
+
             const avail = getBookAvailability(book);
             const availEl = document.getElementById('modalAvailability');
             if (availEl) {
                 if (avail.total === 1) {
                     if (avail.available > 0) {
-                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 inline-flex items-center gap-1.5';
-                        availEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Aanwezig in de bib</span>';
+                        availEl.className = 'text-xs font-bold px-3 py-1.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 inline-block';
+                        availEl.textContent = 'Aanwezig in de bib';
                     } else {
-                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-rose-50 border-rose-200 text-rose-800 inline-flex items-center gap-1.5';
-                        availEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Momenteel uitgeleend</span>';
+                        availEl.className = 'text-xs font-bold px-3 py-1.5 rounded-xl border bg-rose-50 border-rose-200 text-rose-800 inline-block';
+                        availEl.textContent = 'Momenteel uitgeleend';
                     }
                 } else {
                     if (avail.isFullyAvailable) {
-                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 inline-flex items-center gap-1.5';
-                        availEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Alle ${avail.total} exemplaren aanwezig</span>`;
+                        availEl.className = 'text-xs font-bold px-3 py-1.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 inline-block';
+                        availEl.textContent = `Alle ${avail.total} exemplaren aanwezig`;
                     } else if (avail.isPartiallyAvailable) {
-                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-amber-50 border-amber-200 text-amber-800 inline-flex items-center gap-1.5';
-                        availEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>${avail.available} van de ${avail.total} exemplaren aanwezig (${avail.loaned} ontleend)</span>`;
+                        availEl.className = 'text-xs font-bold px-3 py-1.5 rounded-xl border bg-amber-50 border-amber-200 text-amber-800 inline-block';
+                        availEl.textContent = `${avail.available} van de ${avail.total} aanwezig (${avail.loaned} ontleend)`;
                     } else {
-                        availEl.className = 'text-xs font-bold px-3 py-2 rounded-xl border bg-rose-50 border-rose-200 text-rose-800 inline-flex items-center gap-1.5';
-                        availEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Alle ${avail.total} exemplaren momenteel uitgeleend</span>`;
+                        availEl.className = 'text-xs font-bold px-3 py-1.5 rounded-xl border bg-rose-50 border-rose-200 text-rose-800 inline-block';
+                        availEl.textContent = `Alle ${avail.total} exemplaren uitgeleend`;
                     }
                 }
             }
 
-            // Exemplaren lijst vullen in de modal
+            // Exemplaren lijst vullen in de modal (rustig en zonder icoontjes)
             const copiesListEl = document.getElementById('modalCopiesList');
             const copiesBadgeEl = document.getElementById('modalCopiesBadge');
             if (copiesListEl && copiesBadgeEl) {
@@ -2179,23 +2286,22 @@
                     const loanInfo = getCopyLoanInfo(book.Titel, c.copyLabel, c.copyId);
 
                     const div = document.createElement('div');
-                    div.className = `p-2.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${isLent ? 'bg-rose-50/70 border-rose-200 text-rose-900' : 'bg-white border-brand-100 text-slate-800'}`;
+                    div.className = `p-2.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${isLent ? 'bg-rose-50/70 border-rose-200 text-rose-900' : 'bg-white border-slate-200 text-slate-800'}`;
                     
                     div.innerHTML = `
                         <div class="flex items-center gap-2">
-                            <span class="font-extrabold text-xs text-brand-900">${escapeHtml(c.copyLabel || ('Exemplaar ' + (idx + 1)))}:</span>
-                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200/80">
-                                ðŸ“ Locatie: <strong>${escapeHtml(c.locatie || 'Bibliotheek')}</strong>
+                            <span class="font-bold text-xs text-slate-800">${escapeHtml(c.copyLabel || ('Exemplaar ' + (idx + 1)))}:</span>
+                            <span class="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200/80">
+                                Locatie: ${escapeHtml(c.locatie || 'Bibliotheek')}
                             </span>
                         </div>
                         <div>
                             ${isLent 
-                                ? `<span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-rose-600 bg-rose-100/70 px-2.5 py-1 rounded-lg">
-                                    <span>ðŸ”´ Uitgeleend aan ${escapeHtml(loanInfo ? loanInfo.klas : '')}</span>
-                                    <span class="text-[10px] text-rose-500 font-medium">(terug: ${loanInfo ? loanInfo.dueDate : ''})</span>
+                                ? `<span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200">
+                                    Uitgeleend aan ${escapeHtml(loanInfo ? loanInfo.klas : '')} (terug: ${loanInfo ? loanInfo.dueDate : ''})
                                    </span>`
-                                : `<span class="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-                                    <span>ðŸŸ¢ Aanwezig in rek</span>
+                                : `<span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                                    Aanwezig in rek
                                    </span>`}
                         </div>
                     `;
@@ -2232,8 +2338,6 @@
             const boekenzoekerSearchQuery = encodeURIComponent(`${book.Titel} ${book.Auteur}`);
             boekenzoekerBtn.href = `https://www.boekenzoeker.be/zoek?q=${boekenzoekerSearchQuery}`;
 
-            fetchBookSynopsis(book);
-
             modal.showModal();
         }
 
@@ -2257,49 +2361,13 @@
             const label = document.getElementById('modalFavLabel');
 
             if (isFav) {
-                btn.className = 'w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 bg-coral-50 border-coral-200 text-coral-600 hover:bg-coral-100';
-                icon.textContent = '❤️';
+                btn.className = 'w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 bg-coral-50 border border-coral-200 text-coral-600 hover:bg-coral-100';
+                icon.innerHTML = '<svg class="w-4 h-4 fill-coral-500 text-coral-500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
                 label.textContent = 'Bewaard in mijn favorieten';
             } else {
-                btn.className = 'w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 bg-slate-50 border-slate-200 text-slate-700 hover:bg-coral-50 hover:text-coral-600';
-                icon.textContent = '🤍';
+                btn.className = 'w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:bg-coral-50 hover:text-coral-600';
+                icon.innerHTML = '<svg class="w-4 h-4 text-slate-400 hover:text-coral-500 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
                 label.textContent = 'Toevoegen aan mijn favorieten';
-            }
-        }
-
-        async function fetchBookSynopsis(book) {
-            const synopsisEl = document.getElementById('modalSynopsis');
-            synopsisEl.textContent = 'Bezig met het ophalen van de achterflap...';
-
-            if (!book.ISBN && !book.Titel) {
-                synopsisEl.textContent = 'Geen achterflaptekst beschikbaar voor dit boek.';
-                return;
-            }
-
-            try {
-                const q = book.ISBN ? `isbn:${book.ISBN}` : `intitle:${encodeURIComponent(book.Titel)}+inauthor:${encodeURIComponent(book.Auteur)}`;
-                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}`);
-                const data = await res.json();
-
-                if (data.items && data.items.length > 0 && data.items[0].volumeInfo) {
-                    const info = data.items[0].volumeInfo;
-                    if (info.description) {
-                        const cleanDesc = info.description.replace(/<[^>]*>?/gm, '');
-                        synopsisEl.textContent = cleanDesc;
-                        return;
-                    }
-                }
-
-                synopsisEl.innerHTML = `
-                    Dit boek staat geregistreerd in onze schoolbibliotheek onder de categorie <strong>${escapeHtml(book.Locatie)}</strong> 
-                    en is geschikt voor de <strong>${escapeHtml(book.Graad)}</strong>.<br><br>
-                    Wil je de volledige samenvatting, leestips of recensies bekijken? Klik dan hieronder op de oranje knop om dit boek meteen te openen op <strong>Boekenzoeker.be</strong>!
-                `;
-            } catch (err) {
-                synopsisEl.innerHTML = `
-                    Dit boek staat geregistreerd in de schoolbibliotheek voor de <strong>${escapeHtml(book.Graad)}</strong>.<br><br>
-                    Bekijk meer informatie en leestips rechtstreeks op <strong>Boekenzoeker.be</strong> via de knop hieronder!
-                `;
             }
         }
 
@@ -2399,54 +2467,62 @@
             const statusBox = document.getElementById('addBookStatus');
             const submitBtn = document.getElementById('btnAddBookSubmit');
 
-            // Admin chips voor Genre en Thema
+            // Admin chips voor Genre, Thema en Kenmerken (text-only, zonder icoontjes)
             const ADMIN_GENRES = [
-                { id: 'young adult', label: '📖 Young Adult' },
-                { id: 'graphic novel', label: '🎨 Graphic Novel' },
-                { id: 'spanning', label: '🔍 Spanning & Thriller' },
-                { id: 'detective', label: '🕵️ Detective' },
-                { id: 'fantasy', label: '🐉 Fantasy' },
-                { id: 'sciencefiction', label: '🚀 Sciencefiction' },
-                { id: 'historisch', label: '⏳ Historische fictie' },
-                { id: 'romance', label: '💘 Romantiek' },
-                { id: 'humor', label: '😂 Humor' },
-                { id: 'coming of age', label: '🌱 Coming of Age' },
-                { id: 'non fictie', label: '💡 Non-fictie' },
-                { id: 'biografie', label: '👤 Biografie' },
-                { id: 'poëzie', label: '✒️ Poëzie' },
-                { id: 'toneelstuk', label: '🎭 Toneel' }
+                { id: 'young adult', label: 'Young Adult' },
+                { id: 'graphic novel', label: 'Graphic Novel' },
+                { id: 'spanning', label: 'Spanning & Thriller' },
+                { id: 'detective', label: 'Detective' },
+                { id: 'actie', label: 'Actie & Avontuur' },
+                { id: 'horror', label: 'Horror & Griezelen' },
+                { id: 'dark academia', label: 'Dark Academia' },
+                { id: 'fantasy', label: 'Fantasy' },
+                { id: 'sciencefiction', label: 'Sciencefiction' },
+                { id: 'historisch', label: 'Historische fictie' },
+                { id: 'romance', label: 'Romantiek' },
+                { id: 'humor', label: 'Humor' },
+                { id: 'coming of age', label: 'Coming of Age' },
+                { id: 'non fictie', label: 'Non-fictie' },
+                { id: 'biografie', label: 'Biografie' },
+                { id: 'poëzie', label: 'Poëzie' },
+                { id: 'toneelstuk', label: 'Toneel' }
             ];
 
             const ADMIN_THEMAS = [
-                { id: 'vriendschap', label: '🤝 Vriendschap' },
-                { id: 'familie', label: '👨‍👩‍👧 Familie' },
-                { id: 'verlies', label: '💔 Verlies & Rouw' },
-                { id: 'migratie', label: '🌍 Migratie & Vluchten' },
-                { id: 'oorlog', label: '⚔️ Oorlog & Vrede' },
-                { id: 'identiteit', label: '🪞 Identiteit & Queer' },
-                { id: 'mental health', label: '🧠 Mentaal welzijn' },
-                { id: 'sport', label: '⚽ Sport' },
-                { id: 'school', label: '🎒 School & Pesten' },
-                { id: 'dieren', label: '🐾 Dieren' },
-                { id: 'natuur', label: '🌿 Natuur & Milieu' },
-                { id: 'politiek', label: '⚖️ Maatschappij' },
-                { id: 'kunst', label: '🏛️ Kunst & Cultuur' },
-                { id: 'muziek', label: '🎵 Muziek' },
-                { id: 'avontuur', label: '🧭 Avontuur' }
+                { id: 'vriendschap', label: 'Vriendschap' },
+                { id: 'familie', label: 'Familie' },
+                { id: 'verlies', label: 'Verlies & Rouw' },
+                { id: 'migratie', label: 'Migratie & Vluchten' },
+                { id: 'oorlog', label: 'Oorlog & Vrede' },
+                { id: 'identiteit', label: 'Identiteit & Queer' },
+                { id: 'mental health', label: 'Mentaal welzijn' },
+                { id: 'sport', label: 'Sport' },
+                { id: 'school', label: 'School & Pesten' },
+                { id: 'dieren', label: 'Dieren' },
+                { id: 'natuur', label: 'Natuur & Milieu' },
+                { id: 'politiek', label: 'Maatschappij' },
+                { id: 'kunst', label: 'Kunst & Cultuur' },
+                { id: 'muziek', label: 'Muziek' }
+            ];
+
+            const ADMIN_KENMERKEN = [
+                { id: 'bekroond', label: 'Bekroond boek' }
             ];
 
             const genreContainer = document.getElementById('adminGenreChips');
             const themaContainer = document.getElementById('adminThemaChips');
+            const kenmerkenContainer = document.getElementById('adminKenmerkenChips');
             const extraTagInput = document.getElementById('adminExtraTagInput');
             const tagsInput = document.getElementById('fTags');
 
             function syncAdminTags() {
                 const selectedGenres = Array.from(document.querySelectorAll('#adminGenreChips .admin-chip.active')).map(c => c.getAttribute('data-tag'));
                 const selectedThemas = Array.from(document.querySelectorAll('#adminThemaChips .admin-chip.active')).map(c => c.getAttribute('data-tag'));
+                const selectedKenmerken = Array.from(document.querySelectorAll('#adminKenmerkenChips .admin-chip.active')).map(c => c.getAttribute('data-tag'));
                 const extraVal = extraTagInput ? extraTagInput.value : '';
                 const extraList = extraVal.split(',').map(cleanRawTag).filter(Boolean);
 
-                const allCombined = [...new Set([...selectedGenres, ...selectedThemas, ...extraList])];
+                const allCombined = [...new Set([...selectedGenres, ...selectedThemas, ...selectedKenmerken, ...extraList])];
                 if (tagsInput) tagsInput.value = allCombined.join(', ');
             }
 
@@ -2500,6 +2576,19 @@
                     btn.textContent = th.label;
                     btn.addEventListener('click', () => toggleAdminChip(btn));
                     themaContainer.appendChild(btn);
+                });
+            }
+
+            if (kenmerkenContainer) {
+                kenmerkenContainer.innerHTML = '';
+                ADMIN_KENMERKEN.forEach(km => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'admin-chip px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition flex items-center gap-1 cursor-pointer';
+                    btn.setAttribute('data-tag', km.id);
+                    btn.textContent = km.label;
+                    btn.addEventListener('click', () => toggleAdminChip(btn));
+                    kenmerkenContainer.appendChild(btn);
                 });
             }
 
@@ -2905,9 +2994,9 @@
                 if (isLent) {
                     const loanInfo = getCopyLoanInfo(book.Titel, c.copyLabel, c.copyId);
                     opt.disabled = true;
-                    opt.textContent = `❌ ${c.copyLabel} (${c.locatie}) — Al uitgeleend aan ${loanInfo ? loanInfo.student : 'leerling'}`;
+                    opt.textContent = `${c.copyLabel} (${c.locatie}) — Al uitgeleend aan ${loanInfo ? loanInfo.student : 'leerling'}`;
                 } else {
-                    opt.textContent = `🟢 ${c.copyLabel} (${c.locatie}) — Beschikbaar`;
+                    opt.textContent = `${c.copyLabel} (${c.locatie}) — Beschikbaar`;
                     if (!hasAvailable) {
                         opt.selected = true;
                         hasAvailable = true;
@@ -2921,7 +3010,7 @@
                 warnOpt.value = "";
                 warnOpt.disabled = true;
                 warnOpt.selected = true;
-                warnOpt.textContent = "⚠️ Alle exemplaren van dit boek zijn momenteel uitgeleend!";
+                warnOpt.textContent = "Alle exemplaren van dit boek zijn momenteel uitgeleend!";
                 copySelect.prepend(warnOpt);
             }
         }
@@ -2972,7 +3061,7 @@
                 tr.className = 'hover:bg-slate-50 transition';
 
                 const copyInfoHtml = loan.copyLabel 
-                    ? `<span class="font-extrabold text-slate-800">${escapeHtml(loan.copyLabel)}</span> <span class="text-[10px] text-slate-500 block">📍 ${escapeHtml(loan.copyLoc || 'Bib')}</span>`
+                    ? `<span class="font-extrabold text-slate-800">${escapeHtml(loan.copyLabel)}</span> <span class="text-[10px] text-slate-500 block">Locatie: ${escapeHtml(loan.copyLoc || 'Bib')}</span>`
                     : `<span class="text-slate-500 italic">Exemplaar 1</span>`;
 
                 tr.innerHTML = `
