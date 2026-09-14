@@ -135,14 +135,8 @@
             <div class="hidden md:flex items-center gap-3">
                 <button id="btnDeskCatalog" class="nav-tab-btn active-nav px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm hover:bg-brand-700">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span>Boekenzoeker Bib</span>
+                    <span>Catalogus Bib</span>
                 </button>
-                <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" 
-                   class="px-3.5 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 border border-transparent hover:border-brand-200" 
-                   title="Open officiële Boekenzoeker.be website in nieuw scherm">
-                    <span>Naar Boekenzoeker.be</span>
-                    <span class="text-slate-400">↗</span>
-                </a>
                 <button id="btnDeskAdmin" class="nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-coral-50 hover:text-coral-700 border border-slate-200">
                     <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     <span>Beheerder</span>
@@ -168,7 +162,7 @@
                     Vind je volgende boek in onze schoolbib!
                 </h2>
                 <p class="text-sm sm:text-base text-brand-50 font-medium mb-6 leading-relaxed">
-                    Dit is de catalogus van onze schoolbib. We helpen je graag bij het kiezen van je volgende boek en tonen wat er allemaal aanwezig is in onze bib. Klik op een cover voor de achterflap of geef sterren. Voor uitgebreide leestips en inspiratie kun je ook altijd terecht op <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" class="underline font-bold text-white hover:text-sunny-300">Boekenzoeker.be ↗</a>.
+                    Dit is de catalogus van onze schoolbib. We helpen je graag bij het kiezen van je volgende boek en tonen wat er allemaal aanwezig is in onze bib. Klik op een boek voor meer informatie, geef sterren of bekijk reviews en achterflappen via Goodreads.
                 </p>
 
                 <!-- Hoofd Zoekbalk in de Hero -->
@@ -455,17 +449,14 @@
                 </div>
             </div>
 
-            <!-- Modal Footer (geen ISBN) -->
-            <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-end gap-2.5">
-                <a id="btnOpenGoodreads" href="#" target="_blank" rel="noopener noreferrer" 
-                   class="w-full sm:w-auto bg-[#382110] hover:bg-[#2b180a] text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 hidden">
-                    <span>Goodreads ↗</span>
-                </a>
-                <a id="btnOpenBoekenzoeker" href="#" target="_blank" rel="noopener noreferrer" 
-                   class="w-full sm:w-auto bg-coral-500 hover:bg-coral-600 text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2">
+            <!-- Modal Footer: Enkel Goodreads knop -->
+            <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
+                <a id="btnOpenGoodreads" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"
+                   class="w-full sm:w-auto bg-[#382110] hover:bg-[#2b180a] text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2"
+                   title="Bekijk achterflap en recensies op Goodreads">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span>Achterflap op Boekenzoeker.be</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    <span>Bekijk op Goodreads</span>
+                    <svg class="w-4 h-4 text-amber-200/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
             </div>
 
@@ -779,7 +770,7 @@
                             <input type="hidden" id="fTags" value="">
 
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">ISBN / Barcode (voor coverafbeelding en Boekenzoeker)</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">ISBN / Barcode (voor coverafbeelding en Goodreads)</label>
                                 <input type="text" id="fIsbn" placeholder="Bijv. 9789028241254" 
                                        class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                             </div>
@@ -936,7 +927,7 @@
                 <img src="logo.jpg" alt="Logo Boekenbende" class="w-6 h-6 rounded-lg object-cover">
                 <span class="font-bold text-slate-700">&copy; 2026 Boekenbende Sint-Pieters</span>
             </div>
-            <p>Met zorg gemaakt voor onze leerlingen • Laatste update: september 2026 • Geïnspireerd op <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Boekenzoeker.be ↗</a></p>
+            <p>Met zorg gemaakt voor onze leerlingen • Schoolbibliotheek Don Bosco Gent (Campus Sint-Pieters) • Laatste update: september 2026</p>
         </div>
     </footer>
 
@@ -2649,18 +2640,16 @@
 
             updateModalFavState();
 
-            const boekenzoekerBtn = document.getElementById('btnOpenBoekenzoeker');
-            const boekenzoekerSearchQuery = encodeURIComponent(`${book.Titel} ${book.Auteur}`);
-            boekenzoekerBtn.href = `https://www.boekenzoeker.be/zoek?q=${boekenzoekerSearchQuery}`;
-
             const goodreadsBtn = document.getElementById('btnOpenGoodreads');
             if (goodreadsBtn) {
                 if (book.Goodreads && book.Goodreads.startsWith('http')) {
                     goodreadsBtn.href = book.Goodreads;
-                    goodreadsBtn.classList.remove('hidden');
                 } else {
-                    goodreadsBtn.classList.add('hidden');
+                    const cleanIsbn = book.ISBN ? String(book.ISBN).replace(/[^0-9X]/gi, '') : '';
+                    const query = cleanIsbn ? cleanIsbn : `${book.Titel} ${book.Auteur}`.replace(/[:\/#?]/g, ' ').trim();
+                    goodreadsBtn.href = `https://www.goodreads.com/search?q=${encodeURIComponent(query)}`;
                 }
+                goodreadsBtn.classList.remove('hidden');
             }
 
             modal.showModal();
