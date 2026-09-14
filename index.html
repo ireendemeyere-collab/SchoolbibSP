@@ -731,7 +731,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Locatie / Taal</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Locatie / Kast</label>
                                 <input type="text" id="fLocatie" list="locatieSuggesties" placeholder="Bijv. Nederlandstalige fictie" value="Nederlandstalige fictie"
                                        class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                                 <datalist id="locatieSuggesties">
@@ -744,6 +744,27 @@
                                     <option value="Poëzie">
                                     <option value="Non-fictie">
                                 </datalist>
+                            </div>
+
+                            <!-- Batch-invoer aantal exemplaren -->
+                            <div class="sm:col-span-2 bg-brand-50/60 p-3.5 rounded-2xl border border-brand-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <label for="fAantal" class="block text-xs font-extrabold text-brand-900 uppercase tracking-wider">
+                                        📦 Aantal exemplaren op deze locatie
+                                    </label>
+                                    <p class="text-[11px] text-slate-500 mt-0.5">Heb je meerdere exemplaren voor dit rek? Voeg ze in één klik in batch toe.</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <input type="number" id="fAantal" min="1" max="50" value="1" required
+                                           class="w-20 text-sm font-extrabold text-center px-3 py-2 rounded-xl border border-brand-300 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-2xs">
+                                    <div class="flex items-center gap-1" id="aantalQuickBtns">
+                                        <button type="button" class="btn-aantal active px-2.5 py-1.5 text-xs font-bold rounded-xl border border-brand-600 bg-brand-600 text-white shadow-2xs transition cursor-pointer" data-num="1">1x</button>
+                                        <button type="button" class="btn-aantal px-2.5 py-1.5 text-xs font-bold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition cursor-pointer" data-num="2">2x</button>
+                                        <button type="button" class="btn-aantal px-2.5 py-1.5 text-xs font-bold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition cursor-pointer" data-num="3">3x</button>
+                                        <button type="button" class="btn-aantal px-2.5 py-1.5 text-xs font-bold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition cursor-pointer" data-num="4">4x</button>
+                                        <button type="button" class="btn-aantal px-2.5 py-1.5 text-xs font-bold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition cursor-pointer" data-num="5">5x</button>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- 1. GENRE SELECTIE VOOR BEHEERDERS -->
@@ -957,27 +978,34 @@
                 <p class="text-xs text-slate-500 mt-1">Is dit een extra exemplaar of had je het per ongeluk al ingegeven?</p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs text-slate-700">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs text-slate-700">
                 <p><strong>Titel:</strong> <span id="modalDupTitle" class="font-bold text-slate-900"></span></p>
                 <p><strong>Auteur:</strong> <span id="modalDupAuthor" class="font-semibold text-slate-800"></span></p>
                 <p><strong>Reeds aanwezig:</strong> <span id="modalDupCopies" class="font-bold text-brand-700"></span></p>
-                <p class="text-[11px] text-slate-500 pt-1.5 border-t border-slate-200">Nieuw toe te voegen locatie: <span id="modalDupNewLoc" class="font-bold text-slate-900"></span></p>
+                <div class="pt-2 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <p class="text-[11px] text-slate-600">Locatie voor toevoeging: <span id="modalDupNewLoc" class="font-bold text-slate-900"></span></p>
+                    <div class="flex items-center gap-1.5 self-start sm:self-auto">
+                        <label for="modalDupAantal" class="text-[11px] font-bold text-slate-700">Aantal stuks:</label>
+                        <input type="number" id="modalDupAantal" min="1" max="50" value="1" 
+                               class="w-16 text-center text-xs font-black py-1 px-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                </div>
             </div>
 
             <div class="space-y-2 pt-1">
                 <!-- Keuze 1: Ja, extra exemplaar -->
-                <button type="button" id="btnModalConfirmAddCopy" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-4 rounded-2xl transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm">
-                    <span>Ja, voeg toe als nieuw exemplaar</span>
+                <button type="button" id="btnModalConfirmAddCopy" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-4 rounded-2xl transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer">
+                    <span id="modalDupConfirmBtnText">Ja, voeg toe als nieuw exemplaar</span>
                     <span id="modalDupNextCopyLabel" class="text-[11px] bg-emerald-700/80 px-2 py-0.5 rounded-lg font-semibold"></span>
                 </button>
 
                 <!-- Keuze 2: Oeps, al ingegeven / annuleren -->
-                <button type="button" id="btnModalCancelDuplicate" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-2xl transition text-xs flex items-center justify-center">
+                <button type="button" id="btnModalCancelDuplicate" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-2xl transition text-xs flex items-center justify-center cursor-pointer">
                     <span>Oeps, al ingegeven (Niet toevoegen)</span>
                 </button>
 
                 <!-- Keuze 3: Bestaand boek bekijken -->
-                <button type="button" id="btnModalViewExisting" class="w-full text-brand-600 hover:text-brand-800 font-bold py-2 px-4 rounded-xl transition text-xs flex items-center justify-center">
+                <button type="button" id="btnModalViewExisting" class="w-full text-brand-600 hover:text-brand-800 font-bold py-2 px-4 rounded-xl transition text-xs flex items-center justify-center cursor-pointer">
                     <span>Bekijk bestaand boek in catalogus</span>
                 </button>
             </div>
@@ -1207,8 +1235,8 @@
                         const locatie = (book.Locatie || book.locatie || '').trim();
                         const isbnRaw = (book.ISBN || book.isbn || book.cover || '').toString().trim();
                         const isbn = isbnRaw.replace(/[^0-9X]/gi, '');
-                        // Ondersteun zowel 'Link coverafbeelding', 'Cover', 'Cover URL' en 'cover'
-                        const coverRaw = (book['Link coverafbeelding'] || book['link coverafbeelding'] || book.Cover || (book.cover?.startsWith('http') ? book.cover : '') || book['Cover URL'] || book.Weblink || '').toString().trim();
+                        // Ondersteun zowel 'Link coverafbeelding', 'Cover', 'Cover URL', 'Afbeelding' en 'cover'
+                        const coverRaw = (book['Link coverafbeelding'] || book['link coverafbeelding'] || book.Cover || book.coverafbeelding || book.Coverafbeelding || book.Afbeelding || book.afbeelding || (book.cover?.startsWith('http') ? book.cover : '') || book['Cover URL'] || book.Weblink || '').toString().trim();
                         const boekenzoekerRaw = (book['Boekenzoeker Link'] || book['boekenzoeker link'] || book.Boekenzoeker || book.boekenzoeker || '').toString().trim();
                         const hebbanRaw = (book['Hebban Link'] || book['hebban link'] || book.Hebban || book.hebban || '').toString().trim();
                         const goodreadsRaw = (book['Goodreads Link'] || book['goodreads link'] || book.Goodreads || '').toString().trim();
@@ -1457,7 +1485,10 @@
         }
 
         function renderCoverHtml(book) {
-            const coverUrl = getBookCoverUrl(book.ISBN);
+            const rawCover = (book.Cover && typeof book.Cover === 'string') ? book.Cover.trim() : '';
+            const olCover = getBookCoverUrl(book.ISBN);
+            const coverUrl = (rawCover && rawCover.startsWith('http')) ? rawCover : olCover;
+            const fallbackUrl = (rawCover && rawCover.startsWith('http') && olCover && olCover !== rawCover) ? olCover : '';
             const gradient = getCoverGradient(book.Titel);
             const safeTitle = escapeHtml(book.Titel);
             const safeAuthor = escapeHtml(book.Auteur);
@@ -1470,8 +1501,9 @@
                         <img src="${coverUrl}" 
                              alt="${safeTitle}" 
                              loading="lazy" 
+                             ${fallbackUrl ? `data-fallback="${fallbackUrl}"` : ''}
                              class="w-full h-full object-cover transition duration-300 group-hover:scale-105"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                             onerror="if (this.dataset.fallback && this.src !== this.dataset.fallback) { this.src = this.dataset.fallback; } else { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
                         <div class="w-full h-full p-3 flex flex-col justify-between items-center text-center text-white" 
                              style="display: none; background: ${gradient};">
                             <div class="my-auto py-2 flex flex-col items-center">
@@ -3288,6 +3320,35 @@
                 extraTagInput.addEventListener('input', syncAdminTags);
             }
 
+            const aantalInput = document.getElementById('fAantal');
+            const aantalQuickBtns = document.querySelectorAll('#aantalQuickBtns .btn-aantal');
+            if (aantalQuickBtns.length > 0 && aantalInput) {
+                aantalQuickBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const val = btn.getAttribute('data-num');
+                        aantalInput.value = val;
+                        aantalQuickBtns.forEach(b => {
+                            b.classList.remove('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-2xs');
+                            b.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+                        });
+                        btn.classList.add('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-2xs');
+                        btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                    });
+                });
+                aantalInput.addEventListener('input', () => {
+                    const currentVal = aantalInput.value;
+                    aantalQuickBtns.forEach(b => {
+                        if (b.getAttribute('data-num') === currentVal) {
+                            b.classList.add('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-2xs');
+                            b.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                        } else {
+                            b.classList.remove('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-2xs');
+                            b.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+                        }
+                    });
+                });
+            }
+
             form.addEventListener('reset', () => {
                 setTimeout(() => {
                     document.querySelectorAll('.admin-chip').forEach(c => {
@@ -3296,6 +3357,18 @@
                     });
                     if (tagsInput) tagsInput.value = '';
                     if (extraTagInput) extraTagInput.value = '';
+                    if (aantalInput) aantalInput.value = '1';
+                    if (aantalQuickBtns.length > 0) {
+                        aantalQuickBtns.forEach(b => {
+                            if (b.getAttribute('data-num') === '1') {
+                                b.classList.add('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-2xs');
+                                b.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                            } else {
+                                b.classList.remove('active', 'bg-brand-600', 'text-white', 'border-brand-600', 'shadow-2xs');
+                                b.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+                            }
+                        });
+                    }
                 }, 10);
             });
 
@@ -3446,6 +3519,7 @@
                 const t = titleInput.value.trim();
                 const i = isbnInput.value.trim().replace(/[^0-9X]/gi, '');
                 const existing = findExistingBook(t, i);
+                const aantalVal = Math.max(1, parseInt(aantalInput?.value || 1, 10));
 
                 const newBookData = {
                     Titel: t,
@@ -3457,9 +3531,26 @@
                     Taal: bepaalTaal(document.getElementById('fLocatie').value.trim())
                 };
 
+                const modalDupAantal = document.getElementById('modalDupAantal');
+                const modalDupConfirmBtnText = document.getElementById('modalDupConfirmBtnText');
+
+                function updateModalDupLabels(countAlready) {
+                    const addCount = Math.max(1, parseInt(modalDupAantal?.value || 1, 10));
+                    const startNum = countAlready + 1;
+                    const nextCopyEl = document.getElementById('modalDupNextCopyLabel');
+                    if (addCount === 1) {
+                        if (modalDupConfirmBtnText) modalDupConfirmBtnText.textContent = 'Ja, voeg toe als nieuw exemplaar';
+                        if (nextCopyEl) nextCopyEl.textContent = `(Exemplaar ${startNum})`;
+                    } else {
+                        const endNum = startNum + addCount - 1;
+                        if (modalDupConfirmBtnText) modalDupConfirmBtnText.textContent = `Ja, voeg toe als ${addCount} nieuwe exemplaren`;
+                        if (nextCopyEl) nextCopyEl.textContent = `(Exemplaar ${startNum} t/m ${endNum})`;
+                    }
+                }
+
                 // Als het boek al bestaat -> Toon pop-up bevestiging alvorens op te slaan!
                 if (existing) {
-                    pendingSaveData = { newBook: newBookData, existingBook: existing };
+                    pendingSaveData = { newBook: newBookData, existingBook: existing, aantal: aantalVal };
 
                     document.getElementById('modalDupTitle').textContent = existing.Titel;
                     document.getElementById('modalDupAuthor').textContent = existing.Auteur;
@@ -3472,21 +3563,27 @@
 
                     document.getElementById('modalDupCopies').textContent = `${count} ${count === 1 ? 'exemplaar' : 'exemplaren'} (${locsText})`;
                     document.getElementById('modalDupNewLoc').textContent = newBookData.Locatie || '(geen locatie ingevuld)';
-                    document.getElementById('modalDupNextCopyLabel').textContent = `(Exemplaar ${count + 1})`;
+                    
+                    if (modalDupAantal) modalDupAantal.value = aantalVal;
+                    updateModalDupLabels(count);
+                    if (modalDupAantal) {
+                        modalDupAantal.oninput = () => updateModalDupLabels(count);
+                    }
 
                     dupModal.showModal();
                     return;
                 }
 
                 // Boek bestaat nog niet -> Direct opslaan
-                await executeSaveBook(newBookData, null);
+                await executeSaveBook(newBookData, null, aantalVal);
             });
 
             // Modal Actie 1: Bevestig toevoegen als nieuw exemplaar
             btnModalConfirmAddCopy.addEventListener('click', async () => {
                 dupModal.close();
                 if (pendingSaveData) {
-                    await executeSaveBook(pendingSaveData.newBook, pendingSaveData.existingBook);
+                    const finalAantal = Math.max(1, parseInt(document.getElementById('modalDupAantal')?.value || pendingSaveData.aantal || 1, 10));
+                    await executeSaveBook(pendingSaveData.newBook, pendingSaveData.existingBook, finalAantal);
                     pendingSaveData = null;
                 }
             });
@@ -3506,15 +3603,16 @@
                 }
             });
 
-            // Daadwerkelijke opslagfunctie
-            async function executeSaveBook(newBook, existingBook) {
+            // Daadwerkelijke opslagfunctie met batch-ondersteuning
+            async function executeSaveBook(newBook, existingBook, count = 1) {
+                const addCount = Math.max(1, parseInt(count || 1, 10));
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `
                     <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-                    <span>Bezig met opslaan...</span>
+                    <span>Bezig met opslaan (${addCount} ${addCount === 1 ? 'exemplaar' : 'exemplaren'})...</span>
                 `;
 
-                let copyLabel = 'Exemplaar 1';
+                let copySummary = '';
                 if (existingBook) {
                     if (!existingBook.copies || existingBook.copies.length === 0) {
                         existingBook.copies = [{
@@ -3525,25 +3623,37 @@
                             isbn: existingBook.ISBN
                         }];
                     }
-                    const nextNum = existingBook.copies.length + 1;
-                    copyLabel = `Exemplaar ${nextNum}`;
-                    existingBook.copies.push({
-                        copyId: allBooks.length + 1,
-                        copyNumber: nextNum,
-                        copyLabel: copyLabel,
-                        locatie: newBook.Locatie,
-                        isbn: newBook.ISBN
-                    });
+                    const startNum = existingBook.copies.length + 1;
+                    for (let c = 0; c < addCount; c++) {
+                        const nextNum = startNum + c;
+                        existingBook.copies.push({
+                            copyId: allBooks.length + 1000 + nextNum,
+                            copyNumber: nextNum,
+                            copyLabel: `Exemplaar ${nextNum}`,
+                            locatie: newBook.Locatie,
+                            isbn: newBook.ISBN
+                        });
+                    }
+                    copySummary = addCount === 1 
+                        ? `Exemplaar ${startNum}` 
+                        : `${addCount} exemplaren (Exemplaar ${startNum} t/m ${startNum + addCount - 1})`;
                 } else {
                     newBook.id = allBooks.length + 1;
-                    newBook.copies = [{
-                        copyId: newBook.id,
-                        copyNumber: 1,
-                        copyLabel: 'Exemplaar 1',
-                        locatie: newBook.Locatie,
-                        isbn: newBook.ISBN
-                    }];
+                    newBook.copies = [];
+                    for (let c = 0; c < addCount; c++) {
+                        const nextNum = c + 1;
+                        newBook.copies.push({
+                            copyId: newBook.id + c,
+                            copyNumber: nextNum,
+                            copyLabel: `Exemplaar ${nextNum}`,
+                            locatie: newBook.Locatie,
+                            isbn: newBook.ISBN
+                        });
+                    }
                     allBooks.push(newBook);
+                    copySummary = addCount === 1 
+                        ? `1 exemplaar` 
+                        : `${addCount} exemplaren (Exemplaar 1 t/m ${addCount})`;
                 }
 
                 initFilters();
@@ -3567,19 +3677,20 @@
                                 graad: newBook.Graad,
                                 locatie: newBook.Locatie,
                                 isbn: newBook.ISBN,
-                                exemplaar: copyLabel
+                                aantal: addCount,
+                                exemplaar: copySummary
                             })
                         });
 
                         statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex items-center gap-2';
-                        statusBox.innerHTML = `<span>Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is succesvol opgeslagen in Google Sheets!</span>`;
+                        statusBox.innerHTML = `<span>Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copySummary} op ${escapeHtml(newBook.Locatie)}) is succesvol opgeslagen in Google Sheets!</span>`;
                     } catch (err) {
                         statusBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold';
-                        statusBox.innerHTML = `<span>Boek is lokaal toegevoegd als ${copyLabel}. Kon niet automatisch naar Google Sheets verzonden worden.</span>`;
+                        statusBox.innerHTML = `<span>Boek is lokaal toegevoegd (${copySummary}). Kon niet automatisch naar Google Sheets verzonden worden.</span>`;
                     }
                 } else {
                     statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex flex-col gap-1';
-                    statusBox.innerHTML = `<span>Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copyLabel} op ${escapeHtml(newBook.Locatie)}) is direct toegevoegd aan de website!</span>`;
+                    statusBox.innerHTML = `<span>Boek <strong>"${escapeHtml(newBook.Titel)}"</strong> (${copySummary} op ${escapeHtml(newBook.Locatie)}) is direct toegevoegd aan de website!</span>`;
                 }
 
                 statusBox.classList.remove('hidden');

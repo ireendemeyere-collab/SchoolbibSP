@@ -43,19 +43,31 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
     
-    // Actie 2: Nieuw boek toevoegen aan de catalogus
+    // Actie 2: Nieuw boek / exemplaren toevoegen aan de catalogus
     var sheet = ss.getActiveSheet();
-    sheet.appendRow([
-      data.titel ? data.titel.toString().trim() : '',
-      data.auteur ? data.auteur.toString().trim() : '',
-      data.tags ? data.tags.toString().trim() : '',
-      data.graad ? data.graad.toString().trim() : '',
-      data.locatie ? data.locatie.toString().trim() : '',
-      data.isbn ? data.isbn.toString().trim() : ''
-    ]);
+    var count = data.aantal ? Math.max(1, parseInt(data.aantal, 10)) : 1;
     
+    // Kolomvolgorde conform Google Sheet catalogus:
+    // 1: Titel | 2: Auteur | 3: Tags | 4: Locatie | 5: Goodreads Link | 6: Graad | 7: ISBN | 8: Link coverafbeelding
+    for (var i = 0; i < count; i++) {
+      sheet.appendRow([
+        data.titel ? data.titel.toString().trim() : '',
+        data.auteur ? data.auteur.toString().trim() : '',
+        data.tags ? data.tags.toString().trim() : '',
+        data.locatie ? data.locatie.toString().trim() : '',
+        data.goodreads ? data.goodreads.toString().trim() : '',
+        data.graad ? data.graad.toString().trim() : '',
+        data.isbn ? data.isbn.toString().trim() : '',
+        data.cover ? data.cover.toString().trim() : ''
+      ]);
+    }
+    
+    var successMessage = count > 1 
+      ? count + ' exemplaren succesvol toegevoegd aan de Google Sheet!' 
+      : 'Boek succesvol toegevoegd!';
+      
     return ContentService
-      .createTextOutput(JSON.stringify({ status: 'success', message: 'Boek succesvol toegevoegd!' }))
+      .createTextOutput(JSON.stringify({ status: 'success', message: successMessage }))
       .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
