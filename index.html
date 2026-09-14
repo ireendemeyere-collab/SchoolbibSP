@@ -88,6 +88,13 @@
         .clean-scroll::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+        .no-scrollbar::-webkit-scrollbar { 
+            display: none; 
+        }
+        .no-scrollbar { 
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
+        }
         .star-rating .star {
             cursor: pointer;
             transition: color 0.15s ease, transform 0.15s ease;
@@ -167,13 +174,14 @@
 
             <div class="relative z-10 max-w-3xl">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-extrabold uppercase tracking-wider mb-3">
-                    <span>📚 Catalogus Schoolbibliotheek</span>
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>Catalogus Schoolbibliotheek</span>
                 </div>
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-2">
                     Vind je volgende boek in onze schoolbib!
                 </h2>
                 <p class="text-sm sm:text-base text-brand-50 font-medium mb-6 leading-relaxed">
-                    Dit is de catalogus van onze schoolbib. We helpen je graag bij het kiezen van je volgende boek en tonen wat er allemaal aanwezig is in onze bib. Klik op een boek voor meer informatie, geef sterren of bekijk reviews en achterflappen via Goodreads.
+                    Dit is de catalogus van onze schoolbib. We helpen je graag bij het kiezen van je volgende boek en tonen wat er allemaal aanwezig is in onze bib. Klik op een boek voor meer informatie zoals locatie en beschikbaarheid. Geef daar ook sterren of klik door om recensies en korte inhoud te lezen. Veel leesplezier!
                 </p>
 
                 <!-- Hoofd Zoekbalk in de Hero -->
@@ -362,8 +370,8 @@
                 <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
             </div>
 
-            <!-- Carrousels per graad (max 5 boeken per graad) -->
-            <div id="featuredGradesContainer" class="space-y-5"></div>
+            <!-- Carrousels per graad: 1 enkele rij met 3 graden naast elkaar (1ste, 2de en 3de graad) -->
+            <div id="featuredGradesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-stretch"></div>
         </section>
 
         <!-- 5. NIEUW IN DE BIB -->
@@ -1785,35 +1793,98 @@
                 const carouselId = `featuredGradeCarousel_${key}`;
 
                 const block = document.createElement('div');
-                block.className = 'bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-2xs';
+                block.className = 'bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between';
                 
                 block.innerHTML = `
-                    <div class="flex items-center justify-between mb-3.5">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl">${escapeHtml(label)}</span>
-                            <span class="text-xs text-slate-400 font-bold">${pickedBooks.length} ${pickedBooks.length === 1 ? 'boek' : 'boeken'}</span>
+                    <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-100">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl truncate">${escapeHtml(label)}</span>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <button class="w-7 h-7 rounded-full bg-slate-50 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-xs font-bold transition border border-slate-200 shadow-2xs" 
-                                    onclick="scrollGradeCarousel('${carouselId}', -300)" title="Vorige boeken">‹</button>
-                            <button class="w-7 h-7 rounded-full bg-slate-50 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-xs font-bold transition border border-slate-200 shadow-2xs" 
-                                    onclick="scrollGradeCarousel('${carouselId}', 300)" title="Volgende boeken">›</button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <span id="counter_${carouselId}" class="text-[11px] text-slate-400 font-bold mr-1">1 / ${pickedBooks.length}</span>
+                            ${pickedBooks.length > 1 ? `
+                            <button class="w-7 h-7 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-xs font-bold transition border border-slate-200 shadow-2xs" 
+                                    onclick="stepGradeCarousel('${carouselId}', -1, ${pickedBooks.length})" title="Vorig boek">‹</button>
+                            <button class="w-7 h-7 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-xs font-bold transition border border-slate-200 shadow-2xs" 
+                                    onclick="stepGradeCarousel('${carouselId}', 1, ${pickedBooks.length})" title="Volgend boek">›</button>
+                            ` : ''}
                         </div>
                     </div>
-                    <div id="${carouselId}" class="flex gap-4 overflow-x-auto pb-2 pt-1 clean-scroll scroll-smooth"></div>
+                    <div id="${carouselId}" class="flex overflow-x-auto snap-x snap-mandatory clean-scroll scroll-smooth w-full no-scrollbar"></div>
                 `;
 
                 const carousel = block.querySelector(`#${carouselId}`);
                 pickedBooks.forEach(book => {
-                    const card = createMiniBookCard(book, false);
-                    carousel.appendChild(card);
+                    const avail = getBookAvailability(book);
+                    const statusBadgeHtml = avail.available > 0
+                        ? `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-2xs bg-emerald-600 text-white">Aanwezig</span>`
+                        : `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-2xs bg-rose-600 text-white">Uitgeleend</span>`;
+                    const rating = getBookRating(book.Titel);
+
+                    const slide = document.createElement('div');
+                    slide.className = 'w-full shrink-0 snap-start flex flex-col justify-between cursor-pointer group px-0.5';
+                    slide.onclick = () => openBookDetailModal(book);
+                    slide.innerHTML = `
+                        <div class="aspect-[2/3] w-full max-w-[160px] sm:max-w-[180px] mx-auto rounded-2xl overflow-hidden shadow-xs group-hover:shadow-md mb-2.5 relative border border-slate-100 transition card-hover">
+                            ${renderCoverHtml(book)}
+                            <div class="absolute top-2 left-2 z-10 flex flex-col gap-1 items-start">
+                                <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs">
+                                    ${escapeHtml(book.Graad)}
+                                </span>
+                                ${statusBadgeHtml}
+                                ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-2xs">Bekroond</span>' : ''}
+                            </div>
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center pointer-events-none">
+                                <span class="opacity-0 group-hover:opacity-100 transition bg-white/95 text-brand-700 p-2 rounded-full shadow-md flex items-center justify-center" title="Bekijk details">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-center sm:text-left mt-0.5">
+                            <h5 class="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug truncate group-hover:text-brand-600 transition" title="${escapeHtml(book.Titel)}">
+                                ${escapeHtml(book.Titel)}
+                            </h5>
+                            <p class="text-[11px] text-slate-500 truncate mb-1.5">door <span class="text-slate-700 font-semibold">${escapeHtml(book.Auteur)}</span></p>
+                            <div class="flex items-center justify-between pt-1.5 border-t border-slate-100 text-[11px]">
+                                <span class="text-brand-600 font-extrabold flex items-center gap-1 group-hover:underline">
+                                    <span>Bekijk details</span>
+                                    <span>→</span>
+                                </span>
+                                <span class="text-sunny-400 font-bold">${rating.avg > 0 ? '★ ' + rating.avg : ''}</span>
+                            </div>
+                        </div>
+                    `;
+                    carousel.appendChild(slide);
                 });
+
+                carousel.addEventListener('scroll', () => {
+                    const w = carousel.clientWidth;
+                    if (w > 0) {
+                        const idx = Math.min(pickedBooks.length, Math.max(1, Math.round(carousel.scrollLeft / w) + 1));
+                        const counter = block.querySelector('#counter_' + carouselId);
+                        if (counter) counter.textContent = `${idx} / ${pickedBooks.length}`;
+                    }
+                }, { passive: true });
 
                 gradesContainer.appendChild(block);
             });
 
             section.classList.remove('hidden');
         }
+
+        window.stepGradeCarousel = function(carouselId, direction, total) {
+            const el = document.getElementById(carouselId);
+            if (!el) return;
+            const w = el.clientWidth;
+            if (w <= 0) return;
+            const currentIdx = Math.round(el.scrollLeft / w);
+            let nextIdx = currentIdx + direction;
+            if (nextIdx < 0) nextIdx = total - 1;
+            if (nextIdx >= total) nextIdx = 0;
+            el.scrollTo({ left: nextIdx * w, behavior: 'smooth' });
+            const counter = document.getElementById('counter_' + carouselId);
+            if (counter) counter.textContent = `${nextIdx + 1} / ${total}`;
+        };
 
         function createMiniBookCard(book, isDarkTheme = false) {
             const card = document.createElement('div');
@@ -2802,7 +2873,7 @@
                 return {
                     platform: 'boekenzoeker',
                     url: book.Boekenzoeker,
-                    label: 'Achterflap op Boekenzoeker.be',
+                    label: 'Bekijk op Boekenzoeker.be',
                     title: 'Bekijk dit boek en samenvatting op Boekenzoeker.be',
                     btnClass: 'bg-coral-500 hover:bg-coral-600 text-white shadow-coral-500/20'
                 };
@@ -2815,7 +2886,7 @@
                 return {
                     platform: 'boekenzoeker',
                     url: bzUrl,
-                    label: 'Achterflap op Boekenzoeker.be',
+                    label: 'Bekijk op Boekenzoeker.be',
                     title: 'Bekijk dit boek en samenvatting op Boekenzoeker.be',
                     btnClass: 'bg-coral-500 hover:bg-coral-600 text-white shadow-coral-500/20'
                 };
@@ -2851,8 +2922,8 @@
                 return {
                     platform: 'goodreads',
                     url: book.Goodreads,
-                    label: 'Bekijk op Goodreads',
-                    title: 'Bekijk recensies en achterflap op Goodreads',
+                    label: 'Bekijk op Goodreads.com',
+                    title: 'Bekijk recensies en achterflap op Goodreads.com',
                     btnClass: 'bg-[#382110] hover:bg-[#2b180a] text-white shadow-stone-800/20'
                 };
             }
