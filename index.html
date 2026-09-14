@@ -456,7 +456,11 @@
             </div>
 
             <!-- Modal Footer (geen ISBN) -->
-            <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
+            <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-end gap-2.5">
+                <a id="btnOpenGoodreads" href="#" target="_blank" rel="noopener noreferrer" 
+                   class="w-full sm:w-auto bg-[#382110] hover:bg-[#2b180a] text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 hidden">
+                    <span>Goodreads ↗</span>
+                </a>
                 <a id="btnOpenBoekenzoeker" href="#" target="_blank" rel="noopener noreferrer" 
                    class="w-full sm:w-auto bg-coral-500 hover:bg-coral-600 text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
@@ -1151,7 +1155,10 @@
             const syncEl = document.getElementById('syncBadge');
             countEl.textContent = 'Boeken laden...';
 
-            fetch(GOOGLE_SHEET_CSV_URL)
+            // Cache-busting toevoegen zodat Google Sheet wijzigingen altijd direct zichtbaar zijn
+            const nocacheUrl = GOOGLE_SHEET_CSV_URL + (GOOGLE_SHEET_CSV_URL.includes('?') ? '&' : '?') + '_t=' + Date.now();
+
+            fetch(nocacheUrl, { cache: 'no-cache' })
                 .then(res => {
                     if (!res.ok) throw new Error('Kon Google Sheet niet ophalen');
                     return res.text();
@@ -1191,6 +1198,9 @@
                         const locatie = (book.Locatie || book.locatie || '').trim();
                         const isbnRaw = (book.ISBN || book.isbn || book.cover || '').toString().trim();
                         const isbn = isbnRaw.replace(/[^0-9X]/gi, '');
+                        // Ondersteun zowel 'Link coverafbeelding', 'Cover', 'Cover URL' en 'cover'
+                        const coverRaw = (book['Link coverafbeelding'] || book['link coverafbeelding'] || book.Cover || (book.cover?.startsWith('http') ? book.cover : '') || book['Cover URL'] || book.Weblink || '').toString().trim();
+                        const goodreadsRaw = (book['Goodreads Link'] || book['goodreads link'] || book.Goodreads || '').toString().trim();
                         const exemplaar = (book.Exemplaar || book.exemplaar || '').trim();
 
                         // Normaliseer en ontdubbel tags direct
@@ -1226,6 +1236,8 @@
                             Graad: graad || 'Alle graden',
                             Locatie: locatie || 'Nederlandstalige fictie',
                             ISBN: isbn,
+                            Cover: coverRaw,
+                            Goodreads: goodreadsRaw,
                             Exemplaar: exemplaar,
                             Taal: bepaalTaal(locatie)
                         };
@@ -1248,12 +1260,16 @@
                                 Graad: item.Graad,
                                 Locatie: item.Locatie,
                                 ISBN: item.ISBN,
+                                Cover: item.Cover,
+                                Goodreads: item.Goodreads,
                                 Taal: item.Taal,
                                 copies: []
                             });
                         }
                         const entry = bookMap.get(key);
                         if (!entry.ISBN && item.ISBN) entry.ISBN = item.ISBN;
+                        if (!entry.Cover && item.Cover) entry.Cover = item.Cover;
+                        if (!entry.Goodreads && item.Goodreads) entry.Goodreads = item.Goodreads;
                         if (!entry.isBekroond && item.isBekroond) entry.isBekroond = true;
                         if (!entry.Tags && item.Tags) {
                             entry.Tags = item.Tags;
@@ -2636,6 +2652,16 @@
             const boekenzoekerBtn = document.getElementById('btnOpenBoekenzoeker');
             const boekenzoekerSearchQuery = encodeURIComponent(`${book.Titel} ${book.Auteur}`);
             boekenzoekerBtn.href = `https://www.boekenzoeker.be/zoek?q=${boekenzoekerSearchQuery}`;
+
+            const goodreadsBtn = document.getElementById('btnOpenGoodreads');
+            if (goodreadsBtn) {
+                if (book.Goodreads && book.Goodreads.startsWith('http')) {
+                    goodreadsBtn.href = book.Goodreads;
+                    goodreadsBtn.classList.remove('hidden');
+                } else {
+                    goodreadsBtn.classList.add('hidden');
+                }
+            }
 
             modal.showModal();
         }
