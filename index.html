@@ -125,6 +125,11 @@
                     <button id="btnMobCatalog" class="nav-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-brand-600 text-white shadow-xs">
                         📚 Boeken
                     </button>
+                    <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer"
+                       class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
+                       title="Naar Boekenzoeker.be">
+                        <span>Boekenzoeker ↗</span>
+                    </a>
                     <button id="btnMobAdmin" class="nav-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200">
                         ⚙️ Beheer
                     </button>
@@ -137,6 +142,12 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     <span>Catalogus Bib</span>
                 </button>
+                <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" 
+                   class="px-3.5 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 border border-slate-200 hover:border-brand-200" 
+                   title="Open officiële Boekenzoeker.be website in nieuw tabblad">
+                    <span>Naar Boekenzoeker.be</span>
+                    <span class="text-slate-400 font-bold">↗</span>
+                </a>
                 <button id="btnDeskAdmin" class="nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-coral-50 hover:text-coral-700 border border-slate-200">
                     <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     <span>Beheerder</span>
@@ -449,14 +460,13 @@
                 </div>
             </div>
 
-            <!-- Modal Footer: Enkel Goodreads knop -->
+            <!-- Modal Footer: Exact 1 dynamische knop naar Boekenzoeker, Hebban of Goodreads -->
             <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
-                <a id="btnOpenGoodreads" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"
-                   class="w-full sm:w-auto bg-[#382110] hover:bg-[#2b180a] text-white font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2"
-                   title="Bekijk achterflap en recensies op Goodreads">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span>Bekijk op Goodreads</span>
-                    <svg class="w-4 h-4 text-amber-200/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                <a id="btnModalInfoLink" href="#" target="_blank" rel="noopener noreferrer"
+                   class="w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span id="modalInfoBtnText">Meer informatie</span>
+                    <svg class="w-4 h-4 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
             </div>
 
@@ -1191,6 +1201,8 @@
                         const isbn = isbnRaw.replace(/[^0-9X]/gi, '');
                         // Ondersteun zowel 'Link coverafbeelding', 'Cover', 'Cover URL' en 'cover'
                         const coverRaw = (book['Link coverafbeelding'] || book['link coverafbeelding'] || book.Cover || (book.cover?.startsWith('http') ? book.cover : '') || book['Cover URL'] || book.Weblink || '').toString().trim();
+                        const boekenzoekerRaw = (book['Boekenzoeker Link'] || book['boekenzoeker link'] || book.Boekenzoeker || book.boekenzoeker || '').toString().trim();
+                        const hebbanRaw = (book['Hebban Link'] || book['hebban link'] || book.Hebban || book.hebban || '').toString().trim();
                         const goodreadsRaw = (book['Goodreads Link'] || book['goodreads link'] || book.Goodreads || '').toString().trim();
                         const exemplaar = (book.Exemplaar || book.exemplaar || '').trim();
 
@@ -1228,6 +1240,8 @@
                             Locatie: locatie || 'Nederlandstalige fictie',
                             ISBN: isbn,
                             Cover: coverRaw,
+                            Boekenzoeker: boekenzoekerRaw,
+                            Hebban: hebbanRaw,
                             Goodreads: goodreadsRaw,
                             Exemplaar: exemplaar,
                             Taal: bepaalTaal(locatie)
@@ -1252,6 +1266,8 @@
                                 Locatie: item.Locatie,
                                 ISBN: item.ISBN,
                                 Cover: item.Cover,
+                                Boekenzoeker: item.Boekenzoeker,
+                                Hebban: item.Hebban,
                                 Goodreads: item.Goodreads,
                                 Taal: item.Taal,
                                 copies: []
@@ -1260,6 +1276,8 @@
                         const entry = bookMap.get(key);
                         if (!entry.ISBN && item.ISBN) entry.ISBN = item.ISBN;
                         if (!entry.Cover && item.Cover) entry.Cover = item.Cover;
+                        if (!entry.Boekenzoeker && item.Boekenzoeker) entry.Boekenzoeker = item.Boekenzoeker;
+                        if (!entry.Hebban && item.Hebban) entry.Hebban = item.Hebban;
                         if (!entry.Goodreads && item.Goodreads) entry.Goodreads = item.Goodreads;
                         if (!entry.isBekroond && item.isBekroond) entry.isBekroond = true;
                         if (!entry.Tags && item.Tags) {
@@ -2562,6 +2580,293 @@
             });
         }
 
+        // Geverifieerde Boekenzoeker database van onze schoolbib catalogus
+        const BOEKENZOEKER_VERIFIED = {
+  "een eiland in zee": "https://www.boekenzoeker.be/een-eiland-zee",
+  "zwart water": "https://www.boekenzoeker.be/zwart-water",
+  "onder de sneeuw": "https://www.boekenzoeker.be/onder-de-sneeuw",
+  "de hardloper": "https://www.boekenzoeker.be/de-hardloper",
+  "alle kleuren grijs": "https://www.boekenzoeker.be/het-mooiste-boek-van-alle-kleuren-encyclopedia-otto-colorista",
+  "de keuze": "https://www.boekenzoeker.be/kiplings-keuze",
+  "spot uit": "https://www.boekenzoeker.be/licht-uit-spot-aan-achter-de-schermen-bij-het-royal-opera-house",
+  "ontvoerd": "https://www.boekenzoeker.be/ontvoerd-0",
+  "julian, mijn broer": "https://www.boekenzoeker.be/julian-mijn-broer",
+  "het lied van de raaf": "https://www.boekenzoeker.be/het-lied-van-de-raaf",
+  "levende steden": "https://www.boekenzoeker.be/levende-steden",
+  "het is de liefde die we niet begrijpen": "https://www.boekenzoeker.be/het-de-liefde-die-we-niet-begrijpen",
+  "mijn laatste dag als genie": "https://www.boekenzoeker.be/mijn-laatste-dag-als-genie",
+  "catwalk": "https://www.boekenzoeker.be/catwalk",
+  "op kot": "https://www.boekenzoeker.be/op-kot-verhalen-van-een-kotmadam",
+  "grenzen": "https://www.boekenzoeker.be/grenzen",
+  "jona": "https://www.boekenzoeker.be/jona",
+  "hij was mijn vriend": "https://www.boekenzoeker.be/mijn-vriend-hitler",
+  "de smaak van zijn stem": "https://www.boekenzoeker.be/de-smaak-van-zijn-stem",
+  "de grot": "https://www.boekenzoeker.be/de-grot",
+  "een weeffout in onze sterren": "https://www.boekenzoeker.be/een-weeffout-onze-sterren",
+  "de verloren vader": "https://www.boekenzoeker.be/verloren-grond",
+  "diep in het woud: verzamelde verhalen van ovidius": "https://www.boekenzoeker.be/diep-het-woud",
+  "gebroken soep": "https://www.boekenzoeker.be/gebroken-soep",
+  "de wildernis in": "https://www.boekenzoeker.be/de-wildernis",
+  "liefste esther": "https://www.boekenzoeker.be/liefste-esther",
+  "mijn stilte": "https://www.boekenzoeker.be/mijn-stilte",
+  "engelenmoord": "https://www.boekenzoeker.be/engelenmoord",
+  "de winter van de belgica": "https://www.boekenzoeker.be/de-winter-van-de-belgica",
+  "stilstaan": "https://www.boekenzoeker.be/stilstaan",
+  "mag het op mijn manier?": "https://www.boekenzoeker.be/ik-doe-het-op-mijn-manier",
+  "voetballen of vechten?": "https://www.boekenzoeker.be/vechten-voetballen",
+  "je ziet maar ... !": "https://www.boekenzoeker.be/wat-je-ziet-zit-je-hoofd",
+  "het grote misschien": "https://www.boekenzoeker.be/het-grote-misschien",
+  "rood weeskind": "https://www.boekenzoeker.be/rood-weeskind",
+  "de troost van de filosofie": "https://www.boekenzoeker.be/de-troost-van-de-filosofie",
+  "marja": "https://www.boekenzoeker.be/marja",
+  "rode sneeuw": "https://www.boekenzoeker.be/rode-sneeuw",
+  "de meisje": "https://www.boekenzoeker.be/meisje-jongen-jongen-meisje",
+  "zout van de zee": "https://www.boekenzoeker.be/zout-van-de-zee",
+  "raak me dan, als je kan": "https://www.boekenzoeker.be/raak-me-dan-als-je-kan",
+  "een rugzak vol": "https://www.boekenzoeker.be/een-rugzak-vol",
+  "een jongen": "https://www.boekenzoeker.be/meisje-jongen-jongen-meisje",
+  "de man bij het meer": "https://www.boekenzoeker.be/de-man-bij-het-meer",
+  "william s.": "https://www.boekenzoeker.be/william-wil-de-wereld-zien",
+  "vuurkraal": "https://www.boekenzoeker.be/vuurkraal",
+  "robinson crusoë": "https://www.boekenzoeker.be/robinson-crusoe",
+  "vermoord het verleden": "https://www.boekenzoeker.be/vermoord-het-verleden",
+  "anna was hier": "https://www.boekenzoeker.be/anna-was-hier",
+  "zwarte zwaan": "https://www.boekenzoeker.be/zwarte-zwaan",
+  "afscheid van een koning": "https://www.boekenzoeker.be/afscheid-van-arthur",
+  "boris": "https://www.boekenzoeker.be/bruidsmeisje-boris",
+  "lara": "https://www.boekenzoeker.be/lara",
+  "hannibal": "https://www.boekenzoeker.be/hannibal",
+  "de boekendief": "https://www.boekenzoeker.be/de-boekendief",
+  "de nacht van 2 april": "https://www.boekenzoeker.be/de-nacht-van-2-april",
+  "dracula": "https://www.boekenzoeker.be/dracula",
+  "zijde": "https://www.boekenzoeker.be/zijde",
+  "verloren vrouw": "https://www.boekenzoeker.be/radio-verloren-stad",
+  "zoals het gebeurd is": "https://www.boekenzoeker.be/zoals-het-gebeurd",
+  "blijven slapen": "https://www.boekenzoeker.be/blijven-slapen",
+  "dun!": "https://www.boekenzoeker.be/dun",
+  "kieuw": "https://www.boekenzoeker.be/kieuw",
+  "ademloos": "https://www.boekenzoeker.be/ademloos",
+  "ooit is niet nu: het geheime leven van tatiana d.": "https://www.boekenzoeker.be/ooit-niet-nu",
+  "solo": "https://www.boekenzoeker.be/solo",
+  "de erfgenaam": "https://www.boekenzoeker.be/de-gestolen-erfgenaam",
+  "het huis van eb en vloed": "https://www.boekenzoeker.be/het-huis-van-eb-en-vloed",
+  "splinters": "https://www.boekenzoeker.be/splinters",
+  "de ramp van tsjernobyl": "https://www.boekenzoeker.be/de-ramp-van-tsjernobyl",
+  "hermelijn": "https://www.boekenzoeker.be/hermelijn",
+  "lord of the flies": "https://www.boekenzoeker.be/lord-flies",
+  "honderd uur nacht": "https://www.boekenzoeker.be/honderd-uur-nacht",
+  "lang zal ze leven": "https://www.boekenzoeker.be/lang-zal-ze-leven",
+  "dit is mijn dag": "https://www.boekenzoeker.be/dit-mijn-dag",
+  "het geschenk": "https://www.boekenzoeker.be/het-geschenk",
+  "de drie mannen van eva": "https://www.boekenzoeker.be/de-drie-mannen-van-eva",
+  "doodgraag": "https://www.boekenzoeker.be/doodgraag",
+  "die foto waar ik niet op sta": "https://www.boekenzoeker.be/die-foto-waar-ik-niet-op-sta",
+  "vikingbloed": "https://www.boekenzoeker.be/vikingbloed",
+  "de laatsten": "https://www.boekenzoeker.be/de-laatsten",
+  "mijn vriend hitler": "https://www.boekenzoeker.be/mijn-vriend-hitler",
+  "ik geef je de zon": "https://www.boekenzoeker.be/ik-geef-je-de-zon",
+  "het land van het witte paard": "https://www.boekenzoeker.be/aydin-het-waargebeurde-verhaal-van-een-beloega",
+  "mijn zusje": "https://www.boekenzoeker.be/mijn-zusje-de-seriemoordenaar",
+  "op drift": "https://www.boekenzoeker.be/op-drift",
+  "gouden sterren": "https://www.boekenzoeker.be/de-gouden-kooi",
+  "jongen zonder naam": "https://www.boekenzoeker.be/jongen-zonder-naam",
+  "op liefde en dood": "https://www.boekenzoeker.be/op-liefde-en-dood",
+  "niets": "https://www.boekenzoeker.be/niets-0",
+  "hertz": "https://www.boekenzoeker.be/hertz-de-zoektocht-van-finn-revel",
+  "oorlogswinter": "https://www.boekenzoeker.be/oorlogswinter",
+  "mamma?": "https://www.boekenzoeker.be/mamma-waar-ben-je",
+  "wat niemand ziet": "https://www.boekenzoeker.be/wat-niemand-ziet",
+  "wildernis": "https://www.boekenzoeker.be/de-wildernis-0",
+  "de wildernis": "https://www.boekenzoeker.be/de-wildernis-0",
+  "brieven van mijn vader": "https://www.boekenzoeker.be/brieven-aan-mijn-vader",
+  "alles wat je lief is": "https://www.boekenzoeker.be/alles-wat-je-lief",
+  "kijk niet om": "https://www.boekenzoeker.be/kijk-niet-meer-om",
+  "dromer": "https://www.boekenzoeker.be/dromer",
+  "vals nest": "https://www.boekenzoeker.be/vals-nest",
+  "¡dolores!": "https://www.boekenzoeker.be/dolores",
+  "het zijn net mensen: beelden uit het midden-oosten": "https://www.boekenzoeker.be/het-zijn-net-mensen-beelden-uit-het-midden-oosten",
+  "de kooi": "https://www.boekenzoeker.be/de-kooi-0",
+  "lopen voor je leven": "https://www.boekenzoeker.be/lopen-voor-je-leven",
+  "allemaal willen we de hemel": "https://www.boekenzoeker.be/allemaal-willen-we-de-hemel",
+  "vallen": "https://www.boekenzoeker.be/vallen",
+  "gaten": "https://www.boekenzoeker.be/gaten",
+  "wild water": "https://www.boekenzoeker.be/wild-van-water-een-heleboel-coole-experimenten",
+  "schaduw van de leeuw": "https://www.boekenzoeker.be/de-leeuw-van-mars",
+  "mariken": "https://www.boekenzoeker.be/mariken",
+  "naar de maan": "https://www.boekenzoeker.be/naar-de-maan",
+  "wat zou martin doen?": "https://www.boekenzoeker.be/wat-zou-martin-doen",
+  "adres onbekend": "https://www.boekenzoeker.be/adres-onbekend-1",
+  "oktober": "https://www.boekenzoeker.be/oktober-oktober",
+  "ijzerkop": "https://www.boekenzoeker.be/ijzerkop",
+  "het toeval": "https://www.boekenzoeker.be/het-toeval",
+  "het klimaat zijn wij: de wereld redden begint bij het ontbijt": "https://www.boekenzoeker.be/wij-zijn-het-klimaat-een-brief-aan-iedereen",
+  "samen sterk": "https://www.boekenzoeker.be/samen-sterk",
+  "sam": "https://www.boekenzoeker.be/samen-met-sam-naar-de-winkel",
+  "één is altijd gelijk aan één": "https://www.boekenzoeker.be/een-altijd-gelijk-aan-een",
+  "jonkvrouw": "https://www.boekenzoeker.be/jonkvrouw",
+  "maar ik ben jou niet": "https://www.boekenzoeker.be/maar-ik-ben-jou-niet",
+  "the hate u give (the hate u give, #1)": "https://www.boekenzoeker.be/hate-u-give",
+  "wij blijven bij elkaar": "https://www.boekenzoeker.be/wij-blijven-bij-elkaar",
+  "suikerspin": "https://www.boekenzoeker.be/suikerspin-0",
+  "kwetsbaar geluk": "https://www.boekenzoeker.be/recht-op-geluk-een-jongen-steekt-de-grens-over",
+  "ik mis je, ik mis je!": "https://www.boekenzoeker.be/papa-ik-mis-je",
+  "trofee": "https://www.boekenzoeker.be/trofee",
+  "bart": "https://www.boekenzoeker.be/bert-en-bart-redden-de-wereld",
+  "het lied van de vreemdeling": "https://www.boekenzoeker.be/het-lied-van-de-vreemdeling",
+  "blauwe plekken": "https://www.boekenzoeker.be/blauwe-plekken",
+  "hele verhalen voor een halve soldaat": "https://www.boekenzoeker.be/hele-verhalen-voor-een-halve-soldaat",
+  "het dorp van de zwaluwen": "https://www.boekenzoeker.be/het-dorp-van-de-zwaluwen-oradour-sur-glane",
+  "je kunt geen kant op": "https://www.boekenzoeker.be/je-kunt-geen-kant-op",
+  "zonder titel": "https://www.boekenzoeker.be/zonder-titel",
+  "zwaard en kroon": "https://www.boekenzoeker.be/een-kroon-voor-koud-zilver",
+  "de reis om de wereld in 80 dagen": "https://www.boekenzoeker.be/reis-om-de-wereld-80-dagen-0",
+  "schaduw van toet": "https://www.boekenzoeker.be/schaduw-van-toet",
+  "voor altijd : romeo en julia : een vleselijk liefdesverhaal": "https://www.boekenzoeker.be/voor-altijd-beroemd",
+  "de rest van ons leven": "https://www.boekenzoeker.be/de-rest-van-ons-leven",
+  "en met anna?": "https://www.boekenzoeker.be/en-met-anna",
+  "alles wat groots voelt": "https://www.boekenzoeker.be/alles-wat-groots-voelt",
+  "vliegen zonder vleugels": "https://www.boekenzoeker.be/vliegen-zonder-vleugels",
+  "kaas": "https://www.boekenzoeker.be/kaas",
+  "de dagen van de bluegrassliefde": "https://www.boekenzoeker.be/de-dagen-van-de-bluegrassliefde",
+  "artemis fowl (artemis fowl, #1)": "https://www.boekenzoeker.be/artemis-fowl",
+  "wij, twee jongens": "https://www.boekenzoeker.be/wij-twee-jongens",
+  "een lied voor lore": "https://www.boekenzoeker.be/een-lied-voor-lore",
+  "ik ben niet bang": "https://www.boekenzoeker.be/ik-ben-vincent-en-ik-ben-niet-bang",
+  "we noemen hem anna": "https://www.boekenzoeker.be/we-noemen-hem-anna",
+  "prins van de hel": "https://www.boekenzoeker.be/prins-van-de-hel",
+  "ons derde lichaam": "https://www.boekenzoeker.be/ons-derde-lichaam",
+  "die dag aan zee": "https://www.boekenzoeker.be/die-dag-aan-zee",
+  "jij, jij en jij": "https://www.boekenzoeker.be/jij-jij-en-jij",
+  "negen open armen": "https://www.boekenzoeker.be/negen-open-armen",
+  "niet meer dan lucht": "https://www.boekenzoeker.be/het-monster-van-loch-ness-en-meer-dan-100-andere-mysteries",
+  "slecht": "https://www.boekenzoeker.be/slecht",
+  "bevroren": "https://www.boekenzoeker.be/bevroren-kamers",
+  "heer doos": "https://www.boekenzoeker.be/dit-geen-doos",
+  "chatroom": "https://www.boekenzoeker.be/chatroom",
+  "de stalker": "https://www.boekenzoeker.be/johnny-stalker",
+  "verwachtingen": "https://www.boekenzoeker.be/verwachtingen",
+  "ik denk dat het liefde was": "https://www.boekenzoeker.be/ik-denk-dat-het-liefde-was",
+  "liever de leugen": "https://www.boekenzoeker.be/liever-de-leugen",
+  "mijn zoute zoen": "https://www.boekenzoeker.be/mijn-zoute-zoen",
+  "de tillermans: de zwerftocht van vier kinderen op zoek naar een thuis": "https://www.boekenzoeker.be/de-tillermans-de-zwerftocht-van-vier-kinderen-op-zoek-naar-een-thuis",
+  "de alchemist": "https://www.boekenzoeker.be/de-alchemist",
+  "de aanslag": "https://www.boekenzoeker.be/de-aanslag",
+  "de roedel wolven": "https://www.boekenzoeker.be/het-wolfje-dat-geen-roedel-nodig-had",
+  "zolang te water": "https://www.boekenzoeker.be/al-zolang-er-mensen-bestaan-verhalen-van-over-de-hele-wereld",
+  "eleanor & park": "https://www.boekenzoeker.be/eleanor-park",
+  "legend (legend, #1)": "https://www.boekenzoeker.be/legend",
+  "versnelling": "https://www.boekenzoeker.be/versnelling",
+  "nooit meer thuis": "https://www.boekenzoeker.be/nooit-meer-bang",
+  "vroeger is alles wat ik van je heb": "https://www.boekenzoeker.be/dit-alles-het-hoofdkussenboek-van-cordelia-kenn",
+  "naar de top": "https://www.boekenzoeker.be/naar-de-top",
+  "love me": "https://www.boekenzoeker.be/justine-summer-love",
+  "babel": "https://www.boekenzoeker.be/babel-0",
+  "prachtige wereld, waar ben je": "https://www.boekenzoeker.be/prachtige-wereld-waar-ben-je",
+  "julius caesar": "https://www.boekenzoeker.be/de-adelaar-de-laatste-dagen-van-caesar",
+  "will grayson, will grayson (will grayson, will grayson, #1)": "https://www.boekenzoeker.be/will-grayson-will-grayson",
+  "tamar": "https://www.boekenzoeker.be/tamar",
+  "i am legend": "https://www.boekenzoeker.be/legend",
+  "about a boy": "https://www.boekenzoeker.be/about-boy",
+  "sluitertijd": "https://www.boekenzoeker.be/sluitertijd",
+  "vliegen tot de hemel: het verhaal van de minotaurus": "https://www.boekenzoeker.be/vliegen-tot-de-hemel-het-verhaal-van-de-minotaurus",
+  "de hobbit": "https://www.boekenzoeker.be/de-hobbit-daarheen-en-weer-terug",
+  "mijn andere ik": "https://www.boekenzoeker.be/ik-heb-mijn-zusje-kwijtgemaakt",
+  "vissen redden": "https://www.boekenzoeker.be/vissen-smelten-niet",
+  "over het kanaal": "https://www.boekenzoeker.be/over-het-kanaal",
+  "de passievrucht": "https://www.boekenzoeker.be/de-passievrucht",
+  "alles wat licht is": "https://www.boekenzoeker.be/alles-wat-licht",
+  "de vliegeraar": "https://www.boekenzoeker.be/de-vliegeraar",
+  "slaap!": "https://www.boekenzoeker.be/slaap-kindje-slaap",
+  "misdaden": "https://www.boekenzoeker.be/misdaden",
+  "het feest der liefde": "https://www.boekenzoeker.be/na-het-feest",
+  "siegfried": "https://www.boekenzoeker.be/siegfried",
+  "het parfum": "https://www.boekenzoeker.be/pepijn-en-het-duistere-parfum",
+  "nooit meer slapen": "https://www.boekenzoeker.be/nooit-meer-slapen",
+  "zonder genade": "https://www.boekenzoeker.be/zonder-genade",
+  "het grote verlangen": "https://www.boekenzoeker.be/het-grote-verlangen",
+  "tirza": "https://www.boekenzoeker.be/tirza",
+  "vluchteling": "https://www.boekenzoeker.be/vluchteling",
+  "mijn kleine oorlog": "https://www.boekenzoeker.be/kleine-helden-over-gewone-mensen-die-oorlog-en-ellende-een-groot-verschil-maken",
+  "xxl": "https://www.boekenzoeker.be/lucy-xxl",
+  "de spin en de sleutel": "https://www.boekenzoeker.be/de-spin-en-de-sleutel",
+  "de geur van melisse": "https://www.boekenzoeker.be/de-geur-van-melisse"
+};
+
+        // Bepaal de meest geschikte externe link voor meer info (1 knop per boek: Boekenzoeker -> Hebban -> Goodreads)
+        function getBookExternalLink(book) {
+            if (!book) return null;
+
+            // STAP 1: Boekenzoeker
+            // A. Directe Boekenzoeker link uit Google Sheet
+            if (book.Boekenzoeker && book.Boekenzoeker.startsWith('http')) {
+                return {
+                    platform: 'boekenzoeker',
+                    url: book.Boekenzoeker,
+                    label: 'Achterflap op Boekenzoeker.be',
+                    title: 'Bekijk dit boek en samenvatting op Boekenzoeker.be',
+                    btnClass: 'bg-coral-500 hover:bg-coral-600 text-white shadow-coral-500/20'
+                };
+            }
+            // B. Geverifieerde match in Boekenzoeker databank
+            const normTitle = (book.Titel || '').toLowerCase().trim();
+            const shortTitle = normTitle.split(':')[0].trim();
+            const bzUrl = BOEKENZOEKER_VERIFIED[normTitle] || BOEKENZOEKER_VERIFIED[shortTitle];
+            if (bzUrl) {
+                return {
+                    platform: 'boekenzoeker',
+                    url: bzUrl,
+                    label: 'Achterflap op Boekenzoeker.be',
+                    title: 'Bekijk dit boek en samenvatting op Boekenzoeker.be',
+                    btnClass: 'bg-coral-500 hover:bg-coral-600 text-white shadow-coral-500/20'
+                };
+            }
+
+            // STAP 2: Hebban (dé betrouwbare Nederlandstalige boekensite met achterflap en lezersrecensies)
+            // A. Directe Hebban link uit Google Sheet
+            if (book.Hebban && book.Hebban.startsWith('http')) {
+                return {
+                    platform: 'hebban',
+                    url: book.Hebban,
+                    label: 'Bekijk op Hebban.nl',
+                    title: 'Bekijk achterflap en recensies op Hebban.nl',
+                    btnClass: 'bg-[#1976D2] hover:bg-[#1565C0] text-white shadow-blue-500/20'
+                };
+            }
+            // B. Nederlandstalig boek of boek met ISBN -> Hebban zoeklink (100% werkend en stabiel)
+            const cleanIsbn = book.ISBN ? String(book.ISBN).replace(/[^0-9X]/gi, '') : '';
+            const isDutch = !book.Taal || book.Taal === 'Nederlands';
+            if (isDutch && (cleanIsbn || (book.Titel && book.Auteur))) {
+                const hebbanQuery = cleanIsbn || `${book.Titel} ${book.Auteur}`.replace(/[:\/#?]/g, ' ').trim();
+                return {
+                    platform: 'hebban',
+                    url: `https://www.hebban.nl/zoeken?q=${encodeURIComponent(hebbanQuery)}`,
+                    label: 'Bekijk op Hebban.nl',
+                    title: 'Bekijk achterflap en recensies op Hebban.nl',
+                    btnClass: 'bg-[#1976D2] hover:bg-[#1565C0] text-white shadow-blue-500/20'
+                };
+            }
+
+            // STAP 3: Goodreads (ideaal voor anderstalige boeken of als specifieke Goodreads URL gekend is)
+            if (book.Goodreads && book.Goodreads.startsWith('http')) {
+                return {
+                    platform: 'goodreads',
+                    url: book.Goodreads,
+                    label: 'Bekijk op Goodreads',
+                    title: 'Bekijk recensies en achterflap op Goodreads',
+                    btnClass: 'bg-[#382110] hover:bg-[#2b180a] text-white shadow-stone-800/20'
+                };
+            }
+
+            // Fallback: Hebban zoekopdracht op titel
+            return {
+                platform: 'hebban',
+                url: `https://www.hebban.nl/zoeken?q=${encodeURIComponent(book.Titel || '')}`,
+                label: 'Bekijk op Hebban.nl',
+                title: 'Bekijk op Hebban.nl',
+                btnClass: 'bg-[#1976D2] hover:bg-[#1565C0] text-white shadow-blue-500/20'
+            };
+        }
+
         function openBookDetailModal(book) {
             currentModalBook = book;
             const modal = document.getElementById('bookDetailModal');
@@ -2640,16 +2945,18 @@
 
             updateModalFavState();
 
-            const goodreadsBtn = document.getElementById('btnOpenGoodreads');
-            if (goodreadsBtn) {
-                if (book.Goodreads && book.Goodreads.startsWith('http')) {
-                    goodreadsBtn.href = book.Goodreads;
-                } else {
-                    const cleanIsbn = book.ISBN ? String(book.ISBN).replace(/[^0-9X]/gi, '') : '';
-                    const query = cleanIsbn ? cleanIsbn : `${book.Titel} ${book.Auteur}`.replace(/[:\/#?]/g, ' ').trim();
-                    goodreadsBtn.href = `https://www.goodreads.com/search?q=${encodeURIComponent(query)}`;
-                }
-                goodreadsBtn.classList.remove('hidden');
+            // Exact 1 werkende knop naar meer informatie: Boekenzoeker -> Hebban -> Goodreads
+            const infoLink = getBookExternalLink(book);
+            const infoBtn = document.getElementById('btnModalInfoLink');
+            const infoText = document.getElementById('modalInfoBtnText');
+            if (infoBtn && infoLink) {
+                infoBtn.href = infoLink.url;
+                infoBtn.title = infoLink.title;
+                if (infoText) infoText.textContent = infoLink.label;
+                infoBtn.className = `w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 ${infoLink.btnClass}`;
+                infoBtn.classList.remove('hidden');
+            } else if (infoBtn) {
+                infoBtn.classList.add('hidden');
             }
 
             modal.showModal();
