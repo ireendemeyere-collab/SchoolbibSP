@@ -334,19 +334,7 @@
             </div>
         </div>
 
-        <!-- 3. UITGELICHT THEMA IN DE KIJKER (PROMINENT BOVENAAN) -->
-        <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 border shadow-sm transition-all duration-300">
-            <div class="mb-5">
-                <span id="featuredThemeBadge" class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md mb-2">Thema in de kijker</span>
-                <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold leading-snug"></h3>
-                <p id="featuredThemeDesc" class="text-xs sm:text-sm mt-1 max-w-2xl"></p>
-            </div>
-
-            <!-- Carrousels per graad: 1 enkele rij met 3 graden naast elkaar (1ste, 2de en 3de graad) -->
-            <div id="featuredGradesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-stretch"></div>
-        </section>
-
-        <!-- 4. CATALOGUS SECTIE -->
+        <!-- 3. CATALOGUS SECTIE -->
         <!-- A. Standaard weergave: 1 rij met 10 boeken en pijltjessysteem -->
         <section id="catalogDefaultCarouselSection" class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -372,6 +360,18 @@
                 <span id="activeFilterFeedback" class="font-semibold text-slate-600">Gefilterde boeken</span>
             </div>
             <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
+        </section>
+
+        <!-- 4. UITGELICHT THEMA IN DE KIJKER -->
+        <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 border shadow-sm transition-all duration-300">
+            <div class="mb-5">
+                <span id="featuredThemeBadge" class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md mb-2">Thema in de kijker</span>
+                <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold leading-snug"></h3>
+                <p id="featuredThemeDesc" class="text-xs sm:text-sm mt-1 max-w-2xl"></p>
+            </div>
+
+            <!-- Carrousels per graad: 1 enkele rij met 3 graden naast elkaar (1ste, 2de en 3de graad) -->
+            <div id="featuredGradesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-stretch"></div>
         </section>
 
         <!-- 5. NIEUW IN DE BIB -->
@@ -1045,6 +1045,26 @@
                             </button>
                         </div>
                         <p id="pinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Pincode aangepast!</p>
+                    </div>
+
+                    <div class="space-y-3 pt-4 border-t border-slate-100">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                                Klassenlijst beheren
+                            </label>
+                            <p class="text-xs text-slate-500 mt-0.5">Stel de klassen van de school in (gescheiden door komma's). Deze verschijnen automatisch in de keuzelijst bij het uitlenen.</p>
+                        </div>
+                        <div class="space-y-2">
+                            <textarea id="schoolClassesInput" rows="3" placeholder="Bijv. 1A, 1B, 2MWa, 2MWb, 3WET, 4ECO, 5ASO, 6ASO, OKAN, Leerkracht"
+                                      class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium"></textarea>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] text-slate-400">Tip: Scheid klassen met een komma of op een nieuwe regel.</span>
+                                <button type="button" id="btnSaveClasses" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition cursor-pointer">
+                                    Klassenlijst Opslaan
+                                </button>
+                            </div>
+                        </div>
+                        <p id="classesSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Klassenlijst succesvol bijgewerkt!</p>
                     </div>
 
                 </div>
@@ -4357,12 +4377,55 @@
             }
 
             if (modal) {
+                updateSchoolClassesDatalist();
                 modal.showModal();
                 document.getElementById('quickLoanStudent')?.focus();
             }
         }
 
+        const DEFAULT_CLASSES = [
+            "1A", "1B", "1C", "1D",
+            "2MWa", "2MWb", "2STEM", "2K&C",
+            "3WET", "3HUM", "3ECO", "3LAT",
+            "4WET", "4HUM", "4ECO", "4LAT",
+            "5ASO", "5WET", "5HUM", "5ECO",
+            "6ASO", "6WET", "6HUM", "6ECO",
+            "OKAN", "Leerkracht"
+        ];
+
+        function getSchoolClasses() {
+            const saved = localStorage.getItem('schoolbib_classes');
+            let list = DEFAULT_CLASSES;
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) list = parsed;
+                } catch (e) {}
+            }
+            // Voeg klassen toe die in actieve/historische uitleningen voorkomen
+            const set = new Set(list);
+            if (Array.isArray(loans)) {
+                loans.forEach(l => {
+                    if (l.klas && l.klas.trim()) set.add(l.klas.trim());
+                });
+            }
+            return Array.from(set).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        }
+
+        function updateSchoolClassesDatalist() {
+            const datalist = document.getElementById('schoolClassesList');
+            if (!datalist) return;
+            const classes = getSchoolClasses();
+            datalist.innerHTML = '';
+            classes.forEach(cls => {
+                const opt = document.createElement('option');
+                opt.value = cls;
+                datalist.appendChild(opt);
+            });
+        }
+
         function initLoans() {
+            updateSchoolClassesDatalist();
             const loanForm = document.getElementById('loanForm');
             const titleInput = document.getElementById('loanBookTitle');
             const copySelect = document.getElementById('loanCopySelect');
@@ -4879,6 +4942,33 @@
                 pinInput.value = '';
                 setTimeout(() => pinSavedMsg.classList.add('hidden'), 3000);
             });
+
+            // Klassenlijst instelling
+            const classesInput = document.getElementById('schoolClassesInput');
+            const saveClassesBtn = document.getElementById('btnSaveClasses');
+            const classesSavedMsg = document.getElementById('classesSavedMsg');
+
+            if (classesInput) {
+                classesInput.value = getSchoolClasses().join(', ');
+            }
+
+            if (saveClassesBtn && classesInput) {
+                saveClassesBtn.addEventListener('click', () => {
+                    const raw = classesInput.value;
+                    const parsed = raw.split(/[,;\n]+/).map(c => c.trim()).filter(c => c.length > 0);
+                    if (parsed.length === 0) {
+                        alert('Voer minimaal 1 klas in.');
+                        return;
+                    }
+                    localStorage.setItem('schoolbib_classes', JSON.stringify(parsed));
+                    updateSchoolClassesDatalist();
+                    if (classesSavedMsg) {
+                        classesSavedMsg.classList.remove('hidden');
+                        setTimeout(() => classesSavedMsg.classList.add('hidden'), 3000);
+                    }
+                    showToast('Klassenlijst succesvol bijgewerkt! ✓', 'success');
+                });
+            }
         }
     </script>
 </body>
