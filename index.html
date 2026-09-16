@@ -334,7 +334,19 @@
             </div>
         </div>
 
-        <!-- 3. CATALOGUS SECTIE -->
+        <!-- 3. UITGELICHT THEMA IN DE KIJKER (PROMINENT BOVENAAN) -->
+        <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 border shadow-sm transition-all duration-300">
+            <div class="mb-5">
+                <span id="featuredThemeBadge" class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md mb-2">Thema in de kijker</span>
+                <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold leading-snug"></h3>
+                <p id="featuredThemeDesc" class="text-xs sm:text-sm mt-1 max-w-2xl"></p>
+            </div>
+
+            <!-- Carrousels per graad: 1 enkele rij met 3 graden naast elkaar (1ste, 2de en 3de graad) -->
+            <div id="featuredGradesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-stretch"></div>
+        </section>
+
+        <!-- 4. CATALOGUS SECTIE -->
         <!-- A. Standaard weergave: 1 rij met 10 boeken en pijltjessysteem -->
         <section id="catalogDefaultCarouselSection" class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -360,18 +372,6 @@
                 <span id="activeFilterFeedback" class="font-semibold text-slate-600">Gefilterde boeken</span>
             </div>
             <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
-        </section>
-
-        <!-- 4. UITGELICHTE BOEKEN (AANBEVOLEN PER GRAAD MET CARROUSEL, MAX 5 PER GRAAD) -->
-        <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 bg-slate-50 border border-slate-200/90 shadow-xs text-slate-900">
-            <div class="mb-5">
-                <span class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-brand-100 text-brand-800 mb-2">Thema in de kijker</span>
-                <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
-                <p id="featuredThemeDesc" class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl"></p>
-            </div>
-
-            <!-- Carrousels per graad: 1 enkele rij met 3 graden naast elkaar (1ste, 2de en 3de graad) -->
-            <div id="featuredGradesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-stretch"></div>
         </section>
 
         <!-- 5. NIEUW IN DE BIB -->
@@ -468,10 +468,14 @@
                 </div>
             </div>
 
-            <!-- Modal Footer: Exact 1 dynamische knop naar Boekenzoeker, Hebban of Goodreads -->
-            <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
+            <!-- Modal Footer: Uitlenen knop (beveiligd) & Link naar Boekenzoeker/Hebban/Goodreads -->
+            <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <button id="btnModalLoanOut" type="button" class="w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white cursor-pointer order-2 sm:order-1">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>📘 Dit boek uitlenen</span>
+                </button>
                 <a id="btnModalInfoLink" href="#" target="_blank" rel="noopener noreferrer"
-                   class="w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2">
+                   class="w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 order-1 sm:order-2">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     <span id="modalInfoBtnText">Meer informatie</span>
                     <svg class="w-4 h-4 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
@@ -584,11 +588,16 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kleursfeer van de banner</label>
                                 <select id="fThemeStyle" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
-                                    <option value="night" selected>🎃 Mysterieus & Donker (Donkerblauw & Koraal)</option>
+                                    <option value="sunny" selected>☀️ Zonnig Geel / Goud (Vrolijk)</option>
+                                    <option value="night">🎃 Mysterieus & Donker (Donkerblauw & Koraal)</option>
                                     <option value="coral">🔥 Warm Koraalrood (Energiek & Opvallend)</option>
                                     <option value="teal">🌿 Boekenzoeker Teal (Fris & Uitnodigend)</option>
-                                    <option value="sunny">☀️ Zonnig Geel / Goud (Vrolijk)</option>
                                 </select>
+                                <!-- Live kleursfeer voorbeeld -->
+                                <div id="themeColorPreview" class="mt-2.5 p-3 rounded-2xl text-xs font-black flex items-center justify-between border transition shadow-2xs">
+                                    <span id="themePreviewText">☀️ Zonnig Geel banner geactiveerd</span>
+                                    <span class="text-[10px] px-2.5 py-0.5 rounded-lg font-black" id="themePreviewBadge">Actief</span>
+                                </div>
                             </div>
                         </div>
 
@@ -828,57 +837,143 @@
                 </div>
             </div>
 
-            <!-- SUB-TAB 2: BOEKEN ONTLENEN -->
+            <!-- SUB-TAB 2: BOEKEN ONTLENEN & INLEVEREN -->
             <div id="subtabLoans" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden">
                 <div class="space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <!-- Top header & Cloud status -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
                         <div>
-                            <h3 class="text-xl font-extrabold text-slate-900">Boeken Ontlenen & Inleveren</h3>
-                            <p class="text-xs sm:text-sm text-slate-500">Registreer wie welk boek heeft meegenomen en bewaar overzicht over inleverdata.</p>
+                            <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2.5">
+                                <span>Boeken Ontlenen & Inleveren</span>
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-500">Beheer uitleningen centraal voor de hele school via Google Sheets.</p>
                         </div>
-                        <span id="activeLoansCount" class="text-xs font-extrabold bg-brand-100 text-brand-700 px-3.5 py-1.5 rounded-xl self-start sm:self-auto">
-                            0 actieve uitleningen
-                        </span>
-                    </div>
-
-                    <form id="loanForm" class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-4">
-                        <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
-                            <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Nieuwe uitlening registreren
-                        </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
-                                <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
-                                <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
-                            </div>
-                            <div class="lg:col-span-1">
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel van het boek <span class="text-rose-500">*</span></label>
-                                <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
-                                <datalist id="loanBooksList"></datalist>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Specifiek Exemplaar & Locatie <span class="text-rose-500">*</span></label>
-                                <select id="loanCopySelect" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                    <option value="">-- Kies eerst een titel --</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum</label>
-                                <input type="date" id="loanDueDate" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white">
-                            </div>
-                        </div>
-                        <div class="flex justify-end">
-                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span>Uitlening opslaan</span>
+                        <div class="flex flex-wrap items-center gap-2.5">
+                            <span id="loanCloudSyncBadge" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-600 border border-slate-200">
+                                <span class="w-2 h-2 rounded-full bg-slate-400" id="loanSyncDot"></span>
+                                <span id="loanCloudSyncText">Lokale opslag</span>
+                            </span>
+                            <button id="btnRefreshLoans" type="button" title="Synchroniseer uitleningen opnieuw met Google Sheets" class="p-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition flex items-center justify-center cursor-pointer">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                             </button>
                         </div>
-                    </form>
+                    </div>
 
+                    <!-- Mini-Dashboard Statistieken -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="p-4 rounded-2xl bg-brand-50/60 border border-brand-100 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-lg font-black">
+                                📖
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider block">Actief uitgeleend</span>
+                                <span id="statActiveLoans" class="text-lg font-black text-brand-900">0 boeken</span>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg font-black">
+                                ⚠️
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Te laat</span>
+                                <span id="statOverdueLoans" class="text-lg font-black text-rose-900">0 boeken</span>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center text-lg font-black">
+                                🏫
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Betrokken klassen</span>
+                                <span id="statActiveClasses" class="text-lg font-black text-slate-800">0 klassen</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Snelle Barcodescan / Snelle Invoer balk -->
+                    <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-brand-900 text-white space-y-2.5 shadow-xs">
+                        <div class="flex items-center justify-between">
+                            <label for="barcodeQuickInput" class="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-brand-200">
+                                <svg class="w-4 h-4 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                                <span>Snelle Barcode / ISBN scan (Uitlenen of Direct Inleveren)</span>
+                            </label>
+                            <span class="text-[10px] text-slate-300 hidden sm:inline">Handscanner klaar: scan een barcode of druk op Enter</span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" id="barcodeQuickInput" placeholder="Scan barcode/ISBN of typ titel... (bijv. 9789047701234 of 'Kruistocht')" 
+                                   class="w-full text-xs sm:text-sm px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-400 transition">
+                        </div>
+                        <!-- Resultaat & Direct actie venstertje -->
+                        <div id="barcodeFeedbackBox" class="hidden p-3 rounded-xl bg-white/10 border border-white/20 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"></div>
+                    </div>
+
+                    <!-- Nieuwe uitlening registreren formulier (Accordion) -->
+                    <details class="group bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 transition" open>
+                        <summary class="font-bold text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>Nieuwe uitlening handmatig registreren</span>
+                            </span>
+                            <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                        </summary>
+                        
+                        <form id="loanForm" class="mt-4 space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                                <div class="lg:col-span-1">
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel van het boek <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                    <datalist id="loanBooksList"></datalist>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Exemplaar & Locatie <span class="text-rose-500">*</span></label>
+                                    <select id="loanCopySelect" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                        <option value="">-- Kies eerst een titel --</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum</label>
+                                    <input type="date" id="loanDueDate" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Uitlening opslaan</span>
+                                </button>
+                            </div>
+                        </form>
+                    </details>
+
+                    <!-- Filter & Zoekbalk (Booksource Classroom Klas-weergave) -->
+                    <div class="space-y-3 pt-2">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                            <div class="relative flex-1">
+                                <input type="text" id="loansSearchFilter" placeholder="🔍 Filter uitleningen op leerling, klas of boektitel..." 
+                                       class="w-full text-xs px-3.5 py-2.5 pl-9 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button id="btnBatchReturnClass" type="button" class="hidden text-xs font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center gap-1.5">
+                                    <span>✓ Alles van deze klas inleveren</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Klas-knoppen (Booksource stijl) -->
+                        <div class="flex items-center gap-1.5 overflow-x-auto clean-scroll py-1" id="loansClassFilterBar">
+                            <!-- Dynamisch gevuld met bijv: Alle klassen, 1A (3), 2MWb (5), ... -->
+                        </div>
+                    </div>
+
+                    <!-- Tabel van uitleningen -->
                     <div class="overflow-x-auto rounded-2xl border border-slate-200">
                         <table class="w-full text-left text-xs text-slate-600">
                             <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
@@ -890,7 +985,7 @@
                                     <th class="px-4 py-3">Uitleendatum</th>
                                     <th class="px-4 py-3">Inleverdatum</th>
                                     <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3 text-right">Actie</th>
+                                    <th class="px-4 py-3 text-right">Acties</th>
                                 </tr>
                             </thead>
                             <tbody id="loansTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
@@ -1011,6 +1106,94 @@
             </div>
         </div>
     </dialog>
+ 
+    <!-- MODAL: LEERKRACHT PINCODE VERIFICATIE VOOR SNEL UITLENEN -->
+    <dialog id="teacherPinAuthModal" class="rounded-3xl p-0 shadow-2xl backdrop:bg-slate-900/60 max-w-sm w-full overflow-hidden border border-slate-200">
+        <div class="bg-white p-6 space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <div class="text-center space-y-1">
+                <h3 class="text-base font-extrabold text-slate-900">Leerkracht Verificatie</h3>
+                <p class="text-xs text-slate-500">Voer de leerkrachtcode in om dit boek uit te lenen. (Leerlingen kunnen dit niet van thuis uit.)</p>
+            </div>
+            <form id="teacherPinAuthForm" class="space-y-3">
+                <div>
+                    <input type="password" id="modalTeacherPinInput" placeholder="Pincode (donbosco)" 
+                           class="w-full text-center text-sm font-bold tracking-widest px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none" required>
+                    <p id="modalTeacherPinError" class="text-[11px] font-bold text-rose-500 text-center mt-1 hidden">Pincode onjuist. Probeer opnieuw.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button type="button" id="btnCancelTeacherPin" class="w-1/2 py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold text-xs transition cursor-pointer">Annuleren</button>
+                    <button type="submit" class="w-1/2 py-2.5 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs transition shadow-xs cursor-pointer">Bevestigen</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- MODAL: SNEL UITLENEN VANUIT HET BOEKVENSTER -->
+    <dialog id="quickLoanModal" class="rounded-3xl p-0 shadow-2xl backdrop:bg-slate-900/60 max-w-md w-full overflow-hidden border border-slate-200">
+        <div class="bg-white p-6 space-y-5">
+            <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-14 rounded-lg bg-brand-50 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-lg" id="quickLoanCoverThumb">
+                        📚
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">Boek Uitlenen</span>
+                        <h3 id="quickLoanBookTitle" class="text-sm font-extrabold text-slate-900 line-clamp-1">Titel</h3>
+                        <p id="quickLoanBookAuthor" class="text-xs text-slate-500 line-clamp-1">Auteur</p>
+                    </div>
+                </div>
+                <button type="button" id="btnCloseQuickLoan" class="text-slate-400 hover:text-slate-600 font-bold text-lg p-1 cursor-pointer">✕</button>
+            </div>
+
+            <form id="quickLoanForm" class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Beschikbaar Exemplaar <span class="text-rose-500">*</span></label>
+                    <select id="quickLoanCopySelect" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500"></select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
+                    <input type="text" id="quickLoanStudent" required placeholder="Bijv. Lucas Vermeulen" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
+                        <input type="text" id="quickLoanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum</label>
+                        <input type="date" id="quickLoanDueDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                    </div>
+                </div>
+                <datalist id="schoolClassesList">
+                    <option value="1A"></option>
+                    <option value="1B"></option>
+                    <option value="1C"></option>
+                    <option value="2MWa"></option>
+                    <option value="2MWb"></option>
+                    <option value="2STEM"></option>
+                    <option value="3WET"></option>
+                    <option value="3HUM"></option>
+                    <option value="4WET"></option>
+                    <option value="4ECO"></option>
+                    <option value="5ASO"></option>
+                    <option value="6ASO"></option>
+                    <option value="OKAN"></option>
+                    <option value="Leerkracht"></option>
+                </datalist>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" id="btnCancelQuickLoan" class="w-1/2 py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold text-xs transition cursor-pointer">Annuleren</button>
+                    <button type="submit" class="w-1/2 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span>Uitlening Bevestigen</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 
     <!-- JAVASCRIPT LOGICA -->
     <script>
@@ -1044,7 +1227,7 @@
             title: "Spannende boeken in november",
             description: "Griezelen en spanning voor de donkere herfstdagen! Ontdek onze bloedstollende thrillers en detectives in de bib.",
             tag: "spanning",
-            style: "night",
+            style: "sunny",
             gradePicks: {
                 grade1: [],
                 grade2: [],
@@ -1054,6 +1237,10 @@
         let featuredTheme = JSON.parse(localStorage.getItem('schoolbib_featured_theme') || JSON.stringify(DEFAULT_FEATURED));
         if (!featuredTheme.gradePicks) {
             featuredTheme.gradePicks = { grade1: [], grade2: [], grade3: [] };
+        }
+        if (!featuredTheme.style || featuredTheme.style === 'night') {
+            featuredTheme.style = 'sunny';
+            localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
         }
 
         let currentModalBook = null;
@@ -1372,9 +1559,31 @@
             'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)'
         ];
 
-        function getCoverGradient(title) {
+        function getCoverGradient(title, themeOrGenre = '') {
+            const tg = (themeOrGenre || '').toLowerCase();
+            if (tg.includes('span') || tg.includes('detective') || tg.includes('thriller') || tg.includes('misdaad')) {
+                return 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)';
+            }
+            if (tg.includes('fantas') || tg.includes('magie') || tg.includes('myth')) {
+                return 'linear-gradient(135deg, #6b21a8 0%, #3b0764 100%)';
+            }
+            if (tg.includes('romance') || tg.includes('liefde')) {
+                return 'linear-gradient(135deg, #e11d48 0%, #9f1239 100%)';
+            }
+            if (tg.includes('histor') || tg.includes('oorlog')) {
+                return 'linear-gradient(135deg, #78350f 0%, #451a03 100%)';
+            }
+            if (tg.includes('humor') || tg.includes('satire')) {
+                return 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)';
+            }
+            if (tg.includes('science') || tg.includes('sci-fi')) {
+                return 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
+            }
+            if (tg.includes('natuur') || tg.includes('dier') || tg.includes('milieu')) {
+                return 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)';
+            }
             let hash = 0;
-            for (let i = 0; i < title.length; i++) hash = title.charCodeAt(i) + ((hash << 5) - hash);
+            for (let i = 0; i < (title || '').length; i++) hash = title.charCodeAt(i) + ((hash << 5) - hash);
             const index = Math.abs(hash) % GRADIENTS.length;
             return GRADIENTS[index];
         }
@@ -1489,10 +1698,10 @@
             const olCover = getBookCoverUrl(book.ISBN);
             const coverUrl = (rawCover && rawCover.startsWith('http')) ? rawCover : olCover;
             const fallbackUrl = (rawCover && rawCover.startsWith('http') && olCover && olCover !== rawCover) ? olCover : '';
-            const gradient = getCoverGradient(book.Titel);
             const safeTitle = escapeHtml(book.Titel);
             const safeAuthor = escapeHtml(book.Auteur);
             const primaryGenre = (book.genres && book.genres[0]) || (book.themes && book.themes[0]) || (book.Tags || '') || (book.Locatie || '');
+            const gradient = getCoverGradient(book.Titel, primaryGenre);
             const vectorSvg = getGenreVectorSvg(primaryGenre, 'w-8 h-8 text-white/90');
 
             if (coverUrl) {
@@ -1704,11 +1913,56 @@
             const styleInput = document.getElementById('fThemeStyle');
             const savedMsg = document.getElementById('themeSavedMsg');
 
-            enabledInput.checked = featuredTheme.enabled;
+            enabledInput.checked = featuredTheme.enabled !== false;
             titleInput.value = featuredTheme.title || '';
             descInput.value = featuredTheme.description || '';
             tagInput.value = featuredTheme.tag || '';
-            styleInput.value = featuredTheme.style || 'night';
+            styleInput.value = featuredTheme.style || 'sunny';
+
+            function updateThemePreview() {
+                const previewEl = document.getElementById('themeColorPreview');
+                const previewText = document.getElementById('themePreviewText');
+                const previewBadge = document.getElementById('themePreviewBadge');
+                if (!previewEl) return;
+                const curStyle = styleInput ? styleInput.value : (featuredTheme.style || 'sunny');
+                const cfg = THEME_BANNER_STYLES[curStyle] || THEME_BANNER_STYLES.sunny;
+                previewEl.style.background = cfg.bg;
+                previewEl.style.borderColor = cfg.border;
+                if (curStyle === 'night') {
+                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition text-white shadow-2xs';
+                    if (previewText) previewText.textContent = '🎃 Mysterieus & Donker banner actief';
+                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-coral-500/30 text-coral-200 border border-coral-400/30';
+                } else if (curStyle === 'coral') {
+                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition text-white shadow-2xs';
+                    if (previewText) previewText.textContent = '🔥 Warm Koraalrood banner actief';
+                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-white/25 text-white border border-white/30';
+                } else if (curStyle === 'teal') {
+                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition text-white shadow-2xs';
+                    if (previewText) previewText.textContent = '🌿 Boekenzoeker Teal banner actief';
+                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-white/25 text-white border border-white/30';
+                } else {
+                    // sunny
+                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-black flex items-center justify-between border transition text-amber-950 shadow-2xs';
+                    if (previewText) previewText.textContent = '☀️ Zonnig Geel banner actief';
+                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-amber-950/15 text-amber-950 border border-amber-950/20';
+                }
+            }
+
+            updateThemePreview();
+
+            // Directe live reactie bij wijziging van de kleursfeer of checkbox
+            styleInput.addEventListener('change', () => {
+                featuredTheme.style = styleInput.value;
+                localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
+                updateThemePreview();
+                renderFeaturedTheme();
+            });
+
+            enabledInput.addEventListener('change', () => {
+                featuredTheme.enabled = enabledInput.checked;
+                localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
+                renderFeaturedTheme();
+            });
 
             currentGradePicks = {
                 grade1: (featuredTheme.gradePicks && featuredTheme.gradePicks.grade1) ? [...featuredTheme.gradePicks.grade1] : [],
@@ -1742,9 +1996,49 @@
                 savedMsg.classList.remove('hidden');
                 setTimeout(() => savedMsg.classList.add('hidden'), 3500);
 
+                updateThemePreview();
                 renderFeaturedTheme();
             });
         }
+
+        const THEME_BANNER_STYLES = {
+            sunny: {
+                bg: 'linear-gradient(135deg, #fef9c3 0%, #fef08a 45%, #fde047 100%)',
+                border: '#eab308',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-950/10 text-amber-950 border border-amber-950/20 backdrop-blur-xs mb-2',
+                titleClass: 'text-xl sm:text-2xl font-black text-amber-950 leading-snug',
+                descClass: 'text-xs sm:text-sm text-amber-900 font-semibold mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-amber-950 bg-amber-100/90 border border-amber-300/80 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-amber-200/80'
+            },
+            night: {
+                bg: 'linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e1b4b 100%)',
+                border: '#1e293b',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-coral-500/25 text-coral-300 border border-coral-500/30 mb-2',
+                titleClass: 'text-xl sm:text-2xl font-extrabold text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-slate-200/80'
+            },
+            coral: {
+                bg: 'linear-gradient(135deg, #ea4d36 0%, #c53823 100%)',
+                border: '#c53823',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-2',
+                titleClass: 'text-xl sm:text-2xl font-extrabold text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-coral-50 mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-coral-900 bg-coral-50 border border-coral-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-coral-100'
+            },
+            teal: {
+                bg: 'linear-gradient(135deg, #107075 0%, #073235 100%)',
+                border: '#0d5b5f',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-2',
+                titleClass: 'text-xl sm:text-2xl font-extrabold text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-brand-100 mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-brand-100'
+            }
+        };
 
         function renderFeaturedTheme() {
             const section = document.getElementById('featuredThemeSection');
@@ -1755,14 +2049,31 @@
                 return;
             }
 
+            // Pas kleursfeer en achtergrond van de banner dynamisch toe
+            const styleKey = (featuredTheme.style || 'sunny').toLowerCase();
+            const styleCfg = THEME_BANNER_STYLES[styleKey] || THEME_BANNER_STYLES.sunny;
+
+            section.classList.remove('bg-slate-50', 'text-slate-900', 'border-slate-200/90');
+            section.style.setProperty('background', styleCfg.bg, 'important');
+            section.style.setProperty('border-color', styleCfg.border, 'important');
+
+            const badgeEl = document.getElementById('featuredThemeBadge');
+            if (badgeEl) badgeEl.className = styleCfg.badgeClass;
+
             const titleEl = document.getElementById('featuredThemeTitle');
             const descEl = document.getElementById('featuredThemeDesc');
 
             // Strip emoticons voor een rustige en droge redactionele stijl
             const stripEmojis = (str) => (str || '').replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
 
-            if (titleEl) titleEl.textContent = stripEmojis(featuredTheme.title) || 'Thema in de kijker';
-            if (descEl) descEl.textContent = stripEmojis(featuredTheme.description) || '';
+            if (titleEl) {
+                titleEl.textContent = stripEmojis(featuredTheme.title) || 'Thema in de kijker';
+                titleEl.className = styleCfg.titleClass;
+            }
+            if (descEl) {
+                descEl.textContent = stripEmojis(featuredTheme.description) || '';
+                descEl.className = styleCfg.descClass;
+            }
 
             const targetTag = (featuredTheme.tag || 'spanning').toLowerCase().trim();
             const matchingBooks = allBooks.filter(b => 
@@ -1823,14 +2134,16 @@
                 if (pickedBooks.length === 0) return;
 
                 const carouselId = `featuredGradeCarousel_${key}`;
+                const gradeBadgeClass = styleCfg.gradeBadgeClass || 'text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl truncate';
+                const cardBorderClass = styleCfg.cardBorder || 'border-slate-200/80';
 
                 const block = document.createElement('div');
-                block.className = 'bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between';
+                block.className = `bg-white rounded-3xl p-4 sm:p-5 border ${cardBorderClass} shadow-xs flex flex-col justify-between`;
                 
                 block.innerHTML = `
                     <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-100">
                         <div class="flex items-center gap-2 min-w-0">
-                            <span class="text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl truncate">${escapeHtml(label)}</span>
+                            <span class="${gradeBadgeClass}">${escapeHtml(label)}</span>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
                             <span id="counter_${carouselId}" class="text-[11px] text-slate-400 font-bold mr-1">1 / ${pickedBooks.length}</span>
@@ -2413,11 +2726,15 @@
             const defaultCarouselSection = document.getElementById('catalogDefaultCarouselSection');
             const gridSection = document.getElementById('catalogGridSection');
             const defaultCarousel = document.getElementById('catalogDefaultCarousel');
+            const featuredSection = document.getElementById('featuredThemeSection');
 
             if (!isFiltering) {
-                // Standaard weergave: enkel 1 rij met 10 willekeurige boeken en pijltjessysteem
+                // Standaard weergave: toon thema in de kijker en 1 rij met 10 willekeurige boeken
                 if (defaultCarouselSection) defaultCarouselSection.classList.remove('hidden');
                 if (gridSection) gridSection.classList.add('hidden');
+                if (featuredSection && featuredTheme && featuredTheme.enabled) {
+                    featuredSection.classList.remove('hidden');
+                }
 
                 if (defaultCarousel) {
                     defaultCarousel.innerHTML = '';
@@ -2432,7 +2749,8 @@
                 return;
             }
 
-            // Zoeken of filteren actief: toon het volledige zoekraster
+            // Zoeken of filteren actief: toon het volledige zoekraster en verberg thema tijdelijk
+            if (featuredSection) featuredSection.classList.add('hidden');
             if (defaultCarouselSection) defaultCarouselSection.classList.add('hidden');
             if (gridSection) gridSection.classList.remove('hidden');
 
@@ -2899,6 +3217,57 @@
         function getBookExternalLink(book) {
             if (!book) return null;
 
+            // STAP 0: Manuele override in Google Sheets 'Goodreads Link' kolom
+            // Als de beheerder in die kolom een afwijkende link heeft geplaatst (i.p.v. de geautomatiseerde https://www.goodreads.com/book/show/nummer)
+            let gLink = (book.Goodreads || '').toString().trim();
+            if (gLink && !gLink.startsWith('http://') && !gLink.startsWith('https://')) {
+                if (gLink.includes('.') && !gLink.includes(' ')) {
+                    gLink = 'https://' + gLink;
+                }
+            }
+
+            if (gLink && (gLink.startsWith('http://') || gLink.startsWith('https://'))) {
+                const isStandardGoodreads = /^https?:\/\/(www\.)?goodreads\.com\/book\/show\/\d+/i.test(gLink);
+                if (!isStandardGoodreads) {
+                    // Manuele correctie door beheerder in Google Sheet: krijgt direct voorrang op alles!
+                    const u = gLink.toLowerCase();
+                    if (u.includes('boekenzoeker.be')) {
+                        return {
+                            platform: 'boekenzoeker',
+                            url: gLink,
+                            label: 'Bekijk op Boekenzoeker.be',
+                            title: 'Bekijk dit boek en samenvatting op Boekenzoeker.be',
+                            btnClass: 'bg-coral-500 hover:bg-coral-600 text-white shadow-coral-500/20'
+                        };
+                    }
+                    if (u.includes('hebban.nl')) {
+                        return {
+                            platform: 'hebban',
+                            url: gLink,
+                            label: 'Bekijk op Hebban.nl',
+                            title: 'Bekijk achterflap en recensies op Hebban.nl',
+                            btnClass: 'bg-[#1976D2] hover:bg-[#1565C0] text-white shadow-blue-500/20'
+                        };
+                    }
+                    if (u.includes('goodreads.com')) {
+                        return {
+                            platform: 'goodreads',
+                            url: gLink,
+                            label: 'Bekijk op Goodreads.com',
+                            title: 'Bekijk recensies en achterflap op Goodreads.com',
+                            btnClass: 'bg-[#382110] hover:bg-[#2b180a] text-white shadow-stone-800/20'
+                        };
+                    }
+                    return {
+                        platform: 'custom',
+                        url: gLink,
+                        label: 'Bekijk meer informatie ↗',
+                        title: 'Bekijk achterflap en recensies',
+                        btnClass: 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-500/20'
+                    };
+                }
+            }
+
             // STAP 1: Boekenzoeker
             // A. Directe Boekenzoeker link uit Google Sheet
             if (book.Boekenzoeker && book.Boekenzoeker.startsWith('http')) {
@@ -2949,11 +3318,11 @@
                 };
             }
 
-            // STAP 3: Goodreads (ideaal voor anderstalige boeken of als specifieke Goodreads URL gekend is)
-            if (book.Goodreads && book.Goodreads.startsWith('http')) {
+            // STAP 3: Goodreads (standaard geautomatiseerde Goodreads link)
+            if (gLink && (gLink.startsWith('http://') || gLink.startsWith('https://'))) {
                 return {
                     platform: 'goodreads',
-                    url: book.Goodreads,
+                    url: gLink,
                     label: 'Bekijk op Goodreads.com',
                     title: 'Bekijk recensies en achterflap op Goodreads.com',
                     btnClass: 'bg-[#382110] hover:bg-[#2b180a] text-white shadow-stone-800/20'

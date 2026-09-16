@@ -1,19 +1,14 @@
 /**
  * Google Apps Script voor SchoolbibSP (Schoolbibliotheek Don Bosco Gent campus Sint-Pieters)
  * 
- * INSTRUCTIES VOOR EENMALIGE INSTELLING:
+ * INSTRUCTIES VOOR EENMALIGE INSTELLING / UPDATE:
  * 1. Open je Google Spreadsheet (SchoolbibSP) in je browser.
  * 2. Klik in het bovenmenu op: Extensies > Apps Script.
- * 3. Wis eventuele bestaande code in het venster en plak deze volledige code erin.
+ * 3. Wis eventuele bestaande code in het venster en plak deze volledige bijgewerkte code erin.
  * 4. Klik op 'Opslaan' (het diskette-icoontje bovenaan).
- * 5. Klik rechtsboven op de blauwe knop: 'Implementeren' (Deploy) > 'Nieuwe implementatie' (New deployment).
- * 6. Klik op het tandwieltje naast 'Type selecteren' en kies: 'Web-app'.
- * 7. Vul in:
- *    - Beschrijving: Schoolbib Web API
- *    - Uitvoeren als: 'Ik' (je eigen e-mailadres)
- *    - Wie heeft toegang: 'Iedereen' (Anyone)  <-- BELANGRIJK!
- * 8. Klik op 'Implementeren' en geef Google eenmalig toestemming (klik op Geavanceerd > Doorgaan).
- * 9. Kopieer de 'Web-app-URL' (begint met https://script.google.com/macros/s/...) en plak deze in de website onder Beheer!
+ * 5. Klik rechtsboven op de blauwe knop: 'Implementeren' (Deploy) > 'Beheer implementaties' (Manage deployments).
+ * 6. Klik op het potlood-icoontje (Bewerken), kies bij Versie: 'Nieuwe versie' en klik op 'Implementeren'.
+ *    (Of maak bij een eerste keer: 'Nieuwe implementatie' > Type: 'Web-app' > Toegang: 'Iedereen').
  */
 
 function doPost(e) {
@@ -31,6 +26,7 @@ function doPost(e) {
       if (!reviewsSheet) {
         reviewsSheet = ss.insertSheet("Beoordelingen");
         reviewsSheet.appendRow(["Tijdstip", "Titel", "Sterren (1-5)"]);
+        reviewsSheet.setFrozenRows(1);
       }
       reviewsSheet.appendRow([
         new Date(),
@@ -38,12 +34,70 @@ function doPost(e) {
         data.rating ? Number(data.rating) : ''
       ]);
       
-      return ContentService
-        .createTextOutput(JSON.stringify({ status: 'success', message: 'Beoordeling opgeslagen!' }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return createJsonResponse({ status: 'success', message: 'Beoordeling opgeslagen!' });
     }
     
-    // Actie 2: Nieuw boek / exemplaren toevoegen aan de catalogus
+    // Actie 2: Nieuwe uitlening registreren in centrale spreadsheet
+    if (data.action === 'save_loan') {
+      var loansSheet = getOrCreateLoansSheet(ss);
+      loansSheet.appendRow([
+        data.id ? data.id.toString() : new Date().getTime().toString(),
+        new Date(),
+        data.student ? data.student.toString().trim() : '',
+        data.klas ? data.klas.toString().trim() : '',
+        data.bookTitle ? data.bookTitle.toString().trim() : '',
+        data.copyLabel ? data.copyLabel.toString().trim() : 'Exemplaar 1',
+        data.copyLoc ? data.copyLoc.toString().trim() : '',
+        data.loanDate || new Date().toISOString().split('T')[0],
+        data.dueDate || '',
+        data.returned ? 'Ingeleverd' : 'Uitgeleend',
+        data.returnDate || ''
+      ]);
+      
+      return createJsonResponse({ status: 'success', message: 'Uitlening succesvol opgeslagen in Google Sheet!' });
+    }
+
+    // Actie 3: Boek markeren als ingeleverd in centrale spreadsheet
+    if (data.action === 'return_loan') {
+      var loansSheet = getOrCreateLoansSheet(ss);
+      var rows = loansSheet.getDataRange().getValues();
+      var found = false;
+      var targetId = data.id ? data.id.toString() : '';
+      var retDate = data.returnDate || new Date().toISOString().split('T')[0];
+
+      for (var r = 1; r < rows.length; r++) {
+        if (rows[r][0] && rows[r][0].toString() === targetId) {
+          loansSheet.getRange(r + 1, 10).setValue('Ingeleverd'); // Kolom 10 = Status
+          loansSheet.getRange(r + 1, 11).setValue(retDate);     // Kolom 11 = Werkelijke inleverdatum
+          found = true;
+          break;
+        }
+      }
+
+      return createJsonResponse({ 
+        status: 'success', 
+        found: found, 
+        message: found ? 'Boek succesvol gemarkeerd als ingeleverd!' : 'Uitlening niet gevonden in sheet.' 
+      });
+    }
+
+    // Actie 4: Uitlening verwijderen uit historiek
+    if (data.action === 'delete_loan') {
+      var loansSheet = getOrCreateLoansSheet(ss);
+      var rows = loansSheet.getDataRange().getValues();
+      var targetId = data.id ? data.id.toString() : '';
+
+      for (var r = 1; r < rows.length; r++) {
+        if (rows[r][0] && rows[r][0].toString() === targetId) {
+          loansSheet.deleteRow(r + 1);
+          break;
+        }
+      }
+
+      return createJsonResponse({ status: 'success', message: 'Uitlening verwijderd uit Google Sheet.' });
+    }
+
+    // Actie 5: Nieuw boek / exemplaren toevoegen aan de catalogus
     var sheet = ss.getActiveSheet();
     var count = data.aantal ? Math.max(1, parseInt(data.aantal, 10)) : 1;
     
@@ -66,22 +120,86 @@ function doPost(e) {
       ? count + ' exemplaren succesvol toegevoegd aan de Google Sheet!' 
       : 'Boek succesvol toegevoegd!';
       
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: 'success', message: successMessage }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return createJsonResponse({ status: 'success', message: successMessage });
       
   } catch (error) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-      
+    return createJsonResponse({ status: 'error', message: error.toString() });
   } finally {
     lock.releaseLock();
   }
 }
 
 function doGet(e) {
+  var action = (e && e.parameter && e.parameter.action) ? e.parameter.action : '';
+
+  // Actie: Actuele uitleningen ophalen voor de website
+  if (action === 'get_loans') {
+    try {
+      var ss = SpreadsheetApp.getActiveSpreadsheet();
+      var loansSheet = ss.getSheetByName("Uitleningen");
+      if (!loansSheet) {
+        return createJsonResponse({ status: 'success', loans: [] });
+      }
+
+      var data = loansSheet.getDataRange().getValues();
+      if (data.length <= 1) {
+        return createJsonResponse({ status: 'success', loans: [] });
+      }
+
+      var loans = [];
+      for (var i = 1; i < data.length; i++) {
+        var row = data[i];
+        if (!row[0] && !row[4]) continue; // Sla lege rijen over
+        
+        loans.push({
+          id: row[0] ? row[0].toString() : '',
+          createdAt: row[1] ? row[1].toString() : '',
+          student: row[2] ? row[2].toString() : '',
+          klas: row[3] ? row[3].toString() : '',
+          bookTitle: row[4] ? row[4].toString() : '',
+          copyLabel: row[5] ? row[5].toString() : 'Exemplaar 1',
+          copyLoc: row[6] ? row[6].toString() : '',
+          loanDate: formatCellDate(row[7]),
+          dueDate: formatCellDate(row[8]),
+          returned: (row[9] && row[9].toString().toLowerCase() === 'ingeleverd'),
+          returnDate: formatCellDate(row[10])
+        });
+      }
+
+      return createJsonResponse({ status: 'success', loans: loans });
+    } catch (err) {
+      return createJsonResponse({ status: 'error', message: err.toString(), loans: [] });
+    }
+  }
+
+  return createJsonResponse({ status: 'active', message: 'Schoolbib API is actief!' });
+}
+
+function getOrCreateLoansSheet(ss) {
+  var sheet = ss.getSheetByName("Uitleningen");
+  if (!sheet) {
+    sheet = ss.insertSheet("Uitleningen");
+    sheet.appendRow([
+      "ID", "Tijdstip", "Leerling", "Klas", "Boektitel", "Exemplaar", "Locatie", "Uitleendatum", "Inleverdatum", "Status", "Werkelijke Inleverdatum"
+    ]);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function formatCellDate(val) {
+  if (!val) return '';
+  if (val instanceof Date) {
+    var y = val.getFullYear();
+    var m = String(val.getMonth() + 1).padStart(2, '0');
+    var d = String(val.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+  }
+  return val.toString().trim();
+}
+
+function createJsonResponse(data) {
   return ContentService
-    .createTextOutput(JSON.stringify({ status: 'active', message: 'Schoolbib API is actief!' }))
+    .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
