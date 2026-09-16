@@ -4194,65 +4194,371 @@
             }
         }
 
-        // 12. ONTLENEN MET SPECIFIEKE EXEMPLAREN
+        // 12. ONTLENEN MET CENTRALE CLOUD SYNC & BARCODESCANNING
+        let loansSearchQuery = '';
+        let loansActiveFilterClass = 'all';
+        let currentQuickLoanBook = null;
+
+        function showToast(message, type = 'info') {
+            let container = document.getElementById('schoolbibToastContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'schoolbibToastContainer';
+                container.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none px-4 w-full max-w-md';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-emerald-600 text-white shadow-emerald-900/30' :
+                            type === 'warning' ? 'bg-amber-500 text-white shadow-amber-900/30' :
+                            'bg-slate-900 text-white shadow-slate-900/30';
+
+            toast.className = `${bgClass} text-xs sm:text-sm font-bold px-4 py-2.5 rounded-2xl shadow-xl transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto flex items-center justify-center gap-2 text-center w-full`;
+            toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 350);
+            }, 4000);
+        }
+
+        function updateLoanSyncBadge(status, text) {
+            const badge = document.getElementById('loanCloudSyncBadge');
+            const dot = document.getElementById('loanSyncDot');
+            const label = document.getElementById('loanCloudSyncText');
+            if (!badge || !dot || !label) return;
+            label.textContent = text;
+            if (status === 'synced') {
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+                badge.className = 'inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200';
+            } else if (status === 'syncing') {
+                dot.className = 'w-2 h-2 rounded-full bg-brand-500 animate-ping';
+                badge.className = 'inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-brand-50 text-brand-700 border border-brand-200';
+            } else if (status === 'warning') {
+                dot.className = 'w-2 h-2 rounded-full bg-amber-500';
+                badge.className = 'inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-700 border border-amber-200';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-slate-400';
+                badge.className = 'inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-600 border border-slate-200';
+            }
+        }
+
+        async function loadLoansFromCloud() {
+            const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
+            if (!activeScriptUrl) {
+                updateLoanSyncBadge('local', 'Lokale opslag (geen web-app URL)');
+                renderLoans();
+                return;
+            }
+
+            try {
+                updateLoanSyncBadge('syncing', 'Synchroniseren met Google Sheet...');
+                const sep = activeScriptUrl.includes('?') ? '&' : '?';
+                const resp = await fetch(`${activeScriptUrl}${sep}action=get_loans&_t=${Date.now()}`);
+                if (!resp.ok) throw new Error(`HTTP error ${resp.status}`);
+                const data = await resp.json();
+                if (data && data.status === 'success' && Array.isArray(data.loans)) {
+                    // Google Sheet data
+                    if (data.loans.length > 0) {
+                        loans = data.loans;
+                        localStorage.setItem('schoolbib_loans', JSON.stringify(loans));
+                    }
+                    updateLoanSyncBadge('synced', 'Gesynchroniseerd met Google Sheet ✓');
+                } else {
+                    updateLoanSyncBadge('warning', 'Google Sheet verbonden');
+                }
+            } catch (err) {
+                console.warn('Kon uitleningen niet direct ophalen uit Google Sheet:', err);
+                updateLoanSyncBadge('local', 'Lokale fallback (offline)');
+            }
+            renderLoans();
+            filterAndRender();
+        }
+
+        async function syncLoanToCloud(action, payload) {
+            const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
+            if (!activeScriptUrl) return;
+            try {
+                updateLoanSyncBadge('syncing', 'Bezig met opslaan naar Google Sheet...');
+                await fetch(activeScriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: action, ...payload })
+                });
+                updateLoanSyncBadge('synced', 'Gesynchroniseerd met Google Sheet ✓');
+            } catch (e) {
+                console.error('Fout bij synchroniseren met Google Sheet:', e);
+                updateLoanSyncBadge('warning', 'Lokaal bewaard (sync mislukt)');
+            }
+        }
+
+        function handleBookLoanButtonClick(book) {
+            const isLoggedIn = sessionStorage.getItem('schoolbib_logged_in') === 'true';
+            if (isLoggedIn) {
+                openQuickLoanModal(book);
+            } else {
+                const pinModal = document.getElementById('teacherPinAuthModal');
+                const pinInput = document.getElementById('modalTeacherPinInput');
+                const errEl = document.getElementById('modalTeacherPinError');
+                if (pinInput) pinInput.value = '';
+                if (errEl) errEl.classList.add('hidden');
+                if (pinModal) {
+                    pinModal.showModal();
+                    if (pinInput) pinInput.focus();
+                }
+            }
+        }
+
+        function openQuickLoanModal(book) {
+            if (!book) return;
+            currentQuickLoanBook = book;
+
+            const modal = document.getElementById('quickLoanModal');
+            const titleEl = document.getElementById('quickLoanBookTitle');
+            const authorEl = document.getElementById('quickLoanBookAuthor');
+            const coverThumb = document.getElementById('quickLoanCoverThumb');
+            const copySelect = document.getElementById('quickLoanCopySelect');
+            const dueDateInput = document.getElementById('quickLoanDueDate');
+
+            if (titleEl) titleEl.textContent = book.Titel;
+            if (authorEl) authorEl.textContent = book.Auteur;
+            if (coverThumb) coverThumb.innerHTML = renderCoverHtml(book, false);
+
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 21);
+            if (dueDateInput) dueDateInput.value = defaultDate.toISOString().split('T')[0];
+
+            if (copySelect) {
+                copySelect.innerHTML = '';
+                const copies = book.copies && book.copies.length > 0 ? book.copies : [{ copyId: book.id, copyLabel: 'Exemplaar 1', locatie: book.Locatie }];
+                let hasAvailable = false;
+
+                copies.forEach((c, idx) => {
+                    const isLent = isCopyLoaned(book.Titel, c.copyLabel, c.copyId);
+                    if (!isLent) {
+                        const opt = document.createElement('option');
+                        opt.value = `${c.copyId || (idx + 1)}|||${c.copyLabel || ('Exemplaar ' + (idx + 1))}|||${c.locatie || ''}`;
+                        opt.textContent = `${c.copyLabel || ('Exemplaar ' + (idx + 1))} (${c.locatie || 'Bib'}) - Beschikbaar`;
+                        copySelect.appendChild(opt);
+                        hasAvailable = true;
+                    }
+                });
+
+                if (!hasAvailable) {
+                    alert('Alle exemplaren van dit boek zijn momenteel al uitgeleend!');
+                    return;
+                }
+            }
+
+            if (modal) {
+                modal.showModal();
+                document.getElementById('quickLoanStudent')?.focus();
+            }
+        }
+
         function initLoans() {
             const loanForm = document.getElementById('loanForm');
             const titleInput = document.getElementById('loanBookTitle');
             const copySelect = document.getElementById('loanCopySelect');
             const dueDateInput = document.getElementById('loanDueDate');
+            const searchInput = document.getElementById('loansSearchFilter');
+            const refreshBtn = document.getElementById('btnRefreshLoans');
 
             const defaultDate = new Date();
             defaultDate.setDate(defaultDate.getDate() + 21);
-            dueDateInput.value = defaultDate.toISOString().split('T')[0];
+            if (dueDateInput) dueDateInput.value = defaultDate.toISOString().split('T')[0];
 
-            // Wanneer titel gekozen of getypt wordt, toon de exemplaren
-            titleInput.addEventListener('input', () => {
-                updateCopySelectOptions(titleInput.value.trim());
-            });
-            titleInput.addEventListener('change', () => {
-                updateCopySelectOptions(titleInput.value.trim());
-            });
+            if (titleInput) {
+                titleInput.addEventListener('input', () => updateCopySelectOptions(titleInput.value.trim()));
+                titleInput.addEventListener('change', () => updateCopySelectOptions(titleInput.value.trim()));
+            }
 
-            loanForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const student = document.getElementById('loanStudent').value.trim();
-                const klas = document.getElementById('loanClass').value.trim();
-                const bookTitle = titleInput.value.trim();
-                const selectedCopyVal = copySelect ? copySelect.value : '';
-                const dueDate = dueDateInput.value;
+            if (loanForm) {
+                loanForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const student = document.getElementById('loanStudent').value.trim();
+                    const klas = document.getElementById('loanClass').value.trim();
+                    const bookTitle = titleInput.value.trim();
+                    const selectedCopyVal = copySelect ? copySelect.value : '';
+                    const dueDate = dueDateInput.value;
 
-                if (!selectedCopyVal) {
-                    alert('Selecteer a.u.b. welk specifiek exemplaar wordt uitgeleend.');
+                    if (!selectedCopyVal) {
+                        alert('Selecteer a.u.b. welk specifiek exemplaar wordt uitgeleend.');
+                        return;
+                    }
+
+                    const [copyId, copyLabel, copyLoc] = selectedCopyVal.split('|||');
+
+                    const newLoan = {
+                        id: Date.now().toString(),
+                        student,
+                        klas,
+                        bookTitle,
+                        copyId: copyId || '',
+                        copyLabel: copyLabel || 'Exemplaar 1',
+                        copyLoc: copyLoc || '',
+                        loanDate: new Date().toISOString().split('T')[0],
+                        dueDate,
+                        returned: false
+                    };
+
+                    loans.unshift(newLoan);
+                    saveLoans();
+                    syncLoanToCloud('save_loan', newLoan);
+
+                    loanForm.reset();
+                    if (dueDateInput) dueDateInput.value = defaultDate.toISOString().split('T')[0];
+                    if (copySelect) copySelect.innerHTML = '<option value="">-- Kies eerst een titel --</option>';
+
+                    showToast(`"${newLoan.bookTitle}" is succesvol uitgeleend aan ${newLoan.student} (${newLoan.klas})! ✓`, 'success');
+                });
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    loansSearchQuery = searchInput.value.trim();
+                    renderLoans();
+                });
+            }
+
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', () => {
+                    refreshBtn.querySelector('svg')?.classList.add('animate-spin');
+                    loadLoansFromCloud().finally(() => {
+                        setTimeout(() => refreshBtn.querySelector('svg')?.classList.remove('animate-spin'), 600);
+                    });
+                });
+            }
+
+            initBarcodeScanner();
+            renderLoans();
+        }
+
+        function initBarcodeScanner() {
+            const input = document.getElementById('barcodeQuickInput');
+            const feedbackBox = document.getElementById('barcodeFeedbackBox');
+            if (!input) return;
+
+            function handleScan(code) {
+                code = (code || '').trim();
+                if (!code) {
+                    if (feedbackBox) feedbackBox.classList.add('hidden');
                     return;
                 }
 
-                // selectedCopyVal format: "copyId|||copyLabel|||locatie"
-                const [copyId, copyLabel, copyLoc] = selectedCopyVal.split('|||');
+                const cleanDigits = code.replace(/[^0-9X]/gi, '');
+                const lowerCode = code.toLowerCase();
 
-                const newLoan = {
-                    id: Date.now(),
-                    student,
-                    klas,
-                    bookTitle,
-                    copyId: copyId || '',
-                    copyLabel: copyLabel || 'Exemplaar 1',
-                    copyLoc: copyLoc || '',
-                    loanDate: new Date().toISOString().split('T')[0],
-                    dueDate,
-                    returned: false
-                };
+                // STAP 1: Zoek of dit boek momenteel is uitgeleend -> Bied direct inleveren aan!
+                const activeLoan = loans.find(l => {
+                    if (l.returned) return false;
+                    const titleMatch = l.bookTitle && l.bookTitle.toLowerCase().trim() === lowerCode;
+                    const bookObj = allBooks.find(b => (b.Titel || '').toLowerCase().trim() === (l.bookTitle || '').toLowerCase().trim());
+                    const isbnMatch = cleanDigits && bookObj && bookObj.ISBN && String(bookObj.ISBN).replace(/[^0-9X]/gi, '') === cleanDigits;
+                    return titleMatch || isbnMatch;
+                });
 
-                loans.unshift(newLoan);
-                saveLoans();
-                renderLoans();
-                filterAndRender();
+                if (activeLoan) {
+                    if (feedbackBox) {
+                        feedbackBox.className = 'p-3.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-white';
+                        feedbackBox.innerHTML = `
+                            <div>
+                                <span class="font-extrabold text-amber-200">Uitgeleend boek gevonden:</span>
+                                <strong class="text-white ml-1">"${escapeHtml(activeLoan.bookTitle)}"</strong> (${escapeHtml(activeLoan.copyLabel || 'Exemplaar')})
+                                <span class="block text-[11px] text-amber-100">Geleend door: <strong>${escapeHtml(activeLoan.student)}</strong> (${escapeHtml(activeLoan.klas)}) • Te laat sinds/inleveren voor: ${activeLoan.dueDate || '-'}</span>
+                            </div>
+                            <button type="button" id="btnQuickReturnScanned" 
+                                    class="shrink-0 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-3.5 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                <span>Direct Inleveren ✓</span>
+                            </button>
+                        `;
+                        feedbackBox.classList.remove('hidden');
 
-                loanForm.reset();
-                dueDateInput.value = defaultDate.toISOString().split('T')[0];
-                if (copySelect) copySelect.innerHTML = '<option value="">-- Kies eerst een titel --</option>';
+                        document.getElementById('btnQuickReturnScanned')?.addEventListener('click', () => {
+                            markLoanReturned(activeLoan.id);
+                            feedbackBox.classList.add('hidden');
+                            input.value = '';
+                        });
+                    }
+                    return;
+                }
+
+                // STAP 2: Zoek in de catalogus op ISBN of Titel
+                const foundBook = allBooks.find(b => {
+                    if (cleanDigits && b.ISBN && String(b.ISBN).replace(/[^0-9X]/gi, '') === cleanDigits) return true;
+                    if (b.Titel && b.Titel.toLowerCase().trim().includes(lowerCode)) return true;
+                    return false;
+                });
+
+                if (foundBook) {
+                    const avail = getBookAvailability(foundBook);
+                    if (avail.available > 0) {
+                        if (feedbackBox) {
+                            feedbackBox.className = 'p-3.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-white';
+                            feedbackBox.innerHTML = `
+                                <div>
+                                    <span class="font-extrabold text-emerald-200">Boek gevonden in catalogus:</span>
+                                    <strong class="text-white ml-1">"${escapeHtml(foundBook.Titel)}"</strong> (${escapeHtml(foundBook.Auteur)})
+                                    <span class="block text-[11px] text-emerald-100">${avail.available} van ${avail.total} exemplaren beschikbaar (${escapeHtml(foundBook.Locatie || 'Bib')})</span>
+                                </div>
+                                <button type="button" id="btnQuickLoanScanned" class="shrink-0 bg-brand-500 hover:bg-brand-600 text-white font-extrabold px-3.5 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                    <span>Dit boek uitlenen 📘</span>
+                                </button>
+                            `;
+                            feedbackBox.classList.remove('hidden');
+
+                            document.getElementById('btnQuickLoanScanned')?.addEventListener('click', () => {
+                                openQuickLoanModal(foundBook);
+                                feedbackBox.classList.add('hidden');
+                                input.value = '';
+                            });
+                        }
+
+                        // Pre-fill manual form as well
+                        const titleInput = document.getElementById('loanBookTitle');
+                        if (titleInput) {
+                            titleInput.value = foundBook.Titel;
+                            updateCopySelectOptions(foundBook.Titel);
+                            document.getElementById('loanStudent')?.focus();
+                        }
+                    } else {
+                        if (feedbackBox) {
+                            feedbackBox.className = 'p-3.5 rounded-xl bg-rose-500/20 border border-rose-400/40 text-xs text-rose-200';
+                            feedbackBox.innerHTML = `<span>Alle exemplaren van <strong>"${escapeHtml(foundBook.Titel)}"</strong> zijn momenteel al uitgeleend!</span>`;
+                            feedbackBox.classList.remove('hidden');
+                        }
+                    }
+                } else {
+                    if (feedbackBox) {
+                        feedbackBox.className = 'p-3.5 rounded-xl bg-white/10 border border-white/20 text-xs text-slate-300';
+                        feedbackBox.innerHTML = `<span>Geen boek gevonden voor code of titel "${escapeHtml(code)}".</span>`;
+                        feedbackBox.classList.remove('hidden');
+                    }
+                }
+            }
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleScan(input.value);
+                }
             });
 
-            renderLoans();
+            input.addEventListener('input', () => {
+                const val = input.value.trim();
+                const clean = val.replace(/[^0-9X]/gi, '');
+                if (clean.length === 10 || clean.length === 13) {
+                    handleScan(val);
+                } else if (!val && feedbackBox) {
+                    feedbackBox.classList.add('hidden');
+                }
+            });
         }
 
         function updateCopySelectOptions(title) {
@@ -4276,14 +4582,14 @@
             book.copies.forEach((c, idx) => {
                 const isLent = isCopyLoaned(book.Titel, c.copyLabel, c.copyId);
                 const opt = document.createElement('option');
-                opt.value = `${c.copyId}|||${c.copyLabel}|||${c.locatie}`;
+                opt.value = `${c.copyId || (idx + 1)}|||${c.copyLabel || ('Exemplaar ' + (idx + 1))}|||${c.locatie || ''}`;
                 
                 if (isLent) {
                     const loanInfo = getCopyLoanInfo(book.Titel, c.copyLabel, c.copyId);
                     opt.disabled = true;
-                    opt.textContent = `${c.copyLabel} (${c.locatie}) — Al uitgeleend aan ${loanInfo ? loanInfo.student : 'leerling'}`;
+                    opt.textContent = `${c.copyLabel} (${c.locatie || 'Bib'}) — Al uitgeleend aan ${loanInfo ? loanInfo.student : 'leerling'}`;
                 } else {
-                    opt.textContent = `${c.copyLabel} (${c.locatie}) — Beschikbaar`;
+                    opt.textContent = `${c.copyLabel} (${c.locatie || 'Bib'}) — Beschikbaar`;
                     if (!hasAvailable) {
                         opt.selected = true;
                         hasAvailable = true;
@@ -4320,20 +4626,140 @@
             filterAndRender();
         }
 
+        function updateLoanStats() {
+            const today = new Date().toISOString().split('T')[0];
+            const activeLoans = loans.filter(l => !l.returned);
+            const overdueLoans = activeLoans.filter(l => l.dueDate && l.dueDate < today);
+
+            const activeClasses = new Set();
+            activeLoans.forEach(l => {
+                if (l.klas && l.klas.trim()) activeClasses.add(l.klas.trim());
+            });
+
+            const statActive = document.getElementById('statActiveLoans');
+            const statOverdue = document.getElementById('statOverdueLoans');
+            const statClasses = document.getElementById('statActiveClasses');
+
+            if (statActive) statActive.textContent = `${activeLoans.length} ${activeLoans.length === 1 ? 'boek' : 'boeken'}`;
+            if (statOverdue) statOverdue.textContent = `${overdueLoans.length} ${overdueLoans.length === 1 ? 'boek' : 'boeken'}`;
+            if (statClasses) statClasses.textContent = `${activeClasses.size} ${activeClasses.size === 1 ? 'klas' : 'klassen'}`;
+        }
+
+        function renderClassFilterChips() {
+            const bar = document.getElementById('loansClassFilterBar');
+            if (!bar) return;
+
+            const classCounts = {};
+            let totalActive = 0;
+            loans.forEach(l => {
+                if (!l.returned && l.klas && l.klas.trim()) {
+                    const k = l.klas.trim();
+                    classCounts[k] = (classCounts[k] || 0) + 1;
+                    totalActive++;
+                }
+            });
+
+            const sortedClasses = Object.keys(classCounts).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+            bar.innerHTML = '';
+
+            // 'Alle klassen' chip
+            const allBtn = document.createElement('button');
+            allBtn.type = 'button';
+            const isAllSelected = loansActiveFilterClass === 'all';
+            allBtn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${isAllSelected ? 'bg-brand-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`;
+            allBtn.innerHTML = `Alle klassen <span class="ml-1 text-[10px] ${isAllSelected ? 'text-brand-100' : 'text-slate-500'} font-semibold">(${totalActive})</span>`;
+            allBtn.addEventListener('click', () => {
+                loansActiveFilterClass = 'all';
+                renderClassFilterChips();
+                renderLoans();
+            });
+            bar.appendChild(allBtn);
+
+            // Klas chips
+            sortedClasses.forEach(cls => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                const isSelected = loansActiveFilterClass.toLowerCase() === cls.toLowerCase();
+                btn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${isSelected ? 'bg-brand-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`;
+                btn.innerHTML = `${escapeHtml(cls)} <span class="ml-1 text-[10px] ${isSelected ? 'text-brand-100' : 'text-slate-500'} font-semibold">(${classCounts[cls]})</span>`;
+                btn.addEventListener('click', () => {
+                    loansActiveFilterClass = cls;
+                    renderClassFilterChips();
+                    renderLoans();
+                });
+                bar.appendChild(btn);
+            });
+
+            // Batch inleverknop voor geselecteerde klas
+            const batchBtn = document.getElementById('btnBatchReturnClass');
+            if (batchBtn) {
+                if (loansActiveFilterClass !== 'all' && classCounts[loansActiveFilterClass]) {
+                    batchBtn.classList.remove('hidden');
+                    batchBtn.innerHTML = `<span>✓ Alles van klas <strong>${escapeHtml(loansActiveFilterClass)}</strong> inleveren (${classCounts[loansActiveFilterClass]})</span>`;
+                    batchBtn.onclick = () => batchReturnClass(loansActiveFilterClass);
+                } else {
+                    batchBtn.classList.add('hidden');
+                }
+            }
+        }
+
+        window.batchReturnClass = function(className) {
+            if (!className || className === 'all') return;
+            const activeInClass = loans.filter(l => !l.returned && l.klas && l.klas.toLowerCase().trim() === className.toLowerCase().trim());
+            if (activeInClass.length === 0) {
+                alert(`Geen openstaande boeken meer voor klas ${className}.`);
+                return;
+            }
+
+            if (!confirm(`Weet je zeker dat je alle ${activeInClass.length} openstaande boeken van klas "${className}" als ingeleverd wilt markeren?`)) {
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            activeInClass.forEach(loan => {
+                loan.returned = true;
+                loan.returnDate = today;
+                syncLoanToCloud('return_loan', { id: loan.id, returnDate: today });
+            });
+
+            saveLoans();
+            showToast(`Alle ${activeInClass.length} boeken van klas ${className} zijn succesvol ingeleverd! ✓`, 'success');
+        };
+
         function renderLoans() {
+            updateLoanStats();
+            renderClassFilterChips();
+
             const tbody = document.getElementById('loansTableBody');
-            const countBadge = document.getElementById('activeLoansCount');
             if (!tbody) return;
 
-            const activeLoans = loans.filter(l => !l.returned);
-            countBadge.textContent = `${activeLoans.length} actieve uitleningen`;
+            let filtered = [...loans];
+
+            // Filter op klas
+            if (loansActiveFilterClass && loansActiveFilterClass !== 'all') {
+                filtered = filtered.filter(l => l.klas && l.klas.toLowerCase().trim() === loansActiveFilterClass.toLowerCase().trim());
+            }
+
+            // Filter op zoekterm (leerling, klas of titel)
+            if (loansSearchQuery && loansSearchQuery.trim()) {
+                const q = loansSearchQuery.toLowerCase().trim();
+                filtered = filtered.filter(l => 
+                    (l.student && l.student.toLowerCase().includes(q)) ||
+                    (l.klas && l.klas.toLowerCase().includes(q)) ||
+                    (l.bookTitle && l.bookTitle.toLowerCase().includes(q)) ||
+                    (l.copyLabel && l.copyLabel.toLowerCase().includes(q))
+                );
+            }
 
             tbody.innerHTML = '';
-            if (loans.length === 0) {
+            if (filtered.length === 0) {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="px-4 py-8 text-center text-slate-400">
-                            Nog geen boeken uitgeleend. Gebruik het bovenstaande formulier om een uitlening te registreren.
+                            ${loans.length === 0 
+                                ? 'Nog geen boeken uitgeleend. Gebruik de barcodescan of het formulier om een uitlening te registreren.' 
+                                : 'Geen uitleningen gevonden die voldoen aan de huidige filters.'}
                         </td>
                     </tr>
                 `;
@@ -4342,7 +4768,7 @@
 
             const today = new Date().toISOString().split('T')[0];
 
-            loans.forEach(loan => {
+            filtered.forEach(loan => {
                 const isOverdue = !loan.returned && loan.dueDate && loan.dueDate < today;
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition';
@@ -4353,7 +4779,9 @@
 
                 tr.innerHTML = `
                     <td class="px-4 py-3 font-semibold text-slate-900">${escapeHtml(loan.student)}</td>
-                    <td class="px-4 py-3 font-medium text-slate-600">${escapeHtml(loan.klas)}</td>
+                    <td class="px-4 py-3 font-medium text-slate-600">
+                        <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-[11px]">${escapeHtml(loan.klas)}</span>
+                    </td>
                     <td class="px-4 py-3 font-medium text-slate-800">${escapeHtml(loan.bookTitle)}</td>
                     <td class="px-4 py-3 text-xs">${copyInfoHtml}</td>
                     <td class="px-4 py-3 text-slate-500">${loan.loanDate || '-'}</td>
@@ -4366,15 +4794,20 @@
                                 : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Uitgeleend</span>')}
                     </td>
                     <td class="px-4 py-3 text-right">
-                        ${!loan.returned ? `
-                            <button onclick="markLoanReturned(${loan.id})" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1 rounded-xl transition">
-                                Inleveren ✓
-                            </button>
-                        ` : `
-                            <button onclick="deleteLoan(${loan.id})" class="text-xs text-slate-400 hover:text-rose-600 transition" title="Verwijderen uit historiek">
-                                ✕
-                            </button>
-                        `}
+                        <div class="flex items-center justify-end gap-1.5">
+                            ${!loan.returned ? `
+                                <button onclick="markLoanReturned('${loan.id}')" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1 rounded-xl transition cursor-pointer" title="Boek als ingeleverd markeren">
+                                    Inleveren ✓
+                                </button>
+                                <button onclick="extendLoan('${loan.id}')" class="text-xs font-semibold bg-brand-50 hover:bg-brand-100 text-brand-700 px-2 py-1 rounded-xl transition cursor-pointer" title="Verleng met 3 weken">
+                                    +3w
+                                </button>
+                            ` : `
+                                <button onclick="deleteLoan('${loan.id}')" class="text-xs text-slate-400 hover:text-rose-600 transition cursor-pointer p-1" title="Verwijderen uit historiek">
+                                    ✕
+                                </button>
+                            `}
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -4382,17 +4815,36 @@
         }
 
         window.markLoanReturned = function(id) {
-            const loan = loans.find(l => l.id === id);
+            const loan = loans.find(l => String(l.id) === String(id));
             if (loan) {
                 loan.returned = true;
                 loan.returnDate = new Date().toISOString().split('T')[0];
                 saveLoans();
+                syncLoanToCloud('return_loan', { id: loan.id, returnDate: loan.returnDate });
+                showToast(`"${loan.bookTitle}" is succesvol ingeleverd door ${loan.student} ✓`, 'success');
+            }
+        };
+
+        window.extendLoan = function(id) {
+            const loan = loans.find(l => String(l.id) === String(id));
+            if (loan && !loan.returned) {
+                const curDue = new Date(loan.dueDate || new Date());
+                curDue.setDate(curDue.getDate() + 21);
+                loan.dueDate = curDue.toISOString().split('T')[0];
+                saveLoans();
+                syncLoanToCloud('save_loan', loan);
+                showToast(`Inleverdatum verlengd voor "${loan.bookTitle}" tot ${loan.dueDate} ✓`, 'success');
             }
         };
 
         window.deleteLoan = function(id) {
-            loans = loans.filter(l => l.id !== id);
+            const loan = loans.find(l => String(l.id) === String(id));
+            loans = loans.filter(l => String(l.id) !== String(id));
             saveLoans();
+            if (loan) {
+                syncLoanToCloud('delete_loan', { id: loan.id });
+                showToast(`Uitlening verwijderd uit historiek.`, 'info');
+            }
         };
 
         // 13. INSTELLINGEN
