@@ -1272,6 +1272,7 @@
             initQuickFilters();
             initDropdownMenus();
             loadBooks();
+            loadLoansFromCloud();
         });
 
         // TAXONOMIE VOOR GENRES & THEMA'S (TEXT-ONLY, OVERZICHTELIJK EN ZONDER ICOONTJES)
@@ -2999,6 +3000,102 @@
                     updateModalFavState();
                 }
             });
+
+            // Beveiligde 'Dit boek uitlenen' knop
+            const loanOutBtn = document.getElementById('btnModalLoanOut');
+            if (loanOutBtn) {
+                loanOutBtn.addEventListener('click', () => {
+                    if (!currentModalBook) return;
+                    handleBookLoanButtonClick(currentModalBook);
+                });
+            }
+
+            // Pincode authenticatie modal voor leerkracht/beheerder
+            const teacherPinModal = document.getElementById('teacherPinAuthModal');
+            const btnCancelTeacherPin = document.getElementById('btnCancelTeacherPin');
+            const teacherPinForm = document.getElementById('teacherPinAuthForm');
+            if (btnCancelTeacherPin && teacherPinModal) {
+                btnCancelTeacherPin.addEventListener('click', () => teacherPinModal.close());
+                teacherPinModal.addEventListener('click', (e) => {
+                    if (e.target === teacherPinModal) teacherPinModal.close();
+                });
+            }
+            if (teacherPinForm) {
+                teacherPinForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const pin = document.getElementById('modalTeacherPinInput').value.trim();
+                    const activePin = localStorage.getItem('schoolbib_pin') || DEFAULT_PIN;
+                    if (pin === activePin) {
+                        sessionStorage.setItem('schoolbib_logged_in', 'true');
+                        teacherPinModal.close();
+                        if (currentModalBook) {
+                            openQuickLoanModal(currentModalBook);
+                        }
+                    } else {
+                        document.getElementById('modalTeacherPinError')?.classList.remove('hidden');
+                    }
+                });
+            }
+
+            // Snel Uitlenen Modal
+            const quickLoanModal = document.getElementById('quickLoanModal');
+            const btnCloseQuickLoan = document.getElementById('btnCloseQuickLoan');
+            const btnCancelQuickLoan = document.getElementById('btnCancelQuickLoan');
+            const quickLoanForm = document.getElementById('quickLoanForm');
+
+            if (btnCloseQuickLoan && quickLoanModal) {
+                btnCloseQuickLoan.addEventListener('click', () => quickLoanModal.close());
+            }
+            if (btnCancelQuickLoan && quickLoanModal) {
+                btnCancelQuickLoan.addEventListener('click', () => quickLoanModal.close());
+            }
+            if (quickLoanModal) {
+                quickLoanModal.addEventListener('click', (e) => {
+                    if (e.target === quickLoanModal) quickLoanModal.close();
+                });
+            }
+
+            if (quickLoanForm) {
+                quickLoanForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (!currentQuickLoanBook) return;
+
+                    const student = document.getElementById('quickLoanStudent').value.trim();
+                    const klas = document.getElementById('quickLoanClass').value.trim();
+                    const copyVal = document.getElementById('quickLoanCopySelect').value;
+                    const dueDate = document.getElementById('quickLoanDueDate').value;
+
+                    if (!copyVal) {
+                        alert('Selecteer a.u.b. een exemplaar.');
+                        return;
+                    }
+
+                    const [copyId, copyLabel, copyLoc] = copyVal.split('|||');
+
+                    const newLoan = {
+                        id: Date.now().toString(),
+                        student,
+                        klas,
+                        bookTitle: currentQuickLoanBook.Titel,
+                        copyId: copyId || '',
+                        copyLabel: copyLabel || 'Exemplaar 1',
+                        copyLoc: copyLoc || '',
+                        loanDate: new Date().toISOString().split('T')[0],
+                        dueDate,
+                        returned: false
+                    };
+
+                    loans.unshift(newLoan);
+                    saveLoans();
+                    syncLoanToCloud('save_loan', newLoan);
+
+                    quickLoanModal.close();
+                    modal.close();
+
+                    showToast(`"${newLoan.bookTitle}" is succesvol uitgeleend aan ${newLoan.student} (${newLoan.klas}) tot ${dueDate}! ✓`, 'success');
+                    quickLoanForm.reset();
+                });
+            }
         }
 
         // Geverifieerde Boekenzoeker database van onze schoolbib catalogus
@@ -3429,6 +3526,24 @@
                 infoBtn.classList.remove('hidden');
             } else if (infoBtn) {
                 infoBtn.classList.add('hidden');
+            }
+
+            // Beveiligde knop: Boek Uitlenen
+            const loanBtn = document.getElementById('btnModalLoanOut');
+            if (loanBtn) {
+                const avail = getBookAvailability(book);
+                if (avail.available > 0) {
+                    loanBtn.disabled = false;
+                    loanBtn.innerHTML = `
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        <span>📘 Dit boek uitlenen</span>
+                    `;
+                    loanBtn.className = "w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white cursor-pointer order-2 sm:order-1";
+                } else {
+                    loanBtn.disabled = true;
+                    loanBtn.innerHTML = `<span>Al uitgeleend</span>`;
+                    loanBtn.className = "w-full sm:w-auto font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl bg-slate-100 text-slate-400 cursor-not-allowed flex items-center justify-center order-2 sm:order-1";
+                }
             }
 
             modal.showModal();
