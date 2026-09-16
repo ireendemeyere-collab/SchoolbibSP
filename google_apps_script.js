@@ -97,7 +97,29 @@ function doPost(e) {
       return createJsonResponse({ status: 'success', message: 'Uitlening verwijderd uit Google Sheet.' });
     }
 
-    // Actie 5: Nieuw boek / exemplaren toevoegen aan de catalogus
+    // Actie 5: Centrale instelling opslaan (PIN, uitleentermijn, klassen)
+    if (data.action === 'save_setting') {
+      var settingsSheet = getOrCreateSettingsSheet(ss);
+      var sRows = settingsSheet.getDataRange().getValues();
+      var key = data.key ? data.key.toString().trim() : '';
+      var val = data.value !== undefined ? data.value.toString() : '';
+      var updated = false;
+
+      for (var sr = 1; sr < sRows.length; sr++) {
+        if (sRows[sr][0] && sRows[sr][0].toString() === key) {
+          settingsSheet.getRange(sr + 1, 2).setValue(val);
+          settingsSheet.getRange(sr + 1, 3).setValue(new Date());
+          updated = true;
+          break;
+        }
+      }
+      if (!updated && key) {
+        settingsSheet.appendRow([key, val, new Date()]);
+      }
+      return createJsonResponse({ status: 'success', message: 'Instelling opgeslagen in Google Sheet' });
+    }
+
+    // Actie 6: Nieuw boek / exemplaren toevoegen aan de catalogus
     var sheet = ss.getActiveSheet();
     var count = data.aantal ? Math.max(1, parseInt(data.aantal, 10)) : 1;
     
@@ -132,43 +154,72 @@ function doPost(e) {
 function doGet(e) {
   var action = (e && e.parameter && e.parameter.action) ? e.parameter.action : '';
 
-  // Actie: Actuele uitleningen ophalen voor de website
-  if (action === 'get_loans') {
+  // Actie: Uitleningen, instellingen en beoordelingen ophalen voor de website
+  if (action === 'get_loans' || action === 'get_all_data') {
     try {
       var ss = SpreadsheetApp.getActiveSpreadsheet();
       var loansSheet = ss.getSheetByName("Uitleningen");
-      if (!loansSheet) {
-        return createJsonResponse({ status: 'success', loans: [] });
-      }
-
-      var data = loansSheet.getDataRange().getValues();
-      if (data.length <= 1) {
-        return createJsonResponse({ status: 'success', loans: [] });
-      }
-
       var loans = [];
-      for (var i = 1; i < data.length; i++) {
-        var row = data[i];
-        if (!row[0] && !row[4]) continue; // Sla lege rijen over
-        
-        loans.push({
-          id: row[0] ? row[0].toString() : '',
-          createdAt: row[1] ? row[1].toString() : '',
-          student: row[2] ? row[2].toString() : '',
-          klas: row[3] ? row[3].toString() : '',
-          bookTitle: row[4] ? row[4].toString() : '',
-          copyLabel: row[5] ? row[5].toString() : 'Exemplaar 1',
-          copyLoc: row[6] ? row[6].toString() : '',
-          loanDate: formatCellDate(row[7]),
-          dueDate: formatCellDate(row[8]),
-          returned: (row[9] && row[9].toString().toLowerCase() === 'ingeleverd'),
-          returnDate: formatCellDate(row[10])
-        });
+      if (loansSheet) {
+        var data = loansSheet.getDataRange().getValues();
+        for (var i = 1; i < data.length; i++) {
+          var row = data[i];
+          if (!row[0] && !row[4]) continue; // Sla lege rijen over
+          
+          loans.push({
+            id: row[0] ? row[0].toString() : '',
+            createdAt: row[1] ? row[1].toString() : '',
+            student: row[2] ? row[2].toString() : '',
+            klas: row[3] ? row[3].toString() : '',
+            bookTitle: row[4] ? row[4].toString() : '',
+            copyLabel: row[5] ? row[5].toString() : 'Exemplaar 1',
+            copyLoc: row[6] ? row[6].toString() : '',
+            loanDate: formatCellDate(row[7]),
+            dueDate: formatCellDate(row[8]),
+            returned: (row[9] && row[9].toString().toLowerCase() === 'ingeleverd'),
+            returnDate: formatCellDate(row[10])
+          });
+        }
       }
 
-      return createJsonResponse({ status: 'success', loans: loans });
+      // Instellingen ophalen
+      var settings = {};
+      var settingsSheet = ss.getSheetByName("Instellingen");
+      if (settingsSheet) {
+        var sData = settingsSheet.getDataRange().getValues();
+        for (var s = 1; s < sData.length; s++) {
+          var k = sData[s][0] ? sData[s][0].toString().trim() : '';
+          if (k) {
+            settings[k] = sData[s][1] ? sData[s][1].toString() : '';
+          }
+        }
+      }
+
+      // Beoordelingen ophalen
+      var ratings = {};
+      var reviewsSheet = ss.getSheetByName("Beoordelingen");
+      if (reviewsSheet) {
+        var rData = reviewsSheet.getDataRange().getValues();
+        for (var r = 1; r < rData.length; r++) {
+          var t = rData[r][1] ? rData[r][1].toString().trim() : '';
+          var stars = rData[r][2] ? Number(rData[r][2]) : 0;
+          if (t && stars > 0) {
+            if (!ratings[t]) ratings[t] = { count: 0, total: 0, avg: 0 };
+            ratings[t].count += 1;
+            ratings[t].total += stars;
+            ratings[t].avg = Math.round((ratings[t].total / ratings[t].count) * 10) / 10;
+          }
+        }
+      }
+
+      return createJsonResponse({ 
+        status: 'success', 
+        loans: loans, 
+        settings: settings, 
+        ratings: ratings 
+      });
     } catch (err) {
-      return createJsonResponse({ status: 'error', message: err.toString(), loans: [] });
+      return createJsonResponse({ status: 'error', message: err.toString(), loans: [], settings: {}, ratings: {} });
     }
   }
 
@@ -182,6 +233,16 @@ function getOrCreateLoansSheet(ss) {
     sheet.appendRow([
       "ID", "Tijdstip", "Leerling", "Klas", "Boektitel", "Exemplaar", "Locatie", "Uitleendatum", "Inleverdatum", "Status", "Werkelijke Inleverdatum"
     ]);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function getOrCreateSettingsSheet(ss) {
+  var sheet = ss.getSheetByName("Instellingen");
+  if (!sheet) {
+    sheet = ss.insertSheet("Instellingen");
+    sheet.appendRow(["Instelling", "Waarde", "Laatst Bijgewerkt"]);
     sheet.setFrozenRows(1);
   }
   return sheet;

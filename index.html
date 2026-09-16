@@ -364,10 +364,15 @@
 
         <!-- 4. UITGELICHT THEMA IN DE KIJKER -->
         <section id="featuredThemeSection" class="hidden rounded-3xl p-6 sm:p-8 border shadow-sm transition-all duration-300">
-            <div class="mb-5">
-                <span id="featuredThemeBadge" class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md mb-2">Thema in de kijker</span>
-                <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold leading-snug"></h3>
-                <p id="featuredThemeDesc" class="text-xs sm:text-sm mt-1 max-w-2xl"></p>
+            <div class="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-start sm:items-center gap-3.5 min-w-0">
+                    <div id="featuredThemeVectorContainer" class="p-2.5 rounded-2xl bg-white/15 backdrop-blur-xs text-white shrink-0 shadow-2xs border border-white/20 flex items-center justify-center"></div>
+                    <div class="min-w-0">
+                        <span id="featuredThemeBadge" class="inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md mb-1.5">Thema in de kijker</span>
+                        <h3 id="featuredThemeTitle" class="text-xl sm:text-2xl font-extrabold leading-snug"></h3>
+                        <p id="featuredThemeDesc" class="text-xs sm:text-sm mt-1 max-w-2xl"></p>
+                    </div>
+                </div>
             </div>
 
             <!-- Carrousels per graad: 1 enkele rij met 3 graden naast elkaar (1ste, 2de en 3de graad) -->
@@ -588,15 +593,22 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kleursfeer van de banner</label>
                                 <select id="fThemeStyle" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
-                                    <option value="sunny" selected>☀️ Zonnig Geel / Goud (Vrolijk)</option>
-                                    <option value="night">🎃 Mysterieus & Donker (Donkerblauw & Koraal)</option>
-                                    <option value="coral">🔥 Warm Koraalrood (Energiek & Opvallend)</option>
-                                    <option value="teal">🌿 Boekenzoeker Teal (Fris & Uitnodigend)</option>
+                                    <option value="auto" selected>✨ Automatisch (zelfde stijl als boekenkaartjes van thema)</option>
+                                    <option value="teal">🌿 Petrol Teal (Schoolbib & Natuur)</option>
+                                    <option value="coral">🔥 Koraalrood (Boekenzoeker & Romantiek)</option>
+                                    <option value="night">🌙 Nachtblauw (Spanning & Detective)</option>
+                                    <option value="fantasy">🔮 Magisch Purper (Fantasy & Magie)</option>
+                                    <option value="sciencefiction">🚀 Oceaanblauw (Sciencefiction & Dystopie)</option>
+                                    <option value="amber">☀️ Warm Amber (Humor & Avontuur)</option>
+                                    <option value="history">🏛️ Kastanjebruin (Historische fictie)</option>
                                 </select>
                                 <!-- Live kleursfeer voorbeeld -->
-                                <div id="themeColorPreview" class="mt-2.5 p-3 rounded-2xl text-xs font-black flex items-center justify-between border transition shadow-2xs">
-                                    <span id="themePreviewText">☀️ Zonnig Geel banner geactiveerd</span>
-                                    <span class="text-[10px] px-2.5 py-0.5 rounded-lg font-black" id="themePreviewBadge">Actief</span>
+                                <div id="themeColorPreview" class="mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition shadow-2xs text-white">
+                                    <div class="flex items-center gap-2 min-w-0">
+                                        <span id="themePreviewIcon" class="w-5 h-5 flex items-center justify-center shrink-0"></span>
+                                        <span id="themePreviewText" class="truncate">✨ Automatisch afgestemd</span>
+                                    </div>
+                                    <span class="text-[10px] px-2.5 py-0.5 rounded-lg font-black shrink-0 bg-white/25 text-white border border-white/30" id="themePreviewBadge">Actief</span>
                                 </div>
                             </div>
                         </div>
@@ -918,7 +930,7 @@
                         </summary>
                         
                         <form id="loanForm" class="mt-4 space-y-4">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
                                     <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
@@ -939,8 +951,12 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum</label>
-                                    <input type="date" id="loanDueDate" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Uitleendatum (vanaf) <span class="text-rose-500">*</span></label>
+                                    <input type="date" id="loanStartDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum (tot) <span class="text-rose-500">*</span></label>
+                                    <input type="date" id="loanDueDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
                                 </div>
                             </div>
                             <div class="flex justify-end">
@@ -1044,7 +1060,26 @@
                                 Wijzigen
                             </button>
                         </div>
-                        <p id="pinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Pincode aangepast!</p>
+                        <p id="pinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Pincode aangepast en opgeslagen!</p>
+                    </div>
+
+                    <div class="space-y-3 pt-4 border-t border-slate-100">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            Standaard Uitleentermijn
+                        </label>
+                        <p class="text-xs text-slate-500">Kies de standaard uitleenduur. Bij het invoeren van een uitlening berekent het systeem automatisch de inleverdatum vanaf de startdatum.</p>
+                        <div class="flex gap-2 items-center">
+                            <select id="loanDurationSelect" class="text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                                <option value="1_month">1 maand (standaard)</option>
+                                <option value="3_weeks">3 weken (21 dagen)</option>
+                                <option value="2_weeks">2 weken (14 dagen)</option>
+                                <option value="2_months">2 maanden</option>
+                            </select>
+                            <button type="button" id="btnSaveLoanDuration" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer">
+                                Opslaan
+                            </button>
+                        </div>
+                        <p id="loanDurationSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Uitleentermijn opgeslagen!</p>
                     </div>
 
                     <div class="space-y-3 pt-4 border-t border-slate-100">
@@ -1177,13 +1212,17 @@
                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
                     <input type="text" id="quickLoanStudent" required placeholder="Bijv. Lucas Vermeulen" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
                 </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
+                    <input type="text" id="quickLoanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
-                        <input type="text" id="quickLoanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Uitleendatum (vanaf) <span class="text-rose-500">*</span></label>
+                        <input type="date" id="quickLoanStartDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum</label>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum (tot) <span class="text-rose-500">*</span></label>
                         <input type="date" id="quickLoanDueDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
                     </div>
                 </div>
@@ -1241,13 +1280,13 @@
         let ratingsStore = JSON.parse(localStorage.getItem('schoolbib_ratings') || '{}');
         let favoritesList = JSON.parse(localStorage.getItem('schoolbib_favorites') || '[]');
 
-        // UITGELICHT THEMA CONFIGURATIE
+        // UITGELICHT THEMA CONFIGURATIE (Kleurstijlen identiek aan de boekenkaartjes)
         const DEFAULT_FEATURED = {
             enabled: true,
             title: "Spannende boeken in november",
             description: "Griezelen en spanning voor de donkere herfstdagen! Ontdek onze bloedstollende thrillers en detectives in de bib.",
             tag: "spanning",
-            style: "sunny",
+            style: "auto",
             gradePicks: {
                 grade1: [],
                 grade2: [],
@@ -1258,30 +1297,34 @@
         if (!featuredTheme.gradePicks) {
             featuredTheme.gradePicks = { grade1: [], grade2: [], grade3: [] };
         }
-        if (!featuredTheme.style || featuredTheme.style === 'night') {
-            featuredTheme.style = 'sunny';
-            localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
-        }
 
         let currentModalBook = null;
 
-        function initRatingsSeed() {
-            if (Object.keys(ratingsStore).length === 0) {
-                ratingsStore = {
-                    "De jonge Wallander": { count: 8, total: 38, avg: 4.8 },
-                    "De avonturen van Tom Sawyer": { count: 12, total: 56, avg: 4.7 },
-                    "Honderd uur nacht": { count: 9, total: 42, avg: 4.7 },
-                    "Maus Compleet": { count: 15, total: 74, avg: 4.9 },
-                    "Zijde": { count: 6, total: 27, avg: 4.5 },
-                    "De man die glimlachte": { count: 7, total: 32, avg: 4.6 },
-                    "Dwaalsporen": { count: 5, total: 23, avg: 4.6 }
-                };
+        function cleanDemoRatings() {
+            const demoTitles = [
+                "De jonge Wallander",
+                "De avonturen van Tom Sawyer",
+                "Honderd uur nacht",
+                "Maus Compleet",
+                "Zijde",
+                "De man die glimlachte",
+                "Dwaalsporen"
+            ];
+            let changed = false;
+            demoTitles.forEach(t => {
+                // Verwijder alleen als er geen eigen stem (myRating) van de gebruiker is
+                if (ratingsStore[t] && !ratingsStore[t].myRating) {
+                    delete ratingsStore[t];
+                    changed = true;
+                }
+            });
+            if (changed) {
                 localStorage.setItem('schoolbib_ratings', JSON.stringify(ratingsStore));
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initRatingsSeed();
+            cleanDemoRatings();
             initNavigation();
             initAdminAuth();
             initAddBook();
@@ -1938,34 +1981,32 @@
             titleInput.value = featuredTheme.title || '';
             descInput.value = featuredTheme.description || '';
             tagInput.value = featuredTheme.tag || '';
-            styleInput.value = featuredTheme.style || 'sunny';
+            styleInput.value = featuredTheme.style || 'auto';
 
             function updateThemePreview() {
                 const previewEl = document.getElementById('themeColorPreview');
                 const previewText = document.getElementById('themePreviewText');
                 const previewBadge = document.getElementById('themePreviewBadge');
+                const previewIcon = document.getElementById('themePreviewIcon');
                 if (!previewEl) return;
-                const curStyle = styleInput ? styleInput.value : (featuredTheme.style || 'sunny');
-                const cfg = THEME_BANNER_STYLES[curStyle] || THEME_BANNER_STYLES.sunny;
-                previewEl.style.background = cfg.bg;
-                previewEl.style.borderColor = cfg.border;
-                if (curStyle === 'night') {
-                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition text-white shadow-2xs';
-                    if (previewText) previewText.textContent = '🎃 Mysterieus & Donker banner actief';
-                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-coral-500/30 text-coral-200 border border-coral-400/30';
-                } else if (curStyle === 'coral') {
-                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition text-white shadow-2xs';
-                    if (previewText) previewText.textContent = '🔥 Warm Koraalrood banner actief';
-                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-white/25 text-white border border-white/30';
-                } else if (curStyle === 'teal') {
-                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition text-white shadow-2xs';
-                    if (previewText) previewText.textContent = '🌿 Boekenzoeker Teal banner actief';
-                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-white/25 text-white border border-white/30';
-                } else {
-                    // sunny
-                    previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-black flex items-center justify-between border transition text-amber-950 shadow-2xs';
-                    if (previewText) previewText.textContent = '☀️ Zonnig Geel banner actief';
-                    if (previewBadge) previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-amber-950/15 text-amber-950 border border-amber-950/20';
+                const curStyle = styleInput ? styleInput.value : (featuredTheme.style || 'auto');
+                const curTag = tagInput ? tagInput.value : (featuredTheme.tag || '');
+                const cfg = resolveThemeStyle(curStyle, curTag);
+
+                previewEl.style.setProperty('background', cfg.bg, 'important');
+                previewEl.style.setProperty('border-color', cfg.border, 'important');
+                previewEl.className = 'mt-2.5 p-3 rounded-2xl text-xs font-bold flex items-center justify-between border transition shadow-2xs text-white';
+
+                if (previewText) {
+                    previewText.textContent = curStyle === 'auto'
+                        ? `✨ Automatisch (${cfg.name}) banner actief`
+                        : `${cfg.name} banner actief`;
+                }
+                if (previewIcon) {
+                    previewIcon.innerHTML = getGenreVectorSvg(cfg.iconGenre || curTag, 'w-4 h-4 text-white');
+                }
+                if (previewBadge) {
+                    previewBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-lg font-black bg-white/25 text-white border border-white/30';
                 }
             }
 
@@ -1977,6 +2018,12 @@
                 localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
                 updateThemePreview();
                 renderFeaturedTheme();
+            });
+
+            tagInput.addEventListener('input', () => {
+                if (styleInput && styleInput.value === 'auto') {
+                    updateThemePreview();
+                }
             });
 
             enabledInput.addEventListener('change', () => {
@@ -2022,44 +2069,120 @@
             });
         }
 
+        // KLEURSFEER PALET VOOR HET THEMA (EXACT DEZELFDE GRADIËNTEN EN STIJL ALS DE BOEKENKAARTJES)
         const THEME_BANNER_STYLES = {
-            sunny: {
-                bg: 'linear-gradient(135deg, #fef9c3 0%, #fef08a 45%, #fde047 100%)',
-                border: '#eab308',
-                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-950/10 text-amber-950 border border-amber-950/20 backdrop-blur-xs mb-2',
-                titleClass: 'text-xl sm:text-2xl font-black text-amber-950 leading-snug',
-                descClass: 'text-xs sm:text-sm text-amber-900 font-semibold mt-1 max-w-2xl',
-                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-amber-950 bg-amber-100/90 border border-amber-300/80 px-2.5 py-1 rounded-xl truncate',
-                cardBorder: 'border-amber-200/80'
-            },
-            night: {
-                bg: 'linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e1b4b 100%)',
-                border: '#1e293b',
-                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-coral-500/25 text-coral-300 border border-coral-500/30 mb-2',
-                titleClass: 'text-xl sm:text-2xl font-extrabold text-white leading-snug',
-                descClass: 'text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl',
+            teal: {
+                key: 'teal',
+                name: '🌿 Petrol Teal',
+                iconGenre: 'natuur',
+                bg: 'linear-gradient(135deg, #107075 0%, #084c4f 100%)',
+                border: '#0d5b5f',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-brand-100 font-medium mt-1 max-w-2xl',
                 gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl truncate',
-                cardBorder: 'border-slate-200/80'
+                cardBorder: 'border-brand-100'
             },
             coral: {
-                bg: 'linear-gradient(135deg, #ea4d36 0%, #c53823 100%)',
-                border: '#c53823',
-                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-2',
-                titleClass: 'text-xl sm:text-2xl font-extrabold text-white leading-snug',
-                descClass: 'text-xs sm:text-sm text-coral-50 mt-1 max-w-2xl',
+                key: 'coral',
+                name: '🔥 Koraalrood',
+                iconGenre: 'romance',
+                bg: 'linear-gradient(135deg, #ff6b57 0%, #c43c29 100%)',
+                border: '#c43c29',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-coral-100 font-medium mt-1 max-w-2xl',
                 gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-coral-900 bg-coral-50 border border-coral-200/70 px-2.5 py-1 rounded-xl truncate',
                 cardBorder: 'border-coral-100'
             },
-            teal: {
-                bg: 'linear-gradient(135deg, #107075 0%, #073235 100%)',
-                border: '#0d5b5f',
-                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-2',
-                titleClass: 'text-xl sm:text-2xl font-extrabold text-white leading-snug',
-                descClass: 'text-xs sm:text-sm text-brand-100 mt-1 max-w-2xl',
-                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200/70 px-2.5 py-1 rounded-xl truncate',
-                cardBorder: 'border-brand-100'
+            night: {
+                key: 'night',
+                name: '🌙 Nachtblauw',
+                iconGenre: 'spanning',
+                bg: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)',
+                border: '#1e293b',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-coral-500/30 text-coral-200 border border-coral-400/40 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-slate-300 font-medium mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-indigo-900 bg-indigo-50 border border-indigo-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-slate-200/80'
+            },
+            fantasy: {
+                key: 'fantasy',
+                name: '🔮 Magisch Purper',
+                iconGenre: 'fantasy',
+                bg: 'linear-gradient(135deg, #6b21a8 0%, #3b0764 100%)',
+                border: '#3b0764',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-purple-100 font-medium mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-purple-900 bg-purple-50 border border-purple-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-purple-100'
+            },
+            sciencefiction: {
+                key: 'sciencefiction',
+                name: '🚀 Oceaanblauw',
+                iconGenre: 'science',
+                bg: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+                border: '#0369a1',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-sky-100 font-medium mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-sky-900 bg-sky-50 border border-sky-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-sky-100'
+            },
+            amber: {
+                key: 'amber',
+                name: '☀️ Warm Amber',
+                iconGenre: 'humor',
+                bg: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)',
+                border: '#b45309',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/25 text-white border border-white/35 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-amber-50 font-medium mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-amber-950 bg-amber-50 border border-amber-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-amber-100'
+            },
+            sunny: {
+                key: 'amber',
+                name: '☀️ Warm Amber',
+                iconGenre: 'humor',
+                bg: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)',
+                border: '#b45309',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/25 text-white border border-white/35 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-amber-50 font-medium mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-amber-950 bg-amber-50 border border-amber-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-amber-100'
+            },
+            history: {
+                key: 'history',
+                name: '🏛️ Kastanjebruin',
+                iconGenre: 'histor',
+                bg: 'linear-gradient(135deg, #78350f 0%, #451a03 100%)',
+                border: '#451a03',
+                badgeClass: 'inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 backdrop-blur-xs mb-1.5',
+                titleClass: 'text-xl sm:text-2xl font-black text-white leading-snug',
+                descClass: 'text-xs sm:text-sm text-amber-100 font-medium mt-1 max-w-2xl',
+                gradeBadgeClass: 'text-xs font-black uppercase tracking-wider text-amber-950 bg-amber-50 border border-amber-200/70 px-2.5 py-1 rounded-xl truncate',
+                cardBorder: 'border-amber-100'
             }
         };
+
+        function resolveThemeStyle(styleKey, tag) {
+            const sk = (styleKey || 'auto').toLowerCase();
+            if (sk === 'auto') {
+                const tg = (tag || '').toLowerCase();
+                if (tg.includes('span') || tg.includes('detective') || tg.includes('thriller') || tg.includes('misdaad')) return THEME_BANNER_STYLES.night;
+                if (tg.includes('fantas') || tg.includes('magie') || tg.includes('myth')) return THEME_BANNER_STYLES.fantasy;
+                if (tg.includes('romance') || tg.includes('liefde')) return THEME_BANNER_STYLES.coral;
+                if (tg.includes('science') || tg.includes('sci-fi')) return THEME_BANNER_STYLES.sciencefiction;
+                if (tg.includes('humor') || tg.includes('satire')) return THEME_BANNER_STYLES.amber;
+                if (tg.includes('histor') || tg.includes('oorlog')) return THEME_BANNER_STYLES.history;
+                return THEME_BANNER_STYLES.teal;
+            }
+            return THEME_BANNER_STYLES[sk] || THEME_BANNER_STYLES.teal;
+        }
 
         function renderFeaturedTheme() {
             const section = document.getElementById('featuredThemeSection');
@@ -2070,9 +2193,9 @@
                 return;
             }
 
-            // Pas kleursfeer en achtergrond van de banner dynamisch toe
-            const styleKey = (featuredTheme.style || 'sunny').toLowerCase();
-            const styleCfg = THEME_BANNER_STYLES[styleKey] || THEME_BANNER_STYLES.sunny;
+            const targetTag = (featuredTheme.tag || 'spanning').toLowerCase().trim();
+            const styleKey = (featuredTheme.style || 'auto').toLowerCase();
+            const styleCfg = resolveThemeStyle(styleKey, targetTag);
 
             section.classList.remove('bg-slate-50', 'text-slate-900', 'border-slate-200/90');
             section.style.setProperty('background', styleCfg.bg, 'important');
@@ -2080,6 +2203,11 @@
 
             const badgeEl = document.getElementById('featuredThemeBadge');
             if (badgeEl) badgeEl.className = styleCfg.badgeClass;
+
+            const iconContainer = document.getElementById('featuredThemeVectorContainer');
+            if (iconContainer) {
+                iconContainer.innerHTML = getGenreVectorSvg(styleCfg.iconGenre || targetTag, 'w-6 h-6 sm:w-7 sm:h-7 text-white');
+            }
 
             const titleEl = document.getElementById('featuredThemeTitle');
             const descEl = document.getElementById('featuredThemeDesc');
@@ -3083,6 +3211,8 @@
                     const student = document.getElementById('quickLoanStudent').value.trim();
                     const klas = document.getElementById('quickLoanClass').value.trim();
                     const copyVal = document.getElementById('quickLoanCopySelect').value;
+                    const startDateInput = document.getElementById('quickLoanStartDate');
+                    const loanDate = (startDateInput && startDateInput.value) ? startDateInput.value : new Date().toISOString().split('T')[0];
                     const dueDate = document.getElementById('quickLoanDueDate').value;
 
                     if (!copyVal) {
@@ -3100,7 +3230,7 @@
                         copyId: copyId || '',
                         copyLabel: copyLabel || 'Exemplaar 1',
                         copyLoc: copyLoc || '',
-                        loanDate: new Date().toISOString().split('T')[0],
+                        loanDate: loanDate,
                         dueDate,
                         returned: false
                     };
@@ -4268,6 +4398,42 @@
             }
         }
 
+        function calculateDefaultDueDate(startDateStr) {
+            const base = startDateStr ? new Date(startDateStr) : new Date();
+            const duration = localStorage.getItem('schoolbib_loan_duration') || '1_month';
+            const target = new Date(base.getTime());
+            if (duration === '1_month') {
+                target.setMonth(target.getMonth() + 1);
+            } else if (duration === '2_months') {
+                target.setMonth(target.getMonth() + 2);
+            } else if (duration === '2_weeks') {
+                target.setDate(target.getDate() + 14);
+            } else if (duration === '3_weeks') {
+                target.setDate(target.getDate() + 21);
+            } else {
+                target.setMonth(target.getMonth() + 1);
+            }
+            const y = target.getFullYear();
+            const m = String(target.getMonth() + 1).padStart(2, '0');
+            const d = String(target.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        async function syncSettingToCloud(key, value) {
+            const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
+            if (!activeScriptUrl) return;
+            try {
+                await fetch(activeScriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'save_setting', key: key, value: value })
+                });
+            } catch (e) {
+                console.warn('Fout bij synchroniseren instelling naar Google Sheet:', e);
+            }
+        }
+
         async function loadLoansFromCloud() {
             const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
             if (!activeScriptUrl) {
@@ -4279,21 +4445,47 @@
             try {
                 updateLoanSyncBadge('syncing', 'Synchroniseren met Google Sheet...');
                 const sep = activeScriptUrl.includes('?') ? '&' : '?';
-                const resp = await fetch(`${activeScriptUrl}${sep}action=get_loans&_t=${Date.now()}`);
+                const resp = await fetch(`${activeScriptUrl}${sep}action=get_all_data&_t=${Date.now()}`);
                 if (!resp.ok) throw new Error(`HTTP error ${resp.status}`);
                 const data = await resp.json();
-                if (data && data.status === 'success' && Array.isArray(data.loans)) {
-                    // Google Sheet data
-                    if (data.loans.length > 0) {
+                if (data && data.status === 'success') {
+                    if (Array.isArray(data.loans) && data.loans.length > 0) {
                         loans = data.loans;
                         localStorage.setItem('schoolbib_loans', JSON.stringify(loans));
+                    }
+                    if (data.settings) {
+                        if (data.settings.schoolbib_pin) {
+                            currentPin = data.settings.schoolbib_pin;
+                            localStorage.setItem('schoolbib_pin', currentPin);
+                        }
+                        if (data.settings.schoolbib_loan_duration) {
+                            localStorage.setItem('schoolbib_loan_duration', data.settings.schoolbib_loan_duration);
+                            const durSel = document.getElementById('loanDurationSelect');
+                            if (durSel) durSel.value = data.settings.schoolbib_loan_duration;
+                        }
+                        if (data.settings.schoolbib_classes) {
+                            localStorage.setItem('schoolbib_classes', data.settings.schoolbib_classes);
+                            updateSchoolClassesDatalist();
+                        }
+                    }
+                    if (data.ratings && Object.keys(data.ratings).length > 0) {
+                        for (const [t, r] of Object.entries(data.ratings)) {
+                            const local = ratingsStore[t];
+                            ratingsStore[t] = {
+                                count: Math.max(r.count, local ? local.count : 0),
+                                total: Math.max(r.total, local ? local.total : 0),
+                                avg: r.avg,
+                                myRating: local ? local.myRating : null
+                            };
+                        }
+                        localStorage.setItem('schoolbib_ratings', JSON.stringify(ratingsStore));
                     }
                     updateLoanSyncBadge('synced', 'Gesynchroniseerd met Google Sheet ✓');
                 } else {
                     updateLoanSyncBadge('warning', 'Google Sheet verbonden');
                 }
             } catch (err) {
-                console.warn('Kon uitleningen niet direct ophalen uit Google Sheet:', err);
+                console.warn('Kon gegevens niet direct ophalen uit Google Sheet:', err);
                 updateLoanSyncBadge('local', 'Lokale fallback (offline)');
             }
             renderLoans();
@@ -4319,19 +4511,17 @@
         }
 
         function handleBookLoanButtonClick(book) {
-            const isLoggedIn = sessionStorage.getItem('schoolbib_logged_in') === 'true';
-            if (isLoggedIn) {
-                openQuickLoanModal(book);
-            } else {
-                const pinModal = document.getElementById('teacherPinAuthModal');
-                const pinInput = document.getElementById('modalTeacherPinInput');
-                const errEl = document.getElementById('modalTeacherPinError');
-                if (pinInput) pinInput.value = '';
-                if (errEl) errEl.classList.add('hidden');
-                if (pinModal) {
-                    pinModal.showModal();
-                    if (pinInput) pinInput.focus();
-                }
+            // Toon ALTIJD eerst de leerkracht-pincode verificatie popup
+            // zodat leerlingen niet zelfstandig boeken kunnen ontlenen via de catalogus.
+            currentQuickLoanBook = book;
+            const pinModal = document.getElementById('teacherPinAuthModal');
+            const pinInput = document.getElementById('modalTeacherPinInput');
+            const errEl = document.getElementById('modalTeacherPinError');
+            if (pinInput) pinInput.value = '';
+            if (errEl) errEl.classList.add('hidden');
+            if (pinModal) {
+                pinModal.showModal();
+                if (pinInput) pinInput.focus();
             }
         }
 
@@ -4344,15 +4534,23 @@
             const authorEl = document.getElementById('quickLoanBookAuthor');
             const coverThumb = document.getElementById('quickLoanCoverThumb');
             const copySelect = document.getElementById('quickLoanCopySelect');
+            const startDateInput = document.getElementById('quickLoanStartDate');
             const dueDateInput = document.getElementById('quickLoanDueDate');
 
             if (titleEl) titleEl.textContent = book.Titel;
             if (authorEl) authorEl.textContent = book.Auteur;
             if (coverThumb) coverThumb.innerHTML = renderCoverHtml(book, false);
 
-            const defaultDate = new Date();
-            defaultDate.setDate(defaultDate.getDate() + 21);
-            if (dueDateInput) dueDateInput.value = defaultDate.toISOString().split('T')[0];
+            const todayStr = new Date().toISOString().split('T')[0];
+            if (startDateInput) {
+                startDateInput.value = todayStr;
+                startDateInput.onchange = () => {
+                    if (dueDateInput) dueDateInput.value = calculateDefaultDueDate(startDateInput.value);
+                };
+            }
+            if (dueDateInput) {
+                dueDateInput.value = calculateDefaultDueDate(todayStr);
+            }
 
             if (copySelect) {
                 copySelect.innerHTML = '';
@@ -4429,13 +4627,21 @@
             const loanForm = document.getElementById('loanForm');
             const titleInput = document.getElementById('loanBookTitle');
             const copySelect = document.getElementById('loanCopySelect');
+            const startDateInput = document.getElementById('loanStartDate');
             const dueDateInput = document.getElementById('loanDueDate');
             const searchInput = document.getElementById('loansSearchFilter');
             const refreshBtn = document.getElementById('btnRefreshLoans');
 
-            const defaultDate = new Date();
-            defaultDate.setDate(defaultDate.getDate() + 21);
-            if (dueDateInput) dueDateInput.value = defaultDate.toISOString().split('T')[0];
+            const todayStr = new Date().toISOString().split('T')[0];
+            if (startDateInput) {
+                startDateInput.value = todayStr;
+                startDateInput.addEventListener('change', () => {
+                    if (dueDateInput) dueDateInput.value = calculateDefaultDueDate(startDateInput.value);
+                });
+            }
+            if (dueDateInput) {
+                dueDateInput.value = calculateDefaultDueDate(todayStr);
+            }
 
             if (titleInput) {
                 titleInput.addEventListener('input', () => updateCopySelectOptions(titleInput.value.trim()));
@@ -4449,6 +4655,7 @@
                     const klas = document.getElementById('loanClass').value.trim();
                     const bookTitle = titleInput.value.trim();
                     const selectedCopyVal = copySelect ? copySelect.value : '';
+                    const loanDate = (startDateInput && startDateInput.value) ? startDateInput.value : todayStr;
                     const dueDate = dueDateInput.value;
 
                     if (!selectedCopyVal) {
@@ -4466,7 +4673,7 @@
                         copyId: copyId || '',
                         copyLabel: copyLabel || 'Exemplaar 1',
                         copyLoc: copyLoc || '',
-                        loanDate: new Date().toISOString().split('T')[0],
+                        loanDate: loanDate,
                         dueDate,
                         returned: false
                     };
@@ -4476,7 +4683,8 @@
                     syncLoanToCloud('save_loan', newLoan);
 
                     loanForm.reset();
-                    if (dueDateInput) dueDateInput.value = defaultDate.toISOString().split('T')[0];
+                    if (startDateInput) startDateInput.value = todayStr;
+                    if (dueDateInput) dueDateInput.value = calculateDefaultDueDate(todayStr);
                     if (copySelect) copySelect.innerHTML = '<option value="">-- Kies eerst een titel --</option>';
 
                     showToast(`"${newLoan.bookTitle}" is succesvol uitgeleend aan ${newLoan.student} (${newLoan.klas})! ✓`, 'success');
@@ -4938,10 +5146,39 @@
                 }
                 localStorage.setItem('schoolbib_pin', val);
                 currentPin = val;
+                syncSettingToCloud('schoolbib_pin', val);
                 pinSavedMsg.classList.remove('hidden');
                 pinInput.value = '';
                 setTimeout(() => pinSavedMsg.classList.add('hidden'), 3000);
             });
+
+            // Uitleentermijn instelling
+            const durationSelect = document.getElementById('loanDurationSelect');
+            const saveDurationBtn = document.getElementById('btnSaveLoanDuration');
+            const durationSavedMsg = document.getElementById('loanDurationSavedMsg');
+
+            if (durationSelect) {
+                durationSelect.value = localStorage.getItem('schoolbib_loan_duration') || '1_month';
+            }
+
+            if (saveDurationBtn && durationSelect) {
+                saveDurationBtn.addEventListener('click', () => {
+                    const dur = durationSelect.value;
+                    localStorage.setItem('schoolbib_loan_duration', dur);
+                    syncSettingToCloud('schoolbib_loan_duration', dur);
+
+                    // Update actieve invoervelden direct
+                    const curStart = document.getElementById('loanStartDate')?.value || new Date().toISOString().split('T')[0];
+                    const dueInput = document.getElementById('loanDueDate');
+                    if (dueInput) dueInput.value = calculateDefaultDueDate(curStart);
+
+                    if (durationSavedMsg) {
+                        durationSavedMsg.classList.remove('hidden');
+                        setTimeout(() => durationSavedMsg.classList.add('hidden'), 3000);
+                    }
+                    showToast('Standaard uitleentermijn succesvol opgeslagen! ✓', 'success');
+                });
+            }
 
             // Klassenlijst instelling
             const classesInput = document.getElementById('schoolClassesInput');
@@ -4960,7 +5197,9 @@
                         alert('Voer minimaal 1 klas in.');
                         return;
                     }
-                    localStorage.setItem('schoolbib_classes', JSON.stringify(parsed));
+                    const jsonVal = JSON.stringify(parsed);
+                    localStorage.setItem('schoolbib_classes', jsonVal);
+                    syncSettingToCloud('schoolbib_classes', jsonVal);
                     updateSchoolClassesDatalist();
                     if (classesSavedMsg) {
                         classesSavedMsg.classList.remove('hidden');
