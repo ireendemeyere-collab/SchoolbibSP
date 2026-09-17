@@ -1,13 +1,15 @@
 # Handleiding Boekenbende Sint-Pieters 📚
 ### Schoolbibliotheek Don Bosco Gent — Campus Sint-Pieters
 
-Welkom bij de handleiding voor het webplatform van onze schoolbibliotheek **Boekenbende Sint-Pieters**. Deze gids is speciaal geschreven voor alle collega-leerkrachten, graadcoördinatoren en bib-medewerkers. Hij legt stap voor stap uit hoe je samen met je leerlingen boeken zoekt, ontleent, inneemt en hoe het beheer werkt.
+Welkom bij de handleiding voor het webplatform van onze schoolbibliotheek **Boekenbende Sint-Pieters**. Deze gids is geschreven voor alle collega-leerkrachten (in het bijzonder leerkrachten Nederlands), graadcoördinatoren, secretariaatsmedewerkers en bib-beheerders. Hij legt stap voor stap uit hoe je samen met je leerlingen boeken zoekt, ontleent, inneemt via de Uitleenbalie en hoe het beheer werkt.
+
+> 💡 **Tip voor leerkrachten en secretariaat:** Zoek je enkel een handige, korte gids voor de dagelijkse werking (boeken ontlenen, innemen en klasbeheer)? Bekijk dan de aparte [Handleiding voor Leerkrachten & Secretariaat (Rol 1)](HANDLEIDING_LEERKRACHTEN.md).
 
 ---
 
 ## Inhoudsopgave
 
-1. [Over het platform](#1-over-het-platform)
+1. [Over het platform & De Twee Rollen](#1-over-het-platform--de-twee-rollen)
 2. [Boeken zoeken & Ontdekken met leerlingen](#2-boeken-zoeken--ontdekken-met-leerlingen)
    - [De zoekbalk](#de-zoekbalk)
    - [Filters: Taal, Graad, Thema en Beschikbaarheid](#filters-taal-graad-thema-en-beschikbaarheid)
@@ -18,20 +20,26 @@ Welkom bij de handleiding voor het webplatform van onze schoolbibliotheek **Boek
    - [Exemplaren en realtime uitleenstatus](#exemplaren-en-realtime-uitleenstatus)
    - [Favorieten en sterrenbeoordeling](#favorieten-en-sterrenbeoordeling)
 4. [Snel Uitlenen vanuit de Boekfiche](#4-snel-uitlenen-vanuit-de-boekfiche)
-5. [Het Beheerderspaneel](#5-het-beheerderspaneel)
-   - [Inloggen met pincode](#inloggen-met-pincode)
+5. [De Uitleenbalie (Rol 1: Leerkrachten & Secretariaat)](#5-de-uitleenbalie-rol-1)
+   - [Inloggen met de Leerkrachtcode](#inloggen-uitleenbalie)
+   - [Snelle Barcode / ISBN scan (Inleveren of Uitlenen)](#snelle-barcodescan)
+   - [Nieuwe uitlening handmatig registreren](#handmatig-registreren)
+   - [Filteren per klas & Klasinlevering in één klik](#klasinlevering)
+   - [Boek inleveren met staat-controle](#staat-controle)
+6. [Het Beheerderspaneel (Rol 2: Hoofdbeheerders)](#6-het-beheerderspaneel-rol-2)
+   - [Inloggen met de geheime Beheerderscode](#inloggen-beheerder)
    - [Tab 1: Thema in de kijker instellen](#tab-1-thema-in-de-kijker-instellen)
-   - [Tab 2: Boek toevoegen (met ISBN-scanner)](#tab-2-boek-toevoegen-met-isbn-scanner)
-   - [Tab 3: Ontlenen & Inleveren (overzichten, scanner, klasinlevering)](#tab-3-ontlenen--inleveren)
-   - [Tab 4: Instellingen & Google Sheet](#tab-4-instellingen--google-sheet)
-6. [Veelgestelde Vragen (FAQ)](#6-veelgestelde-vragen-faq)
+   - [Tab 2: Boek toevoegen (volledig handmatig)](#tab-2-boek-toevoegen-handmatig)
+   - [Tab 3: Instellingen, Google Sheet & Wachtwoordbeheer](#tab-3-instellingen--wachtwoordbeheer)
+   - [Tab 4: Hulp & FAQ](#tab-4-hulp--faq)
+7. [Veelgestelde Vragen (FAQ)](#7-veelgestelde-vragen-faq)
    - [FAQ 1: Hoe help ik een leerling snel een boek vinden op niveau?](#faq-1-hoe-help-ik-een-leerling-snel-een-boek-vinden-op-niveau)
    - [FAQ 2: Waar zie ik of een boek aanwezig is of uitgeleend?](#faq-2-waar-zie-ik-of-een-boek-aanwezig-is-of-uitgeleend)
    - [FAQ 3: Hoe leen ik een boek uit aan een leerling?](#faq-3-hoe-leen-ik-een-boek-uit-aan-een-leerling)
-   - [FAQ 4: Wat is de standaard leerkrachtcode / pincode?](#faq-4-wat-is-de-standaard-leerkrachtcode--pincode)
+   - [FAQ 4: Wat zijn de toegangscodes voor leerkrachten en beheerders?](#faq-4-wat-zijn-de-toegangscodes)
    - [FAQ 5: Hoe neem ik een boek weer in als een leerling het inlevert?](#faq-5-hoe-neem-ik-een-boek-weer-in-als-een-leerling-het-inlevert)
    - [FAQ 6: Kan ik in één klik alle boeken van mijn klas inleveren?](#faq-6-kan-ik-in-één-klik-alle-boeken-van-mijn-klas-inleveren)
-   - [FAQ 7: Hoe voeg ik een nieuw boek of extra exemplaar toe?](#faq-7-hoe-voeg-ik-een-nieuw-boek-of-extra-exemplaar-toe)
+   - [FAQ 7: Hoe voeg ik als beheerder een nieuw boek of extra exemplaar toe?](#faq-7-hoe-voeg-ik-een-nieuw-boek-toe)
    - [FAQ 8: Hoe pas ik de banner 'Thema in de kijker' aan?](#faq-8-hoe-pas-ik-de-banner-thema-in-de-kijker-aan)
    - [FAQ 9: Waarom linkt het ene boek naar Boekenzoeker en het andere naar Hebban?](#faq-9-waarom-linkt-het-ene-boek-naar-boekenzoeker-en-het-andere-naar-hebban)
    - [FAQ 10: Waar worden alle gegevens opgeslagen?](#faq-10-waar-worden-alle-gegevens-opgeslagen)
@@ -40,20 +48,26 @@ Welkom bij de handleiding voor het webplatform van onze schoolbibliotheek **Boek
 
 ---
 
-<a id="1-over-het-platform"></a>
-## 1. Over het platform
+<a id="1-over-het-platform--de-twee-rollen"></a>
+## 1. Over het platform & De Twee Rollen
 
 **Boekenbende Sint-Pieters** is de digitale catalogus en het uitleensysteem van de schoolbibliotheek op Campus Sint-Pieters.
-- **Voor leerlingen**: Een aantrekkelijke, visuele interface (in de stijl van Boekenzoeker.be) om zelfstandig of tijdens leesuren boeken te ontdekken, achterflappen te lezen en te zien waar een boek in het lokaal staat.
-- **Voor leerkrachten**: Een laagdrempelig hulpmiddel om leestips te geven, boeken uit te lenen via de computer of tablet in de klas, en het overzicht te bewaren per klas.
-- **Voor de bib-verantwoordelijken**: Eenvoudig beheer via ISBN-scans, thema-campagnes instellen en centrale synchronisatie met een gedeelde Google Spreadsheet.
+
+Om het beheer veilig en gebruiksvriendelijk te houden, werkt het platform met **twee aparte rollen met elk een eigen toegangscode**:
+
+| Rol | Wie? | Toegang tot | Toegangscode |
+| :--- | :--- | :--- | :--- |
+| **Rol 1: Uitleenbalie / Leerkracht** | Leerkrachten Nederlands, secretariaat, bib-balie | • Boeken uitlenen & innemen<br>• Snel barcodes scannen<br>• Klasinleveringen in batch<br>• Uitleningenlijst raadplegen & verlengen | **Leerkrachtcode**<br>*(Standaard: `donbosco`)* |
+| **Rol 2: Hoofdbeheerder** | De twee aangestelde bib-verantwoordelijken | • Alles van Rol 1<br>• Thema in de kijker instellen<br>• Nieuwe boeken handmatig toevoegen<br>• **Wachtwoorden van beide rollen wijzigen**<br>• Google Sheet koppeling & instellingen | **Beheerderscode**<br>*(Standaard: `beheerder`)* |
+
+- **Voor leerlingen**: Een aantrekkelijke, visuele interface (in de stijl van Boekenzoeker.be) om zelfstandig of tijdens leesuren boeken te ontdekken, achterflappen te lezen en beschikbaarheid te zien. Leerlingen hebben geen code en kunnen van thuis uit niets registreren.
 
 ---
 
 <a id="2-boeken-zoeken--ontdekken-met-leerlingen"></a>
 ## 2. Boeken zoeken & Ontdekken met leerlingen
 
-Ga naar de startpagina (**Catalogus Bib**). Hier kunnen leerlingen en collega's op verschillende manieren grasduinen:
+Ga naar de startpagina (**📚 Catalogus Bib**). Hier kunnen leerlingen en collega's op verschillende manieren grasduinen:
 
 ### De zoekbalk
 Bovenaan in de gekleurde banner vind je de zoekbalk. Je kan hier vrij typen:
@@ -70,27 +84,20 @@ Onder de banner vind je vier dropdownknoppen om heel gericht te selecteren:
    - *Tweede graad* (14–16 jaar)
    - *Derde graad* (16+ jaar)
    - *Alle graden*
-3. **Thema**: Kies uit tientallen genres en onderwerpen (bv. *detective*, *fantasy*, *coming of age*, *graphic novel*, *waargebeurd*). Met het zoekvakje in de dropdown vind je direct de gewenste tag.
+3. **Thema**: Kies uit genres en onderwerpen (bv. *detective*, *fantasy*, *coming of age*, *graphic novel*, *waargebeurd*).
 4. **Beschikbaarheid**:
    - Vink **Nu in de bib aanwezig** aan om enkel boeken te tonen die momenteel fysiek in de rekken staan.
    - Vink **Momenteel uitgeleend** aan om te zien welke boeken momenteel door leerlingen gelezen worden.
 
-> 💡 **Tip:** Meerdere filters combineren is mogelijk (bv. *Engels* + *Tweede graad* + *Nu aanwezig*). Met de rode knop **✕ Wis filters** zet je alle filters in één klik terug.
+> 💡 **Tip:** Meerdere filters combineren is mogelijk. Met de rode knop **✕ Wis filters** zet je alle filters in één klik terug.
 
 ### Snelkeuze-knoppen
 Bovenaan de filterbalk vind je handige sneltoetsen:
 - **Alle boeken**: De volledige collectie.
 - **Bekroonde boeken**: Boeken bekroond met o.a. de Boekenleeuw, Zilveren Griffel of De Leesjury.
 - **Top beoordeeld**: Boeken die de hoogste sterren kregen van onze eigen leerlingen en leerkrachten.
-- **Mijn favorieten**: Een persoonlijk lijstje van boeken die de gebruiker met het hartje heeft bewaard (blijft bewaard op dat toestel).
+- **Mijn favorieten**: Een persoonlijk lijstje van bewaarde boeken (blijft bewaard op dat toestel).
 - **Nieuw in de bib**: De meest recente aanwinsten van de bib.
-
-### Carrousels & Thema in de kijker
-- **Catalogus carrousel (standaard)**: Toont 10 willekeurige boeken om leerlingen te inspireren. Met de knop *'Andere 10 boeken'* schud je de stapel opnieuw.
-- **Thema in de kijker**: Een speciale seizoensplank (bv. *Griezelen in november*, *Poëzieweek*, *Graphic Novels*), opgedeeld per graad.
-- **Pas toegevoegd aan de bib**: Blader horizontaal door de nieuwste aanwinsten.
-
-*(Terug naar [Inhoudsopgave](#inhoudsopgave))*
 
 ---
 
@@ -98,20 +105,15 @@ Bovenaan de filterbalk vind je handige sneltoetsen:
 ## 3. Boekfiche: Details, Recensies en Beschikbaarheid
 
 Klik op een boekkaartje om de gedetailleerde boekfiche te openen:
-
 1. **Cover & Tags**: Een duidelijke boekomslag en labels met thema's.
 2. **Locatie in de bib**: Je ziet meteen in welke kast of afdeling het boek staat (bv. *Nederlandstalige fictie*, *Boektoppers*, *Poëzie*, *Engelstalige fictie*).
 3. **Fysieke exemplaren & Status**:
-   - Heeft de school meerdere exemplaren van een boek? Dan worden ze allemaal opgesomd (bv. *Exemplaar 1*, *Exemplaar 2*).
    - Bij elk exemplaar staat of het **beschikbaar** is of **uitgeleend** (inclusief naam van de lener, klas en verwachte inleverdatum).
 4. **Sterrenbeoordeling & Favorieten**:
    - Geef het boek 1 tot 5 sterren. De score telt mee voor de 'Top beoordeeld'-rangschikking.
    - Klik op *'Opslaan in favorieten'* om het boek te bewaren op je boekenlijstje.
-5. **Knop 'Meer informatie' (Achterflap & Recensies)**:
-   - Linkt automatisch door naar **Boekenzoeker.be**, **Hebban.nl** of **Goodreads**.
-   - Zo kunnen leerlingen recensies van leeftijdsgenoten, fragmenten en samenvattingen lezen.
-
-*(Terug naar [Inhoudsopgave](#inhoudsopgave))*
+5. **Knop 'Meer informatie'**:
+   - Linkt automatisch door naar **Boekenzoeker.be**, **Hebban.nl** of **Goodreads** voor recensies en samenvattingen.
 
 ---
 
@@ -119,195 +121,201 @@ Klik op een boekkaartje om de gedetailleerde boekfiche te openen:
 ## 4. Snel Uitlenen vanuit de Boekfiche
 
 Wil een leerling in de klas meteen een boek meenemen? Dat kan rechtstreeks via de boekfiche:
-
 1. Klik op het boek in de catalogus.
 2. Klik linksonder op de blauwe knop **📘 Dit boek uitlenen**.
-3. **Leerkrachtbeveiliging**: Er verschijnt een vraag om de leerkrachtcode in te voeren (standaard: `donbosco`). Dit verhindert dat leerlingen zelfstandig boeken op andermans naam registreren.
+3. **Leerkrachtbeveiliging**: Er verschijnt een vraag om de **Leerkrachtcode** in te voeren (standaard: `donbosco`). Als je in deze browsersessie al bent ingelogd op de Uitleenbalie of als beheerder, opent het formulier meteen!
 4. Selecteer het exemplaar, vul de **naam van de leerling** in en kies de **klas**.
-5. De uitleentermijn wordt automatisch berekend (standaard 1 maand).
-6. Klik op **Uitlening Bevestigen**. Klaar! Het boek staat nu direct als 'uitgeleend' gemarkeerd in het hele systeem.
-
-*(Terug naar [Inhoudsopgave](#inhoudsopgave))*
+5. De inleverdatum wordt automatisch berekend (standaard 1 maand).
+6. Klik op **Uitlening Bevestigen**. Klaar!
 
 ---
 
-<a id="5-het-beheerderspaneel"></a>
-## 5. Het Beheerderspaneel
+<a id="5-de-uitleenbalie-rol-1"></a>
+## 5. De Uitleenbalie (Rol 1: Leerkrachten & Secretariaat)
 
-Het beheerderspaneel is bedoeld voor leerkrachten en bib-verantwoordelijken.
+De **Uitleenbalie** is dé centrale werkplek voor leerkrachten (bv. leerkracht Nederlands die met de klas naar de bib gaat) en secretariaatsmedewerkers aan de balie. Hier kunnen boeken snel ingecheckt en uitgecheckt worden, zonder dat er risico is dat catalogusgegevens of instellingen gewijzigd worden.
 
-### Inloggen met pincode
+<a id="inloggen-uitleenbalie"></a>
+### Inloggen met de Leerkrachtcode
+1. Klik in het bovenmenu op **🔄 Uitleenbalie** (op mobiel: **🔄 Balie**).
+2. Voer de **Leerkrachtcode** in (standaard: `donbosco`, of de code die door de beheerder is ingesteld).
+3. Klik op **Balie Openen**. Je blijft voor de duur van je sessie ingelogd op deze computer.
+4. Ben je klaar? Klik rechtsboven op **🔒 Balie Vergrendelen**.
+
+<a id="snelle-barcodescan"></a>
+### Snelle Barcode / ISBN scan (Inleveren of Uitlenen)
+Bovenaan de balie vind je de donkere scanbalk:
+- **Boek innemen**: Scan de barcode met een handscanner (of typ de titel). Het systeem herkent direct wie het boek ontleend heeft en toont één knop: **Direct Inleveren ✓**.
+- **Boek uitlenen**: Scan een beschikbaar boek. Het systeem herkent het boek en biedt direct de knop **Dit boek uitlenen 📘**.
+
+<a id="handmatig-registreren"></a>
+### Nieuwe uitlening handmatig registreren
+Onder de scanbalk vind je het uitklapformulier *'Nieuwe uitlening handmatig registreren'*:
+1. Vul de naam van de leerling of collega in.
+2. Selecteer de klas uit de dropdown (bv. `2MWb`).
+3. Typ de titel van het boek en kies het gewenste exemplaar.
+4. Klik op **Uitlening opslaan**.
+
+<a id="klasinlevering"></a>
+### Filteren per klas & Klasinlevering in één klik
+Brengt een leerkracht na een leesuur een hele bak boeken van de klas terug?
+1. Klik in de filterbalk op de badge van jouw klas (bv. `2MWb`).
+2. Je ziet direct alle openstaande boeken van die specifieke klas.
+3. Klik op de groene knop **✓ Alles van klas 2MWb inleveren**. Alle boeken van die klas worden gelijktijdig gemarkeerd als ingeleverd!
+
+<a id="staat-controle"></a>
+### Boek inleveren met staat-controle
+Bij het individueel inleveren van een boek opent een handig pop-upvenster:
+- Kies de staat van het boek: **Goed**, **Lichte schade** of **Ernstig beschadigd / Pagina los**.
+- Voeg eventueel een korte opmerking toe.
+- Dit wordt netjes bewaard in de historiek en gesynchroniseerd met Google Sheets.
+
+---
+
+<a id="6-het-beheerderspaneel-rol-2"></a>
+## 6. Het Beheerderspaneel (Rol 2: Hoofdbeheerders)
+
+Het beheerderspaneel is exclusief voorbehouden voor de twee hoofdbeheerders van de bib.
+
+<a id="inloggen-beheerder"></a>
+### Inloggen met de geheime Beheerderscode
 1. Klik rechtsboven in het menu op **⚙️ Beheerder**.
-2. Voer de schoolpincode in (standaard: `donbosco`).
-3. Je bent nu ingelogd in het dashboard. Er zijn vier subtabs:
+2. Voer jullie **geheime Beheerderscode** in (standaard bij installatie: `beheerder`).
+3. Je bent nu ingelogd in het dashboard met vier subtabs:
 
 ---
 
+<a id="tab-1-thema-in-de-kijker-instellen"></a>
 ### Tab 1: Thema in de kijker instellen
-Hier pas je de grote themabanner aan die leerlingen op de homepage zien:
+Hier pas je de grote seizoensbanner aan die leerlingen op de homepage zien:
 - **Banner activeren/deactiveren**: Schakel de themabanner aan of uit.
 - **Titel & Ondertitel**: bv. *"Jeugdboekenmaand: Tijd voor kunst & verhalen!"*
 - **Trefwoord / Tag**: Geef het trefwoord op (bv. *spanning*, *vriendschap*, *fantasy*).
-- **Kleursfeer**: Kies een sfeer (bijv. *Petrol Teal*, *Koraalrood*, *Nachtblauw*, *Warm Amber*, of automatisch afgestemd).
-- **Aanbevolen boeken per graad**: Je kan per graad (1ste, 2de en 3de graad) tot 5 specifieke boeken selecteren die prominent op de carrousels verschijnen.
+- **Kleursfeer**: Kies een sfeer (bijv. *Petrol Teal*, *Koraalrood*, *Nachtblauw*, *Warm Amber*).
+- **Aanbevolen boeken per graad**: Selecteer per graad (1ste, 2de en 3de graad) tot 5 specifieke boeken die prominent op de carrousels verschijnen.
 - Klik op **💾 Thema Opslaan & Publiceren**.
 
 ---
 
-### Tab 2: Boek toevoegen (met ISBN-scanner)
-Nieuwe boeken toevoegen kan op twee manieren:
-
-#### A. Supersnel via ISBN / Barcodescan (Aanbevolen)
-1. Vul het 13-cijferige ISBN-nummer in het bovenste veld in (of scan de barcode met een handscanner).
-2. Klik op **Gegevens ophalen**.
-3. De titel, auteur, flaptekst, coverafbeelding en bijpassende genres worden automatisch opgehaald!
-4. Controleer de graad en de kast/locatie.
-5. Klik op **Boek toevoegen en opslaan**.
-
-#### B. Duplicaatdetectie (Extra exemplaar)
-Heeft de school al een exemplaar van dit boek? Dan geeft het systeem onmiddellijk een **oranje melding**:
-- Je ziet hoeveel exemplaren er al in de bib staan en op welke locatie.
-- Klik op **Extra exemplaar toevoegen** om automatisch een nieuw volgnummer (bv. *Exemplaar 2*) aan te maken. Je hoeft niet opnieuw alle gegevens in te vullen!
-
-#### C. Aantal exemplaren in batch toevoegen
-Krijg je een stapel van hetzelfde boek binnen (bv. 5 stuks voor een boekenclub)?
-- Klik bij *'Aantal exemplaren'* op **3x**, **5x** of typ het aantal in.
-- Het systeem voegt ze in één keer toe als aparte exemplaren.
+<a id="tab-2-boek-toevoegen-handmatig"></a>
+### Tab 2: Boek toevoegen (volledig handmatig)
+Nieuwe boeken aankopen en toevoegen gebeurt eenvoudig en handmatig via het invoerformulier:
+1. **Titel en Auteur**: Typ de titel en naam van de auteur in.
+2. **Graad**: Kies *Eerste graad*, *Tweede graad*, *Derde graad* of *Alle graden*.
+3. **Locatie / Kast**: Selecteer de standplaats (bv. *Nederlandstalige fictie*, *Boektoppers*, *Graphic novels*...). Je kan via *'+ Nieuwe locatie toevoegen'* ook een eigen kast aanmaken.
+4. **Aantal exemplaren**: Voeg je meerdere stuks toe? Klik op **2x**, **3x**, **5x** of typ het aantal in om ze in één klik in batch aan te maken.
+5. **Genre & Thema's**: Klik op de keuzebadges om genres (bv. *Young adult*, *Graphic novel*, *Spanning*) en inhoudelijke thema's (*Vriendschap*, *Mentaal welzijn*...) te selecteren.
+6. **Optionele gegevens**: Voer eventueel het ISBN-nummer, een coverlink of een weblink naar Boekenzoeker/Hebban in.
+7. **Duplicaatherkenning (Extra exemplaar)**: Bestaat het boek al in de school? Dan verschijnt er direct een oranje melding. Met één klik op **Extra exemplaar toevoegen** worden alle gegevens automatisch overgenomen en krijgt het boek automatisch een nieuw volgnummer (bv. *Exemplaar 2*).
+8. Klik op **Boek toevoegen en opslaan**. Het boek verschijnt direct in de catalogus en wordt automatisch opgeslagen in de Google Sheet!
 
 ---
 
-### Tab 3: Ontlenen & Inleveren
-Dit tabblad is het centrale zenuwstelsel voor het uitlenen en innemen van boeken:
+<a id="tab-3-instellingen--wachtwoordbeheer"></a>
+### Tab 3: Instellingen, Google Sheet & Wachtwoordbeheer
+Hier beheren jullie de centrale configuratie en de beveiliging:
 
-1. **Statistieken**:
-   - Aantal boeken momenteel uitgeleend.
-   - Aantal boeken waarvan de inleverdatum verstreken is (⚠️ Te laat).
-   - Aantal betrokken klassen.
-2. **Snelle Barcodescan / Handscanner**:
-   - Heb je een handscanner aangesloten? Scan de barcode of typ de titel van het ingeleverde boek.
-   - Het systeem herkent direct wie het ontleend heeft en biedt één knop: **Direct Inleveren**.
-3. **Handmatig registreren**:
-   - Via het uitklapformulier *'Nieuwe uitlening handmatig registreren'* koppel je een leerling, klas, boek en exemplaar.
-4. **Filteren op klas (Booksource-stijl)**:
-   - Klik op een klasbadge (bv. `2MWb` of `4WET`) om in één oogopslag te zien wie van die specifieke klas nog boeken heeft.
-5. **Batch inleveren per klas**:
-   - Brengt een leerkracht na een leesuur een hele bak boeken van de klas terug?
-   - Filter op die klas en klik op de groene knop **✓ Alles van deze klas inleveren**. Alle uitleningen van die klas worden in één klik afgesloten!
-6. **Acties per uitlening**:
-   - **Inleveren**: Boek wordt weer als beschikbaar gemarkeerd.
-   - **Verlengen (+2 weken)**: Verschuift de inleverdatum automatisch met 14 dagen.
+1. **Beheerderscode wijzigen (Rol 2)**:
+   - Pas hier jullie eigen geheime code aan.
+   - Klik op **Beheerderscode Opslaan**. De nieuwe code is direct actief en wordt gesynchroniseerd naar Google Sheets.
+2. **Leerkrachtcode / Baliewachtwoord wijzigen (Rol 1)**:
+   - Pas hier de code aan die collega's en secretariaatsmedewerkers gebruiken voor de Uitleenbalie.
+   - Klik op **Leerkrachtcode Opslaan**. Wordt direct opgeslagen in Google Sheets.
+3. **Google Spreadsheet**:
+   - Directe link om de centrale Google Sheet van de school te openen in Google Drive.
+4. **Google Apps Script Web-app URL**:
+   - De veilige cloudverbinding tussen de website en Google Sheets.
+5. **Standaard uitleentermijn**:
+   - Kies tussen: *2 weken*, *3 weken*, *1 maand (standaard)* of *2 maanden*.
+6. **Klassenlijst beheren**:
+   - Beheer de lijst van klassen (gescheiden door komma's). Deze verschijnen automatisch in alle dropdowns.
 
 ---
 
-### Tab 4: Instellingen & Google Sheet
-1. **Google Spreadsheet**:
-   - Link naar het centrale online rekenblad met alle boeken en uitleningen.
-2. **Google Apps Script Web-app URL**:
-   - Zorgt voor de realtime cloudverbinding tussen de website en Google Sheets.
-3. **Schoolpincode wijzigen**:
-   - Pas de toegangscode aan voor het beheer en het uitlenen.
-4. **Standaard uitleentermijn**:
-   - Keuze uit: *2 weken*, *3 weken*, *1 maand (standaard)* of *2 maanden*.
-5. **Klassenlijst beheren**:
-   - Beheer de lijst van klassen (bv. `1A, 1B, 2MWa, 2MWb, 3WET, 4ECO...`). Deze verschijnen automatisch in de dropdowns.
-
-*(Terug naar [Inhoudsopgave](#inhoudsopgave))*
+<a id="tab-4-hulp--faq"></a>
+### Tab 4: Hulp & FAQ
+Bevat een handige samenvatting van de werking en een knop om de handleiding direct af te drukken of op te slaan als PDF.
 
 ---
 
-<a id="6-veelgestelde-vragen-faq"></a>
-## 6. Veelgestelde Vragen (FAQ)
-
-Hieronder vind je snelle antwoorden op de meest voorkomende vragen, met directe links naar de relevante secties in de handleiding.
-
----
+<a id="7-veelgestelde-vragen-faq"></a>
+## 7. Veelgestelde Vragen (FAQ)
 
 <a id="faq-1-hoe-help-ik-een-leerling-snel-een-boek-vinden-op-niveau"></a>
 ### FAQ 1: Hoe help ik een leerling snel een boek vinden op zijn/haar niveau?
-Gebruik de filterknop **Leeftijd** en kies de juiste graad (*Eerste graad* = 12-14 jaar, *Tweede graad* = 14-16 jaar, *Derde graad* = 16+ jaar). Combineer dit eventueel met een interesse via het **Thema** filter (bv. *spanning*, *sport* of *vriendschap*) of klik op de snelkeuze **Bekroonde boeken**.  
-➡️ *Lees meer in: [2. Boeken zoeken & Ontdekken met leerlingen](#2-boeken-zoeken--ontdekken-met-leerlingen).*
+Gebruik de filterknop **Leeftijd** en kies de juiste graad (*Eerste graad* = 12-14 jaar, *Tweede graad* = 14-16 jaar, *Derde graad* = 16+ jaar). Combineer dit eventueel met een interesse via het **Thema** filter (bv. *spanning*, *sport* of *vriendschap*) of klik op de snelkeuze **Bekroonde boeken**.
 
 ---
 
 <a id="faq-2-waar-zie-ik-of-een-boek-aanwezig-is-of-uitgeleend"></a>
 ### FAQ 2: Waar zie ik of een boek aanwezig is of momenteel uitgeleend?
-Klik op het boek om de boekfiche te openen. In het vak **Exemplaren in de schoolbib** zie je per exemplaar een groen vinkje (*"Nu in de bib aanwezig"*) of een oranje label (*"Uitgeleend aan [Naam] ([Klas]) - Verwacht op [Datum]"*). Wil je enkel boeken zien die vandaag op de plank staan? Vink dan in de filterbalk de optie **Nu in de bib aanwezig** aan.  
-➡️ *Lees meer in: [3. Boekfiche: Details, Recensies en Beschikbaarheid](#3-boekfiche-details-recensies-en-beschikbaarheid).*
+Klik op het boek om de boekfiche te openen. In het vak **Exemplaren in de schoolbib** zie je per exemplaar een groen vinkje (*"Aanwezig"*) of een rood label (*"Uitgeleend aan [Naam] ([Klas])"*). Wil je enkel boeken zien die vandaag in het rek staan? Vink dan in de filterbalk de optie **Nu in de bib aanwezig** aan.
 
 ---
 
 <a id="faq-3-hoe-leen-ik-een-boek-uit-aan-een-leerling"></a>
 ### FAQ 3: Hoe leen ik een boek snel uit aan een leerling?
-Open de fiche van het boek en klik op **📘 Dit boek uitlenen**. Voer de leerkrachtcode in (`donbosco`), vul de naam en klas van de leerling in en klik op **Uitlening Bevestigen**.  
-➡️ *Lees meer in: [4. Snel Uitlenen vanuit de Boekfiche](#4-snel-uitlenen-vanuit-de-boekfiche).*
+Open de fiche van het boek in de catalogus en klik op **📘 Dit boek uitlenen**. Voer de leerkrachtcode in (`donbosco`), vul de naam en klas van de leerling in en klik op **Uitlening Bevestigen**.
 
 ---
 
-<a id="faq-4-wat-is-de-standaard-leerkrachtcode--pincode"></a>
-### FAQ 4: Wat is de standaard leerkrachtcode / pincode?
-De standaardcode is **`donbosco`**. Beheerders kunnen deze code op elk moment wijzigen via **Beheerder ➔ Instellingen ➔ Schoolpincode wijzigen**.  
-➡️ *Lees meer in: [5. Het Beheerderspaneel (Tab 4: Instellingen)](#tab-4-instellingen--google-sheet).*
+<a id="faq-4-wat-zijn-de-toegangscodes"></a>
+### FAQ 4: Wat zijn de standaard toegangscodes en wie gebruikt welke code?
+Er zijn twee aparte codes:
+- **Leerkrachtcode (Rol 1: Uitleenbalie & snel uitlenen)**: standaard **`donbosco`**. Deze code mag gedeeld worden met collega-leerkrachten en secretariaat.
+- **Beheerderscode (Rol 2: Beheerderspaneel)**: standaard **`beheerder`**. Deze code is strikt geheim voor de twee hoofdbeheerders.
+Beheerders kunnen **beide codes** op elk moment wijzigen via **Beheerder ➔ Instellingen & Sheet**.
 
 ---
 
 <a id="faq-5-hoe-neem-ik-een-boek-weer-in-als-een-leerling-het-inlevert"></a>
 ### FAQ 5: Hoe neem ik een boek weer in wanneer een leerling het inlevert?
-Ga naar **Beheerder ➔ Ontlenen & Inleveren**. Je kan het boek innemen door:
-1. De barcode van het boek te scannen in het veld *'Snelle Barcode / ISBN scan'*, of
-2. De naam van de leerling of boektitel te typen in de zoekbalk van de tabel en op de knop **Inleveren** te klikken.  
-➡️ *Lees meer in: [5. Het Beheerderspaneel (Tab 3: Ontlenen & Inleveren)](#tab-3-ontlenen--inleveren).*
+Klik bovenaan in het menu op **🔄 Uitleenbalie**. Log in met de leerkrachtcode (`donbosco`). Scan de barcode van het boek in de balk *'Snelle Barcode scan'* (of zoek de leerling in de tabel) en klik op **Direct Inleveren**.
 
 ---
 
 <a id="faq-6-kan-ik-in-één-klik-alle-boeken-van-mijn-klas-inleveren"></a>
 ### FAQ 6: Kan ik in één klik alle boeken van mijn klas inleveren?
-Ja! Ga naar **Beheerder ➔ Ontlenen & Inleveren**, klik op de knop van jouw klas (bv. `2MWb`), en klik vervolgens op de groene knop **✓ Alles van deze klas inleveren**. Alle boeken van die klas worden dan gelijktijdig geregistreerd als ingeleverd.  
-➡️ *Lees meer in: [5. Het Beheerderspaneel (Tab 3: Ontlenen & Inleveren)](#tab-3-ontlenen--inleveren).*
+Ja! Open de **🔄 Uitleenbalie**, klik op de filterknop van jouw klas (bv. `2MWb`), en klik vervolgens op de groene knop **✓ Alles van deze klas inleveren**.
 
 ---
 
-<a id="faq-7-hoe-voeg-ik-een-nieuw-boek-of-extra-exemplaar-toe"></a>
-### FAQ 7: Hoe voeg ik een nieuw boek of een extra exemplaar toe?
-Ga naar **Beheerder ➔ Boek toevoegen**. Voer het ISBN-nummer in en klik op **Gegevens ophalen**. Als het boek al bestaat, verschijnt er een duplicaatwaarschuwing waarin je met één klik op **Extra exemplaar toevoegen** een nieuw volgnummer toewijst.  
-➡️ *Lees meer in: [5. Het Beheerderspaneel (Tab 2: Boek toevoegen)](#tab-2-boek-toevoegen-met-isbn-scanner).*
+<a id="faq-7-hoe-voeg-ik-een-nieuw-boek-toe"></a>
+### FAQ 7: Hoe voeg ik als beheerder een nieuw boek of extra exemplaar toe?
+Ga naar **Beheerder ➔ Boek toevoegen**. Vul handmatig de titel, auteur, graad, kastlocatie en genres in en klik op **Boek toevoegen en opslaan**. Als het boek al in de schoolbib staat, klik je in de oranje melding op **Extra exemplaar toevoegen** om direct een volgend exemplaarnummer aan te maken.
 
 ---
 
 <a id="faq-8-hoe-pas-ik-de-banner-thema-in-de-kijker-aan"></a>
 ### FAQ 8: Hoe pas ik de banner 'Thema in de kijker' aan?
-Ga naar **Beheerder ➔ Thema in de kijker**. Hier kan je een nieuwe titel, omschrijving en trefwoord opgeven, een kleursfeer kiezen en tot 5 boeken per graad uitkiezen. Klik vervolgens op **Opslaan & Publiceren**.  
-➡️ *Lees meer in: [5. Het Beheerderspaneel (Tab 1: Thema in de kijker instellen)](#tab-1-thema-in-de-kijker-instellen).*
+Ga naar **Beheerder ➔ Thema in de kijker**. Geef een titel, omschrijving en trefwoord op, kies een kleursfeer en selecteer eventueel aanbevolen boeken per graad. Klik daarna op **Opslaan & Publiceren**.
 
 ---
 
 <a id="faq-9-waarom-linkt-het-ene-boek-naar-boekenzoeker-en-het-andere-naar-hebban"></a>
 ### FAQ 9: Waarom linkt het ene boek naar Boekenzoeker en het andere naar Hebban?
-Ons platform kiest automatisch de meest betrouwbare bron:
-- Staat het boek geregistreerd in de officiële Vlaamse **Boekenzoeker.be** databank? Dan linkt het door naar Boekenzoeker (ideaal voor jongeren).
-- Is het een ander Nederlandstalig boek? Dan linkt het naar **Hebban.nl** voor uitgebreide achterflapteksten en lezersrecensies.
-- Is het een anderstalig boek (Engels, Frans...)? Dan linkt het naar **Goodreads.com**.  
-➡️ *Lees meer in: [3. Boekfiche: Details, Recensies en Beschikbaarheid](#3-boekfiche-details-recensies-en-beschikbaarheid).*
+Ons platform kiest automatisch de meest geschikte bron:
+- Staat het boek in de officiële **Boekenzoeker.be** databank? Dan linkt het naar Boekenzoeker (ideaal voor jongeren).
+- Is het een ander Nederlandstalig boek? Dan linkt het naar **Hebban.nl** voor achterflapteksten en recensies.
+- Is het een anderstalig boek (Engels, Frans...)? Dan linkt het naar **Goodreads.com**.
 
 ---
 
 <a id="faq-10-waar-worden-alle-gegevens-opgeslagen"></a>
 ### FAQ 10: Waar worden alle gegevens opgeslagen en wat als het internet hapert?
-Alle boeken en actieve uitleningen worden primair live gesynchroniseerd met de **Google Spreadsheet** van de school via Google Apps Script. Daarnaast bewaart de website de meest recente stand lokaal in de browser (Local Storage en ingesloten gegevens). Zelfs bij een tijdelijke hapering van de internetverbinding kan de catalogus geraadpleegd worden.  
-➡️ *Lees meer in: [5. Het Beheerderspaneel (Tab 4: Instellingen & Google Sheet)](#tab-4-instellingen--google-sheet).*
+Alle boeken, actieve uitleningen en systeeminstellingen (inclusief de twee wachtwoorden) worden centraal opgeslagen in de **Google Spreadsheet** van de school via Google Apps Script. Daarnaast bewaart de browser lokaal een reservekopie (LocalStorage), zodat de catalogus zelfs bij een tijdelijke internetonderbreking vlot blijft werken.
 
 ---
 
 <a id="faq-11-hoe-pas-ik-de-klassenlijst-aan"></a>
 ### FAQ 11: Hoe pas ik de klassenlijst aan aan het begin van een nieuw schooljaar?
-Ga naar **Beheerder ➔ Instellingen ➔ Klassenlijst beheren**. Pas het tekstvak aan met de nieuwe klassenamen (gescheiden door komma's) en klik op **Klassenlijst Opslaan**. De nieuwe klassen zijn direct beschikbaar in alle uitleenlijsten.  
-➡️ *Lees meer in: [5. Het Beheerderspaneel (Tab 4: Instellingen)](#tab-4-instellingen--google-sheet).*
+Ga naar **Beheerder ➔ Instellingen ➔ Klassenlijst beheren**. Pas het tekstvak aan met de nieuwe klassenamen (gescheiden door komma's) en klik op **Klassenlijst Opslaan**.
 
 ---
 
 <a id="faq-12-kunnen-leerlingen-zelf-boeken-ontlenen-van-thuis-uit"></a>
 ### FAQ 12: Kunnen leerlingen zelf boeken ontlenen van thuis uit?
-Nee. Om te voorkomen dat boeken per ongeluk of zonder medeweten worden geregistreerd, is voor elke uitlening de leerkrachtcode (`donbosco`) vereist. Leerlingen kunnen van thuis uit wél de catalogus doorzoeken, achterflappen lezen, beschikbaarheid controleren en hun favorietenlijstje samenstellen.  
-➡️ *Lees meer in: [4. Snel Uitlenen vanuit de Boekfiche](#4-snel-uitlenen-vanuit-de-boekfiche).*
+Nee. Om misbruik te voorkomen, is voor elke uitlening en voor toegang tot de Uitleenbalie de leerkrachtcode vereist. Leerlingen kunnen thuis wel vrij zoeken in de catalogus, achterflappen lezen, beschikbaarheid checken en favorieten bewaren.
 
 ---
 

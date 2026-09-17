@@ -128,16 +128,19 @@
                 </a>
 
                 <!-- Mobiele navigatieknoppen -->
-                <div class="flex items-center gap-1.5 md:hidden">
-                    <button id="btnMobCatalog" class="nav-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-brand-600 text-white shadow-xs">
+                <div class="flex items-center gap-1 md:hidden">
+                    <button id="btnMobCatalog" class="nav-tab-btn px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-brand-600 text-white shadow-xs">
                         📚 Boeken
                     </button>
+                    <button id="btnMobDesk" class="nav-tab-btn px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 border border-slate-200">
+                        🔄 Balie
+                    </button>
                     <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer"
-                       class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
+                       class="px-2 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
                        title="Naar Boekenzoeker.be">
                         <span>Boekenzoeker ↗</span>
                     </a>
-                    <button id="btnMobAdmin" class="nav-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200">
+                    <button id="btnMobAdmin" class="nav-tab-btn px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-white text-slate-700 hover:bg-coral-50 hover:text-coral-700 border border-slate-200">
                         ⚙️ Beheer
                     </button>
                 </div>
@@ -148,6 +151,10 @@
                 <button id="btnDeskCatalog" class="nav-tab-btn active-nav px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm hover:bg-brand-700">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     <span>Catalogus Bib</span>
+                </button>
+                <button id="btnDeskDesk" class="nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 border border-slate-200">
+                    <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    <span>🔄 Uitleenbalie</span>
                 </button>
                 <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" 
                    class="px-3.5 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 border border-slate-200 hover:border-brand-200" 
@@ -490,28 +497,227 @@
         </div>
     </dialog>
 
-    <!-- WEERGAVE 2: BEHEERDER -->
+    <!-- WEERGAVE 2: UITLEENBALIE (ROL 1: VOOR LEERKRACHTEN & SECRETARIAAT) -->
+    <main id="deskView" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full hidden">
+        
+        <!-- Inlogscherm met leerkrachtcode -->
+        <div id="deskLoginSection" class="max-w-md mx-auto my-12 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
+            <div class="w-16 h-16 bg-brand-100 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Uitleenbalie</h2>
+            <p class="text-sm text-slate-500 mb-6">Voer de leerkrachtcode in om boeken uit te lenen aan leerlingen of ingeleverde boeken weer in te nemen.</p>
+
+            <form id="deskLoginForm" class="space-y-4">
+                <div>
+                    <input type="password" id="deskPinInput" placeholder="Leerkrachtcode (standaard: donbosco)" 
+                           class="w-full text-center tracking-widest text-lg px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" required>
+                    <p id="deskPinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1.5 hidden">Onjuiste leerkrachtcode. Probeer opnieuw.</p>
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3 px-6 rounded-2xl transition shadow-sm cursor-pointer">
+                    Balie Openen
+                </button>
+            </form>
+            <p class="text-xs text-slate-400 mt-4">Voor leerkrachten en secretariaat • Standaardcode: <span class="font-mono font-bold text-slate-600">donbosco</span></p>
+        </div>
+
+        <!-- Uitleenbalie Dashboard -->
+        <div id="deskDashboardSection" class="hidden space-y-6">
+            
+            <!-- Dashboard Header Bar -->
+            <div class="bg-white p-5 rounded-3xl shadow-xs border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center font-black text-xl">
+                        🔄
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900">Uitleenbalie Boekenbende</h2>
+                        <p class="text-xs font-semibold text-brand-600">Don Bosco Gent • Campus Sint-Pieters</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <span id="loanCloudSyncBadge" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-600 border border-slate-200">
+                        <span class="w-2 h-2 rounded-full bg-slate-400" id="loanSyncDot"></span>
+                        <span id="loanCloudSyncText">Lokale opslag</span>
+                    </span>
+                    <button id="btnRefreshLoans" type="button" title="Synchroniseer uitleningen opnieuw met Google Sheets" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition flex items-center justify-center cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </button>
+                    <a href="HANDLEIDING_LEERKRACHTEN.md" target="_blank" class="text-xs font-bold text-slate-600 hover:text-brand-700 transition flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50" title="Open de beknopte handleiding voor leerkrachten en balie-medewerkers">
+                        <span>📖 Handleiding Balie</span>
+                    </a>
+                    <button id="deskLogoutBtn" class="text-xs font-bold text-slate-500 hover:text-rose-600 transition flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:border-rose-200 hover:bg-rose-50 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <span>Balie Vergrendelen</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Balie Dashboard Inhoud -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 space-y-6">
+                                    <!-- Mini-Dashboard Statistieken -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="p-4 rounded-2xl bg-brand-50/60 border border-brand-100 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-lg font-black">
+                                📖
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider block">Actief uitgeleend</span>
+                                <span id="statActiveLoans" class="text-lg font-black text-brand-900">0 boeken</span>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg font-black">
+                                ⚠️
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Te laat</span>
+                                <span id="statOverdueLoans" class="text-lg font-black text-rose-900">0 boeken</span>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center text-lg font-black">
+                                🏫
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Betrokken klassen</span>
+                                <span id="statActiveClasses" class="text-lg font-black text-slate-800">0 klassen</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Snelle Barcodescan / Snelle Invoer balk -->
+                    <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-brand-900 text-white space-y-2.5 shadow-xs">
+                        <div class="flex items-center justify-between">
+                            <label for="barcodeQuickInput" class="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-brand-200">
+                                <svg class="w-4 h-4 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                                <span>Snelle Barcode / ISBN scan (Uitlenen of Direct Inleveren)</span>
+                            </label>
+                            <span class="text-[10px] text-slate-300 hidden sm:inline">Handscanner klaar: scan een barcode of druk op Enter</span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" id="barcodeQuickInput" placeholder="Scan barcode/ISBN of typ titel... (bijv. 9789047701234 of 'Kruistocht')" 
+                                   class="w-full text-xs sm:text-sm px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-400 transition">
+                        </div>
+                        <!-- Resultaat & Direct actie venstertje -->
+                        <div id="barcodeFeedbackBox" class="hidden p-3 rounded-xl bg-white/10 border border-white/20 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"></div>
+                    </div>
+
+                    <!-- Nieuwe uitlening registreren formulier (Accordion) -->
+                    <details class="group bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 transition" open>
+                        <summary class="font-bold text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>Nieuwe uitlening handmatig registreren</span>
+                            </span>
+                            <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                        </summary>
+                        
+                        <form id="loanForm" class="mt-4 space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                                <div class="lg:col-span-1">
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel van het boek <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                    <datalist id="loanBooksList"></datalist>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Exemplaar & Locatie <span class="text-rose-500">*</span></label>
+                                    <select id="loanCopySelect" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                        <option value="">-- Kies eerst een titel --</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Uitleendatum (vanaf) <span class="text-rose-500">*</span></label>
+                                    <input type="date" id="loanStartDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum (tot) <span class="text-rose-500">*</span></label>
+                                    <input type="date" id="loanDueDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Uitlening opslaan</span>
+                                </button>
+                            </div>
+                        </form>
+                    </details>
+
+                    <!-- Filter & Zoekbalk (Booksource Classroom Klas-weergave) -->
+                    <div class="space-y-3 pt-2">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                            <div class="relative flex-1">
+                                <input type="text" id="loansSearchFilter" placeholder="🔍 Filter uitleningen op leerling, klas of boektitel..." 
+                                       class="w-full text-xs px-3.5 py-2.5 pl-9 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button id="btnBatchReturnClass" type="button" class="hidden text-xs font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center gap-1.5">
+                                    <span>✓ Alles van deze klas inleveren</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Klas-knoppen (Booksource stijl) -->
+                        <div class="flex items-center gap-1.5 overflow-x-auto clean-scroll py-1" id="loansClassFilterBar">
+                            <!-- Dynamisch gevuld met bijv: Alle klassen, 1A (3), 2MWb (5), ... -->
+                        </div>
+                    </div>
+
+                    <!-- Tabel van uitleningen -->
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Leerling / Leraar</th>
+                                    <th class="px-4 py-3">Klas</th>
+                                    <th class="px-4 py-3">Boek</th>
+                                    <th class="px-4 py-3">Exemplaar & Locatie</th>
+                                    <th class="px-4 py-3">Uitleendatum</th>
+                                    <th class="px-4 py-3">Inleverdatum</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3 text-right">Acties</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loansTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- WEERGAVE 3: BEHEERDER (ROL 2: VOOR DE TWEE HOOFDBEHEERDERS) -->
     <main id="adminView" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full hidden">
         
-        <!-- Inlogscherm met pincode -->
+        <!-- Inlogscherm met geheime beheerderscode -->
         <div id="adminLoginSection" class="max-w-md mx-auto my-12 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
             <div class="w-16 h-16 bg-brand-100 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Beheerderspaneel</h2>
-            <p class="text-sm text-slate-500 mb-6">Voer de schoolpincode in om boeken toe te voegen, uitleningen te beheren of een thema uit te lichten.</p>
+            <p class="text-sm text-slate-500 mb-6">Voer de geheime beheerderscode in om nieuwe boeken toe te voegen, thema's uit te lichten of systeeminstellingen te beheren.</p>
 
             <form id="adminLoginForm" class="space-y-4">
                 <div>
-                    <input type="password" id="adminPinInput" placeholder="Pincode (standaard: donbosco)" 
+                    <input type="password" id="adminPinInput" placeholder="Beheerderscode (standaard: beheerder)" 
                            class="w-full text-center tracking-widest text-lg px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" required>
-                    <p id="pinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1.5 hidden">Onjuiste pincode. Probeer opnieuw.</p>
+                    <p id="pinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1.5 hidden">Onjuiste beheerderscode. Probeer opnieuw.</p>
                 </div>
-                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3 px-6 rounded-2xl transition shadow-sm">
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3 px-6 rounded-2xl transition shadow-sm cursor-pointer">
                     Inloggen als Beheerder
                 </button>
             </form>
-            <p class="text-xs text-slate-400 mt-4">Standaard pincode: <span class="font-mono font-bold text-slate-600">donbosco</span></p>
+            <p class="text-xs text-slate-400 mt-4">Uitsluitend voor de twee hoofdbeheerders • Standaardcode: <span class="font-mono font-bold text-slate-600">beheerder</span></p>
         </div>
 
         <!-- Beheerders Dashboard -->
@@ -527,7 +733,7 @@
                     </div>
                 </div>
 
-                <!-- Sub-tabs -->
+                <!-- Sub-tabs (Thema, Boek toevoegen, Instellingen, FAQ) -->
                 <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl">
                     <button id="tabBtnFeatured" class="admin-subtab active-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white text-brand-700 shadow-xs">
                         🌟 Thema in de Kijker
@@ -535,14 +741,17 @@
                     <button id="tabBtnAddBook" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
                         📖 Boek Toevoegen
                     </button>
-                    <button id="tabBtnLoans" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
-                        🔄 Ontlenen & Inleveren
-                    </button>
                     <button id="tabBtnSettings" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
                         ⚙️ Instellingen & Sheet
                     </button>
                     <button id="tabBtnHelp" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-amber-900 hover:text-amber-950 hover:bg-amber-50">
                         ❓ Hulp & FAQ
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="adminToDeskBtn" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-brand-50 hover:bg-brand-100 text-brand-700 flex items-center gap-1.5 border border-brand-200 cursor-pointer" title="Naar de Uitleenbalie voor in- en uitlenen">
+                        <span>🔄 Naar Uitleenbalie</span>
                     </button>
                 </div>
 
@@ -688,12 +897,15 @@
                 </div>
             </div>
 
-            <!-- SUB-TAB 1: BOEK TOEVOEGEN -->
+            <!-- SUB-TAB 2: BOEK TOEVOEGEN (HANDMATIG) -->
             <div id="subtabAddBook" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden">
                 <div class="max-w-3xl mx-auto space-y-6">
                     <div>
-                        <h3 class="text-xl font-extrabold text-slate-900">Nieuw boek toevoegen aan de catalogus</h3>
-                        <p class="text-xs sm:text-sm text-slate-500">Nieuwe boeken worden direct getoond in de catalogus en opgeslagen in jullie Google Sheet.</p>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-extrabold uppercase tracking-wider mb-2">
+                            <span>Catalogusbeheer</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-slate-900">Nieuw boek toevoegen (handmatig)</h3>
+                        <p class="text-xs sm:text-sm text-slate-500">Voer de gegevens van het boek handmatig in. Nieuwe boeken worden direct getoond in de catalogus en automatisch gesynchroniseerd met jullie Google Sheet.</p>
                     </div>
 
                     <!-- LIVE DUPLICAAT WAARSCHUWINGSBANNER -->
@@ -866,167 +1078,6 @@
                 </div>
             </div>
 
-            <!-- SUB-TAB 2: BOEKEN ONTLENEN & INLEVEREN -->
-            <div id="subtabLoans" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden">
-                <div class="space-y-6">
-                    <!-- Top header & Cloud status -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-                        <div>
-                            <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2.5">
-                                <span>Boeken Ontlenen & Inleveren</span>
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-500">Beheer uitleningen centraal voor de hele school via Google Sheets.</p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2.5">
-                            <span id="loanCloudSyncBadge" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-600 border border-slate-200">
-                                <span class="w-2 h-2 rounded-full bg-slate-400" id="loanSyncDot"></span>
-                                <span id="loanCloudSyncText">Lokale opslag</span>
-                            </span>
-                            <button id="btnRefreshLoans" type="button" title="Synchroniseer uitleningen opnieuw met Google Sheets" class="p-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition flex items-center justify-center cursor-pointer">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Mini-Dashboard Statistieken -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="p-4 rounded-2xl bg-brand-50/60 border border-brand-100 flex items-center gap-3.5">
-                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-lg font-black">
-                                📖
-                            </div>
-                            <div>
-                                <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider block">Actief uitgeleend</span>
-                                <span id="statActiveLoans" class="text-lg font-black text-brand-900">0 boeken</span>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center gap-3.5">
-                            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg font-black">
-                                ⚠️
-                            </div>
-                            <div>
-                                <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Te laat</span>
-                                <span id="statOverdueLoans" class="text-lg font-black text-rose-900">0 boeken</span>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3.5">
-                            <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center text-lg font-black">
-                                🏫
-                            </div>
-                            <div>
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Betrokken klassen</span>
-                                <span id="statActiveClasses" class="text-lg font-black text-slate-800">0 klassen</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Snelle Barcodescan / Snelle Invoer balk -->
-                    <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-brand-900 text-white space-y-2.5 shadow-xs">
-                        <div class="flex items-center justify-between">
-                            <label for="barcodeQuickInput" class="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-brand-200">
-                                <svg class="w-4 h-4 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-                                <span>Snelle Barcode / ISBN scan (Uitlenen of Direct Inleveren)</span>
-                            </label>
-                            <span class="text-[10px] text-slate-300 hidden sm:inline">Handscanner klaar: scan een barcode of druk op Enter</span>
-                        </div>
-                        <div class="relative">
-                            <input type="text" id="barcodeQuickInput" placeholder="Scan barcode/ISBN of typ titel... (bijv. 9789047701234 of 'Kruistocht')" 
-                                   class="w-full text-xs sm:text-sm px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-400 transition">
-                        </div>
-                        <!-- Resultaat & Direct actie venstertje -->
-                        <div id="barcodeFeedbackBox" class="hidden p-3 rounded-xl bg-white/10 border border-white/20 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"></div>
-                    </div>
-
-                    <!-- Nieuwe uitlening registreren formulier (Accordion) -->
-                    <details class="group bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 transition" open>
-                        <summary class="font-bold text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
-                            <span class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <span>Nieuwe uitlening handmatig registreren</span>
-                            </span>
-                            <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
-                        </summary>
-                        
-                        <form id="loanForm" class="mt-4 space-y-4">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                                <div class="lg:col-span-1">
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel van het boek <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                    <datalist id="loanBooksList"></datalist>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Exemplaar & Locatie <span class="text-rose-500">*</span></label>
-                                    <select id="loanCopySelect" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                        <option value="">-- Kies eerst een titel --</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Uitleendatum (vanaf) <span class="text-rose-500">*</span></label>
-                                    <input type="date" id="loanStartDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum (tot) <span class="text-rose-500">*</span></label>
-                                    <input type="date" id="loanDueDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Uitlening opslaan</span>
-                                </button>
-                            </div>
-                        </form>
-                    </details>
-
-                    <!-- Filter & Zoekbalk (Booksource Classroom Klas-weergave) -->
-                    <div class="space-y-3 pt-2">
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                            <div class="relative flex-1">
-                                <input type="text" id="loansSearchFilter" placeholder="🔍 Filter uitleningen op leerling, klas of boektitel..." 
-                                       class="w-full text-xs px-3.5 py-2.5 pl-9 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
-                                <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </div>
-                            <div class="flex items-center gap-2 shrink-0">
-                                <button id="btnBatchReturnClass" type="button" class="hidden text-xs font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center gap-1.5">
-                                    <span>✓ Alles van deze klas inleveren</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Klas-knoppen (Booksource stijl) -->
-                        <div class="flex items-center gap-1.5 overflow-x-auto clean-scroll py-1" id="loansClassFilterBar">
-                            <!-- Dynamisch gevuld met bijv: Alle klassen, 1A (3), 2MWb (5), ... -->
-                        </div>
-                    </div>
-
-                    <!-- Tabel van uitleningen -->
-                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
-                        <table class="w-full text-left text-xs text-slate-600">
-                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
-                                <tr>
-                                    <th class="px-4 py-3">Leerling / Leraar</th>
-                                    <th class="px-4 py-3">Klas</th>
-                                    <th class="px-4 py-3">Boek</th>
-                                    <th class="px-4 py-3">Exemplaar & Locatie</th>
-                                    <th class="px-4 py-3">Uitleendatum</th>
-                                    <th class="px-4 py-3">Inleverdatum</th>
-                                    <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3 text-right">Acties</th>
-                                </tr>
-                            </thead>
-                            <tbody id="loansTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
             <!-- SUB-TAB 3: INSTELLINGEN & GOOGLE SHEET -->
             <div id="subtabSettings" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden">
                 <div class="max-w-2xl mx-auto space-y-6">
@@ -1066,18 +1117,46 @@
                         <p id="scriptUrlSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Web-app URL succesvol opgeslagen!</p>
                     </div>
 
-                    <div class="space-y-3 pt-4 border-t border-slate-100">
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Schoolpincode wijzigen
-                        </label>
+                    <!-- 1. BEHEERDERSCODE WIJZIGEN (ROL 2) -->
+                    <div class="space-y-3 pt-4 border-t border-slate-100 bg-slate-50/70 p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider">
+                                    🔑 Beheerderscode wijzigen (Rol 2)
+                                </label>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-900 text-white uppercase">Enkel Hoofdbeheer</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Geheime toegangscode voor jullie twee als hoofdbeheerder (toegang tot boeken toevoegen, thema's en instellingen). Wordt direct gesynchroniseerd met Google Sheets.</p>
+                        </div>
                         <div class="flex gap-2">
-                            <input type="text" id="newPinInput" placeholder="Nieuwe pincode invoeren" 
-                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <button type="button" id="btnSavePin" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">
-                                Wijzigen
+                            <input type="text" id="newAdminPinInput" placeholder="Nieuwe geheime beheerderscode invoeren..." 
+                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                            <button type="button" id="btnSaveAdminPin" class="bg-slate-900 hover:bg-black text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-xs cursor-pointer whitespace-nowrap">
+                                Beheerderscode Opslaan
                             </button>
                         </div>
-                        <p id="pinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">Pincode aangepast en opgeslagen!</p>
+                        <p id="adminPinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">✅ Beheerderscode succesvol aangepast en gesynchroniseerd met Google Sheets!</p>
+                    </div>
+
+                    <!-- 2. LEERKRACHTCODE / BALIECODE WIJZIGEN (ROL 1) -->
+                    <div class="space-y-3 pt-4 border-t border-slate-100 bg-brand-50/40 p-4 rounded-2xl border border-brand-200/80">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <label class="block text-xs font-extrabold text-brand-900 uppercase tracking-wider">
+                                    🏷️ Leerkrachtcode / Baliewachtwoord wijzigen (Rol 1)
+                                </label>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-brand-600 text-white uppercase">Uitleenbalie</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">De code die leerkrachten en secretariaat gebruiken voor de <strong>Uitleenbalie</strong> en snel uitlenen vanuit de catalogus. Wordt direct gesynchroniseerd met Google Sheets.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="newTeacherPinInput" placeholder="Nieuwe leerkrachtcode invoeren..." 
+                                   class="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                            <button type="button" id="btnSaveTeacherPin" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-xs cursor-pointer whitespace-nowrap">
+                                Leerkrachtcode Opslaan
+                            </button>
+                        </div>
+                        <p id="teacherPinSavedMsg" class="text-xs text-emerald-600 font-bold hidden">✅ Leerkrachtcode succesvol aangepast en gesynchroniseerd met Google Sheets!</p>
                     </div>
 
                     <div class="space-y-3 pt-4 border-t border-slate-100">
@@ -1167,10 +1246,10 @@
                         <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-100 space-y-2">
                             <div class="flex items-center gap-2 text-amber-950 font-extrabold text-sm">
                                 <span class="w-6 h-6 rounded-lg bg-amber-600 text-white flex items-center justify-center text-xs">3</span>
-                                <span>Innemen & Klas inleveren</span>
+                                <span>Uitleenbalie (Inleveren & Balie)</span>
                             </div>
                             <p class="text-amber-800 leading-relaxed">
-                                Via <em>'Ontlenen & Inleveren'</em> neem je boeken in via barcode of lever je met één klik alle boeken van een hele klas tegelijk in!
+                                Klik in het hoofdmenu op <strong>🔄 Uitleenbalie</strong>. Met de leerkrachtcode neem je boeken in via barcode of lever je met één klik alle boeken van een hele klas in!
                             </p>
                         </div>
                     </div>
@@ -1216,11 +1295,14 @@
 
                         <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
                             <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
-                                <span>🔑 FAQ 4: Wat is de schoolpincode en hoe pas ik die aan?</span>
+                                <span>🔑 FAQ 4: Wat zijn de toegangscodes voor leerkrachten en beheerders?</span>
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                De standaard pincode voor zowel leerkrachten als het beheer is <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono">donbosco</code>. Je kan deze code op elk moment wijzigen via het tabblad <strong>Instellingen & Sheet</strong>.
+                                Er zijn twee aparte rollen en toegangscodes:<br>
+                                • <strong>Leerkrachtcode (Rol 1: Uitleenbalie & snel uitlenen)</strong>: standaard <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono">donbosco</code> (voor alle leerkrachten en secretariaat).<br>
+                                • <strong>Beheerderscode (Rol 2: Beheerderspaneel)</strong>: standaard <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono">beheerder</code> (enkel voor de twee hoofdbeheerders).<br>
+                                Beheerders kunnen <strong>beide codes</strong> op elk gewenst moment aanpassen via het tabblad <strong>Instellingen & Sheet</strong>. De nieuwe codes worden automatisch centraal opgeslagen in Google Sheets.
                             </p>
                         </details>
 
@@ -1230,7 +1312,7 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Ga naar het tabblad <strong>🔄 Ontlenen & Inleveren</strong>. Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (werkt met handscanner) of zoek de leerling in de tabel en klik op <strong>Inleveren</strong>.
+                                Klik in het hoofdmenu bovenaan op <strong>🔄 Uitleenbalie</strong>. Voer de leerkrachtcode in (<code class="font-bold font-mono text-slate-800">donbosco</code>). Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (of zoek de leerling in de tabel) en klik op <strong>Direct Inleveren</strong>. Je kan eventueel ook de staat van het boek registreren.
                             </p>
                         </details>
 
@@ -1240,7 +1322,7 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Ja! In <strong>Ontlenen & Inleveren</strong> klik je simpelweg op de knop van jouw klas (bv. <em>2MWb</em>). Klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>.
+                                Ja! Open de <strong>🔄 Uitleenbalie</strong>, klik op de filterbadge van jouw klas (bv. <em>2MWb</em>), en klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>. Alle openstaande boeken van die klas worden in één klik afgesloten!
                             </p>
                         </details>
 
@@ -1250,7 +1332,7 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Ga naar het tabblad <strong>📖 Boek Toevoegen</strong>. Vul het 13-cijferige ISBN in en klik op <em>'Gegevens ophalen'</em>. Als het boek al bestaat in de bib, toont het systeem direct de knop <strong>'Extra exemplaar toevoegen'</strong> om het volgnummer automatisch op te hogen.
+                                Ga in het Beheerderspaneel naar het tabblad <strong>📖 Boek Toevoegen</strong>. Vul handmatig de titel, auteur, graad, kastlocatie en kenmerken in en klik op <strong>Boek toevoegen en opslaan</strong>. Het boek wordt direct zichtbaar in de catalogus en opgeslagen in Google Sheets. Als het boek al bestaat in de bib, toont het systeem direct een duplicaatmelding met de knop <strong>'Extra exemplaar toevoegen'</strong>.
                             </p>
                         </details>
 
@@ -2350,7 +2432,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
     <script>
         // CONFIGURATIE
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpWPRhterrkdMeJ3qZlLFshWIZ6I3yR5gIJSMNTdG_fXXAVL8YZgrK-mEDLfN5Qb3rYPamLYgMfb4K/pub?output=csv";
-        const DEFAULT_PIN = "donbosco";
+        const DEFAULT_ADMIN_PIN = "beheerder";
+        const DEFAULT_TEACHER_PIN = "donbosco";
         const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzs90z9O5n2GxA6ozxsWPC0uU2NYYv4xeQKmtZlBIMDi-h7pFheJZTQ3m8cR7qUs4vC3w/exec";
 
         // STATE
@@ -2359,7 +2442,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
         let searchQuery = '';
         let activeQuickFilter = 'all';
         let currentSort = 'default';
-        let currentPin = localStorage.getItem('schoolbib_pin') || DEFAULT_PIN;
+        let currentAdminPin = localStorage.getItem('schoolbib_admin_pin') || DEFAULT_ADMIN_PIN;
+        let currentTeacherPin = localStorage.getItem('schoolbib_teacher_pin') || localStorage.getItem('schoolbib_pin') || DEFAULT_TEACHER_PIN;
         let scriptUrl = localStorage.getItem('schoolbib_script_url') || DEFAULT_SCRIPT_URL;
         let loans = JSON.parse(localStorage.getItem('schoolbib_loans') || '[]');
 
@@ -2419,6 +2503,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
         document.addEventListener('DOMContentLoaded', () => {
             cleanDemoRatings();
             initNavigation();
+            initDeskAuth();
             initAdminAuth();
             initAddBook();
             initLoans();
@@ -4290,9 +4375,9 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 teacherPinForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const pin = document.getElementById('modalTeacherPinInput').value.trim();
-                    const activePin = localStorage.getItem('schoolbib_pin') || DEFAULT_PIN;
-                    if (pin === activePin) {
-                        sessionStorage.setItem('schoolbib_logged_in', 'true');
+                    if (pin === currentTeacherPin || pin === currentAdminPin) {
+                        sessionStorage.setItem('schoolbib_desk_logged_in', 'true');
+                        document.getElementById('modalTeacherPinError')?.classList.add('hidden');
                         teacherPinModal.close();
                         if (currentModalBook) {
                             openQuickLoanModal(currentModalBook);
@@ -4847,80 +4932,151 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             }
         }
 
-        // 9. TOP NAVIGATIE
+        // 9. TOP NAVIGATIE (CATALOGUS, BALIE & BEHEER)
         function initNavigation() {
             const catalogBtns = [document.getElementById('btnDeskCatalog'), document.getElementById('btnMobCatalog')];
+            const deskBtns = [document.getElementById('btnDeskDesk'), document.getElementById('btnMobDesk')];
             const adminBtns = [document.getElementById('btnDeskAdmin'), document.getElementById('btnMobAdmin')];
 
             const catalogView = document.getElementById('catalogView');
+            const deskView = document.getElementById('deskView');
             const adminView = document.getElementById('adminView');
+
+            function setNavActive(activeName) {
+                const groups = [
+                    { name: 'catalog', btns: catalogBtns },
+                    { name: 'desk', btns: deskBtns },
+                    { name: 'admin', btns: adminBtns }
+                ];
+                groups.forEach(g => {
+                    const isAct = g.name === activeName;
+                    g.btns.forEach(btn => {
+                        if (!btn) return;
+                        if (isAct) {
+                            btn.className = 'nav-tab-btn active-nav px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-2xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 sm:gap-2 bg-brand-600 text-white shadow-sm';
+                        } else {
+                            btn.className = 'nav-tab-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 sm:gap-2 bg-white text-slate-700 hover:bg-slate-100 border border-slate-200';
+                        }
+                    });
+                });
+            }
 
             function showCatalog() {
                 catalogView.classList.remove('hidden');
-                adminView.classList.add('hidden');
+                if (deskView) deskView.classList.add('hidden');
+                if (adminView) adminView.classList.add('hidden');
+                setNavActive('catalog');
+            }
 
-                catalogBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm';
-                });
-                adminBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-coral-50 hover:text-coral-700 border border-slate-200';
-                });
+            function showDesk() {
+                catalogView.classList.add('hidden');
+                if (deskView) deskView.classList.remove('hidden');
+                if (adminView) adminView.classList.add('hidden');
+                setNavActive('desk');
+
+                const isDeskAuth = sessionStorage.getItem('schoolbib_desk_logged_in') === 'true' || sessionStorage.getItem('schoolbib_admin_logged_in') === 'true';
+                if (isDeskAuth) {
+                    document.getElementById('deskLoginSection')?.classList.add('hidden');
+                    document.getElementById('deskDashboardSection')?.classList.remove('hidden');
+                    renderLoans();
+                } else {
+                    document.getElementById('deskLoginSection')?.classList.remove('hidden');
+                    document.getElementById('deskDashboardSection')?.classList.add('hidden');
+                    document.getElementById('deskPinInput')?.focus();
+                }
             }
 
             function showAdmin() {
                 catalogView.classList.add('hidden');
-                adminView.classList.remove('hidden');
+                if (deskView) deskView.classList.add('hidden');
+                if (adminView) adminView.classList.remove('hidden');
+                setNavActive('admin');
 
-                adminBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn active-nav px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-brand-600 text-white shadow-sm';
-                });
-                catalogBtns.forEach(btn => {
-                    btn.className = 'nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 border border-slate-200';
-                });
-
-                if (sessionStorage.getItem('schoolbib_logged_in') === 'true') {
-                    document.getElementById('adminLoginSection').classList.add('hidden');
-                    document.getElementById('adminDashboardSection').classList.remove('hidden');
+                if (sessionStorage.getItem('schoolbib_admin_logged_in') === 'true') {
+                    document.getElementById('adminLoginSection')?.classList.add('hidden');
+                    document.getElementById('adminDashboardSection')?.classList.remove('hidden');
                 } else {
-                    document.getElementById('adminLoginSection').classList.remove('hidden');
-                    document.getElementById('adminDashboardSection').classList.add('hidden');
+                    document.getElementById('adminLoginSection')?.classList.remove('hidden');
+                    document.getElementById('adminDashboardSection')?.classList.add('hidden');
+                    document.getElementById('adminPinInput')?.focus();
                 }
             }
 
-            catalogBtns.forEach(btn => btn.addEventListener('click', showCatalog));
-            adminBtns.forEach(btn => btn.addEventListener('click', showAdmin));
+            catalogBtns.forEach(btn => btn && btn.addEventListener('click', showCatalog));
+            deskBtns.forEach(btn => btn && btn.addEventListener('click', showDesk));
+            adminBtns.forEach(btn => btn && btn.addEventListener('click', showAdmin));
+
+            document.getElementById('adminToDeskBtn')?.addEventListener('click', showDesk);
         }
 
-        // 10. BEHEERDER AUTH
+        // 10A. UITLEENBALIE AUTH (ROL 1: LEERKRACHT / BALIE)
+        function initDeskAuth() {
+            const form = document.getElementById('deskLoginForm');
+            const pinInput = document.getElementById('deskPinInput');
+            const pinError = document.getElementById('deskPinErrorMsg');
+            const logoutBtn = document.getElementById('deskLogoutBtn');
+
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const val = pinInput.value.trim();
+                    if (val === currentTeacherPin || val === currentAdminPin) {
+                        sessionStorage.setItem('schoolbib_desk_logged_in', 'true');
+                        if (pinError) pinError.classList.add('hidden');
+                        pinInput.value = '';
+                        document.getElementById('deskLoginSection')?.classList.add('hidden');
+                        document.getElementById('deskDashboardSection')?.classList.remove('hidden');
+                        renderLoans();
+                    } else {
+                        if (pinError) pinError.classList.remove('hidden');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    sessionStorage.removeItem('schoolbib_desk_logged_in');
+                    sessionStorage.removeItem('schoolbib_admin_logged_in');
+                    document.getElementById('deskDashboardSection')?.classList.add('hidden');
+                    document.getElementById('deskLoginSection')?.classList.remove('hidden');
+                });
+            }
+        }
+
+        // 10B. BEHEERDER AUTH (ROL 2: HOOFDBEHEERDER)
         function initAdminAuth() {
             const loginForm = document.getElementById('adminLoginForm');
             const pinInput = document.getElementById('adminPinInput');
             const pinError = document.getElementById('pinErrorMsg');
             const logoutBtn = document.getElementById('adminLogoutBtn');
 
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (pinInput.value.trim() === currentPin) {
-                    sessionStorage.setItem('schoolbib_logged_in', 'true');
-                    pinError.classList.add('hidden');
-                    pinInput.value = '';
-                    document.getElementById('adminLoginSection').classList.add('hidden');
-                    document.getElementById('adminDashboardSection').classList.remove('hidden');
-                } else {
-                    pinError.classList.remove('hidden');
-                }
-            });
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (pinInput.value.trim() === currentAdminPin) {
+                        sessionStorage.setItem('schoolbib_admin_logged_in', 'true');
+                        sessionStorage.setItem('schoolbib_desk_logged_in', 'true');
+                        if (pinError) pinError.classList.add('hidden');
+                        pinInput.value = '';
+                        document.getElementById('adminLoginSection')?.classList.add('hidden');
+                        document.getElementById('adminDashboardSection')?.classList.remove('hidden');
+                    } else {
+                        if (pinError) pinError.classList.remove('hidden');
+                    }
+                });
+            }
 
-            logoutBtn.addEventListener('click', () => {
-                sessionStorage.removeItem('schoolbib_logged_in');
-                document.getElementById('adminDashboardSection').classList.add('hidden');
-                document.getElementById('adminLoginSection').classList.remove('hidden');
-            });
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    sessionStorage.removeItem('schoolbib_admin_logged_in');
+                    document.getElementById('adminDashboardSection')?.classList.add('hidden');
+                    document.getElementById('adminLoginSection')?.classList.remove('hidden');
+                });
+            }
 
             const tabs = [
                 { btn: document.getElementById('tabBtnFeatured'), el: document.getElementById('subtabFeatured') },
                 { btn: document.getElementById('tabBtnAddBook'), el: document.getElementById('subtabAddBook') },
-                { btn: document.getElementById('tabBtnLoans'), el: document.getElementById('subtabLoans') },
                 { btn: document.getElementById('tabBtnSettings'), el: document.getElementById('subtabSettings') },
                 { btn: document.getElementById('tabBtnHelp'), el: document.getElementById('subtabHelp') }
             ];
@@ -5648,9 +5804,16 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                         localStorage.setItem('schoolbib_loans', JSON.stringify(loans));
                     }
                     if (data.settings) {
-                        if (data.settings.schoolbib_pin) {
-                            currentPin = data.settings.schoolbib_pin;
-                            localStorage.setItem('schoolbib_pin', currentPin);
+                        if (data.settings.schoolbib_admin_pin) {
+                            currentAdminPin = data.settings.schoolbib_admin_pin;
+                            localStorage.setItem('schoolbib_admin_pin', currentAdminPin);
+                        }
+                        if (data.settings.schoolbib_teacher_pin) {
+                            currentTeacherPin = data.settings.schoolbib_teacher_pin;
+                            localStorage.setItem('schoolbib_teacher_pin', currentTeacherPin);
+                        } else if (data.settings.schoolbib_pin) {
+                            currentTeacherPin = data.settings.schoolbib_pin;
+                            localStorage.setItem('schoolbib_teacher_pin', currentTeacherPin);
                         }
                         if (data.settings.schoolbib_loan_duration) {
                             localStorage.setItem('schoolbib_loan_duration', data.settings.schoolbib_loan_duration);
@@ -5706,9 +5869,9 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
 
         function handleBookLoanButtonClick(book) {
             currentQuickLoanBook = book;
-            const isLoggedIn = sessionStorage.getItem('schoolbib_logged_in') === 'true';
-            if (isLoggedIn) {
-                // Beheerder/schoolbib staat open op deze computer: leerlingen kunnen meteen ontlenen
+            const isAuthorized = sessionStorage.getItem('schoolbib_desk_logged_in') === 'true' || sessionStorage.getItem('schoolbib_admin_logged_in') === 'true';
+            if (isAuthorized) {
+                // Balie of beheerder is reeds geauthenticeerd op deze computer
                 openQuickLoanModal(book);
             } else {
                 // Nog niet ingelogd op deze computer: vraag eerst de verificatiecode
@@ -6435,23 +6598,55 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 setTimeout(() => scriptSavedMsg.classList.add('hidden'), 3000);
             });
 
-            const pinInput = document.getElementById('newPinInput');
-            const savePinBtn = document.getElementById('btnSavePin');
-            const pinSavedMsg = document.getElementById('pinSavedMsg');
+            // 1. Beheerderscode opslaan (Rol 2)
+            const adminPinInput = document.getElementById('newAdminPinInput');
+            const saveAdminPinBtn = document.getElementById('btnSaveAdminPin');
+            const adminPinSavedMsg = document.getElementById('adminPinSavedMsg');
 
-            savePinBtn.addEventListener('click', () => {
-                const val = pinInput.value.trim();
-                if (val.length < 3) {
-                    alert('Kies een pincode van minimaal 3 tekens.');
-                    return;
-                }
-                localStorage.setItem('schoolbib_pin', val);
-                currentPin = val;
-                syncSettingToCloud('schoolbib_pin', val);
-                pinSavedMsg.classList.remove('hidden');
-                pinInput.value = '';
-                setTimeout(() => pinSavedMsg.classList.add('hidden'), 3000);
-            });
+            if (saveAdminPinBtn && adminPinInput) {
+                saveAdminPinBtn.addEventListener('click', () => {
+                    const val = adminPinInput.value.trim();
+                    if (val.length < 3) {
+                        alert('Kies een beheerderscode van minimaal 3 tekens.');
+                        return;
+                    }
+                    localStorage.setItem('schoolbib_admin_pin', val);
+                    currentAdminPin = val;
+                    syncSettingToCloud('schoolbib_admin_pin', val);
+                    if (adminPinSavedMsg) {
+                        adminPinSavedMsg.classList.remove('hidden');
+                        setTimeout(() => adminPinSavedMsg.classList.add('hidden'), 3500);
+                    }
+                    adminPinInput.value = '';
+                    showToast('Beheerderscode succesvol gewijzigd en gesynchroniseerd met Google Sheets! ✓', 'success');
+                });
+            }
+
+            // 2. Leerkrachtcode / Baliewachtwoord opslaan (Rol 1)
+            const teacherPinInput = document.getElementById('newTeacherPinInput');
+            const saveTeacherPinBtn = document.getElementById('btnSaveTeacherPin');
+            const teacherPinSavedMsg = document.getElementById('teacherPinSavedMsg');
+
+            if (saveTeacherPinBtn && teacherPinInput) {
+                saveTeacherPinBtn.addEventListener('click', () => {
+                    const val = teacherPinInput.value.trim();
+                    if (val.length < 3) {
+                        alert('Kies een leerkrachtcode van minimaal 3 tekens.');
+                        return;
+                    }
+                    localStorage.setItem('schoolbib_teacher_pin', val);
+                    localStorage.setItem('schoolbib_pin', val); // Voor compatibiliteit
+                    currentTeacherPin = val;
+                    syncSettingToCloud('schoolbib_teacher_pin', val);
+                    syncSettingToCloud('schoolbib_pin', val);
+                    if (teacherPinSavedMsg) {
+                        teacherPinSavedMsg.classList.remove('hidden');
+                        setTimeout(() => teacherPinSavedMsg.classList.add('hidden'), 3500);
+                    }
+                    teacherPinInput.value = '';
+                    showToast('Leerkrachtcode succesvol gewijzigd en gesynchroniseerd met Google Sheets! ✓', 'success');
+                });
+            }
 
             // Uitleentermijn instelling
             const durationSelect = document.getElementById('loanDurationSelect');
