@@ -64,11 +64,16 @@ function doPost(e) {
       var found = false;
       var targetId = data.id ? data.id.toString() : '';
       var retDate = data.returnDate || new Date().toISOString().split('T')[0];
+      var condition = data.condition ? data.condition.toString().trim() : 'Goed';
+      var note = data.note ? data.note.toString().trim() : '';
+      var conditionText = condition + (note ? ': ' + note : '');
+      var statusText = condition !== 'Goed' ? 'Ingeleverd (' + conditionText + ')' : 'Ingeleverd';
 
       for (var r = 1; r < rows.length; r++) {
         if (rows[r][0] && rows[r][0].toString() === targetId) {
-          loansSheet.getRange(r + 1, 10).setValue('Ingeleverd'); // Kolom 10 = Status
-          loansSheet.getRange(r + 1, 11).setValue(retDate);     // Kolom 11 = Werkelijke inleverdatum
+          loansSheet.getRange(r + 1, 10).setValue(statusText);    // Kolom 10 = Status
+          loansSheet.getRange(r + 1, 11).setValue(retDate);        // Kolom 11 = Werkelijke inleverdatum
+          loansSheet.getRange(r + 1, 12).setValue(conditionText);  // Kolom 12 = Staat van het boek
           found = true;
           break;
         }
@@ -77,7 +82,7 @@ function doPost(e) {
       return createJsonResponse({ 
         status: 'success', 
         found: found, 
-        message: found ? 'Boek succesvol gemarkeerd als ingeleverd!' : 'Uitlening niet gevonden in sheet.' 
+        message: found ? 'Boek succesvol gemarkeerd als ingeleverd met staat: ' + conditionText : 'Uitlening niet gevonden in sheet.' 
       });
     }
 
@@ -219,8 +224,9 @@ function doGet(e) {
             copyLoc: row[6] ? row[6].toString() : '',
             loanDate: formatCellDate(row[7]),
             dueDate: formatCellDate(row[8]),
-            returned: (row[9] && row[9].toString().toLowerCase() === 'ingeleverd'),
-            returnDate: formatCellDate(row[10])
+            returned: (row[9] && row[9].toString().toLowerCase().indexOf('ingeleverd') !== -1),
+            returnDate: formatCellDate(row[10]),
+            condition: row[11] ? row[11].toString() : (row[9] && row[9].toString().indexOf('(') !== -1 ? row[9].toString() : '')
           });
         }
       }
@@ -274,7 +280,7 @@ function getOrCreateLoansSheet(ss) {
   if (!sheet) {
     sheet = ss.insertSheet("Uitleningen");
     sheet.appendRow([
-      "ID", "Tijdstip", "Leerling", "Klas", "Boektitel", "Exemplaar", "Locatie", "Uitleendatum", "Inleverdatum", "Status", "Werkelijke Inleverdatum"
+      "ID", "Tijdstip", "Leerling", "Klas", "Boektitel", "Exemplaar", "Locatie", "Uitleendatum", "Inleverdatum", "Status", "Werkelijke Inleverdatum", "Staat van het boek"
     ]);
     sheet.setFrozenRows(1);
   }
