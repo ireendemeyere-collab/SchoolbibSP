@@ -213,8 +213,8 @@
                 <button data-filter="my-favorites" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-coral-50 hover:text-coral-600">
                     Mijn favorieten (<span id="favCount">0</span>)
                 </button>
-                <button data-filter="new-books" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-teal-50 hover:text-teal-700">
-                    Nieuw in de bib
+                <button data-filter="graphic-novels" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700">
+                    Graphic novels
                 </button>
             </div>
 
@@ -541,6 +541,9 @@
                     <button id="tabBtnSettings" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
                         ⚙️ Instellingen & Sheet
                     </button>
+                    <button id="tabBtnHelp" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-amber-900 hover:text-amber-950 hover:bg-amber-50">
+                        ❓ Hulp & FAQ
+                    </button>
                 </div>
 
                 <!-- Uitloggen -->
@@ -834,6 +837,31 @@
                                 <input type="text" id="fIsbn" placeholder="Bijv. 9789028241254" 
                                        class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
                             </div>
+
+                            <!-- Link naar coverafbeelding (optioneel) -->
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                    Link naar coverafbeelding <span class="text-slate-400 font-normal normal-case">(optioneel)</span>
+                                </label>
+                                <div class="flex items-center gap-3">
+                                    <input type="url" id="fCover" placeholder="Bijv. https://images.ctfassets.net/... of https://.../cover.jpg" 
+                                           class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
+                                    <div id="fCoverPreview" class="hidden shrink-0 w-11 h-16 rounded-xl border border-slate-200 overflow-hidden bg-slate-100 shadow-2xs flex items-center justify-center">
+                                        <img id="fCoverPreviewImg" src="" alt="Cover preview" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1">Plak een weblink naar de voorzijde van het boek als er geen ISBN is, of laat leeg om automatisch te zoeken.</p>
+                            </div>
+
+                            <!-- Externe infolink (Goodreads, Hebban of Boekenzoeker) -->
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                    Infolink: Boekenzoeker, Hebban of Goodreads <span class="text-slate-400 font-normal normal-case">(optioneel)</span>
+                                </label>
+                                <input type="url" id="fExternalLink" placeholder="Bijv. https://www.boekenzoeker.be/... of https://www.hebban.nl/..." 
+                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
+                                <p class="text-[11px] text-slate-400 mt-1">Plak een rechtstreekse link voor de achterflap/recensies. Indien leeg, zoekt de website automatisch (eerst Boekenzoeker, dan Hebban, dan Goodreads).</p>
+                            </div>
                         </div>
 
                         <div id="addBookStatus" class="hidden p-4 rounded-2xl text-sm font-bold"></div>
@@ -1103,6 +1131,170 @@
                     </div>
 
                 </div>
+            </div>
+
+            <!-- SUB-TAB 4: HULP & HANDLEIDING (VOOR LEERKRACHTEN & BEHEERDERS) -->
+            <div id="subtabHelp" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden space-y-6">
+                
+                <!-- Header van het tabblad -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-black shrink-0">
+                            ❓
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-slate-900">Handleiding & Veelgestelde Vragen (FAQ)</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">Exclusief voor leerkrachten en bib-medewerkers van Campus Sint-Pieters.</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="window.print()" class="shrink-0 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        <span>Handleiding Afdrukken / PDF</span>
+                    </button>
+                </div>
+
+                <!-- 3 Stappen Snelgids Kaarten -->
+                <div>
+                    <h4 class="text-xs font-black uppercase text-brand-700 tracking-wider mb-3">Snelgids voor collega's</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                            <div class="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
+                                <span class="w-6 h-6 rounded-lg bg-brand-600 text-white flex items-center justify-center text-xs">1</span>
+                                <span>Boeken zoeken & filters</span>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed">
+                                Typ in de zoekbalk op titel, auteur of thema. Gebruik de filters voor taal (bv. Frans/Engels), graad en beschikbaarheid.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-brand-50/70 border border-brand-100 space-y-2">
+                            <div class="flex items-center gap-2 text-brand-900 font-extrabold text-sm">
+                                <span class="w-6 h-6 rounded-lg bg-brand-600 text-white flex items-center justify-center text-xs">2</span>
+                                <span>Snel uitlenen in de klas</span>
+                            </div>
+                            <p class="text-brand-700 leading-relaxed">
+                                Klik in de catalogus op een boek ➔ <em>'Dit boek uitlenen'</em> ➔ voer de code <code class="font-bold font-mono text-brand-900">donbosco</code> in ➔ selecteer leerling en klas.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-100 space-y-2">
+                            <div class="flex items-center gap-2 text-amber-950 font-extrabold text-sm">
+                                <span class="w-6 h-6 rounded-lg bg-amber-600 text-white flex items-center justify-center text-xs">3</span>
+                                <span>Innemen & Klas inleveren</span>
+                            </div>
+                            <p class="text-amber-800 leading-relaxed">
+                                Via <em>'Ontlenen & Inleveren'</em> neem je boeken in via barcode of lever je met één klik alle boeken van een hele klas tegelijk in!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Lijst (Interactieve accordeons) -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-xs font-black uppercase text-slate-900 tracking-wider">Veelgestelde Vragen (FAQ)</h4>
+                        <span class="text-[11px] text-slate-400">Klik op een vraag om het antwoord te openen</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition" open>
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>🎯 FAQ 1: Hoe help ik een leerling snel een boek vinden op niveau?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                Gebruik de filter <strong>Leeftijd</strong> (Eerste graad = 12-14j, Tweede graad = 14-16j, Derde graad = 16+j) en combineer met een <strong>Thema</strong> (bv. spanning, sport, vriendschap). Bekijk ook de snelkeuzeknop <strong>Bekroonde boeken</strong> voor kwaliteitsboeken bekroond door o.a. De Leesjury of de Boekenleeuw.
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>🟢 FAQ 2: Waar zie ik of een boek aanwezig is of uitgeleend?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                In de filterbalk kan je <strong>'Nu in de bib aanwezig'</strong> aanvinken. Klik je op een boek, dan zie je onder <em>'Exemplaren in de schoolbib'</em> per exemplaar exact of het aanwezig is op het rek of uitgeleend is (inclusief naam van de leerling, klas en inleverdatum).
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>📘 FAQ 3: Hoe leen ik een boek snel uit aan een leerling?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de pincode in (<code class="font-bold font-mono text-slate-800">donbosco</code>), vul de naam en klas in en bevestig. De uitleentermijn wordt automatisch berekend.
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>🔑 FAQ 4: Wat is de schoolpincode en hoe pas ik die aan?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                De standaard pincode voor zowel leerkrachten als het beheer is <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono">donbosco</code>. Je kan deze code op elk moment wijzigen via het tabblad <strong>Instellingen & Sheet</strong>.
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>📥 FAQ 5: Hoe neem ik een boek weer in wanneer een leerling het terugbrengt?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                Ga naar het tabblad <strong>🔄 Ontlenen & Inleveren</strong>. Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (werkt met handscanner) of zoek de leerling in de tabel en klik op <strong>Inleveren</strong>.
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>🏫 FAQ 6: Kan ik na een leesuur een hele klas in één klik inleveren?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                Ja! In <strong>Ontlenen & Inleveren</strong> klik je simpelweg op de knop van jouw klas (bv. <em>2MWb</em>). Klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>.
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>➕ FAQ 7: Hoe voeg ik een nieuw boek of een extra exemplaar toe?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                Ga naar het tabblad <strong>📖 Boek Toevoegen</strong>. Vul het 13-cijferige ISBN in en klik op <em>'Gegevens ophalen'</em>. Als het boek al bestaat in de bib, toont het systeem direct de knop <strong>'Extra exemplaar toevoegen'</strong> om het volgnummer automatisch op te hogen.
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>🌟 FAQ 8: Hoe pas ik de banner 'Thema in de kijker' aan?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                In <strong>🌟 Thema in de Kijker</strong> kan je een titel en intro intypen (bv. voor Jeugdboekenmaand), een kleursfeer kiezen en tot 5 boeken per graad selecteren. Klik daarna op <em>'💾 Thema Opslaan & Publiceren'</em>.
+                            </p>
+                        </details>
+
+                        <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                            <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                                <span>🌐 FAQ 9: Kunnen leerlingen van thuis uit boeken ontlenen?</span>
+                                <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
+                                Nee. Voor elke uitlening is de leerkrachtcode vereist. Zo voorkomen we ongewenste registraties. Leerlingen kunnen van thuis uit wel de catalogus verkennen, recensies lezen, locaties checken en hun favorieten opslaan.
+                            </p>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- Document info banner -->
+                <div class="p-4 rounded-2xl bg-brand-50/70 border border-brand-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <span class="font-bold text-brand-900 block text-xs sm:text-sm">📄 Volledig naslagwerk (HANDLEIDING.md)</span>
+                        <p class="text-[11px] text-brand-700">De complete uitgeschreven handleiding is opgeslagen in het bestand <strong class="font-mono">HANDLEIDING.md</strong> in de projectmap.</p>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -2341,7 +2533,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                         const boekenzoekerRaw = (book['Boekenzoeker Link'] || book['boekenzoeker link'] || book.Boekenzoeker || book.boekenzoeker || '').toString().trim();
                         const hebbanRaw = (book['Hebban Link'] || book['hebban link'] || book.Hebban || book.hebban || '').toString().trim();
                         const goodreadsRaw = (book['Goodreads Link'] || book['goodreads link'] || book.Goodreads || '').toString().trim();
-                        const exemplaar = (book.Exemplaar || book.exemplaar || '').trim();
+                        const exemplaar = (book.Exemplaar || book.exemplaar || book.Exemplaren || book.exemplaren || '').toString().trim();
 
                         // Normaliseer en ontdubbel tags direct
                         const cleanTagList = rawTags.split(',').map(cleanRawTag).filter(Boolean);
@@ -2425,10 +2617,22 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                         }
 
                         const copyNum = entry.copies.length + 1;
-                        const copyLabel = item.Exemplaar || `Exemplaar ${copyNum}`;
+                        let copyLabel = `Exemplaar ${copyNum}`;
+                        let numericCopyNum = copyNum;
+                        if (item.Exemplaar) {
+                            const rawEx = item.Exemplaar.toString().trim();
+                            if (/^\d+$/.test(rawEx)) {
+                                copyLabel = `Exemplaar ${rawEx}`;
+                                numericCopyNum = parseInt(rawEx, 10);
+                            } else {
+                                copyLabel = rawEx;
+                                const matchDigits = rawEx.match(/\d+/);
+                                if (matchDigits) numericCopyNum = parseInt(matchDigits[0], 10);
+                            }
+                        }
                         entry.copies.push({
                             copyId: item.rowId,
-                            copyNumber: copyNum,
+                            copyNumber: numericCopyNum,
                             copyLabel: copyLabel,
                             locatie: item.Locatie,
                             isbn: item.ISBN
@@ -3799,8 +4003,11 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     matchQuick = r.avg >= 4.0;
                 } else if (activeQuickFilter === 'my-favorites') {
                     matchQuick = isBookFavorite(book.Titel);
-                } else if (activeQuickFilter === 'new-books') {
-                    matchQuick = book.id > (allBooks.length - 25);
+                } else if (activeQuickFilter === 'graphic-novels') {
+                    matchQuick = (book.genres && book.genres.includes('graphic-novel')) ||
+                                 (book.rawTagList && book.rawTagList.some(t => t.includes('strip') || t.includes('graphic') || t.includes('comic'))) ||
+                                 /graphic novel|strip|beeldverhaal|comic/i.test(book.Tags || '') ||
+                                 (book.Locatie && /graphic novel|strip/i.test(book.Locatie));
                 }
 
                 return matchSearch && matchTaal && matchLeeftijd && matchThema && matchBeschikbaar && matchBekroond && matchQuick;
@@ -3821,8 +4028,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 feedbackEl.textContent = 'Gefilterd op: Hoogst beoordeelde boeken (4+ sterren)';
             } else if (activeQuickFilter === 'my-favorites') {
                 feedbackEl.textContent = `Mijn bewaarde favorieten (${favoritesList.length} boeken)`;
-            } else if (activeQuickFilter === 'new-books') {
-                feedbackEl.textContent = 'Gefilterd op: Recent toegevoegd in de schoolbib';
+            } else if (activeQuickFilter === 'graphic-novels') {
+                feedbackEl.textContent = 'Gefilterd op: Graphic novels & strips in onze schoolbib';
             } else if (searchQuery) {
                 feedbackEl.textContent = `Zoekresultaten voor "${escapeHtml(searchQuery)}" (${filtered.length} boeken gevonden)`;
             } else {
@@ -4658,7 +4865,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 { btn: document.getElementById('tabBtnFeatured'), el: document.getElementById('subtabFeatured') },
                 { btn: document.getElementById('tabBtnAddBook'), el: document.getElementById('subtabAddBook') },
                 { btn: document.getElementById('tabBtnLoans'), el: document.getElementById('subtabLoans') },
-                { btn: document.getElementById('tabBtnSettings'), el: document.getElementById('subtabSettings') }
+                { btn: document.getElementById('tabBtnSettings'), el: document.getElementById('subtabSettings') },
+                { btn: document.getElementById('tabBtnHelp'), el: document.getElementById('subtabHelp') }
             ];
 
             tabs.forEach(({ btn, el }) => {
@@ -4838,6 +5046,25 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 });
             }
 
+            const coverInput = document.getElementById('fCover');
+            const coverPreviewBox = document.getElementById('fCoverPreview');
+            const coverPreviewImg = document.getElementById('fCoverPreviewImg');
+            const externalLinkInput = document.getElementById('fExternalLink');
+
+            function updateCoverPreview(url) {
+                if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                    if (coverPreviewImg) coverPreviewImg.src = url;
+                    if (coverPreviewBox) coverPreviewBox.classList.remove('hidden');
+                } else {
+                    if (coverPreviewBox) coverPreviewBox.classList.add('hidden');
+                    if (coverPreviewImg) coverPreviewImg.src = '';
+                }
+            }
+
+            if (coverInput) {
+                coverInput.addEventListener('input', () => updateCoverPreview(coverInput.value.trim()));
+            }
+
             form.addEventListener('reset', () => {
                 setTimeout(() => {
                     document.querySelectorAll('.admin-chip').forEach(c => {
@@ -4847,6 +5074,9 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     if (tagsInput) tagsInput.value = '';
                     if (extraTagInput) extraTagInput.value = '';
                     if (aantalInput) aantalInput.value = '1';
+                    if (coverInput) coverInput.value = '';
+                    if (externalLinkInput) externalLinkInput.value = '';
+                    updateCoverPreview('');
                     if (aantalQuickBtns.length > 0) {
                         aantalQuickBtns.forEach(b => {
                             if (b.getAttribute('data-num') === '1') {
@@ -4886,6 +5116,14 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                         document.getElementById('fAuteur').value = (info.authors && info.authors.join(', ')) || '';
                         document.getElementById('fIsbn').value = isbn;
 
+                        if (info.imageLinks) {
+                            const thumb = (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail || '').replace(/^http:/, 'https:');
+                            if (thumb && coverInput && !coverInput.value) {
+                                coverInput.value = thumb;
+                                updateCoverPreview(thumb);
+                            }
+                        }
+
                         if (info.categories && info.categories.length > 0) {
                             activateChipsFromTagString(info.categories.join(', '));
                         }
@@ -4902,6 +5140,13 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                             document.getElementById('fTitel').value = b.title || '';
                             document.getElementById('fAuteur').value = (b.authors && b.authors.map(a => a.name).join(', ')) || '';
                             document.getElementById('fIsbn').value = isbn;
+
+                            if (b.cover && (b.cover.large || b.cover.medium) && coverInput && !coverInput.value) {
+                                const olCoverUrl = (b.cover.large || b.cover.medium || '').replace(/^http:/, 'https:');
+                                coverInput.value = olCoverUrl;
+                                updateCoverPreview(olCoverUrl);
+                            }
+
                             lookupStatus.textContent = `✅ Boek gevonden: "${b.title}"`;
                             lookupStatus.className = 'text-xs font-semibold text-emerald-600';
                         } else {
@@ -4987,6 +5232,13 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     document.getElementById('fTags').value = currentDetectedBook.Tags || '';
                     activateChipsFromTagString(currentDetectedBook.Tags || '');
                     if (currentDetectedBook.ISBN) isbnInput.value = currentDetectedBook.ISBN;
+                    if (currentDetectedBook.Cover && coverInput) {
+                        coverInput.value = currentDetectedBook.Cover;
+                        updateCoverPreview(currentDetectedBook.Cover);
+                    }
+                    if (currentDetectedBook.Goodreads && externalLinkInput) {
+                        externalLinkInput.value = currentDetectedBook.Goodreads;
+                    }
                     document.getElementById('fLocatie').focus();
                 }
             });
@@ -5017,6 +5269,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     Locatie: document.getElementById('fLocatie').value.trim(),
                     Tags: document.getElementById('fTags').value.trim(),
                     ISBN: i,
+                    Cover: coverInput ? coverInput.value.trim() : '',
+                    Goodreads: externalLinkInput ? externalLinkInput.value.trim() : '',
                     Taal: bepaalTaal(document.getElementById('fLocatie').value.trim())
                 };
 
@@ -5102,6 +5356,9 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 `;
 
                 let copySummary = '';
+                const addedCopyNumbers = [];
+                let startNum = 1;
+
                 if (existingBook) {
                     if (!existingBook.copies || existingBook.copies.length === 0) {
                         existingBook.copies = [{
@@ -5112,9 +5369,10 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                             isbn: existingBook.ISBN
                         }];
                     }
-                    const startNum = existingBook.copies.length + 1;
+                    startNum = existingBook.copies.length + 1;
                     for (let c = 0; c < addCount; c++) {
                         const nextNum = startNum + c;
+                        addedCopyNumbers.push(nextNum);
                         existingBook.copies.push({
                             copyId: allBooks.length + 1000 + nextNum,
                             copyNumber: nextNum,
@@ -5123,14 +5381,18 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                             isbn: newBook.ISBN
                         });
                     }
+                    if (newBook.Cover && !existingBook.Cover) existingBook.Cover = newBook.Cover;
+                    if (newBook.Goodreads && !existingBook.Goodreads) existingBook.Goodreads = newBook.Goodreads;
                     copySummary = addCount === 1 
                         ? `Exemplaar ${startNum}` 
                         : `${addCount} exemplaren (Exemplaar ${startNum} t/m ${startNum + addCount - 1})`;
                 } else {
                     newBook.id = allBooks.length + 1;
                     newBook.copies = [];
+                    startNum = 1;
                     for (let c = 0; c < addCount; c++) {
                         const nextNum = c + 1;
+                        addedCopyNumbers.push(nextNum);
                         newBook.copies.push({
                             copyId: newBook.id + c,
                             copyNumber: nextNum,
@@ -5166,7 +5428,11 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                                 graad: newBook.Graad,
                                 locatie: newBook.Locatie,
                                 isbn: newBook.ISBN,
+                                cover: newBook.Cover || '',
+                                goodreads: newBook.Goodreads || '',
                                 aantal: addCount,
+                                startCopyNum: startNum,
+                                copyNumbers: addedCopyNumbers,
                                 exemplaar: copySummary
                             })
                         });

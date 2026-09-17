@@ -122,25 +122,68 @@ function doPost(e) {
     // Actie 6: Nieuw boek / exemplaren toevoegen aan de catalogus
     var sheet = ss.getActiveSheet();
     var count = data.aantal ? Math.max(1, parseInt(data.aantal, 10)) : 1;
-    
-    // Kolomvolgorde conform Google Sheet catalogus:
-    // 1: Titel | 2: Auteur | 3: Tags | 4: Locatie | 5: Goodreads Link | 6: Graad | 7: ISBN | 8: Link coverafbeelding
+    var startCopyNum = data.startCopyNum ? parseInt(data.startCopyNum, 10) : 1;
+    var copyNumbers = Array.isArray(data.copyNumbers) ? data.copyNumbers : [];
+
+    // Dynamische kolomherkenning op basis van rij 1 (de veldnamen van de Google Sheet)
+    var lastCol = sheet.getLastColumn();
+    var headers = [];
+    if (lastCol > 0) {
+      headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) {
+        return h ? h.toString().toLowerCase().trim() : '';
+      });
+    }
+
+    var colMap = {};
+    for (var c = 0; c < headers.length; c++) {
+      var h = headers[c];
+      if (h === 'titel' || h === 'title') colMap.titel = c;
+      else if (h === 'auteur' || h === 'author') colMap.auteur = c;
+      else if (h === 'tags' || h === 'tag' || h === 'thema' || h === 'themas') colMap.tags = c;
+      else if (h === 'locatie' || h === 'standplaats' || h === 'kast') colMap.locatie = c;
+      else if (h.indexOf('goodreads') !== -1 || h.indexOf('info') !== -1 || h.indexOf('weblink') !== -1 || h.indexOf('hebban') !== -1 || h.indexOf('boekenzoeker') !== -1) colMap.goodreads = c;
+      else if (h === 'graad' || h === 'leeftijd') colMap.graad = c;
+      else if (h === 'isbn' || h === 'barcode') colMap.isbn = c;
+      else if (h.indexOf('cover') !== -1 || h.indexOf('afbeelding') !== -1) colMap.cover = c;
+      else if (h.indexOf('exemplaar') !== -1 || h.indexOf('exemplaren') !== -1 || h === 'copy') colMap.exemplaar = c;
+    }
+
+    // Als de sheet headers heeft, gebruik dynamische kolommen; anders de standaard kolommen
+    var hasHeaders = Object.keys(colMap).length > 0;
+
     for (var i = 0; i < count; i++) {
-      sheet.appendRow([
-        data.titel ? data.titel.toString().trim() : '',
-        data.auteur ? data.auteur.toString().trim() : '',
-        data.tags ? data.tags.toString().trim() : '',
-        data.locatie ? data.locatie.toString().trim() : '',
-        data.goodreads ? data.goodreads.toString().trim() : '',
-        data.graad ? data.graad.toString().trim() : '',
-        data.isbn ? data.isbn.toString().trim() : '',
-        data.cover ? data.cover.toString().trim() : ''
-      ]);
+      var currentCopyNum = (copyNumbers && copyNumbers[i] !== undefined) ? copyNumbers[i] : (startCopyNum + i);
+      
+      if (hasHeaders) {
+        var row = new Array(headers.length).fill('');
+        if (colMap.titel !== undefined) row[colMap.titel] = data.titel ? data.titel.toString().trim() : '';
+        if (colMap.auteur !== undefined) row[colMap.auteur] = data.auteur ? data.auteur.toString().trim() : '';
+        if (colMap.tags !== undefined) row[colMap.tags] = data.tags ? data.tags.toString().trim() : '';
+        if (colMap.locatie !== undefined) row[colMap.locatie] = data.locatie ? data.locatie.toString().trim() : '';
+        if (colMap.goodreads !== undefined) row[colMap.goodreads] = data.goodreads ? data.goodreads.toString().trim() : '';
+        if (colMap.graad !== undefined) row[colMap.graad] = data.graad ? data.graad.toString().trim() : '';
+        if (colMap.isbn !== undefined) row[colMap.isbn] = data.isbn ? data.isbn.toString().trim() : '';
+        if (colMap.cover !== undefined) row[colMap.cover] = data.cover ? data.cover.toString().trim() : '';
+        if (colMap.exemplaar !== undefined) row[colMap.exemplaar] = currentCopyNum;
+        sheet.appendRow(row);
+      } else {
+        sheet.appendRow([
+          data.titel ? data.titel.toString().trim() : '',
+          data.auteur ? data.auteur.toString().trim() : '',
+          data.tags ? data.tags.toString().trim() : '',
+          data.locatie ? data.locatie.toString().trim() : '',
+          data.goodreads ? data.goodreads.toString().trim() : '',
+          data.graad ? data.graad.toString().trim() : '',
+          data.isbn ? data.isbn.toString().trim() : '',
+          data.cover ? data.cover.toString().trim() : '',
+          currentCopyNum
+        ]);
+      }
     }
     
     var successMessage = count > 1 
-      ? count + ' exemplaren succesvol toegevoegd aan de Google Sheet!' 
-      : 'Boek succesvol toegevoegd!';
+      ? count + ' exemplaren succesvol toegevoegd aan de Google Sheet (nrs: ' + (copyNumbers.join(', ') || startCopyNum + '-' + (startCopyNum + count - 1)) + ')!' 
+      : 'Boek succesvol toegevoegd (Exemplaar ' + ((copyNumbers && copyNumbers[0]) || startCopyNum) + ')!';
       
     return createJsonResponse({ status: 'success', message: successMessage });
       
