@@ -696,20 +696,6 @@
                         <p class="text-xs sm:text-sm text-slate-500">Nieuwe boeken worden direct getoond in de catalogus en opgeslagen in jullie Google Sheet.</p>
                     </div>
 
-                    <!-- ISBN-zoeker -->
-                    <div class="bg-brand-50/70 border border-brand-100 p-4 rounded-2xl flex flex-col sm:flex-row items-center gap-3">
-                        <div class="flex-grow w-full">
-                            <label class="block text-xs font-bold text-brand-900 uppercase tracking-wider mb-1">⚡ Supersnel invullen via ISBN of Barcode</label>
-                            <input type="text" id="lookupIsbnInput" placeholder="Typ of scan het ISBN-nummer (bijv. 9789028241254)..." 
-                                   class="w-full text-sm px-3.5 py-2 rounded-xl border border-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
-                        </div>
-                        <button type="button" id="btnLookupIsbn" class="w-full sm:w-auto mt-2 sm:mt-5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 whitespace-nowrap">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            <span>Gegevens ophalen</span>
-                        </button>
-                    </div>
-                    <p id="isbnLookupStatus" class="text-xs font-semibold text-brand-700 hidden"></p>
-
                     <!-- LIVE DUPLICAAT WAARSCHUWINGSBANNER -->
                     <div id="duplicateWarningBox" class="hidden p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-900 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
                         <div>
@@ -755,19 +741,22 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Locatie / Kast</label>
-                                <input type="text" id="fLocatie" list="locatieSuggesties" placeholder="Bijv. Nederlandstalige fictie" value="Nederlandstalige fictie"
-                                       class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition">
-                                <datalist id="locatieSuggesties">
-                                    <option value="Nederlandstalige fictie">
-                                    <option value="Engelstalige fictie">
-                                    <option value="Franstalige fictie">
-                                    <option value="Duitstalige fictie">
-                                    <option value="Graphic novels">
-                                    <option value="Boektoppers">
-                                    <option value="Poëzie">
-                                    <option value="Non-fictie">
-                                </datalist>
+                                <label for="fLocatieSelect" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Locatie / Kast</label>
+                                <select id="fLocatieSelect" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition font-medium text-slate-800">
+                                    <option value="Nederlandstalige fictie" selected>Nederlandstalige fictie</option>
+                                    <option value="Boektoppers">Boektoppers</option>
+                                    <option value="Graphic novels">Graphic novels</option>
+                                    <option value="Engelstalige fictie">Engelstalige fictie</option>
+                                    <option value="Franstalige fictie">Franstalige fictie</option>
+                                    <option value="Duitstalige fictie">Duitstalige fictie</option>
+                                    <option value="Poëzie">Poëzie</option>
+                                    <option value="Non-fictie">Non-fictie</option>
+                                    <option value="__custom__">✏️ + Nieuwe locatie toevoegen...</option>
+                                </select>
+                                <div id="customLocatieContainer" class="hidden mt-2">
+                                    <input type="text" id="fLocatieCustom" placeholder="Typ hier de nieuwe locatie / kast..." 
+                                           class="w-full text-sm px-4 py-2.5 rounded-xl border-2 border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white transition text-slate-800 font-medium">
+                                </div>
                             </div>
 
                             <!-- Batch-invoer aantal exemplaren -->
@@ -1440,6 +1429,73 @@
                     <button type="submit" class="w-1/2 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         <span>Uitlening Bevestigen</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+ 
+    <!-- MODAL: BOEK TERUGGEVEN & STAAT AANDUIDEN -->
+    <dialog id="returnConditionModal" class="rounded-3xl p-0 shadow-2xl backdrop:bg-slate-900/60 max-w-md w-full overflow-hidden border border-slate-200">
+        <div class="bg-white p-6 space-y-4">
+            <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                        🔄
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Boek Inleveren</span>
+                        <h3 id="returnModalBookTitle" class="text-sm font-extrabold text-slate-900 line-clamp-1">Titel</h3>
+                        <p id="returnModalLoanInfo" class="text-xs text-slate-500 line-clamp-1">Leerling • Klas</p>
+                    </div>
+                </div>
+                <button type="button" id="btnCloseReturnModal" class="text-slate-400 hover:text-slate-600 font-bold text-lg p-1 cursor-pointer">✕</button>
+            </div>
+
+            <form id="returnConditionForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Wat is de staat van het ingeleverde boek?
+                    </label>
+                    <div class="grid grid-cols-1 gap-2" id="returnConditionRadioGroup">
+                        <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/60 hover:bg-emerald-50 cursor-pointer transition">
+                            <input type="radio" name="returnCondition" value="Goed" checked class="text-emerald-600 focus:ring-emerald-500">
+                            <span class="text-xs font-bold text-slate-800">🟢 Goed / Onbeschadigd</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition">
+                            <input type="radio" name="returnCondition" value="Cover beschadigd" class="text-amber-600 focus:ring-amber-500">
+                            <span class="text-xs font-bold text-slate-800">🟡 Cover / Kaft beschadigd</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition">
+                            <input type="radio" name="returnCondition" value="Pagina's gescheurd of beschreven" class="text-amber-600 focus:ring-amber-500">
+                            <span class="text-xs font-bold text-slate-800">🟠 Pagina's gescheurd of beschreven</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition">
+                            <input type="radio" name="returnCondition" value="Waterschade / vlekken" class="text-rose-600 focus:ring-rose-500">
+                            <span class="text-xs font-bold text-slate-800">🔴 Waterschade / vlekken</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition">
+                            <input type="radio" name="returnCondition" value="Kwijt / Verloren" class="text-rose-600 focus:ring-rose-500">
+                            <span class="text-xs font-bold text-slate-800">❌ Kwijt / Verloren</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition">
+                            <input type="radio" name="returnCondition" value="Andere opmerking" class="text-brand-600 focus:ring-brand-500">
+                            <span class="text-xs font-bold text-slate-800">✏️ Andere opmerking...</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Extra toelichting (optioneel)</label>
+                    <input type="text" id="returnConditionNote" placeholder="Bijv. Blz. 14 los, koffievlek..." 
+                           class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" id="btnCancelReturnModal" class="w-1/2 py-2.5 px-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold text-xs transition cursor-pointer">Annuleren</button>
+                    <button type="submit" class="w-1/2 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span>Inleveren Bevestigen</span>
                     </button>
                 </div>
             </form>
@@ -5088,79 +5144,65 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                             }
                         });
                     }
+                    if (locSelect) locSelect.value = 'Nederlandstalige fictie';
+                    if (locCustomContainer) locCustomContainer.classList.add('hidden');
+                    if (locCustomInput) locCustomInput.value = '';
                 }, 10);
             });
 
-            const lookupBtn = document.getElementById('btnLookupIsbn');
-            const lookupInput = document.getElementById('lookupIsbnInput');
-            const lookupStatus = document.getElementById('isbnLookupStatus');
+            // --- LOCATIE SELECT & AANGEPASTE LOCATIE LOGICA ---
+            const locSelect = document.getElementById('fLocatieSelect');
+            const locCustomContainer = document.getElementById('customLocatieContainer');
+            const locCustomInput = document.getElementById('fLocatieCustom');
 
-            lookupBtn.addEventListener('click', async () => {
-                const isbn = lookupInput.value.replace(/[^0-9X]/gi, '').trim();
-                if (!isbn) {
-                    alert('Voer eerst een geldig ISBN-nummer in.');
-                    return;
+            function getSelectedBookLocation() {
+                if (locSelect && locSelect.value === '__custom__') {
+                    return (locCustomInput ? locCustomInput.value.trim() : '') || 'Nederlandstalige fictie';
                 }
+                return (locSelect ? locSelect.value.trim() : '') || 'Nederlandstalige fictie';
+            }
 
-                lookupStatus.textContent = 'Gegevens zoeken via Google Books...';
-                lookupStatus.className = 'text-xs font-semibold text-slate-500';
-                lookupStatus.classList.remove('hidden');
-
-                try {
-                    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-                    const data = await res.json();
-
-                    if (data.totalItems > 0 && data.items[0].volumeInfo) {
-                        const info = data.items[0].volumeInfo;
-                        document.getElementById('fTitel').value = info.title || '';
-                        document.getElementById('fAuteur').value = (info.authors && info.authors.join(', ')) || '';
-                        document.getElementById('fIsbn').value = isbn;
-
-                        if (info.imageLinks) {
-                            const thumb = (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail || '').replace(/^http:/, 'https:');
-                            if (thumb && coverInput && !coverInput.value) {
-                                coverInput.value = thumb;
-                                updateCoverPreview(thumb);
-                            }
-                        }
-
-                        if (info.categories && info.categories.length > 0) {
-                            activateChipsFromTagString(info.categories.join(', '));
-                        }
-
-                        lookupStatus.textContent = `✅ Boek gevonden: "${info.title}" (${info.authors ? info.authors.join(', ') : 'onbekend'})`;
-                        lookupStatus.className = 'text-xs font-semibold text-emerald-600';
+            if (locSelect) {
+                locSelect.addEventListener('change', () => {
+                    if (locSelect.value === '__custom__') {
+                        locCustomContainer?.classList.remove('hidden');
+                        locCustomInput?.focus();
                     } else {
-                        const olRes = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-                        const olData = await olRes.json();
-                        const bookKey = `ISBN:${isbn}`;
-
-                        if (olData[bookKey]) {
-                            const b = olData[bookKey];
-                            document.getElementById('fTitel').value = b.title || '';
-                            document.getElementById('fAuteur').value = (b.authors && b.authors.map(a => a.name).join(', ')) || '';
-                            document.getElementById('fIsbn').value = isbn;
-
-                            if (b.cover && (b.cover.large || b.cover.medium) && coverInput && !coverInput.value) {
-                                const olCoverUrl = (b.cover.large || b.cover.medium || '').replace(/^http:/, 'https:');
-                                coverInput.value = olCoverUrl;
-                                updateCoverPreview(olCoverUrl);
-                            }
-
-                            lookupStatus.textContent = `✅ Boek gevonden: "${b.title}"`;
-                            lookupStatus.className = 'text-xs font-semibold text-emerald-600';
-                        } else {
-                            lookupStatus.textContent = 'ℹ️ Geen gegevens gevonden voor dit ISBN. Je kunt de velden handmatig invullen.';
-                            lookupStatus.className = 'text-xs font-semibold text-amber-600';
-                            document.getElementById('fIsbn').value = isbn;
-                        }
+                        locCustomContainer?.classList.add('hidden');
                     }
-                    checkDuplicateLive();
-                } catch (e) {
-                    lookupStatus.textContent = 'Kon gegevens niet ophalen. Vul het formulier handmatig in.';
-                    lookupStatus.className = 'text-xs font-semibold text-slate-500';
-                }
-            });
+                });
+            }
+
+            function populateLocationDropdown() {
+                if (!locSelect) return;
+                const customOption = locSelect.querySelector('option[value="__custom__"]');
+                const existingValues = new Set(Array.from(locSelect.options).map(o => o.value.toLowerCase()));
+                
+                const allLocs = new Set();
+                allBooks.forEach(b => {
+                    if (b.Locatie && b.Locatie.trim()) allLocs.add(b.Locatie.trim());
+                    if (b.copies) {
+                        b.copies.forEach(c => {
+                            if (c.locatie && c.locatie.trim()) allLocs.add(c.locatie.trim());
+                        });
+                    }
+                });
+
+                allLocs.forEach(loc => {
+                    if (!existingValues.has(loc.toLowerCase())) {
+                        const opt = document.createElement('option');
+                        opt.value = loc;
+                        opt.textContent = loc;
+                        if (customOption) {
+                            locSelect.insertBefore(opt, customOption);
+                        } else {
+                            locSelect.appendChild(opt);
+                        }
+                        existingValues.add(loc.toLowerCase());
+                    }
+                });
+            }
+            populateLocationDropdown();
 
             // --- DUPLICAAT DETECTIE & POP-UP LOGICA ---
             const titleInput = document.getElementById('fTitel');
@@ -5199,10 +5241,10 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 });
             }
 
-            // Live check tijdens het typen of scannen
+            // Live check tijdens het typen
             function checkDuplicateLive() {
                 const t = titleInput.value.trim();
-                const i = isbnInput.value.trim() || lookupInput.value.trim();
+                const i = isbnInput.value.trim();
                 currentDetectedBook = findExistingBook(t, i);
 
                 if (currentDetectedBook) {
@@ -5221,7 +5263,6 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
 
             titleInput.addEventListener('input', checkDuplicateLive);
             isbnInput.addEventListener('input', checkDuplicateLive);
-            lookupInput.addEventListener('input', checkDuplicateLive);
 
             // Knop 'Extra exemplaar toevoegen': vul auteur, graad, tags, isbn automatisch aan
             btnDupAutoFill.addEventListener('click', () => {
@@ -5239,15 +5280,34 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     if (currentDetectedBook.Goodreads && externalLinkInput) {
                         externalLinkInput.value = currentDetectedBook.Goodreads;
                     }
-                    document.getElementById('fLocatie').focus();
+
+                    // Locatie instellen in dropdown
+                    const targetLoc = currentDetectedBook.Locatie || 'Nederlandstalige fictie';
+                    if (locSelect) {
+                        let matched = false;
+                        for (let opt of locSelect.options) {
+                            if (opt.value.toLowerCase() === targetLoc.toLowerCase()) {
+                                locSelect.value = opt.value;
+                                matched = true;
+                                break;
+                            }
+                        }
+                        if (!matched) {
+                            const newOpt = document.createElement('option');
+                            newOpt.value = targetLoc;
+                            newOpt.textContent = targetLoc;
+                            locSelect.insertBefore(newOpt, locSelect.querySelector('option[value="__custom__"]'));
+                            locSelect.value = targetLoc;
+                        }
+                        locCustomContainer?.classList.add('hidden');
+                        locSelect.focus();
+                    }
                 }
             });
 
             // Knop 'Wissen': maak invoer leeg
             btnDupCancel.addEventListener('click', () => {
                 form.reset();
-                lookupInput.value = '';
-                lookupStatus.classList.add('hidden');
                 warningBox.classList.add('hidden');
                 currentDetectedBook = null;
             });
@@ -5262,16 +5322,31 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 const existing = findExistingBook(t, i);
                 const aantalVal = Math.max(1, parseInt(aantalInput?.value || 1, 10));
 
+                const chosenLoc = getSelectedBookLocation();
+                // Indien zelf een nieuwe locatie ingetypt, voeg deze optie permanent toe aan de select
+                if (locSelect && locSelect.value === '__custom__' && chosenLoc) {
+                    const existingOpt = Array.from(locSelect.options).find(o => o.value.toLowerCase() === chosenLoc.toLowerCase());
+                    if (!existingOpt) {
+                        const newOpt = document.createElement('option');
+                        newOpt.value = chosenLoc;
+                        newOpt.textContent = chosenLoc;
+                        locSelect.insertBefore(newOpt, locSelect.querySelector('option[value="__custom__"]'));
+                    }
+                    locSelect.value = chosenLoc;
+                    locCustomContainer?.classList.add('hidden');
+                    if (locCustomInput) locCustomInput.value = '';
+                }
+
                 const newBookData = {
                     Titel: t,
                     Auteur: document.getElementById('fAuteur').value.trim(),
                     Graad: document.getElementById('fGraad').value.trim(),
-                    Locatie: document.getElementById('fLocatie').value.trim(),
+                    Locatie: chosenLoc,
                     Tags: document.getElementById('fTags').value.trim(),
                     ISBN: i,
                     Cover: coverInput ? coverInput.value.trim() : '',
                     Goodreads: externalLinkInput ? externalLinkInput.value.trim() : '',
-                    Taal: bepaalTaal(document.getElementById('fLocatie').value.trim())
+                    Taal: bepaalTaal(chosenLoc)
                 };
 
                 const modalDupAantal = document.getElementById('modalDupAantal');
@@ -5450,8 +5525,6 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
 
                 statusBox.classList.remove('hidden');
                 form.reset();
-                lookupInput.value = '';
-                lookupStatus.classList.add('hidden');
                 warningBox.classList.add('hidden');
                 currentDetectedBook = null;
 
@@ -6117,7 +6190,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             activeInClass.forEach(loan => {
                 loan.returned = true;
                 loan.returnDate = today;
-                syncLoanToCloud('return_loan', { id: loan.id, returnDate: today });
+                loan.condition = 'Goed';
+                syncLoanToCloud('return_loan', { id: loan.id, returnDate: today, condition: 'Goed' });
             });
 
             saveLoans();
@@ -6174,6 +6248,33 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     ? `<span class="font-extrabold text-slate-800">${escapeHtml(loan.copyLabel)}</span> <span class="text-[10px] text-slate-500 block">Locatie: ${escapeHtml(loan.copyLoc || 'Bib')}</span>`
                     : `<span class="text-slate-500 italic">Exemplaar 1</span>`;
 
+                let statusBadgeHtml = '';
+                if (loan.returned) {
+                    if (loan.condition && loan.condition !== 'Goed') {
+                        statusBadgeHtml = `
+                            <div>
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300">
+                                    ⚠️ ${escapeHtml(loan.condition)}
+                                </span>
+                                ${loan.conditionNote ? `<span class="block text-[10px] text-slate-500 italic mt-0.5">"${escapeHtml(loan.conditionNote)}"</span>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        statusBadgeHtml = `
+                            <div>
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                    ✓ Ingeleverd (Goed)
+                                </span>
+                                ${loan.conditionNote ? `<span class="block text-[10px] text-slate-500 italic mt-0.5">"${escapeHtml(loan.conditionNote)}"</span>` : ''}
+                            </div>
+                        `;
+                    }
+                } else if (isOverdue) {
+                    statusBadgeHtml = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">Te laat</span>';
+                } else {
+                    statusBadgeHtml = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Uitgeleend</span>';
+                }
+
                 tr.innerHTML = `
                     <td class="px-4 py-3 font-semibold text-slate-900">${escapeHtml(loan.student)}</td>
                     <td class="px-4 py-3 font-medium text-slate-600">
@@ -6184,11 +6285,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     <td class="px-4 py-3 text-slate-500">${loan.loanDate || '-'}</td>
                     <td class="px-4 py-3 ${isOverdue ? 'text-rose-600 font-bold' : 'text-slate-600'}">${loan.dueDate || '-'}</td>
                     <td class="px-4 py-3">
-                        ${loan.returned 
-                            ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Ingeleverd</span>' 
-                            : (isOverdue 
-                                ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">Te laat</span>'
-                                : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Uitgeleend</span>')}
+                        ${statusBadgeHtml}
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-1.5">
@@ -6211,14 +6308,92 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             });
         }
 
+        // --- INLEVEREN MET STAAT CONTROLE (MODAL) LOGICA ---
+        let pendingReturnLoanId = null;
+        const returnConditionModal = document.getElementById('returnConditionModal');
+        const returnConditionForm = document.getElementById('returnConditionForm');
+        const btnCloseReturnModal = document.getElementById('btnCloseReturnModal');
+        const btnCancelReturnModal = document.getElementById('btnCancelReturnModal');
+        const returnModalBookTitle = document.getElementById('returnModalBookTitle');
+        const returnModalLoanInfo = document.getElementById('returnModalLoanInfo');
+        const returnConditionNote = document.getElementById('returnConditionNote');
+
+        if (btnCloseReturnModal) btnCloseReturnModal.addEventListener('click', () => returnConditionModal?.close());
+        if (btnCancelReturnModal) btnCancelReturnModal.addEventListener('click', () => returnConditionModal?.close());
+
+        if (returnConditionForm) {
+            returnConditionForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!pendingReturnLoanId) return;
+                const checkedRadio = document.querySelector('input[name="returnCondition"]:checked');
+                const condVal = checkedRadio ? checkedRadio.value : 'Goed';
+                const noteVal = returnConditionNote ? returnConditionNote.value.trim() : '';
+
+                returnConditionModal?.close();
+                confirmReturnLoan(pendingReturnLoanId, condVal, noteVal);
+                pendingReturnLoanId = null;
+            });
+
+            document.querySelectorAll('input[name="returnCondition"]').forEach(r => {
+                r.addEventListener('change', () => {
+                    document.querySelectorAll('#returnConditionRadioGroup label').forEach(lbl => {
+                        lbl.classList.remove('border-emerald-500', 'bg-emerald-50/70', 'border-amber-500', 'bg-amber-50/70', 'border-rose-500', 'bg-rose-50/70');
+                        lbl.classList.add('border-slate-200', 'bg-white');
+                    });
+                    const curLbl = r.closest('label');
+                    if (curLbl) {
+                        curLbl.classList.remove('border-slate-200', 'bg-white');
+                        if (r.value === 'Goed') {
+                            curLbl.classList.add('border-emerald-500', 'bg-emerald-50/70');
+                        } else if (r.value.includes('beschadigd') || r.value.includes('gescheurd')) {
+                            curLbl.classList.add('border-amber-500', 'bg-amber-50/70');
+                        } else {
+                            curLbl.classList.add('border-rose-500', 'bg-rose-50/70');
+                        }
+                    }
+                });
+            });
+        }
+
         window.markLoanReturned = function(id) {
+            const loan = loans.find(l => String(l.id) === String(id));
+            if (!loan) return;
+            pendingReturnLoanId = id;
+
+            if (returnModalBookTitle) returnModalBookTitle.textContent = loan.bookTitle || 'Boek inleveren';
+            if (returnModalLoanInfo) returnModalLoanInfo.textContent = `${loan.student || 'Leerling'} (${loan.klas || 'Klas'}) • ${loan.copyLabel || 'Exemplaar'}`;
+            if (returnConditionNote) returnConditionNote.value = '';
+
+            const defaultRadio = document.querySelector('input[name="returnCondition"][value="Goed"]');
+            if (defaultRadio) {
+                defaultRadio.checked = true;
+                defaultRadio.dispatchEvent(new Event('change'));
+            }
+
+            if (returnConditionModal && typeof returnConditionModal.showModal === 'function') {
+                returnConditionModal.showModal();
+            } else {
+                confirmReturnLoan(id, 'Goed', '');
+            }
+        };
+
+        function confirmReturnLoan(id, condition, note) {
             const loan = loans.find(l => String(l.id) === String(id));
             if (loan) {
                 loan.returned = true;
                 loan.returnDate = new Date().toISOString().split('T')[0];
+                loan.condition = condition;
+                loan.conditionNote = note;
                 saveLoans();
-                syncLoanToCloud('return_loan', { id: loan.id, returnDate: loan.returnDate });
-                showToast(`"${loan.bookTitle}" is succesvol ingeleverd door ${loan.student} ✓`, 'success');
+                syncLoanToCloud('return_loan', { 
+                    id: loan.id, 
+                    returnDate: loan.returnDate,
+                    condition: condition,
+                    note: note
+                });
+                renderLoans();
+                const statusSuffix = condition !== 'Goed' ? ` (Staat: ${condition})` : '';
+                showToast(`"${loan.bookTitle}" is succesvol ingeleverd door ${loan.student}${statusSuffix} ✓`, 'success');
             }
         };
 
