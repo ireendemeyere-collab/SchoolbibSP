@@ -37,7 +37,7 @@ Deze gids focust uitsluitend op wat jij nodig hebt tijdens een lesuur of baliewa
 ## 1. Snelle Start: Wat is jouw rol?
 
 Als leerkracht of balie-medewerker heb je toegang tot de **🔄 Uitleenbalie**:
-- **Jouw code**: De **Leerkrachtcode** (standaard: **`donbosco`**).
+- **Jouw code**: De **Leerkrachtcode** (standaard: **`donbosco`**, of de door de beheerder gekozen code zoals **`Boekenbende`**).
 - **Wat kun je doen?**: Boeken registreren op naam van leerlingen, boeken scannen en innemen, boeken verlengen, en in één klik alle boeken van een klas inleveren.
 - **Geen zorgen over beheer**: Je kunt niets misdoen aan de catalogus of instellingen van de website; die opties zijn enkel toegankelijk voor de twee hoofdbeheerders.
 
@@ -67,7 +67,7 @@ Je kan op twee manieren een boek toewijzen aan een leerling:
 
 1. Klik in de catalogus op het gekozen boek.
 2. Klik linksonder op de blauwe knop **📘 Dit boek uitlenen**.
-3. Voer de leerkrachtcode in (**`donbosco`**). *(Ben je al ingelogd in deze browsersessie? Dan verschijnt deze vraag niet eens!)*
+3. Voer de leerkrachtcode in (standaard **`donbosco`**, of de actuele code zoals **`Boekenbende`**). *(Ben je al ingelogd in deze browsersessie? Dan verschijnt deze vraag niet eens!)*
 4. Selecteer het **exemplaar** (als er meerdere zijn).
 5. Vul de **naam van de leerling** in en kies de **klas** uit de lijst.
 6. Klik op **Uitlening Bevestigen**. Klaar! Het boek staat meteen als uitgeleend gemarkeerd.
@@ -77,7 +77,7 @@ Je kan op twee manieren een boek toewijzen aan een leerling:
 *Ideaal wanneer leerlingen met hun gekozen boeken naar de computer komen om uit te checken.*
 
 1. Klik in het bovenmenu op **🔄 Uitleenbalie** (op smartphone/tablet: **🔄 Balie**).
-2. Voer de leerkrachtcode in (**`donbosco`**) en klik op **Balie Openen**.
+2. Voer de leerkrachtcode in (standaard **`donbosco`** of actuele code) en klik op **Balie Openen**.
 3. **Met de handscanner**: Scan de barcode achterop het boek in de donkere balk bovenaan. Het boek wordt direct herkend -> klik op **Dit boek uitlenen 📘**.
 4. **Zonder scanner**: Klap het formulier *'Nieuwe uitlening handmatig registreren'* open. Vul naam, klas en boektitel in en klik op **Uitlening opslaan**.
 
@@ -134,7 +134,7 @@ Heb je met je klas een leesuur gehad in de bib en breng je aan het einde van het
 
 <a id="faq-1-wat-is-de-leerkrachtcode-en-waarom-is-die-nodig"></a>
 ### FAQ 1: Wat is de leerkrachtcode en waarom is die nodig?
-De standaard leerkrachtcode is **`donbosco`**.  
+De leerkrachtcode is standaard **`donbosco`**, maar de bibliotheekbeheerders kunnen deze op elk gewenst moment wijzigen (bv. naar **`Boekenbende`**). De website en de snelgids tonen altijd automatisch de actuele code.  
 Deze code verhindert dat leerlingen zelfstandig vanuit huis boeken op andermans naam registreren of per ongeluk boeken als ingeleverd markeren. De code mag vrij gedeeld worden onder collega's en bib-medewerkers.
 
 ---

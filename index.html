@@ -518,7 +518,7 @@
                     Balie Openen
                 </button>
             </form>
-            <p class="text-xs text-slate-400 mt-4">Voor leerkrachten en secretariaat • Standaardcode: <span class="font-mono font-bold text-slate-600">donbosco</span></p>
+            <p class="text-xs text-slate-400 mt-4">Voor leerkrachten en secretariaat • Toegangscode: <span class="font-mono font-bold text-slate-600 display-teacher-pin">donbosco</span></p>
         </div>
 
         <!-- Uitleenbalie Dashboard -->
@@ -717,7 +717,7 @@
                     Inloggen als Beheerder
                 </button>
             </form>
-            <p class="text-xs text-slate-400 mt-4">Uitsluitend voor de twee hoofdbeheerders • Standaardcode: <span class="font-mono font-bold text-slate-600">beheerder</span></p>
+            <p class="text-xs text-slate-400 mt-4">Uitsluitend voor de twee hoofdbeheerders • Toegangscode: <span class="font-mono font-bold text-slate-600 display-admin-pin">beheerder</span></p>
         </div>
 
         <!-- Beheerders Dashboard -->
@@ -1240,7 +1240,7 @@
                                 <span>Snel uitlenen in de klas</span>
                             </div>
                             <p class="text-brand-700 leading-relaxed">
-                                Klik in de catalogus op een boek ➔ <em>'Dit boek uitlenen'</em> ➔ voer de code <code class="font-bold font-mono text-brand-900">donbosco</code> in ➔ selecteer leerling en klas.
+                                Klik in de catalogus op een boek ➔ <em>'Dit boek uitlenen'</em> ➔ voer de code <code class="font-bold font-mono text-brand-900 display-teacher-pin">donbosco</code> in ➔ selecteer leerling en klas.
                             </p>
                         </div>
                         <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-100 space-y-2">
@@ -1289,7 +1289,7 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de pincode in (<code class="font-bold font-mono text-slate-800">donbosco</code>), vul de naam en klas in en bevestig. De uitleentermijn wordt automatisch berekend.
+                                Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de pincode in (<code class="font-bold font-mono text-slate-800 display-teacher-pin">donbosco</code>), vul de naam en klas in en bevestig. De uitleentermijn wordt automatisch berekend.
                             </p>
                         </details>
 
@@ -1300,8 +1300,8 @@
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
                                 Er zijn twee aparte rollen en toegangscodes:<br>
-                                • <strong>Leerkrachtcode (Rol 1: Uitleenbalie & snel uitlenen)</strong>: standaard <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono">donbosco</code> (voor alle leerkrachten en secretariaat).<br>
-                                • <strong>Beheerderscode (Rol 2: Beheerderspaneel)</strong>: standaard <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono">beheerder</code> (enkel voor de twee hoofdbeheerders).<br>
+                                • <strong>Leerkrachtcode (Rol 1: Uitleenbalie & snel uitlenen)</strong>: <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono display-teacher-pin">donbosco</code> (voor alle leerkrachten en secretariaat).<br>
+                                • <strong>Beheerderscode (Rol 2: Beheerderspaneel)</strong>: <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono display-admin-pin">beheerder</code> (enkel voor de twee hoofdbeheerders).<br>
                                 Beheerders kunnen <strong>beide codes</strong> op elk gewenst moment aanpassen via het tabblad <strong>Instellingen & Sheet</strong>. De nieuwe codes worden automatisch centraal opgeslagen in Google Sheets.
                             </p>
                         </details>
@@ -1312,7 +1312,7 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Klik in het hoofdmenu bovenaan op <strong>🔄 Uitleenbalie</strong>. Voer de leerkrachtcode in (<code class="font-bold font-mono text-slate-800">donbosco</code>). Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (of zoek de leerling in de tabel) en klik op <strong>Direct Inleveren</strong>. Je kan eventueel ook de staat van het boek registreren.
+                                Klik in het hoofdmenu bovenaan op <strong>🔄 Uitleenbalie</strong>. Voer de leerkrachtcode in (<code class="font-bold font-mono text-slate-800 display-teacher-pin">donbosco</code>). Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (of zoek de leerling in de tabel) en klik op <strong>Direct Inleveren</strong>. Je kan eventueel ook de staat van het boek registreren.
                             </p>
                         </details>
 
@@ -2453,6 +2453,32 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             randomCatalogSample = shuffled.slice(0, 10);
         }
 
+        // DYNAMISCH BIJHOUDEN EN TONEN VAN TOEGANGSCODES IN DE INTERFACE
+        function updateDisplayedPins() {
+            const tPin = currentTeacherPin || DEFAULT_TEACHER_PIN;
+            const aPin = currentAdminPin || DEFAULT_ADMIN_PIN;
+
+            document.querySelectorAll('.display-teacher-pin').forEach(el => {
+                el.textContent = tPin;
+            });
+            document.querySelectorAll('.display-admin-pin').forEach(el => {
+                el.textContent = aPin;
+            });
+
+            const deskInput = document.getElementById('deskPinInput');
+            if (deskInput) {
+                deskInput.placeholder = `Leerkrachtcode (${tPin})`;
+            }
+            const modalInput = document.getElementById('modalTeacherPinInput');
+            if (modalInput) {
+                modalInput.placeholder = `Pincode (${tPin})`;
+            }
+            const adminInput = document.getElementById('adminPinInput');
+            if (adminInput) {
+                adminInput.placeholder = `Beheerderscode (${aPin})`;
+            }
+        }
+
         // STERREN & FAVORIETEN STATE
         let ratingsStore = JSON.parse(localStorage.getItem('schoolbib_ratings') || '{}');
         let favoritesList = JSON.parse(localStorage.getItem('schoolbib_favorites') || '[]');
@@ -2470,6 +2496,15 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 grade3: []
             }
         };
+
+        function getFeaturedThemeConfig() {
+            try {
+                const raw = localStorage.getItem('schoolbib_featured_theme');
+                return raw ? JSON.parse(raw) : DEFAULT_FEATURED;
+            } catch (e) {
+                return DEFAULT_FEATURED;
+            }
+        }
         let featuredTheme = JSON.parse(localStorage.getItem('schoolbib_featured_theme') || JSON.stringify(DEFAULT_FEATURED));
         if (!featuredTheme.gradePicks) {
             featuredTheme.gradePicks = { grade1: [], grade2: [], grade3: [] };
@@ -2514,6 +2549,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             initDropdownMenus();
             loadBooks();
             loadLoansFromCloud();
+            updateDisplayedPins();
         });
 
         // TAXONOMIE VOOR GENRES & THEMA'S (TEXT-ONLY, OVERZICHTELIJK EN ZONDER ICOONTJES)
@@ -5815,6 +5851,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                             currentTeacherPin = data.settings.schoolbib_pin;
                             localStorage.setItem('schoolbib_teacher_pin', currentTeacherPin);
                         }
+                        updateDisplayedPins();
                         if (data.settings.schoolbib_loan_duration) {
                             localStorage.setItem('schoolbib_loan_duration', data.settings.schoolbib_loan_duration);
                             const durSel = document.getElementById('loanDurationSelect');
@@ -6613,6 +6650,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     localStorage.setItem('schoolbib_admin_pin', val);
                     currentAdminPin = val;
                     syncSettingToCloud('schoolbib_admin_pin', val);
+                    updateDisplayedPins();
                     if (adminPinSavedMsg) {
                         adminPinSavedMsg.classList.remove('hidden');
                         setTimeout(() => adminPinSavedMsg.classList.add('hidden'), 3500);
@@ -6639,6 +6677,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     currentTeacherPin = val;
                     syncSettingToCloud('schoolbib_teacher_pin', val);
                     syncSettingToCloud('schoolbib_pin', val);
+                    updateDisplayedPins();
                     if (teacherPinSavedMsg) {
                         teacherPinSavedMsg.classList.remove('hidden');
                         setTimeout(() => teacherPinSavedMsg.classList.add('hidden'), 3500);

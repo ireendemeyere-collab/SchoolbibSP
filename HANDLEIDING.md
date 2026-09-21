@@ -262,9 +262,9 @@ Open de fiche van het boek in de catalogus en klik op **📘 Dit boek uitlenen**
 <a id="faq-4-wat-zijn-de-toegangscodes"></a>
 ### FAQ 4: Wat zijn de standaard toegangscodes en wie gebruikt welke code?
 Er zijn twee aparte codes:
-- **Leerkrachtcode (Rol 1: Uitleenbalie & snel uitlenen)**: standaard **`donbosco`**. Deze code mag gedeeld worden met collega-leerkrachten en secretariaat.
+- **Leerkrachtcode (Rol 1: Uitleenbalie & snel uitlenen)**: standaard **`donbosco`** (kan door de beheerder op elk moment worden aangepast naar bv. **`Boekenbende`**). De website, snelgids en balie tonen altijd automatisch de actuele ingestelde code.
 - **Beheerderscode (Rol 2: Beheerderspaneel)**: standaard **`beheerder`**. Deze code is strikt geheim voor de twee hoofdbeheerders.
-Beheerders kunnen **beide codes** op elk moment wijzigen via **Beheerder ➔ Instellingen & Sheet**.
+Beheerders kunnen **beide codes** op elk moment wijzigen via **Beheerder ➔ Instellingen & Sheet**. Nieuwe codes worden automatisch gesynchroniseerd via Google Sheets.
 
 ---
 
