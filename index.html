@@ -510,7 +510,7 @@
 
             <form id="deskLoginForm" class="space-y-4">
                 <div>
-                    <input type="password" id="deskPinInput" placeholder="Leerkrachtcode (standaard: donbosco)" 
+                    <input type="password" id="deskPinInput" placeholder="Voer leerkrachtcode in..." 
                            class="w-full text-center tracking-widest text-lg px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" required>
                     <p id="deskPinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1.5 hidden">Onjuiste leerkrachtcode. Probeer opnieuw.</p>
                 </div>
@@ -518,7 +518,7 @@
                     Balie Openen
                 </button>
             </form>
-            <p class="text-xs text-slate-400 mt-4">Voor leerkrachten en secretariaat • Toegangscode: <span class="font-mono font-bold text-slate-600 display-teacher-pin">donbosco</span></p>
+            <p class="text-xs text-slate-400 mt-4">Uitsluitend voor leerkrachten en secretariaat</p>
         </div>
 
         <!-- Uitleenbalie Dashboard -->
@@ -709,7 +709,7 @@
 
             <form id="adminLoginForm" class="space-y-4">
                 <div>
-                    <input type="password" id="adminPinInput" placeholder="Beheerderscode (standaard: beheerder)" 
+                    <input type="password" id="adminPinInput" placeholder="Voer beheerderscode in..." 
                            class="w-full text-center tracking-widest text-lg px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" required>
                     <p id="pinErrorMsg" class="text-xs text-rose-500 font-semibold mt-1.5 hidden">Onjuiste beheerderscode. Probeer opnieuw.</p>
                 </div>
@@ -717,7 +717,7 @@
                     Inloggen als Beheerder
                 </button>
             </form>
-            <p class="text-xs text-slate-400 mt-4">Uitsluitend voor de twee hoofdbeheerders • Toegangscode: <span class="font-mono font-bold text-slate-600 display-admin-pin">beheerder</span></p>
+            <p class="text-xs text-slate-400 mt-4">Uitsluitend voor de twee hoofdbeheerders</p>
         </div>
 
         <!-- Beheerders Dashboard -->
@@ -1301,7 +1301,7 @@
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
                                 Er zijn twee aparte rollen en toegangscodes:<br>
                                 • <strong>Leerkrachtcode (Rol 1: Uitleenbalie & snel uitlenen)</strong>: <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono display-teacher-pin">donbosco</code> (voor alle leerkrachten en secretariaat).<br>
-                                • <strong>Beheerderscode (Rol 2: Beheerderspaneel)</strong>: <code class="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-bold font-mono display-admin-pin">beheerder</code> (enkel voor de twee hoofdbeheerders).<br>
+                                • <strong>Beheerderscode (Rol 2: Beheerderspaneel)</strong>: strikt geheim (enkel voor de twee hoofdbeheerders, in te stellen via tabblad <em>Instellingen & Sheet</em>).<br>
                                 Beheerders kunnen <strong>beide codes</strong> op elk gewenst moment aanpassen via het tabblad <strong>Instellingen & Sheet</strong>. De nieuwe codes worden automatisch centraal opgeslagen in Google Sheets.
                             </p>
                         </details>
@@ -1433,11 +1433,11 @@
             </div>
             <div class="text-center space-y-1">
                 <h3 class="text-base font-extrabold text-slate-900">Leerkracht Verificatie</h3>
-                <p class="text-xs text-slate-500">Voer de leerkrachtcode in om dit boek uit te lenen. (Leerlingen kunnen dit niet van thuis uit.)</p>
+                <p class="text-xs text-slate-500">Voer de leerkrachtcode in om dit boek uit te lenen. (Uitsluitend voor leerkrachten en secretariaat)</p>
             </div>
             <form id="teacherPinAuthForm" class="space-y-3">
                 <div>
-                    <input type="password" id="modalTeacherPinInput" placeholder="Pincode (donbosco)" 
+                    <input type="password" id="modalTeacherPinInput" placeholder="Voer leerkrachtcode in..." 
                            class="w-full text-center text-sm font-bold tracking-widest px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none" required>
                     <p id="modalTeacherPinError" class="text-[11px] font-bold text-rose-500 text-center mt-1 hidden">Pincode onjuist. Probeer opnieuw.</p>
                 </div>
@@ -2453,29 +2453,27 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             randomCatalogSample = shuffled.slice(0, 10);
         }
 
-        // DYNAMISCH BIJHOUDEN EN TONEN VAN TOEGANGSCODES IN DE INTERFACE
+        // DYNAMISCH BIJHOUDEN VAN DE LEERKRACHTCODE IN DE HANDLEIDING/SNELGIDS
         function updateDisplayedPins() {
             const tPin = currentTeacherPin || DEFAULT_TEACHER_PIN;
-            const aPin = currentAdminPin || DEFAULT_ADMIN_PIN;
 
+            // Alleen de leerkrachtcode in de handleiding en snelgids voor collega's bijwerken
             document.querySelectorAll('.display-teacher-pin').forEach(el => {
                 el.textContent = tPin;
             });
-            document.querySelectorAll('.display-admin-pin').forEach(el => {
-                el.textContent = aPin;
-            });
 
+            // Veiligheidsregel: GEEN codes tonen in de invoervelden of placeholders van inlogschermen!
             const deskInput = document.getElementById('deskPinInput');
             if (deskInput) {
-                deskInput.placeholder = `Leerkrachtcode (${tPin})`;
+                deskInput.placeholder = "Voer leerkrachtcode in...";
             }
             const modalInput = document.getElementById('modalTeacherPinInput');
             if (modalInput) {
-                modalInput.placeholder = `Pincode (${tPin})`;
+                modalInput.placeholder = "Voer leerkrachtcode in...";
             }
             const adminInput = document.getElementById('adminPinInput');
             if (adminInput) {
-                adminInput.placeholder = `Beheerderscode (${aPin})`;
+                adminInput.placeholder = "Voer beheerderscode in...";
             }
         }
 
