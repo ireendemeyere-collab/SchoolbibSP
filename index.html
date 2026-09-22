@@ -576,107 +576,112 @@
                 </div>
             </div>
 
-            <!-- Balie Dashboard Inhoud -->
-            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 space-y-6">
-                                    <!-- Mini-Dashboard Statistieken -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="p-4 rounded-2xl bg-brand-50/60 border border-brand-100 flex items-center gap-3.5">
-                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-lg font-black">
-                                📖
-                            </div>
-                            <div>
-                                <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider block">Actief uitgeleend</span>
-                                <span id="statActiveLoans" class="text-lg font-black text-brand-900">0 boeken</span>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center gap-3.5">
-                            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg font-black">
-                                ⚠️
-                            </div>
-                            <div>
-                                <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Te laat</span>
-                                <span id="statOverdueLoans" class="text-lg font-black text-rose-900">0 boeken</span>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3.5">
-                            <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center text-lg font-black">
-                                🏫
-                            </div>
-                            <div>
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Betrokken klassen</span>
-                                <span id="statActiveClasses" class="text-lg font-black text-slate-800">0 klassen</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Balie Dashboard Inhoud met Drie Schermen -->
 
-                    <!-- Snelle Barcodescan / Snelle Invoer balk -->
-                    <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-brand-900 text-white space-y-2.5 shadow-xs">
-                        <div class="flex items-center justify-between">
-                            <label for="barcodeQuickInput" class="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-brand-200">
-                                <svg class="w-4 h-4 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-                                <span>Snelle Barcode / ISBN scan (Uitlenen of Direct Inleveren)</span>
-                            </label>
-                            <span class="text-[10px] text-slate-300 hidden sm:inline">Handscanner klaar: scan een barcode of druk op Enter</span>
-                        </div>
-                        <div class="relative">
-                            <input type="text" id="barcodeQuickInput" placeholder="Scan barcode/ISBN of typ titel... (bijv. 9789047701234 of 'Kruistocht')" 
-                                   class="w-full text-xs sm:text-sm px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-400 transition">
-                        </div>
-                        <!-- Resultaat & Direct actie venstertje -->
-                        <div id="barcodeFeedbackBox" class="hidden p-3 rounded-xl bg-white/10 border border-white/20 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"></div>
-                    </div>
-
-                    <!-- Nieuwe uitlening registreren formulier (Accordion) -->
-                    <details class="group bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 transition" open>
-                        <summary class="font-bold text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
-                            <span class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <span>Nieuwe uitlening handmatig registreren</span>
+            <!-- SCHERM 1: HOOFDSCHERM BALIE MET 2 GROTE KEUZEKNOPPEN -->
+            <div id="deskHomeView" class="space-y-6">
+                <!-- Twee Grote Keuzeknoppen -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                    <!-- Knop 1: INLEVEREN -->
+                    <button type="button" id="btnGoReturnScreen" class="group p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 text-left cursor-pointer flex flex-col justify-between border-2 border-emerald-400/40 relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-36 h-36 bg-white/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+                        <div>
+                            <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-3xl mb-5 shadow-xs group-hover:rotate-[-6deg] transition-transform">
+                                📥
+                            </div>
+                            <span class="inline-block text-[11px] font-black uppercase tracking-widest text-emerald-200 bg-emerald-950/40 px-3 py-1 rounded-full mb-2">
+                                Stap 1: Terugbrengen
                             </span>
-                            <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
-                        </summary>
-                        
-                        <form id="loanForm" class="mt-4 space-y-4">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                                <div class="lg:col-span-1">
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel van het boek <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="loanBookTitle" required placeholder="Typ titel of scan ISBN..." list="loanBooksList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                    <datalist id="loanBooksList"></datalist>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Exemplaar & Locatie <span class="text-rose-500">*</span></label>
-                                    <select id="loanCopySelect" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                        <option value="">-- Kies eerst een titel --</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Uitleendatum (vanaf) <span class="text-rose-500">*</span></label>
-                                    <input type="date" id="loanStartDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum (tot) <span class="text-rose-500">*</span></label>
-                                    <input type="date" id="loanDueDate" required class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
-                                </div>
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Uitlening opslaan</span>
-                                </button>
-                            </div>
-                        </form>
-                    </details>
+                            <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                                Boek Inleveren
+                            </h3>
+                            <p class="text-sm text-emerald-100/90 mt-2 font-medium leading-relaxed">
+                                Een leerling levert een boek in bij de balie. Scan barcode of zoek op titel of naam.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/20 flex items-center justify-between text-sm font-black text-white">
+                            <span>Inleverbalie openen</span>
+                            <span class="w-9 h-9 rounded-xl bg-white text-emerald-800 flex items-center justify-center font-black group-hover:translate-x-1.5 transition-transform">➔</span>
+                        </div>
+                    </button>
 
-                    <!-- Filter & Zoekbalk (Booksource Classroom Klas-weergave) -->
-                    <div class="space-y-3 pt-2">
+                    <!-- Knop 2: UITLENEN -->
+                    <button type="button" id="btnGoLoanScreen" class="group p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-indigo-800 text-white shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 text-left cursor-pointer flex flex-col justify-between border-2 border-brand-400/40 relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-36 h-36 bg-white/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+                        <div>
+                            <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-3xl mb-5 shadow-xs group-hover:rotate-[6deg] transition-transform">
+                                📘
+                            </div>
+                            <span class="inline-block text-[11px] font-black uppercase tracking-widest text-brand-200 bg-brand-950/40 px-3 py-1 rounded-full mb-2">
+                                Stap 2: Meenemen
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                                Boek Uitlenen
+                            </h3>
+                            <p class="text-sm text-brand-100/90 mt-2 font-medium leading-relaxed">
+                                Een leerling kiest een nieuw boek om mee te nemen. Koppel het boek vlot aan een naam en klas.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/20 flex items-center justify-between text-sm font-black text-white">
+                            <span>Uitleenscherm openen</span>
+                            <span class="w-9 h-9 rounded-xl bg-white text-brand-800 flex items-center justify-center font-black group-hover:translate-x-1.5 transition-transform">➔</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Zojuist Afgehandeld (Undo / Ongedaan Maken) Strook -->
+                <div id="deskRecentActionBox" class="hidden p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                    <div class="flex items-center gap-2.5 text-xs">
+                        <span class="text-base">ℹ️</span>
+                        <span id="deskRecentActionText">Geen recente actie.</span>
+                    </div>
+                    <button type="button" id="btnUndoDeskAction" class="shrink-0 px-3 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer">
+                        <span>Ongedaan maken ↩</span>
+                    </button>
+                </div>
+
+                <!-- Mini-Dashboard Statistieken (ONDER DE TWEE KNOPPEN) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="p-4 rounded-2xl bg-brand-50/60 border border-brand-100 flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-lg font-black">
+                            📖
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider block">Actief uitgeleend</span>
+                            <span id="statActiveLoans" class="text-lg font-black text-brand-900">0 boeken</span>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg font-black">
+                            ⚠️
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Te laat</span>
+                            <span id="statOverdueLoans" class="text-lg font-black text-rose-900">0 boeken</span>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center text-lg font-black">
+                            🏫
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Betrokken klassen</span>
+                            <span id="statActiveClasses" class="text-lg font-black text-slate-800">0 klassen</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Volledige Uitleentabel Overzicht -->
+                <div class="bg-white p-6 rounded-3xl shadow-xs border border-slate-200/80 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                            <span>📋</span>
+                            <span>Overzicht van alle lopende uitleningen</span>
+                        </h4>
+                    </div>
+
+                    <!-- Filter & Zoekbalk -->
+                    <div class="space-y-3">
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                             <div class="relative flex-1">
                                 <input type="text" id="loansSearchFilter" placeholder="🔍 Filter uitleningen op leerling, klas of boektitel..." 
@@ -692,7 +697,7 @@
 
                         <!-- Klas-knoppen (Booksource stijl) -->
                         <div class="flex items-center gap-1.5 overflow-x-auto clean-scroll py-1" id="loansClassFilterBar">
-                            <!-- Dynamisch gevuld met bijv: Alle klassen, 1A (3), 2MWb (5), ... -->
+                            <!-- Dynamisch gevuld -->
                         </div>
                     </div>
 
@@ -714,6 +719,138 @@
                             <tbody id="loansTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- SCHERM 2: BOEK INLEVEREN (TERUGBRENGEN) -->
+            <div id="deskReturnView" class="hidden space-y-6 bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80">
+                <!-- Navigatiebalk -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                    <button type="button" class="btnBackToDeskHome shrink-0 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-2 cursor-pointer w-fit">
+                        <span>← Terug naar Balie-overzicht</span>
+                    </button>
+                    <span class="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl flex items-center gap-2 w-fit">
+                        <span class="text-base">📥</span>
+                        <span>Boek Inleveren (Terugbrengen)</span>
+                    </span>
+                </div>
+
+                <!-- Grote Scan & Zoekbalk specifiek voor INLEVEREN -->
+                <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-emerald-800 via-teal-900 to-slate-900 text-white space-y-3 shadow-md border border-emerald-500/30">
+                    <div class="flex items-center justify-between">
+                        <label for="deskReturnSearchInput" class="text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 text-emerald-200">
+                            <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                            <span>Scan barcode of zoek uitgeleend boek</span>
+                        </label>
+                        <span class="text-[11px] text-emerald-200/80 font-semibold hidden sm:inline">Handscanner klaar: scan barcode of typ titel / naam</span>
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="deskReturnSearchInput" placeholder="Scan barcode achterop het boek, of typ titel of naam van leerling..."
+                               class="w-full text-sm sm:text-base font-bold px-5 py-3.5 rounded-2xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-emerald-400 shadow-inner transition">
+                    </div>
+                    <!-- Directe match resultaten -->
+                    <div id="deskReturnSearchResults" class="space-y-2 pt-1"></div>
+                </div>
+
+                <!-- Openstaande Uitleningen Lijst (voor direct visueel aanklikken) -->
+                <div class="space-y-3 pt-2">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-black uppercase text-slate-700 tracking-wider">
+                            Nog in te leveren boeken (<span id="deskReturnOpenCount">0</span>)
+                        </h4>
+                        <span class="text-[11px] text-slate-400">Klik op 'Direct Inleveren' bij de juiste leerling</span>
+                    </div>
+                    <div id="deskReturnActiveList" class="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white max-h-96 overflow-y-auto clean-scroll">
+                        <!-- Dynamisch gevuld met actieve uitleningen -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHERM 3: BOEK UITLENEN (MEENEMEN) -->
+            <div id="deskLoanView" class="hidden space-y-6 bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80">
+                <!-- Navigatiebalk -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                    <button type="button" class="btnBackToDeskHome shrink-0 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-2 cursor-pointer w-fit">
+                        <span>← Terug naar Balie-overzicht</span>
+                    </button>
+                    <span class="text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200 px-3.5 py-1.5 rounded-xl flex items-center gap-2 w-fit">
+                        <span class="text-base">📘</span>
+                        <span>Boek Uitlenen (Meenemen)</span>
+                    </span>
+                </div>
+
+                <!-- Het duidelijke Uitleenformulier -->
+                <form id="loanForm" class="space-y-5">
+                    <div class="p-4 sm:p-5 rounded-2xl bg-brand-50/50 border border-brand-100 space-y-3">
+                        <span class="text-xs font-black uppercase tracking-wider text-brand-800 flex items-center gap-2">
+                            <span>1️⃣</span>
+                            <span>Welk boek wordt uitgeleend?</span>
+                        </span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Titel of ISBN van het boek <span class="text-rose-500">*</span></label>
+                                <input type="text" id="loanBookTitle" required placeholder="Scan ISBN/barcode of typ de boektitel..." list="loanBooksList" 
+                                       class="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                <datalist id="loanBooksList"></datalist>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Exemplaar & Kastlocatie <span class="text-rose-500">*</span></label>
+                                <select id="loanCopySelect" required class="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                    <option value="">-- Kies eerst een boektitel --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="loanBookAvailabilityNotice" class="text-xs hidden"></div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                        <span class="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                            <span>2️⃣</span>
+                            <span>Wie leent het boek?</span>
+                        </span>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Naam Leerling / Leraar <span class="text-rose-500">*</span></label>
+                                <input type="text" id="loanStudent" required placeholder="Bijv. Emma Dupont" 
+                                       class="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
+                                <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" 
+                                       class="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                        <span class="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                            <span>3️⃣</span>
+                            <span>Uitleentermijn</span>
+                        </span>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Uitleendatum (vanaf) <span class="text-rose-500">*</span></label>
+                                <input type="date" id="loanStartDate" required 
+                                       class="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Inleverdatum (tot) <span class="text-rose-500">*</span></label>
+                                <input type="date" id="loanDueDate" required 
+                                       class="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+                        <button type="button" class="btnBackToDeskHome w-full sm:w-auto px-5 py-3 rounded-2xl border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold text-xs transition cursor-pointer">
+                            Annuleren
+                        </button>
+                        <button type="submit" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-extrabold px-6 py-3.5 rounded-2xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Uitlening Bevestigen en Opslaan</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
@@ -5364,6 +5501,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 if (isDeskAuth) {
                     document.getElementById('deskLoginSection')?.classList.add('hidden');
                     document.getElementById('deskDashboardSection')?.classList.remove('hidden');
+                    if (typeof switchDeskSubView === 'function') switchDeskSubView('home');
                     renderLoans();
                 } else {
                     document.getElementById('deskLoginSection')?.classList.remove('hidden');
@@ -5412,6 +5550,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                         pinInput.value = '';
                         document.getElementById('deskLoginSection')?.classList.add('hidden');
                         document.getElementById('deskDashboardSection')?.classList.remove('hidden');
+                        if (typeof switchDeskSubView === 'function') switchDeskSubView('home');
                         renderLoans();
                     } else {
                         if (pinError) pinError.classList.remove('hidden');
@@ -6422,8 +6561,278 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             });
         }
 
+        // GELUIDSFEEDBACK (WEB AUDIO API ZONDER EXTERNE BESTANDEN)
+        function playDeskAudio(type = 'success') {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); // E5
+                    osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16); // G5
+                    gain.gain.setValueAtTime(0.09, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.35);
+                } else if (type === 'undo') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime);
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.09, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.3);
+                }
+            } catch (e) {}
+        }
+
+        // BALIE ONGEDAN MAKEN (UNDO) STATE
+        let lastDeskAction = null;
+
+        function setLastDeskAction(action) {
+            lastDeskAction = action;
+            const box = document.getElementById('deskRecentActionBox');
+            const textEl = document.getElementById('deskRecentActionText');
+            if (!box || !textEl) return;
+
+            if (!action) {
+                box.classList.add('hidden');
+                return;
+            }
+
+            if (action.type === 'return') {
+                textEl.innerHTML = `Boek <strong>"${escapeHtml(action.loan.bookTitle)}"</strong> is zojuist ingeleverd voor <strong>${escapeHtml(action.loan.student)}</strong> (${escapeHtml(action.loan.klas)}).`;
+            } else if (action.type === 'loan') {
+                textEl.innerHTML = `Boek <strong>"${escapeHtml(action.loan.bookTitle)}"</strong> is zojuist uitgeleend aan <strong>${escapeHtml(action.loan.student)}</strong> (${escapeHtml(action.loan.klas)}).`;
+            }
+            box.classList.remove('hidden');
+        }
+
+        function undoLastDeskAction() {
+            if (!lastDeskAction) return;
+            const action = lastDeskAction;
+
+            if (action.type === 'return') {
+                const loan = loans.find(l => String(l.id) === String(action.loan.id));
+                if (loan) {
+                    loan.returned = false;
+                    delete loan.returnDate;
+                    delete loan.condition;
+                    delete loan.conditionNote;
+                    saveLoans();
+                    syncLoanToCloud('save_loan', loan);
+                    renderLoans();
+                    renderDeskReturnActiveList();
+                    playDeskAudio('undo');
+                    showToast(`Inlevering van "${loan.bookTitle}" is ongedaan gemaakt. Het boek staat weer als uitgeleend! ↩`, 'info');
+                }
+            } else if (action.type === 'loan') {
+                const idx = loans.findIndex(l => String(l.id) === String(action.loan.id));
+                if (idx !== -1) {
+                    const removed = loans.splice(idx, 1)[0];
+                    saveLoans();
+                    syncLoanToCloud('delete_loan', { id: action.loan.id });
+                    renderLoans();
+                    renderDeskReturnActiveList();
+                    playDeskAudio('undo');
+                    showToast(`Uitlening van "${removed.bookTitle}" aan ${removed.student} is ongedaan gemaakt! ↩`, 'info');
+                }
+            }
+
+            setLastDeskAction(null);
+        }
+
+        // BALIE SUB-SCHERMEN NAVIGATIE
+        function switchDeskSubView(subView) {
+            const home = document.getElementById('deskHomeView');
+            const returnV = document.getElementById('deskReturnView');
+            const loanV = document.getElementById('deskLoanView');
+
+            if (home) home.classList.add('hidden');
+            if (returnV) returnV.classList.add('hidden');
+            if (loanV) loanV.classList.add('hidden');
+
+            if (subView === 'return') {
+                if (returnV) returnV.classList.remove('hidden');
+                const inp = document.getElementById('deskReturnSearchInput');
+                if (inp) {
+                    inp.value = '';
+                    handleDeskReturnSearch('');
+                    setTimeout(() => inp.focus(), 60);
+                }
+                renderDeskReturnActiveList();
+            } else if (subView === 'loan') {
+                if (loanV) loanV.classList.remove('hidden');
+                const inp = document.getElementById('loanBookTitle');
+                if (inp) {
+                    setTimeout(() => inp.focus(), 60);
+                }
+            } else {
+                if (home) home.classList.remove('hidden');
+            }
+            renderLoans();
+        }
+
+        // LIJST MET ACTIEVE UITLENINGEN IN HET INLEVERSCHERM
+        function renderDeskReturnActiveList() {
+            const listEl = document.getElementById('deskReturnActiveList');
+            const countEl = document.getElementById('deskReturnOpenCount');
+            if (!listEl) return;
+
+            const activeLoans = loans.filter(l => !l.returned);
+            if (countEl) countEl.textContent = activeLoans.length;
+
+            if (activeLoans.length === 0) {
+                listEl.innerHTML = `
+                    <div class="p-6 text-center text-slate-400 text-xs">
+                        🎉 Geen openstaande uitleningen! Alle boeken zijn netjes ingeleverd.
+                    </div>
+                `;
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            listEl.innerHTML = activeLoans.map(loan => {
+                const isOverdue = loan.dueDate && loan.dueDate < today;
+                return `
+                    <div class="p-3.5 hover:bg-slate-50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="space-y-0.5">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <strong class="text-xs text-slate-900 font-extrabold">${escapeHtml(loan.bookTitle)}</strong>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">${escapeHtml(loan.copyLabel || 'Exemplaar')}</span>
+                                ${isOverdue ? '<span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-rose-100 text-rose-700 border border-rose-200">⚠️ Te laat</span>' : ''}
+                            </div>
+                            <div class="text-[11px] text-slate-500">
+                                Geleend door: <strong class="text-slate-800">${escapeHtml(loan.student)}</strong> 
+                                <span class="px-1.5 py-0.2 rounded bg-brand-50 text-brand-700 font-bold ml-1">${escapeHtml(loan.klas)}</span>
+                                <span class="text-slate-400 ml-2">• Inleveren voor: ${loan.dueDate || '-'}</span>
+                            </div>
+                        </div>
+                        <button type="button" onclick="markLoanReturned('${loan.id}')"
+                                class="shrink-0 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs transition shadow-2xs flex items-center gap-1.5 cursor-pointer">
+                            <span>Direct Inleveren ✓</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // FUZZY ZOEKEN IN ACTIEVE UITLENINGEN (VOOR INLEVEREN)
+        function handleDeskReturnSearch(query) {
+            const resultsBox = document.getElementById('deskReturnSearchResults');
+            if (!resultsBox) return;
+
+            query = (query || '').trim();
+            if (!query) {
+                resultsBox.innerHTML = '';
+                resultsBox.classList.add('hidden');
+                return;
+            }
+
+            const cleanDigits = query.replace(/[^0-9X]/gi, '');
+            const lower = query.toLowerCase();
+
+            const matchedLoans = loans.filter(l => {
+                if (l.returned) return false;
+                if (l.student && l.student.toLowerCase().includes(lower)) return true;
+                if (l.klas && l.klas.toLowerCase().trim() === lower) return true;
+                if (l.bookTitle && l.bookTitle.toLowerCase().includes(lower)) return true;
+                if (cleanDigits.length >= 8) {
+                    const book = allBooks.find(b => (b.Titel || '').toLowerCase().trim() === (l.bookTitle || '').toLowerCase().trim());
+                    if (book && book.ISBN && String(book.ISBN).replace(/[^0-9X]/gi, '').includes(cleanDigits)) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            if (matchedLoans.length === 0) {
+                resultsBox.className = 'p-3.5 rounded-2xl bg-white/10 border border-white/20 text-xs text-amber-100 flex items-center gap-2';
+                resultsBox.innerHTML = `
+                    <span>ℹ️ Geen openstaande uitlening gevonden voor <strong>"${escapeHtml(query)}"</strong>. Kijk na of het boek al eerder is ingeleverd of zoek op de achternaam van de leerling.</span>
+                `;
+                resultsBox.classList.remove('hidden');
+                return;
+            }
+
+            resultsBox.className = 'space-y-2 pt-1';
+            resultsBox.innerHTML = matchedLoans.map(l => {
+                return `
+                    <div class="p-4 rounded-2xl bg-white text-slate-900 border-2 border-emerald-400 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-block mb-1">
+                                Uitgeleend boek gevonden
+                            </span>
+                            <h4 class="text-sm font-extrabold text-slate-900">
+                                "${escapeHtml(l.bookTitle)}" <span class="text-xs font-normal text-slate-500">(${escapeHtml(l.copyLabel || 'Exemplaar')})</span>
+                            </h4>
+                            <p class="text-xs text-slate-600 mt-0.5">
+                                Uitgeleend aan: <strong class="text-slate-900">${escapeHtml(l.student)}</strong> 
+                                <span class="font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">${escapeHtml(l.klas)}</span>
+                                <span class="text-slate-400 ml-1">• Uiterste datum: ${l.dueDate || '-'}</span>
+                            </p>
+                        </div>
+                        <button type="button" onclick="markLoanReturned('${l.id}')"
+                                class="shrink-0 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                            <span>✓ Dit boek inleveren</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            resultsBox.classList.remove('hidden');
+        }
+
         function initLoans() {
             updateSchoolClassesDatalist();
+
+            // Knoppen hoofdnavigatie balie
+            document.getElementById('btnGoReturnScreen')?.addEventListener('click', () => switchDeskSubView('return'));
+            document.getElementById('btnGoLoanScreen')?.addEventListener('click', () => switchDeskSubView('loan'));
+            document.querySelectorAll('.btnBackToDeskHome').forEach(btn => {
+                btn.addEventListener('click', () => switchDeskSubView('home'));
+            });
+            document.getElementById('btnUndoDeskAction')?.addEventListener('click', undoLastDeskAction);
+
+            // Inleveren zoek/scan input
+            const returnInput = document.getElementById('deskReturnSearchInput');
+            if (returnInput) {
+                returnInput.addEventListener('input', () => {
+                    handleDeskReturnSearch(returnInput.value);
+                });
+                returnInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const query = returnInput.value.trim().toLowerCase();
+                        if (!query) return;
+                        const cleanDigits = query.replace(/[^0-9X]/gi, '');
+                        const matches = loans.filter(l => {
+                            if (l.returned) return false;
+                            if (l.student && l.student.toLowerCase().includes(query)) return true;
+                            if (l.klas && l.klas.toLowerCase().trim() === query) return true;
+                            if (l.bookTitle && l.bookTitle.toLowerCase().includes(query)) return true;
+                            if (cleanDigits.length >= 8) {
+                                const b = allBooks.find(book => (book.Titel || '').toLowerCase().trim() === (l.bookTitle || '').toLowerCase().trim());
+                                if (b && b.ISBN && String(b.ISBN).replace(/[^0-9X]/gi, '').includes(cleanDigits)) return true;
+                            }
+                            return false;
+                        });
+                        if (matches.length === 1) {
+                            markLoanReturned(matches[0].id);
+                        } else {
+                            handleDeskReturnSearch(returnInput.value);
+                        }
+                    }
+                });
+            }
+
+            // Uitleen formulier logica
             const loanForm = document.getElementById('loanForm');
             const titleInput = document.getElementById('loanBookTitle');
             const copySelect = document.getElementById('loanCopySelect');
@@ -6431,6 +6840,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             const dueDateInput = document.getElementById('loanDueDate');
             const searchInput = document.getElementById('loansSearchFilter');
             const refreshBtn = document.getElementById('btnRefreshLoans');
+            const availNotice = document.getElementById('loanBookAvailabilityNotice');
 
             const todayStr = new Date().toISOString().split('T')[0];
             if (startDateInput) {
@@ -6444,8 +6854,31 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             }
 
             if (titleInput) {
-                titleInput.addEventListener('input', () => updateCopySelectOptions(titleInput.value.trim()));
-                titleInput.addEventListener('change', () => updateCopySelectOptions(titleInput.value.trim()));
+                const handleTitleChange = () => {
+                    const title = titleInput.value.trim();
+                    updateCopySelectOptions(title);
+                    if (availNotice) {
+                        if (!title) {
+                            availNotice.classList.add('hidden');
+                        } else {
+                            const foundBook = allBooks.find(b => b.Titel.toLowerCase().trim() === title.toLowerCase().trim());
+                            if (foundBook) {
+                                const avail = getBookAvailability(foundBook);
+                                if (avail.available > 0) {
+                                    availNotice.className = 'text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl block';
+                                    availNotice.innerHTML = `🟢 <strong>${avail.available} van ${avail.total} exemplaren beschikbaar</strong> (Kastlocatie: ${escapeHtml(foundBook.Locatie || 'Bib')})`;
+                                } else {
+                                    availNotice.className = 'text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 p-2.5 rounded-xl block';
+                                    availNotice.innerHTML = `🔴 <strong>Alle exemplaren van dit boek zijn momenteel uitgeleend!</strong>`;
+                                }
+                            } else {
+                                availNotice.classList.add('hidden');
+                            }
+                        }
+                    }
+                };
+                titleInput.addEventListener('input', handleTitleChange);
+                titleInput.addEventListener('change', handleTitleChange);
             }
 
             if (loanForm) {
@@ -6488,9 +6921,16 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     loanForm.reset();
                     if (startDateInput) startDateInput.value = todayStr;
                     if (dueDateInput) dueDateInput.value = calculateDefaultDueDate(todayStr);
-                    if (copySelect) copySelect.innerHTML = '<option value="">-- Kies eerst een titel --</option>';
+                    if (copySelect) copySelect.innerHTML = '<option value="">-- Kies eerst een boektitel --</option>';
+                    if (availNotice) availNotice.classList.add('hidden');
+
+                    renderLoans();
+                    renderDeskReturnActiveList();
+                    playDeskAudio('success');
+                    setLastDeskAction({ type: 'loan', loan: { ...newLoan } });
 
                     showToast(`"${newLoan.bookTitle}" is succesvol uitgeleend aan ${newLoan.student} (${newLoan.klas})! ✓`, 'success');
+                    switchDeskSubView('home');
                 });
             }
 
@@ -6510,129 +6950,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 });
             }
 
-            initBarcodeScanner();
             renderLoans();
-        }
-
-        function initBarcodeScanner() {
-            const input = document.getElementById('barcodeQuickInput');
-            const feedbackBox = document.getElementById('barcodeFeedbackBox');
-            if (!input) return;
-
-            function handleScan(code) {
-                code = (code || '').trim();
-                if (!code) {
-                    if (feedbackBox) feedbackBox.classList.add('hidden');
-                    return;
-                }
-
-                const cleanDigits = code.replace(/[^0-9X]/gi, '');
-                const lowerCode = code.toLowerCase();
-
-                // STAP 1: Zoek of dit boek momenteel is uitgeleend -> Bied direct inleveren aan!
-                const activeLoan = loans.find(l => {
-                    if (l.returned) return false;
-                    const titleMatch = l.bookTitle && l.bookTitle.toLowerCase().trim() === lowerCode;
-                    const bookObj = allBooks.find(b => (b.Titel || '').toLowerCase().trim() === (l.bookTitle || '').toLowerCase().trim());
-                    const isbnMatch = cleanDigits && bookObj && bookObj.ISBN && String(bookObj.ISBN).replace(/[^0-9X]/gi, '') === cleanDigits;
-                    return titleMatch || isbnMatch;
-                });
-
-                if (activeLoan) {
-                    if (feedbackBox) {
-                        feedbackBox.className = 'p-3.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-white';
-                        feedbackBox.innerHTML = `
-                            <div>
-                                <span class="font-extrabold text-amber-200">Uitgeleend boek gevonden:</span>
-                                <strong class="text-white ml-1">"${escapeHtml(activeLoan.bookTitle)}"</strong> (${escapeHtml(activeLoan.copyLabel || 'Exemplaar')})
-                                <span class="block text-[11px] text-amber-100">Geleend door: <strong>${escapeHtml(activeLoan.student)}</strong> (${escapeHtml(activeLoan.klas)}) • Te laat sinds/inleveren voor: ${activeLoan.dueDate || '-'}</span>
-                            </div>
-                            <button type="button" id="btnQuickReturnScanned" 
-                                    class="shrink-0 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-3.5 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                                <span>Direct Inleveren ✓</span>
-                            </button>
-                        `;
-                        feedbackBox.classList.remove('hidden');
-
-                        document.getElementById('btnQuickReturnScanned')?.addEventListener('click', () => {
-                            markLoanReturned(activeLoan.id);
-                            feedbackBox.classList.add('hidden');
-                            input.value = '';
-                        });
-                    }
-                    return;
-                }
-
-                // STAP 2: Zoek in de catalogus op ISBN of Titel
-                const foundBook = allBooks.find(b => {
-                    if (cleanDigits && b.ISBN && String(b.ISBN).replace(/[^0-9X]/gi, '') === cleanDigits) return true;
-                    if (b.Titel && b.Titel.toLowerCase().trim().includes(lowerCode)) return true;
-                    return false;
-                });
-
-                if (foundBook) {
-                    const avail = getBookAvailability(foundBook);
-                    if (avail.available > 0) {
-                        if (feedbackBox) {
-                            feedbackBox.className = 'p-3.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-white';
-                            feedbackBox.innerHTML = `
-                                <div>
-                                    <span class="font-extrabold text-emerald-200">Boek gevonden in catalogus:</span>
-                                    <strong class="text-white ml-1">"${escapeHtml(foundBook.Titel)}"</strong> (${escapeHtml(foundBook.Auteur)})
-                                    <span class="block text-[11px] text-emerald-100">${avail.available} van ${avail.total} exemplaren beschikbaar (${escapeHtml(foundBook.Locatie || 'Bib')})</span>
-                                </div>
-                                <button type="button" id="btnQuickLoanScanned" class="shrink-0 bg-brand-500 hover:bg-brand-600 text-white font-extrabold px-3.5 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                                    <span>Dit boek uitlenen 📘</span>
-                                </button>
-                            `;
-                            feedbackBox.classList.remove('hidden');
-
-                            document.getElementById('btnQuickLoanScanned')?.addEventListener('click', () => {
-                                openQuickLoanModal(foundBook);
-                                feedbackBox.classList.add('hidden');
-                                input.value = '';
-                            });
-                        }
-
-                        // Pre-fill manual form as well
-                        const titleInput = document.getElementById('loanBookTitle');
-                        if (titleInput) {
-                            titleInput.value = foundBook.Titel;
-                            updateCopySelectOptions(foundBook.Titel);
-                            document.getElementById('loanStudent')?.focus();
-                        }
-                    } else {
-                        if (feedbackBox) {
-                            feedbackBox.className = 'p-3.5 rounded-xl bg-rose-500/20 border border-rose-400/40 text-xs text-rose-200';
-                            feedbackBox.innerHTML = `<span>Alle exemplaren van <strong>"${escapeHtml(foundBook.Titel)}"</strong> zijn momenteel al uitgeleend!</span>`;
-                            feedbackBox.classList.remove('hidden');
-                        }
-                    }
-                } else {
-                    if (feedbackBox) {
-                        feedbackBox.className = 'p-3.5 rounded-xl bg-white/10 border border-white/20 text-xs text-slate-300';
-                        feedbackBox.innerHTML = `<span>Geen boek gevonden voor code of titel "${escapeHtml(code)}".</span>`;
-                        feedbackBox.classList.remove('hidden');
-                    }
-                }
-            }
-
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleScan(input.value);
-                }
-            });
-
-            input.addEventListener('input', () => {
-                const val = input.value.trim();
-                const clean = val.replace(/[^0-9X]/gi, '');
-                if (clean.length === 10 || clean.length === 13) {
-                    handleScan(val);
-                } else if (!val && feedbackBox) {
-                    feedbackBox.classList.add('hidden');
-                }
-            });
+            renderDeskReturnActiveList();
         }
 
         function updateCopySelectOptions(title) {
@@ -6997,6 +7316,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
         function confirmReturnLoan(id, condition, note) {
             const loan = loans.find(l => String(l.id) === String(id));
             if (loan) {
+                const prevSnapshot = JSON.parse(JSON.stringify(loan));
                 loan.returned = true;
                 loan.returnDate = new Date().toISOString().split('T')[0];
                 loan.condition = condition;
@@ -7009,8 +7329,19 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     note: note
                 });
                 renderLoans();
+                if (typeof renderDeskReturnActiveList === 'function') renderDeskReturnActiveList();
+                if (typeof playDeskAudio === 'function') playDeskAudio('success');
+                if (typeof setLastDeskAction === 'function') setLastDeskAction({ type: 'return', loan: prevSnapshot });
+
                 const statusSuffix = condition !== 'Goed' ? ` (Staat: ${condition})` : '';
                 showToast(`"${loan.bookTitle}" is succesvol ingeleverd door ${loan.student}${statusSuffix} ✓`, 'success');
+
+                const retInput = document.getElementById('deskReturnSearchInput');
+                if (retInput) {
+                    retInput.value = '';
+                    if (typeof handleDeskReturnSearch === 'function') handleDeskReturnSearch('');
+                    retInput.focus();
+                }
             }
         };
 
