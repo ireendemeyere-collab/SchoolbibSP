@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="nl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactieve Handleiding & FAQ — Boekenbende Sint-Pieters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9f8',
+                            100: '#dcf2ef',
+                            200: '#b8e5df',
+                            300: '#86d1c7',
+                            400: '#48999d',
+                            500: '#1ea896',
+                            600: '#107075',
+                            700: '#0d5b5f',
+                            800: '#0a494c',
+                            900: '#073235',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+            .print-break { page-break-after: always; }
+        }
+        .clean-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .clean-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .clean-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 font-sans min-h-screen antialiased selection:bg-brand-100 selection:text-brand-900">
+
+    <!-- STICKY TOPBAR -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200/80 shadow-xs no-print">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+            
+            <div class="flex items-center justify-between w-full md:w-auto gap-3">
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <img src="logo.jpg" alt="Logo" class="w-10 h-10 rounded-xl object-cover border border-brand-200" onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?w=120&auto=format&fit=crop&q=80'">
+                    <div>
+                        <h1 class="text-base font-extrabold text-slate-900 leading-tight group-hover:text-brand-600 transition">Boekenbende Sint-Pieters</h1>
+                        <p class="text-[11px] font-semibold text-brand-600">Interactieve Handleiding & Veelgestelde Vragen</p>
+                    </div>
+                </a>
+
+                <a href="index.html" class="md:hidden text-xs font-bold text-brand-700 bg-brand-50 px-3 py-1.5 rounded-xl border border-brand-200">
+                    Naar Bib ↗
+                </a>
+            </div>
+
+            <!-- Zoekbalk & Actieknoppen -->
+            <div class="flex items-center gap-2.5 w-full md:w-auto justify-end">
+                <div class="relative flex-1 md:w-64">
+                    <input type="text" id="manualSearchInput" placeholder="Zoek in handleiding..." 
+                           class="w-full text-xs pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+
+                <button onclick="window.print()" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5 shrink-0" title="Afdrukken of opslaan als PDF">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <span>Printen</span>
+                </button>
+
+                <a href="index.html" class="hidden md:flex px-3.5 py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white transition items-center gap-1.5 shadow-xs shrink-0">
+                    <span>Naar Schoolbib Catalogus</span>
+                    <span>↗</span>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- WEERGAVE SCHAKELAAR (TABS) -->
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-1 pb-2 flex items-center gap-2 overflow-x-auto clean-scroll border-t border-slate-100">
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1 shrink-0">Weergave:</span>
+            <button id="btnViewFull" class="view-tab-btn active px-3 py-1 rounded-lg text-xs font-extrabold transition bg-brand-600 text-white shadow-2xs">
+                📖 Volledige Handleiding & FAQ
+            </button>
+            <button id="btnViewQuick" class="view-tab-btn px-3 py-1 rounded-lg text-xs font-bold transition text-slate-600 hover:bg-slate-100">
+                ⚡ Beknopte Baliegids (Leerkrachten & Secretariaat)
+            </button>
+        </div>
+    </header>
+
+    <!-- INHOUDSOPGAVE QUICK BAR -->
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 py-4 no-print">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+            <span class="text-xs font-extrabold uppercase text-slate-800 tracking-wider block mb-2.5">Inhoudsopgave (klik om direct naar het onderdeel te gaan):</span>
+            <div class="flex flex-wrap gap-1.5 text-xs font-bold" id="tocPills">
+                <a href="#rollen" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">1. De Twee Rollen</a>
+                <a href="#zoeken" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">2. Zoeken & Filters</a>
+                <a href="#boekfiche" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">3. Boekfiche & Recensies</a>
+                <a href="#uitlenen" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">4. Snel Uitlenen</a>
+                <a href="#balie" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">5. Uitleenbalie & Scannen</a>
+                <a href="#beheer" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 transition">6. Beheerderspaneel</a>
+                <a href="#faq" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 transition">❓ Veelgestelde Vragen (FAQ)</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOOFDINHOUD -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 pb-16 space-y-8">
+
+        <!-- INTRO BANNER -->
+        <div class="bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white rounded-3xl p-6 sm:p-8 shadow-sm">
+            <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs font-black uppercase tracking-wider mb-2">Schoolbibliotheek Don Bosco Gent Campus Sint-Pieters</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold leading-tight">Handleiding Boekenbende Sint-Pieters 📚</h2>
+            <p class="text-sm text-brand-50 mt-2 max-w-3xl leading-relaxed">
+                Welkom bij de officiële handleiding voor collega-leerkrachten (in het bijzonder Nederlands en moderne talen), graadcoördinatoren, secretariaatsmedewerkers en bib-beheerders. Deze gids is interactief: klik op de vragen of hoofdstukken om direct de stap-voor-stap instructies te lezen.
+            </p>
+        </div>
+
+        <!-- SECTIE 1: DE TWEE ROLLEN & TOEGANGSCODES -->
+        <section id="rollen" class="manual-section bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center font-black text-sm">1</span>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Over het platform & De Twee Rollen</h3>
+                </div>
+                <a href="#tocPills" class="text-xs font-bold text-slate-400 hover:text-brand-600 no-print">↑ Naar boven</a>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Om het dagelijks gebruik vlot te houden en tegelijkertijd de instellingen van de schoolbib te beschermen, werkt <strong>Boekenbende Sint-Pieters</strong> met twee aparte rollen met elk een eigen toegangscode:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <!-- Rol 1 Kaart -->
+                <div class="p-5 rounded-2xl bg-brand-50/70 border border-brand-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black uppercase text-brand-800 tracking-wider">Rol 1</span>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-brand-200 text-brand-900">Uitleenbalie & Klas</span>
+                    </div>
+                    <h4 class="text-base font-extrabold text-slate-900">Leerkrachten & Secretariaat</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Voor alle leerkrachten en balie-medewerkers. Geeft toegang tot:
+                    </p>
+                    <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                        <li>Boeken uitlenen aan leerlingen in de klas</li>
+                        <li>Boeken innemen via de barcodescanner</li>
+                        <li>Na een leesuur in 1 klik een hele klas inleveren</li>
+                        <li>De staat van een ingeleverd boek registreren</li>
+                    </ul>
+                    <div class="pt-2 border-t border-brand-200 flex items-center justify-between text-xs">
+                        <span class="font-bold text-brand-900">Standaardcode:</span>
+                        <code class="font-mono font-extrabold text-sm bg-white px-2 py-0.5 rounded border border-brand-300 text-brand-800">donbosco</code>
+                    </div>
+                </div>
+
+                <!-- Rol 2 Kaart -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black uppercase text-slate-700 tracking-wider">Rol 2</span>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800">Hoofdbeheer</span>
+                    </div>
+                    <h4 class="text-base font-extrabold text-slate-900">Bib-verantwoordelijken</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Exclusief voor de aangestelde bib-coördinatoren. Bevat alle functies van Rol 1 plus:
+                    </p>
+                    <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                        <li>Thema in de kijker & campagnes instellen</li>
+                        <li>Nieuwe boeken handmatig toevoegen</li>
+                        <li><strong>Beide wachtwoorden wijzigen</strong></li>
+                        <li>Google Spreadsheet koppeling & klassenlijst beheren</li>
+                    </ul>
+                    <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                        <span class="font-bold text-slate-700">Standaardcode:</span>
+                        <code class="font-mono font-extrabold text-sm bg-white px-2 py-0.5 rounded border border-slate-300 text-slate-900">beheerder</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center gap-2">
+                <span class="text-base">🔒</span>
+                <span><strong>Voor leerlingen:</strong> Leerlingen hebben geen code en kunnen van thuis uit géén boeken op andermans naam registreren. Zij kunnen enkel zoeken, achterflappen lezen en favorieten opslaan.</span>
+            </div>
+        </section>
+
+        <!-- SECTIE 2: BOEKEN ZOEKEN & ONTDEKKEN -->
+        <section id="zoeken" class="manual-section bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center font-black text-sm">2</span>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Boeken zoeken & Kiezen met leerlingen</h3>
+                </div>
+                <a href="#tocPills" class="text-xs font-bold text-slate-400 hover:text-brand-600 no-print">↑ Naar boven</a>
+            </div>
+
+            <div class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p>Ga in de klas of bib naar de hoofdpagina (<strong>📚 Catalogus Bib</strong>):</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                        <span class="font-extrabold text-slate-900 text-xs block">🔍 1. Vrij zoeken in de zoekbalk</span>
+                        <p class="text-xs text-slate-500">Typ de titel (bv. <em>Kruistocht in spijkerbroek</em>), auteur (bv. <em>Dirk Bracke</em>) of een onderwerp (bv. <em>oorlog, vriendschap, spanning</em>). De resultaten verschijnen onmiddellijk.</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                        <span class="font-extrabold text-slate-900 text-xs block">🎯 2. Slimme filterknoppen</span>
+                        <p class="text-xs text-slate-500">Kies gericht op <strong>Leeftijd/Graad</strong> (1ste, 2de of 3de graad), <strong>Taal</strong> (Nederlands, Frans, Engels, Duits), of vink <strong>'Nu in de bib aanwezig'</strong> aan om enkel fysiek aanwezige boeken te tonen.</p>
+                    </div>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                    <span class="font-extrabold text-slate-900 text-xs block">⭐ 3. Snelkeuzes bovenaan</span>
+                    <p class="text-xs text-slate-500">Gebruik de knoppen <strong>Bekroonde boeken</strong> (bekroond door Leesjury, Boekenleeuw...), <strong>Top beoordeeld</strong> (hoogste lezersscores van onze school), of <strong>Nieuw in de bib</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTIE 3: BOEKFICHE & RECENSIES -->
+        <section id="boekfiche" class="manual-section bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center font-black text-sm">3</span>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Boekfiche: Details, Recensies en Beschikbaarheid</h3>
+                </div>
+                <a href="#tocPills" class="text-xs font-bold text-slate-400 hover:text-brand-600 no-print">↑ Naar boven</a>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Wanneer een leerling op een boekkaartje klikt, opent het rustige detailvenster met:
+            </p>
+
+            <ul class="text-xs sm:text-sm text-slate-700 space-y-2 list-disc list-inside">
+                <li><strong>Cover & Locatie</strong>: Je ziet direct in welke kast of afdeling het boek staat (bv. <em>Nederlandstalige fictie, Boektoppers, Poëzie, Engelstalige fictie</em>).</li>
+                <li><strong>Exemplaren in de bib</strong>: Elk exemplaar (bv. <em>Exemplaar 1, Exemplaar 2</em>) toont realtime of het aanwezig is of wie het momenteel ontleent.</li>
+                <li><strong>Knop 'Meer informatie' (Boekenzoeker / Hebban / Goodreads)</strong>: Linkt rechtstreeks door naar de achterflap en lezersrecensies van leeftijdsgenoten.</li>
+                <li><strong>Sterren & Favorieten</strong>: Leerlingen kunnen sterren geven (1 tot 5) en het boek bewaren in hun persoonlijke favorietenlijstje.</li>
+            </ul>
+        </section>
+
+        <!-- SECTIE 4: SNEL UITLENEN IN DE KLAS -->
+        <section id="uitlenen" class="manual-section bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center font-black text-sm">4</span>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Snel Uitlenen vanuit de Boekfiche (in de klas)</h3>
+                </div>
+                <a href="#tocPills" class="text-xs font-bold text-slate-400 hover:text-brand-600 no-print">↑ Naar boven</a>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Wil een leerling tijdens een leesuur meteen een boek beginnen lezen? Dat kan rechtstreeks in 4 snelle stappen:
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-1">
+                <div class="p-3.5 rounded-2xl bg-brand-50/70 border border-brand-100 space-y-1 text-xs">
+                    <span class="font-extrabold text-brand-900 block">Stap 1: Boek openen</span>
+                    <p class="text-slate-600">Klik in de catalogus op het boek dat de leerling wil meenemen.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-brand-50/70 border border-brand-100 space-y-1 text-xs">
+                    <span class="font-extrabold text-brand-900 block">Stap 2: Knop Uitlenen</span>
+                    <p class="text-slate-600">Klik linksonder op <strong>📘 Dit boek uitlenen</strong>.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-brand-50/70 border border-brand-100 space-y-1 text-xs">
+                    <span class="font-extrabold text-brand-900 block">Stap 3: Leerkrachtcode</span>
+                    <p class="text-slate-600">Voer de code in (<code class="font-mono font-bold">donbosco</code>). *(Slechts 1x per sessie nodig!)*</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-brand-50/70 border border-brand-100 space-y-1 text-xs">
+                    <span class="font-extrabold text-brand-900 block">Stap 4: Bevestigen</span>
+                    <p class="text-slate-600">Vul naam en klas in en klik op <strong>Uitlening Bevestigen</strong>. Klaar!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTIE 5: DE UITLEENBALIE & INLEVEREN -->
+        <section id="balie" class="manual-section bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center font-black text-sm">5</span>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">De Uitleenbalie (Rol 1: Leerkrachten & Secretariaat)</h3>
+                </div>
+                <a href="#tocPills" class="text-xs font-bold text-slate-400 hover:text-brand-600 no-print">↑ Naar boven</a>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                De <strong>🔄 Uitleenbalie</strong> is het centrale werkblad voor baliewachten en leerkrachten. Klik in het bovenmenu op <strong>🔄 Uitleenbalie</strong> en meld aan met de leerkrachtcode (<code class="font-mono font-bold">donbosco</code>).
+            </p>
+
+            <div class="space-y-3 pt-2">
+                <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-brand-900 text-white space-y-1.5 shadow-xs">
+                    <span class="text-xs font-extrabold text-brand-200 uppercase tracking-wider block">⚡ Bliksemsnel met de handscanner (Aanbevolen)</span>
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        Zorg dat de cursor in het donkere scanvak staat. Scan de barcode achterop het boek. Het systeem toont direct de lener en één grote knop: <strong>Direct Inleveren ✓</strong>. Eén klik en het boek staat weer in de kast!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                        <span class="font-extrabold text-slate-900 block text-xs">🏫 Klasinlevering in één klik na een leesuur:</span>
+                        <p class="text-slate-600 leading-relaxed">
+                            Brengt een leerkracht na een leesuur een hele bak boeken terug? Klik simpelweg op de klasbadge (bv. <strong>2MWb</strong>) en klik op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                        <span class="font-extrabold text-slate-900 block text-xs">🩹 Staat van het boek registreren:</span>
+                        <p class="text-slate-600 leading-relaxed">
+                            Is een boek beschadigd of bevuild? Bij het inleveren kan je de staat selecteren (<em>Beschadigd, Waterschade, Pagina los</em>). Dit wordt direct vastgelegd in de historiek en Google Sheets.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTIE 6: BEHEERDERSPANEEL -->
+        <section id="beheer" class="manual-section bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center font-black text-sm">6</span>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Het Beheerderspaneel (Rol 2: Hoofdbeheerders)</h3>
+                </div>
+                <a href="#tocPills" class="text-xs font-bold text-slate-400 hover:text-brand-600 no-print">↑ Naar boven</a>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Exclusief voor de twee aangestelde bib-verantwoordelijken. Toegankelijk via <strong>⚙️ Beheerder</strong> met de geheime beheerderscode (standaard: <code class="font-mono font-bold">beheerder</code>):
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                    <span class="font-extrabold text-slate-900 block">🌟 Thema in de kijker</span>
+                    <p class="text-slate-600">Stel de seizoenscampagnes in (bv. <em>Halloween, Poëzieweek</em>), kies een kleursfeer en selecteer tot 5 boeken per graad.</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                    <span class="font-extrabold text-slate-900 block">📖 Boek toevoegen</span>
+                    <p class="text-slate-600">Voer handmatig nieuwe boeken of extra exemplaren in. Direct gesynchroniseerd met Google Sheets.</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                    <span class="font-extrabold text-slate-900 block">⚙️ Wachtwoordbeheer</span>
+                    <p class="text-slate-600">Pas hier op elk moment de <strong>Leerkrachtcode</strong> én de <strong>Beheerderscode</strong> aan. Beide worden veilig opgeslagen.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTIE 7: VEELGESTELDE VRAGEN (FAQ) -->
+        <section id="faq" class="manual-section bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black text-sm">❓</span>
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Veelgestelde Vragen (FAQ)</h3>
+                        <p class="text-xs text-slate-500">Klik op een vraag om het antwoord direct te openen</p>
+                    </div>
+                </div>
+                <a href="#tocPills" class="text-xs font-bold text-slate-400 hover:text-brand-600 no-print">↑ Naar boven</a>
+            </div>
+
+            <!-- FAQ ACCORDEONS -->
+            <div class="space-y-3" id="faqAccordionList">
+                
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition" open>
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>🎯 FAQ 1: Hoe help ik een leerling snel een boek vinden op niveau?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Gebruik de filter <strong>Leeftijd</strong> (Eerste graad = 12-14j, Tweede graad = 14-16j, Derde graad = 16+j) en combineer met een <strong>Thema</strong> (bv. spanning, sport, vriendschap). Bekijk ook de snelkeuzeknop <strong>Bekroonde boeken</strong> voor gegarandeerde kwaliteitsboeken bekroond door o.a. De Leesjury of de Boekenleeuw.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#zoeken" class="underline hover:text-brand-900">Lees meer in: 2. Boeken zoeken & filters</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>🟢 FAQ 2: Waar zie ik of een boek aanwezig is of uitgeleend?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>In de filterbalk kan je <strong>'Nu in de bib aanwezig'</strong> aanvinken. Klik je op een boek, dan zie je onder <em>'Exemplaren in de schoolbib'</em> per exemplaar exact of het aanwezig is op het rek of uitgeleend is (inclusief naam van de leerling, klas en inleverdatum).</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#boekfiche" class="underline hover:text-brand-900">Lees meer in: 3. Boekfiche & Details</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>📘 FAQ 3: Hoe leen ik een boek snel uit aan een leerling?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de leerkrachtcode in (<code class="font-mono font-bold text-slate-800">donbosco</code>), vul de naam en klas in en bevestig. De uitleentermijn wordt automatisch berekend.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#uitlenen" class="underline hover:text-brand-900">Lees meer in: 4. Snel Uitlenen vanuit de Boekfiche</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>🔑 FAQ 4: Wat zijn de toegangscodes voor leerkrachten en beheerders?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Er zijn twee aparte codes: de <strong>Leerkrachtcode</strong> (<code class="font-mono font-bold text-slate-800">donbosco</code>) voor balie en uitlenen, en de <strong>Beheerderscode</strong> (<code class="font-mono font-bold text-slate-800">beheerder</code>) voor het hoofdbeheer. Beheerders kunnen beide codes aanpassen via <em>Beheerder ➔ Instellingen</em>.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#rollen" class="underline hover:text-brand-900">Lees meer in: 1. De Twee Rollen</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>📥 FAQ 5: Hoe neem ik een boek weer in wanneer een leerling het terugbrengt?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Klik op <strong>🔄 Uitleenbalie</strong> en log in met de leerkrachtcode. Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (of zoek de leerling in de tabel) en klik op <strong>Direct Inleveren</strong>.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#balie" class="underline hover:text-brand-900">Lees meer in: 5. De Uitleenbalie & Scannen</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>🏫 FAQ 6: Kan ik na een leesuur een hele klas in één klik inleveren?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Ja! Open de <strong>🔄 Uitleenbalie</strong>, klik op de filterbadge van jouw klas (bv. <em>2MWb</em>), en klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>. Alle openstaande boeken van die klas worden in één klik afgesloten!</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#balie" class="underline hover:text-brand-900">Lees meer in: 5. Klasinleveringen</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>➕ FAQ 7: Hoe voeg ik een nieuw boek of extra exemplaar toe?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Ga in het Beheerderspaneel naar het tabblad <strong>📖 Boek Toevoegen</strong>. Vul de velden in en klik op opslaan. Als het boek al bestaat in de bib, toont het systeem automatisch een duplicaatmelding met de knop <strong>'Extra exemplaar toevoegen'</strong>.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#beheer" class="underline hover:text-brand-900">Lees meer in: 6. Het Beheerderspaneel</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>🌐 FAQ 8: Waarom linkt het ene boek naar Boekenzoeker en het andere naar Hebban?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Het platform kiest slim de beste bron: staat het boek in de officiële Vlaamse <strong>Boekenzoeker.be</strong> databank, dan linkt het naar Boekenzoeker. Voor andere boeken linkt het naar <strong>Hebban.nl</strong> (voor uitgebreide achterflappen) of naar <strong>Goodreads</strong> voor anderstalige boeken.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#boekfiche" class="underline hover:text-brand-900">Lees meer in: 3. Boekfiche & Recensies</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>📱 FAQ 9: Kunnen leerlingen van thuis uit boeken ontlenen?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>Nee. Voor elke uitlening is de leerkrachtcode vereist. Zo voorkomen we foute of ongeoorloofde registraties. Leerlingen kunnen van thuis uit wel de catalogus verkennen, recensies lezen, locaties checken en hun favorieten opslaan.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#rollen" class="underline hover:text-brand-900">Lees meer in: 1. De Twee Rollen</a></p>
+                    </div>
+                </details>
+
+                <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                        <span>⏳ FAQ 10: Wat is de standaard uitleentermijn en hoe verleng ik een boek?</span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
+                        <p>De standaardtermijn is <strong>1 maand</strong>. In de Uitleenbalie kan je bij elk actief uitgeleend boek op de knop <strong>Verlengen (+2 weken)</strong> klikken om de inleverdatum met 14 dagen op te schuiven.</p>
+                        <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#balie" class="underline hover:text-brand-900">Lees meer in: 5. De Uitleenbalie</a></p>
+                    </div>
+                </details>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <img src="logo.jpg" alt="Logo" class="w-6 h-6 rounded-lg object-cover">
+                <span class="font-bold text-slate-700">&copy; 2026 Boekenbende Don Bosco Gent • Campus Sint-Pieters</span>
+            </div>
+            <p>Schoolbibliotheek Catalogus & Uitleenplatform</p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIEVE JAVASCRIPT VOOR ZOEKEN EN WEERGAVE -->
+    <script>
+        // Snelzoekbalk in handleiding
+        const searchInput = document.getElementById('manualSearchInput');
+        const sections = document.querySelectorAll('.manual-section');
+        const detailsList = document.querySelectorAll('#faqAccordionList details');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!query) {
+                sections.forEach(s => s.classList.remove('hidden'));
+                detailsList.forEach(d => d.classList.remove('hidden'));
+                return;
+            }
+
+            // Filter secties
+            sections.forEach(s => {
+                const text = s.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    s.classList.remove('hidden');
+                } else {
+                    s.classList.add('hidden');
+                }
+            });
+
+            // Open en filter FAQ accordeons die matchen
+            detailsList.forEach(d => {
+                const text = d.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    d.classList.remove('hidden');
+                    d.open = true;
+                } else {
+                    d.classList.add('hidden');
+                }
+            });
+        });
+
+        // Schakelaar tussen Volledig en Beknopt
+        const btnFull = document.getElementById('btnViewFull');
+        const btnQuick = document.getElementById('btnViewQuick');
+
+        btnQuick.addEventListener('click', () => {
+            btnQuick.className = "view-tab-btn active px-3 py-1 rounded-lg text-xs font-extrabold transition bg-brand-600 text-white shadow-2xs";
+            btnFull.className = "view-tab-btn px-3 py-1 rounded-lg text-xs font-bold transition text-slate-600 hover:bg-slate-100";
+            
+            // Toon enkel rollen, uitlenen, balie en faq
+            document.getElementById('rollen').classList.remove('hidden');
+            document.getElementById('zoeken').classList.add('hidden');
+            document.getElementById('boekfiche').classList.add('hidden');
+            document.getElementById('uitlenen').classList.remove('hidden');
+            document.getElementById('balie').classList.remove('hidden');
+            document.getElementById('beheer').classList.add('hidden');
+            document.getElementById('faq').classList.remove('hidden');
+        });
+
+        btnFull.addEventListener('click', () => {
+            btnFull.className = "view-tab-btn active px-3 py-1 rounded-lg text-xs font-extrabold transition bg-brand-600 text-white shadow-2xs";
+            btnQuick.className = "view-tab-btn px-3 py-1 rounded-lg text-xs font-bold transition text-slate-600 hover:bg-slate-100";
+            
+            sections.forEach(s => s.classList.remove('hidden'));
+        });
+    </script>
+</body>
+</html>
