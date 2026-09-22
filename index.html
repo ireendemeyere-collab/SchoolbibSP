@@ -107,6 +107,23 @@
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(4px);
         }
+
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+            #printDocumentArea, #printDocumentArea * {
+                visibility: visible !important;
+            }
+            #printDocumentArea {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                background: white !important;
+                padding: 15px !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#f7faf9] text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-100 selection:text-brand-900">
@@ -743,19 +760,22 @@
                     </div>
                 </div>
 
-                <!-- Sub-tabs (Thema, Boek toevoegen, Instellingen, FAQ) -->
+                <!-- Sub-tabs (Thema, Boek toevoegen, Rapporten, Instellingen, FAQ) -->
                 <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl">
                     <button id="tabBtnFeatured" class="admin-subtab active-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white text-brand-700 shadow-xs">
-                        🌟 Thema in de Kijker
+                        Thema in de Kijker
                     </button>
                     <button id="tabBtnAddBook" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
-                        📖 Boek Toevoegen
+                        Boek Toevoegen
+                    </button>
+                    <button id="tabBtnReports" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Rapporten & Statistieken
                     </button>
                     <button id="tabBtnSettings" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
-                        ⚙️ Instellingen & Sheet
+                        Instellingen & Sheet
                     </button>
-                    <button id="tabBtnHelp" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-amber-900 hover:text-amber-950 hover:bg-amber-50">
-                        ❓ Hulp & FAQ
+                    <button id="tabBtnHelp" class="admin-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Hulp & FAQ
                     </button>
                 </div>
 
@@ -1085,6 +1105,283 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- SUB-TAB: RAPPORTEN & STATISTIEKEN (TEXT-ONLY, GEEN ICOONTJES) -->
+            <div id="subtabReports" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-slate-200/80 hidden space-y-8">
+                <!-- Header & Periodekiezer -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                    <div>
+                        <span class="text-xs font-bold text-brand-600 uppercase tracking-wider block mb-1">Beheer & Data-inzicht</span>
+                        <h3 class="text-xl font-extrabold text-slate-900">Rapporten & Statistieken</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Volledige analyse van uitleningen, slapende boeken, openstaande inleveringen en collectiebeheer.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5">
+                            <label for="reportPeriodFilter" class="text-xs font-bold text-slate-600 whitespace-nowrap">Periode:</label>
+                            <select id="reportPeriodFilter" class="text-xs font-semibold bg-transparent text-slate-800 focus:outline-none cursor-pointer">
+                                <option value="all" selected>Volledige historiek (Alles)</option>
+                                <option value="schoolyear">Dit schooljaar (vanaf 1 september)</option>
+                                <option value="trimester">Dit trimester / semester</option>
+                                <option value="month">Laatste 30 dagen</option>
+                            </select>
+                        </div>
+                        <button type="button" id="btnExportFullCsv" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-900 text-white hover:bg-slate-800 shadow-xs cursor-pointer">
+                            Exporteer alle gegevens (CSV)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Samenvattingskaarten / KPI's -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Totaal Uitleningen</span>
+                        <div class="text-2xl sm:text-3xl font-black text-slate-900" id="kpiTotalLoans">0</div>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Binnen geselecteerde periode</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Momenteel Uitgeleend</span>
+                        <div class="text-2xl sm:text-3xl font-black text-brand-700" id="kpiActiveLoans">0</div>
+                        <p class="text-[11px] font-semibold text-rose-600 mt-0.5" id="kpiOverdueSubtext">0 te laat</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Slapende Boeken</span>
+                        <div class="text-2xl sm:text-3xl font-black text-slate-900" id="kpiSleepingBooks">0</div>
+                        <p class="text-[11px] text-slate-500 mt-0.5" id="kpiSleepingPercent">0% van collectie</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Gemiddelde Waardering</span>
+                        <div class="text-2xl sm:text-3xl font-black text-amber-800" id="kpiAvgRating">-</div>
+                        <p class="text-[11px] text-slate-500 mt-0.5" id="kpiRatingCount">0 beoordelingen</p>
+                    </div>
+                </div>
+
+                <!-- Sub-navigatieknoppen tussen de 6 rapporten -->
+                <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl">
+                    <button type="button" id="reportNavPopular" class="report-nav-btn active-report-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-white text-brand-700 shadow-xs">
+                        Populaire boeken
+                    </button>
+                    <button type="button" id="reportNavSleeping" class="report-nav-btn px-3 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Slapende boeken
+                    </button>
+                    <button type="button" id="reportNavActive" class="report-nav-btn px-3 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Openstaande boeken
+                    </button>
+                    <button type="button" id="reportNavCondition" class="report-nav-btn px-3 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Staat van boeken
+                    </button>
+                    <button type="button" id="reportNavRatings" class="report-nav-btn px-3 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Hoogst gewaardeerd
+                    </button>
+                    <button type="button" id="reportNavClasses" class="report-nav-btn px-3 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Leesactiviteit per klas
+                    </button>
+                </div>
+
+                <!-- RAPPORT 1: POPULAIRE BOEKEN -->
+                <div id="reportSectionPopular" class="report-section space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <h4 class="text-sm font-extrabold text-slate-900">1. Populaire boeken</h4>
+                            <p class="text-xs text-slate-500">Meest gelezen titels gerangschikt op aantal uitleningen in de gekozen periode.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="popularSearchInput" placeholder="Zoek op titel of auteur..." class="text-xs px-3 py-1.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <button type="button" id="btnExportPopularCsv" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition shrink-0 cursor-pointer">
+                                Download CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Top 5 grafische progress bars -->
+                    <div id="popularTopBars" class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200"></div>
+
+                    <!-- Tabel Populaire Boeken -->
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Rang</th>
+                                    <th class="px-4 py-3">Boektitel</th>
+                                    <th class="px-4 py-3">Auteur</th>
+                                    <th class="px-4 py-3">Locatie</th>
+                                    <th class="px-4 py-3">Graad</th>
+                                    <th class="px-4 py-3 text-right">Aantal Uitleningen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="popularTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- RAPPORT 2: SLAPENDE BOEKEN -->
+                <div id="reportSectionSleeping" class="report-section hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <h4 class="text-sm font-extrabold text-slate-900">2. Slapende boeken</h4>
+                            <p class="text-xs text-slate-500">Boeken uit de schoolcollectie die in de geselecteerde periode niet werden ontleend.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="sleepingLocationFilter" class="text-xs px-3 py-1.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="all">Alle locaties</option>
+                            </select>
+                            <input type="text" id="sleepingSearchInput" placeholder="Filter titel/auteur..." class="text-xs px-3 py-1.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <button type="button" id="btnExportSleepingCsv" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition shrink-0 cursor-pointer">
+                                Download CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="sleepingSummaryText" class="p-3 bg-brand-50/60 border border-brand-100 rounded-xl text-xs text-brand-900 font-semibold"></div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200 max-h-96 overflow-y-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="sticky top-0 bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 shadow-2xs">
+                                <tr>
+                                    <th class="px-4 py-3">Boektitel</th>
+                                    <th class="px-4 py-3">Auteur</th>
+                                    <th class="px-4 py-3">Kastlocatie</th>
+                                    <th class="px-4 py-3">Graad</th>
+                                    <th class="px-4 py-3 text-right">Actie</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sleepingTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- RAPPORT 3: OPENSTAANDE BOEKEN -->
+                <div id="reportSectionActive" class="report-section hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <h4 class="text-sm font-extrabold text-slate-900">3. Openstaande boeken</h4>
+                            <p class="text-xs text-slate-500">Momenteel uitgeleende boeken met status (op tijd of te laat ingeleverd).</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="activeLoansClassFilter" class="text-xs px-3 py-1.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="all">Alle klassen</option>
+                            </select>
+                            <button type="button" id="btnPrintActiveLoans" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition shrink-0 cursor-pointer">
+                                Print klassenlijst
+                            </button>
+                            <button type="button" id="btnExportActiveLoansCsv" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition shrink-0 cursor-pointer">
+                                Download CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Leerling</th>
+                                    <th class="px-4 py-3">Klas</th>
+                                    <th class="px-4 py-3">Boektitel</th>
+                                    <th class="px-4 py-3">Exemplaar</th>
+                                    <th class="px-4 py-3">Uitleendatum</th>
+                                    <th class="px-4 py-3">Uiterste inleverdatum</th>
+                                    <th class="px-4 py-3 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activeLoansReportTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- RAPPORT 4: STAAT VAN BOEKEN -->
+                <div id="reportSectionCondition" class="report-section hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <h4 class="text-sm font-extrabold text-slate-900">4. Staat van de boeken</h4>
+                            <p class="text-xs text-slate-500">Overzicht van de staat van boeken bij inlevering en geregistreerde schadeopmerkingen.</p>
+                        </div>
+                        <button type="button" id="btnExportConditionCsv" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition shrink-0 cursor-pointer">
+                            Download CSV
+                        </button>
+                    </div>
+
+                    <!-- Conditie percentage kaarten -->
+                    <div id="conditionStatCards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
+
+                    <!-- Tabel met recente conditie registraties -->
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Datum</th>
+                                    <th class="px-4 py-3">Boektitel</th>
+                                    <th class="px-4 py-3">Exemplaar</th>
+                                    <th class="px-4 py-3">Leerling</th>
+                                    <th class="px-4 py-3">Klas</th>
+                                    <th class="px-4 py-3">Staat</th>
+                                    <th class="px-4 py-3">Toelichting</th>
+                                </tr>
+                            </thead>
+                            <tbody id="conditionTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- RAPPORT 5: HOOGST GEWAARDEERDE BOEKEN -->
+                <div id="reportSectionRatings" class="report-section hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <h4 class="text-sm font-extrabold text-slate-900">5. Hoogst gewaardeerde boeken</h4>
+                            <p class="text-xs text-slate-500">Titels met de hoogste gemiddelde lezersscore door leerlingen.</p>
+                        </div>
+                        <button type="button" id="btnExportRatingsCsv" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition shrink-0 cursor-pointer">
+                            Download CSV
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Rang</th>
+                                    <th class="px-4 py-3">Boektitel</th>
+                                    <th class="px-4 py-3">Auteur</th>
+                                    <th class="px-4 py-3">Locatie</th>
+                                    <th class="px-4 py-3">Gemiddelde Score</th>
+                                    <th class="px-4 py-3 text-right">Aantal Stemmen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ratingsReportTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- RAPPORT 6: LEESACTIVITEIT PER KLAS -->
+                <div id="reportSectionClasses" class="report-section hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <h4 class="text-sm font-extrabold text-slate-900">6. Leesactiviteit per klas</h4>
+                            <p class="text-xs text-slate-500">Aantal ontleningen en unieke lezers gegroepeerd per klas in de gekozen periode.</p>
+                        </div>
+                        <button type="button" id="btnExportClassesCsv" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition shrink-0 cursor-pointer">
+                            Download CSV
+                        </button>
+                    </div>
+
+                    <!-- Erepodium Zonder Icoontjes -->
+                    <div id="classesPodium" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+
+                    <!-- Tabel Klasactiviteit -->
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Rang</th>
+                                    <th class="px-4 py-3">Klas</th>
+                                    <th class="px-4 py-3">Totaal Aantal Uitleningen</th>
+                                    <th class="px-4 py-3">Verschillende Titels</th>
+                                    <th class="px-4 py-3 text-right">Unieke Lezers</th>
+                                </tr>
+                            </thead>
+                            <tbody id="classesReportTableBody" class="divide-y divide-slate-200 bg-white"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -1601,6 +1898,29 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </dialog>
+
+    <!-- MODAL: PRINTKLARE KLASSENLIJST OPENSTAANDE BOEKEN (ZONDER ICOONTJES) -->
+    <dialog id="printActiveLoansModal" class="rounded-3xl p-0 shadow-2xl backdrop:bg-slate-900/60 max-w-2xl w-full overflow-hidden border border-slate-200">
+        <div class="bg-white p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900">Printbare Klassenlijst Openstaande Boeken</h3>
+                    <p class="text-xs text-slate-500">Overzicht voor klastitularis of leerkracht Nederlands</p>
+                </div>
+                <button type="button" id="btnClosePrintModal" class="text-slate-400 hover:text-slate-600 font-bold text-lg p-1 cursor-pointer">✕</button>
+            </div>
+
+            <!-- Afdrukbaar documentgedeelte -->
+            <div id="printDocumentArea" class="border border-slate-200 rounded-2xl p-6 bg-slate-50 text-slate-900 text-xs space-y-4 max-h-[60vh] overflow-y-auto"></div>
+
+            <div class="pt-2 flex justify-end gap-2 border-t border-slate-100">
+                <button type="button" id="btnCancelPrintModal" class="py-2 px-4 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold text-xs transition cursor-pointer">Sluiten</button>
+                <button type="button" id="btnExecutePrint" class="py-2 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition shadow-xs cursor-pointer">
+                    Afdrukken / Opslaan als PDF
+                </button>
+            </div>
         </div>
     </dialog>
 
@@ -2561,6 +2881,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             initAddBook();
             initLoans();
             initSettings();
+            initReports();
             initFeaturedTheme();
             initModalEvents();
             initQuickFilters();
@@ -5145,11 +5466,12 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             const tabs = [
                 { btn: document.getElementById('tabBtnFeatured'), el: document.getElementById('subtabFeatured') },
                 { btn: document.getElementById('tabBtnAddBook'), el: document.getElementById('subtabAddBook') },
+                { btn: document.getElementById('tabBtnReports'), el: document.getElementById('subtabReports'), onSelect: () => renderAllReports() },
                 { btn: document.getElementById('tabBtnSettings'), el: document.getElementById('subtabSettings') },
                 { btn: document.getElementById('tabBtnHelp'), el: document.getElementById('subtabHelp') }
             ];
 
-            tabs.forEach(({ btn, el }) => {
+            tabs.forEach(({ btn, el, onSelect }) => {
                 if (!btn || !el) return;
                 btn.addEventListener('click', () => {
                     tabs.forEach(t => {
@@ -5158,6 +5480,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     });
                     el.classList.remove('hidden');
                     btn.className = 'admin-subtab active-subtab px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white text-brand-700 shadow-xs';
+                    if (typeof onSelect === 'function') onSelect();
                 });
             });
         }
@@ -6838,6 +7161,879 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 });
             }
         }
+
+        // ==========================================
+        // 13. RAPPORTEN & STATISTIEKEN (ZONDER ICOONTJES)
+        // ==========================================
+
+        function initReports() {
+            const periodSelect = document.getElementById('reportPeriodFilter');
+            if (periodSelect) {
+                periodSelect.addEventListener('change', () => renderAllReports());
+            }
+
+            const exportFullBtn = document.getElementById('btnExportFullCsv');
+            if (exportFullBtn) {
+                exportFullBtn.addEventListener('click', exportFullLoansCsv);
+            }
+
+            // Sub-navigatieknoppen binnen het rapporten-tabblad
+            const navItems = [
+                { btn: document.getElementById('reportNavPopular'), sec: document.getElementById('reportSectionPopular') },
+                { btn: document.getElementById('reportNavSleeping'), sec: document.getElementById('reportSectionSleeping') },
+                { btn: document.getElementById('reportNavActive'), sec: document.getElementById('reportSectionActive') },
+                { btn: document.getElementById('reportNavCondition'), sec: document.getElementById('reportSectionCondition') },
+                { btn: document.getElementById('reportNavRatings'), sec: document.getElementById('reportSectionRatings') },
+                { btn: document.getElementById('reportNavClasses'), sec: document.getElementById('reportSectionClasses') }
+            ];
+
+            navItems.forEach(({ btn, sec }) => {
+                if (!btn || !sec) return;
+                btn.addEventListener('click', () => {
+                    navItems.forEach(n => {
+                        if (n.sec) n.sec.classList.add('hidden');
+                        if (n.btn) n.btn.className = 'report-nav-btn px-3 py-1.5 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900';
+                    });
+                    sec.classList.remove('hidden');
+                    btn.className = 'report-nav-btn active-report-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-white text-brand-700 shadow-xs';
+                });
+            });
+
+            // Event listeners voor individuele rapporten en exports
+            const popularSearch = document.getElementById('popularSearchInput');
+            if (popularSearch) {
+                popularSearch.addEventListener('input', renderPopularReport);
+            }
+            const exportPopularBtn = document.getElementById('btnExportPopularCsv');
+            if (exportPopularBtn) {
+                exportPopularBtn.addEventListener('click', exportPopularCsv);
+            }
+
+            const sleepingLoc = document.getElementById('sleepingLocationFilter');
+            if (sleepingLoc) {
+                sleepingLoc.addEventListener('change', renderSleepingReport);
+            }
+            const sleepingSearch = document.getElementById('sleepingSearchInput');
+            if (sleepingSearch) {
+                sleepingSearch.addEventListener('input', renderSleepingReport);
+            }
+            const exportSleepingBtn = document.getElementById('btnExportSleepingCsv');
+            if (exportSleepingBtn) {
+                exportSleepingBtn.addEventListener('click', exportSleepingCsv);
+            }
+            const sleepingTbody = document.getElementById('sleepingTableBody');
+            if (sleepingTbody) {
+                sleepingTbody.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.btn-view-sleeping');
+                    if (btn && btn.dataset.title) {
+                        openBookModalByTitle(btn.dataset.title);
+                    }
+                });
+            }
+
+            const activeClass = document.getElementById('activeLoansClassFilter');
+            if (activeClass) {
+                activeClass.addEventListener('change', renderActiveLoansReport);
+            }
+            const printActiveBtn = document.getElementById('btnPrintActiveLoans');
+            if (printActiveBtn) {
+                printActiveBtn.addEventListener('click', openPrintActiveLoansModal);
+            }
+            const exportActiveBtn = document.getElementById('btnExportActiveLoansCsv');
+            if (exportActiveBtn) {
+                exportActiveBtn.addEventListener('click', exportActiveLoansCsv);
+            }
+
+            const exportCondBtn = document.getElementById('btnExportConditionCsv');
+            if (exportCondBtn) {
+                exportCondBtn.addEventListener('click', exportConditionCsv);
+            }
+
+            const exportRatingsBtn = document.getElementById('btnExportRatingsCsv');
+            if (exportRatingsBtn) {
+                exportRatingsBtn.addEventListener('click', exportRatingsCsv);
+            }
+
+            const exportClassesBtn = document.getElementById('btnExportClassesCsv');
+            if (exportClassesBtn) {
+                exportClassesBtn.addEventListener('click', exportClassesCsv);
+            }
+
+            // Print modal handlers
+            const closePrintBtn = document.getElementById('btnClosePrintModal');
+            const cancelPrintBtn = document.getElementById('btnCancelPrintModal');
+            const printModal = document.getElementById('printActiveLoansModal');
+            const execPrintBtn = document.getElementById('btnExecutePrint');
+
+            if (closePrintBtn && printModal) {
+                closePrintBtn.addEventListener('click', () => printModal.close());
+            }
+            if (cancelPrintBtn && printModal) {
+                cancelPrintBtn.addEventListener('click', () => printModal.close());
+            }
+            if (execPrintBtn) {
+                execPrintBtn.addEventListener('click', () => {
+                    window.print();
+                });
+            }
+        }
+
+        function isLoanInReportPeriod(dateStr, period) {
+            if (!dateStr || period === 'all') return true;
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return true;
+            const now = new Date();
+
+            if (period === 'month') {
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(now.getDate() - 30);
+                return d >= thirtyDaysAgo;
+            }
+
+            if (period === 'schoolyear') {
+                const curYear = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+                const schoolYearStart = new Date(curYear, 8, 1);
+                return d >= schoolYearStart;
+            }
+
+            if (period === 'trimester') {
+                const curMonth = now.getMonth();
+                const curYear = now.getFullYear();
+                let trimStart;
+                if (curMonth >= 8 && curMonth <= 11) {
+                    trimStart = new Date(curYear, 8, 1);
+                } else if (curMonth >= 0 && curMonth <= 3) {
+                    trimStart = new Date(curYear, 0, 1);
+                } else {
+                    trimStart = new Date(curYear, 4, 1);
+                }
+                return d >= trimStart;
+            }
+
+            return true;
+        }
+
+        function getFilteredReportLoans() {
+            const period = document.getElementById('reportPeriodFilter')?.value || 'all';
+            return loans.filter(l => isLoanInReportPeriod(l.loanDate || l.createdAt, period));
+        }
+
+        function downloadCsv(filename, headers, rows) {
+            const escapeCsvCell = (val) => {
+                if (val === null || val === undefined) return '""';
+                const s = String(val).replace(/"/g, '""');
+                return `"${s}"`;
+            };
+
+            const headerLine = headers.map(escapeCsvCell).join(';');
+            const rowLines = rows.map(r => r.map(escapeCsvCell).join(';'));
+            const csvContent = '\uFEFF' + [headerLine, ...rowLines].join('\r\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function getReportDateStamp() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function renderPopularReport() {
+            const periodLoans = getFilteredReportLoans();
+            const q = (document.getElementById('popularSearchInput')?.value || '').toLowerCase().trim();
+
+            const counts = {};
+            periodLoans.forEach(l => {
+                const t = (l.bookTitle || '').trim();
+                if (!t) return;
+                counts[t] = (counts[t] || 0) + 1;
+            });
+
+            let list = Object.keys(counts).map(t => {
+                const b = allBooks.find(item => (item.Titel || '').toLowerCase().trim() === t.toLowerCase());
+                return {
+                    title: t,
+                    count: counts[t],
+                    author: b ? b.Auteur : '-',
+                    locatie: b ? b.Locatie : '-',
+                    graad: b ? b.Graad : '-'
+                };
+            }).sort((a, b) => b.count - a.count);
+
+            if (q) {
+                list = list.filter(item => item.title.toLowerCase().includes(q) || item.author.toLowerCase().includes(q));
+            }
+
+            const topBarsContainer = document.getElementById('popularTopBars');
+            if (topBarsContainer) {
+                const top5 = list.slice(0, 5);
+                const maxCount = top5[0]?.count || 1;
+                if (top5.length === 0) {
+                    topBarsContainer.innerHTML = '<p class="text-xs text-slate-500 italic">Geen uitleningen gevonden in deze periode.</p>';
+                } else {
+                    topBarsContainer.innerHTML = `
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Top 5 meest ontleend</span>
+                        <div class="space-y-2.5">
+                            ${top5.map((item, idx) => `
+                                <div>
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="font-bold text-slate-900 truncate">
+                                            <span class="text-brand-700 font-extrabold mr-1">#${idx + 1}</span> 
+                                            ${escapeHtml(item.title)} 
+                                            <span class="text-slate-500 font-normal">(${escapeHtml(item.author)})</span>
+                                        </span>
+                                        <span class="font-extrabold text-brand-700 shrink-0 ml-2">${item.count}x uitgeleend</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                                        <div class="bg-brand-600 h-2 rounded-full transition-all duration-300" style="width: ${(item.count / maxCount) * 100}%"></div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+            }
+
+            const tbody = document.getElementById('popularTableBody');
+            if (tbody) {
+                if (list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-slate-400 text-xs">Geen gegevens gevonden.</td></tr>';
+                } else {
+                    tbody.innerHTML = list.map((item, idx) => `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-4 py-2.5 font-extrabold text-brand-700">#${idx + 1}</td>
+                            <td class="px-4 py-2.5 font-bold text-slate-900">${escapeHtml(item.title)}</td>
+                            <td class="px-4 py-2.5 text-slate-600">${escapeHtml(item.author)}</td>
+                            <td class="px-4 py-2.5 text-slate-500">${escapeHtml(item.locatie)}</td>
+                            <td class="px-4 py-2.5 text-slate-500">${escapeHtml(item.graad)}</td>
+                            <td class="px-4 py-2.5 text-right font-extrabold text-slate-900">${item.count}</td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+
+        function exportPopularCsv() {
+            const dateStr = getReportDateStamp();
+            const periodLoans = getFilteredReportLoans();
+            const counts = {};
+            periodLoans.forEach(l => {
+                const t = (l.bookTitle || '').trim();
+                if (t) counts[t] = (counts[t] || 0) + 1;
+            });
+            const list = Object.keys(counts).map(t => {
+                const b = allBooks.find(item => (item.Titel || '').toLowerCase().trim() === t.toLowerCase());
+                return {
+                    title: t,
+                    count: counts[t],
+                    author: b ? b.Auteur : '-',
+                    locatie: b ? b.Locatie : '-',
+                    graad: b ? b.Graad : '-'
+                };
+            }).sort((a, b) => b.count - a.count);
+
+            const headers = ['Rang', 'Boektitel', 'Auteur', 'Locatie', 'Graad', 'Aantal uitleningen'];
+            const rows = list.map((item, idx) => [idx + 1, item.title, item.author, item.locatie, item.graad, item.count]);
+            downloadCsv(`schoolbib_populaire_boeken_${dateStr}.csv`, headers, rows);
+        }
+
+        function renderSleepingReport() {
+            const periodLoans = getFilteredReportLoans();
+            const borrowedTitles = new Set(periodLoans.map(l => (l.bookTitle || '').toLowerCase().trim()).filter(Boolean));
+
+            const selectedLoc = document.getElementById('sleepingLocationFilter')?.value || 'all';
+            const q = (document.getElementById('sleepingSearchInput')?.value || '').toLowerCase().trim();
+
+            const locSelect = document.getElementById('sleepingLocationFilter');
+            if (locSelect && locSelect.options.length <= 1) {
+                const locs = new Set();
+                allBooks.forEach(b => {
+                    const loc = (b.Locatie || '').trim();
+                    if (loc) locs.add(loc);
+                });
+                Array.from(locs).sort().forEach(loc => {
+                    const opt = document.createElement('option');
+                    opt.value = loc;
+                    opt.textContent = loc;
+                    locSelect.appendChild(opt);
+                });
+            }
+
+            let sleepingBooks = allBooks.filter(b => {
+                const t = (b.Titel || '').toLowerCase().trim();
+                return !borrowedTitles.has(t);
+            });
+
+            const totalSleeping = sleepingBooks.length;
+            const pct = allBooks.length > 0 ? Math.round((totalSleeping / allBooks.length) * 100) : 0;
+
+            const summaryEl = document.getElementById('sleepingSummaryText');
+            if (summaryEl) {
+                summaryEl.textContent = `${totalSleeping} van de ${allBooks.length} boeken (${pct}%) zijn in deze periode niet ontleend.`;
+            }
+
+            if (selectedLoc !== 'all') {
+                sleepingBooks = sleepingBooks.filter(b => (b.Locatie || '').trim() === selectedLoc);
+            }
+
+            if (q) {
+                sleepingBooks = sleepingBooks.filter(b => 
+                    (b.Titel || '').toLowerCase().includes(q) || 
+                    (b.Auteur || '').toLowerCase().includes(q)
+                );
+            }
+
+            const tbody = document.getElementById('sleepingTableBody');
+            if (tbody) {
+                if (sleepingBooks.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-6 text-center text-slate-400 text-xs">Geen slapende boeken gevonden voor deze filters.</td></tr>';
+                } else {
+                    tbody.innerHTML = sleepingBooks.map(b => `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-4 py-2.5 font-bold text-slate-900">${escapeHtml(b.Titel)}</td>
+                            <td class="px-4 py-2.5 text-slate-600">${escapeHtml(b.Auteur)}</td>
+                            <td class="px-4 py-2.5 text-slate-500">${escapeHtml(b.Locatie || '-')}</td>
+                            <td class="px-4 py-2.5 text-slate-500">${escapeHtml(b.Graad || '-')}</td>
+                            <td class="px-4 py-2.5 text-right">
+                                <button type="button" data-title="${escapeHtml(b.Titel)}" class="btn-view-sleeping text-xs text-brand-700 hover:underline font-bold">
+                                    Bekijk
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+
+        function openBookModalByTitle(title) {
+            const b = allBooks.find(item => (item.Titel || '').toLowerCase().trim() === title.toLowerCase().trim());
+            if (b && typeof openBookModal === 'function') {
+                openBookModal(b);
+            }
+        }
+
+        function exportSleepingCsv() {
+            const dateStr = getReportDateStamp();
+            const periodLoans = getFilteredReportLoans();
+            const borrowedTitles = new Set(periodLoans.map(l => (l.bookTitle || '').toLowerCase().trim()).filter(Boolean));
+            const selectedLoc = document.getElementById('sleepingLocationFilter')?.value || 'all';
+
+            let sleepingBooks = allBooks.filter(b => !borrowedTitles.has((b.Titel || '').toLowerCase().trim()));
+            if (selectedLoc !== 'all') {
+                sleepingBooks = sleepingBooks.filter(b => (b.Locatie || '').trim() === selectedLoc);
+            }
+
+            const headers = ['Boektitel', 'Auteur', 'Locatie', 'Graad', 'ISBN'];
+            const rows = sleepingBooks.map(b => [b.Titel || '', b.Auteur || '', b.Locatie || '', b.Graad || '', b.ISBN || '']);
+            downloadCsv(`schoolbib_slapende_boeken_${dateStr}.csv`, headers, rows);
+        }
+
+        function renderActiveLoansReport() {
+            const activeLoans = loans.filter(l => !l.returned);
+            const classFilter = document.getElementById('activeLoansClassFilter')?.value || 'all';
+
+            const classSelect = document.getElementById('activeLoansClassFilter');
+            if (classSelect && classSelect.options.length <= 1) {
+                const classes = new Set();
+                activeLoans.forEach(l => {
+                    const c = (l.klas || '').trim();
+                    if (c) classes.add(c);
+                });
+                Array.from(classes).sort().forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c;
+                    opt.textContent = c;
+                    classSelect.appendChild(opt);
+                });
+            }
+
+            let filtered = activeLoans;
+            if (classFilter !== 'all') {
+                filtered = filtered.filter(l => (l.klas || '').trim() === classFilter);
+            }
+
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            filtered.sort((a, b) => {
+                const aOver = a.dueDate && a.dueDate < todayStr ? 1 : 0;
+                const bOver = b.dueDate && b.dueDate < todayStr ? 1 : 0;
+                if (bOver !== aOver) return bOver - aOver;
+                return (a.dueDate || '').localeCompare(b.dueDate || '');
+            });
+
+            const tbody = document.getElementById('activeLoansReportTableBody');
+            if (tbody) {
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-400 text-xs">Geen openstaande boeken gevonden.</td></tr>';
+                } else {
+                    tbody.innerHTML = filtered.map(l => {
+                        const isOverdue = l.dueDate && l.dueDate < todayStr;
+                        let overdueDays = 0;
+                        if (isOverdue) {
+                            const diff = Math.floor((new Date(todayStr) - new Date(l.dueDate)) / (1000 * 60 * 60 * 24));
+                            overdueDays = diff > 0 ? diff : 1;
+                        }
+
+                        const statusBadge = isOverdue
+                            ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">${overdueDays} d te laat</span>`
+                            : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Op tijd</span>`;
+
+                        return `
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="px-4 py-2.5 font-bold text-slate-900">${escapeHtml(l.student)}</td>
+                                <td class="px-4 py-2.5 font-semibold text-slate-700">${escapeHtml(l.klas)}</td>
+                                <td class="px-4 py-2.5 text-slate-800">${escapeHtml(l.bookTitle)}</td>
+                                <td class="px-4 py-2.5 text-slate-500">${escapeHtml(l.copyLabel || 'Exemplaar 1')} (${escapeHtml(l.copyLoc || 'Bib')})</td>
+                                <td class="px-4 py-2.5 text-slate-600">${l.loanDate || '-'}</td>
+                                <td class="px-4 py-2.5 ${isOverdue ? 'font-bold text-rose-600' : 'text-slate-600'}">${l.dueDate || '-'}</td>
+                                <td class="px-4 py-2.5 text-right">${statusBadge}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        function openPrintActiveLoansModal() {
+            const modal = document.getElementById('printActiveLoansModal');
+            const area = document.getElementById('printDocumentArea');
+            if (!modal || !area) return;
+
+            const activeLoans = loans.filter(l => !l.returned);
+            const classFilter = document.getElementById('activeLoansClassFilter')?.value || 'all';
+
+            let filtered = activeLoans;
+            if (classFilter !== 'all') {
+                filtered = filtered.filter(l => (l.klas || '').trim() === classFilter);
+            }
+
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            // Groepeer per klas
+            const byClass = {};
+            filtered.forEach(l => {
+                const c = (l.klas || 'Onbekende klas').trim();
+                if (!byClass[c]) byClass[c] = [];
+                byClass[c].push(l);
+            });
+
+            const sortedClasses = Object.keys(byClass).sort();
+
+            area.innerHTML = `
+                <div class="border-b-2 border-slate-900 pb-3 mb-4">
+                    <h2 class="text-base font-black uppercase tracking-wider text-slate-900">Schoolbib - Overzicht Openstaande Boeken</h2>
+                    <p class="text-xs text-slate-600">Datum: ${todayStr} | Klasfilter: ${classFilter === 'all' ? 'Alle klassen' : classFilter} | Totaal openstaand: ${filtered.length}</p>
+                </div>
+                ${sortedClasses.length === 0 ? '<p class="text-xs text-slate-500 italic">Geen openstaande boeken.</p>' : ''}
+                ${sortedClasses.map(c => `
+                    <div class="mb-6 page-break-inside-avoid">
+                        <h3 class="text-sm font-black text-slate-900 bg-slate-200 px-3 py-1 rounded mb-2">Klas: ${escapeHtml(c)}</h3>
+                        <table class="w-full text-left text-[11px] border border-slate-300">
+                            <thead class="bg-slate-100 border-b border-slate-300">
+                                <tr>
+                                    <th class="p-1.5 border-r border-slate-300">Leerling</th>
+                                    <th class="p-1.5 border-r border-slate-300">Boektitel</th>
+                                    <th class="p-1.5 border-r border-slate-300">Exemplaar</th>
+                                    <th class="p-1.5 border-r border-slate-300">Inleverdatum</th>
+                                    <th class="p-1.5 border-r border-slate-300">Status</th>
+                                    <th class="p-1.5">Handtekening / Notitie</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                ${byClass[c].map(l => {
+                                    const isOver = l.dueDate && l.dueDate < todayStr;
+                                    return `
+                                        <tr>
+                                            <td class="p-1.5 font-bold border-r border-slate-300">${escapeHtml(l.student)}</td>
+                                            <td class="p-1.5 border-r border-slate-300">${escapeHtml(l.bookTitle)}</td>
+                                            <td class="p-1.5 border-r border-slate-300">${escapeHtml(l.copyLabel || 'Exemplaar 1')}</td>
+                                            <td class="p-1.5 border-r border-slate-300">${l.dueDate || '-'}</td>
+                                            <td class="p-1.5 border-r border-slate-300 ${isOver ? 'font-bold text-rose-700' : ''}">${isOver ? 'Te laat' : 'Op tijd'}</td>
+                                            <td class="p-1.5 text-slate-400">........................</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `).join('')}
+            `;
+
+            modal.showModal();
+        }
+
+        function exportActiveLoansCsv() {
+            const dateStr = getReportDateStamp();
+            const activeLoans = loans.filter(l => !l.returned);
+            const classFilter = document.getElementById('activeLoansClassFilter')?.value || 'all';
+            let filtered = activeLoans;
+            if (classFilter !== 'all') {
+                filtered = filtered.filter(l => (l.klas || '').trim() === classFilter);
+            }
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            const headers = ['Leerling', 'Klas', 'Boektitel', 'Exemplaar', 'Locatie', 'Uitleendatum', 'Uiterste inleverdatum', 'Status', 'Dagen te laat'];
+            const rows = filtered.map(l => {
+                const isOverdue = l.dueDate && l.dueDate < todayStr;
+                let overdueDays = 0;
+                if (isOverdue) {
+                    const diff = Math.floor((new Date(todayStr) - new Date(l.dueDate)) / (1000 * 60 * 60 * 24));
+                    overdueDays = diff > 0 ? diff : 1;
+                }
+                return [
+                    l.student || '',
+                    l.klas || '',
+                    l.bookTitle || '',
+                    l.copyLabel || '',
+                    l.copyLoc || '',
+                    l.loanDate || '',
+                    l.dueDate || '',
+                    isOverdue ? 'Te laat' : 'Op tijd',
+                    isOverdue ? overdueDays : 0
+                ];
+            });
+
+            downloadCsv(`schoolbib_openstaande_boeken_${dateStr}.csv`, headers, rows);
+        }
+
+        function renderConditionReport() {
+            const returnedLoans = loans.filter(l => l.returned);
+
+            const counts = {
+                goed: 0,
+                cover: 0,
+                pagina: 0,
+                water: 0,
+                verloren: 0,
+                anders: 0
+            };
+
+            returnedLoans.forEach(l => {
+                const c = (l.condition || 'Goed').toLowerCase();
+                if (c.includes('goed')) counts.goed++;
+                else if (c.includes('cover') || c.includes('kaft')) counts.cover++;
+                else if (c.includes('pagina') || c.includes('gescheurd')) counts.pagina++;
+                else if (c.includes('water') || c.includes('vlek')) counts.water++;
+                else if (c.includes('kwijt') || c.includes('verloren')) counts.verloren++;
+                else counts.anders++;
+            });
+
+            const total = returnedLoans.length || 1;
+            const statCards = document.getElementById('conditionStatCards');
+            if (statCards) {
+                statCards.innerHTML = `
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase block">Goed</span>
+                        <span class="text-lg font-black text-slate-900">${counts.goed}</span>
+                        <span class="text-[10px] text-slate-400 block">${Math.round((counts.goed / total) * 100)}%</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase block">Cover beschadigd</span>
+                        <span class="text-lg font-black text-slate-900">${counts.cover}</span>
+                        <span class="text-[10px] text-slate-400 block">${Math.round((counts.cover / total) * 100)}%</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase block">Pagina's</span>
+                        <span class="text-lg font-black text-slate-900">${counts.pagina}</span>
+                        <span class="text-[10px] text-slate-400 block">${Math.round((counts.pagina / total) * 100)}%</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase block">Waterschade</span>
+                        <span class="text-lg font-black text-slate-900">${counts.water}</span>
+                        <span class="text-[10px] text-slate-400 block">${Math.round((counts.water / total) * 100)}%</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase block">Kwijt / Verloren</span>
+                        <span class="text-lg font-black text-slate-900">${counts.verloren}</span>
+                        <span class="text-[10px] text-slate-400 block">${Math.round((counts.verloren / total) * 100)}%</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase block">Andere opmerking</span>
+                        <span class="text-lg font-black text-slate-900">${counts.anders}</span>
+                        <span class="text-[10px] text-slate-400 block">${Math.round((counts.anders / total) * 100)}%</span>
+                    </div>
+                `;
+            }
+
+            const tbody = document.getElementById('conditionTableBody');
+            if (tbody) {
+                const sortedReturned = [...returnedLoans].sort((a, b) => {
+                    const aNotGood = (a.condition && a.condition !== 'Goed') ? 1 : 0;
+                    const bNotGood = (b.condition && b.condition !== 'Goed') ? 1 : 0;
+                    if (bNotGood !== aNotGood) return bNotGood - aNotGood;
+                    return (b.returnDate || '').localeCompare(a.returnDate || '');
+                });
+
+                if (sortedReturned.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-400 text-xs">Nog geen ingeleverde boeken geregistreerd.</td></tr>';
+                } else {
+                    tbody.innerHTML = sortedReturned.map(l => {
+                        const cond = l.condition || 'Goed';
+                        const isGood = cond === 'Goed';
+                        const badgeClass = isGood 
+                            ? 'bg-slate-100 text-slate-700' 
+                            : 'bg-amber-100 text-amber-900 border border-amber-300';
+                        return `
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="px-4 py-2.5 text-slate-600">${l.returnDate || l.loanDate || '-'}</td>
+                                <td class="px-4 py-2.5 font-bold text-slate-900">${escapeHtml(l.bookTitle)}</td>
+                                <td class="px-4 py-2.5 text-slate-500">${escapeHtml(l.copyLabel || 'Exemplaar 1')} (${escapeHtml(l.copyLoc || 'Bib')})</td>
+                                <td class="px-4 py-2.5 text-slate-800">${escapeHtml(l.student)}</td>
+                                <td class="px-4 py-2.5 font-semibold text-slate-700">${escapeHtml(l.klas)}</td>
+                                <td class="px-4 py-2.5">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">
+                                        ${escapeHtml(cond)}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2.5 text-slate-600 italic text-[11px]">${escapeHtml(l.conditionNote || '-')}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        function exportConditionCsv() {
+            const dateStr = getReportDateStamp();
+            const returnedLoans = loans.filter(l => l.returned);
+            const headers = ['Datum', 'Boektitel', 'Exemplaar', 'Locatie', 'Leerling', 'Klas', 'Conditie', 'Opmerking'];
+            const rows = returnedLoans.map(l => [
+                l.returnDate || l.loanDate || '',
+                l.bookTitle || '',
+                l.copyLabel || '',
+                l.copyLoc || '',
+                l.student || '',
+                l.klas || '',
+                l.condition || 'Goed',
+                l.conditionNote || ''
+            ]);
+            downloadCsv(`schoolbib_staat_van_boeken_${dateStr}.csv`, headers, rows);
+        }
+
+        function renderRatingsReport() {
+            const list = Object.keys(ratingsStore).map(t => {
+                const r = ratingsStore[t];
+                const b = allBooks.find(item => (item.Titel || '').toLowerCase().trim() === t.toLowerCase().trim());
+                return {
+                    title: t,
+                    avg: r.avg || 0,
+                    count: r.count || 0,
+                    author: b ? b.Auteur : '-',
+                    locatie: b ? b.Locatie : '-'
+                };
+            }).filter(item => item.count > 0).sort((a, b) => {
+                if (b.avg !== a.avg) return b.avg - a.avg;
+                return b.count - a.count;
+            });
+
+            const tbody = document.getElementById('ratingsReportTableBody');
+            if (tbody) {
+                if (list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-slate-400 text-xs">Nog geen lezersbeoordelingen ontvangen.</td></tr>';
+                } else {
+                    tbody.innerHTML = list.map((item, idx) => `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-4 py-2.5 font-extrabold text-brand-700">#${idx + 1}</td>
+                            <td class="px-4 py-2.5 font-bold text-slate-900">${escapeHtml(item.title)}</td>
+                            <td class="px-4 py-2.5 text-slate-600">${escapeHtml(item.author)}</td>
+                            <td class="px-4 py-2.5 text-slate-500">${escapeHtml(item.locatie)}</td>
+                            <td class="px-4 py-2.5 font-black text-slate-900">${Number(item.avg).toFixed(1)} / 5</td>
+                            <td class="px-4 py-2.5 text-right font-semibold text-slate-600">${item.count} stemmen</td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+
+        function exportRatingsCsv() {
+            const dateStr = getReportDateStamp();
+            const list = Object.keys(ratingsStore).map(t => {
+                const r = ratingsStore[t];
+                const b = allBooks.find(item => (item.Titel || '').toLowerCase().trim() === t.toLowerCase().trim());
+                return {
+                    title: t,
+                    avg: r.avg || 0,
+                    count: r.count || 0,
+                    author: b ? b.Auteur : '-',
+                    locatie: b ? b.Locatie : '-'
+                };
+            }).filter(item => item.count > 0).sort((a, b) => b.avg - a.avg || b.count - a.count);
+
+            const headers = ['Rang', 'Boektitel', 'Auteur', 'Locatie', 'Gemiddelde score (op 5)', 'Aantal stemmen'];
+            const rows = list.map((item, idx) => [
+                idx + 1,
+                item.title,
+                item.author,
+                item.locatie,
+                Number(item.avg).toFixed(1),
+                item.count
+            ]);
+            downloadCsv(`schoolbib_hoogst_gewaardeerd_${dateStr}.csv`, headers, rows);
+        }
+
+        function renderClassesReport() {
+            const periodLoans = getFilteredReportLoans();
+            const byClass = {};
+
+            periodLoans.forEach(l => {
+                const c = (l.klas || 'Overig').trim();
+                if (!byClass[c]) {
+                    byClass[c] = {
+                        name: c,
+                        total: 0,
+                        books: new Set(),
+                        students: new Set()
+                    };
+                }
+                byClass[c].total++;
+                if (l.bookTitle) byClass[c].books.add(l.bookTitle.toLowerCase().trim());
+                if (l.student) byClass[c].students.add(l.student.toLowerCase().trim());
+            });
+
+            const list = Object.values(byClass).sort((a, b) => b.total - a.total);
+
+            // Erepodium Zonder Icoontjes
+            const podiumEl = document.getElementById('classesPodium');
+            if (podiumEl) {
+                const top3 = list.slice(0, 3);
+                if (top3.length === 0) {
+                    podiumEl.innerHTML = '<p class="text-xs text-slate-400 italic">Nog geen klasgegevens in deze periode.</p>';
+                } else {
+                    const medals = ['1e plaats (Goud)', '2e plaats (Zilver)', '3e plaats (Brons)'];
+                    const borderColors = ['border-amber-300 bg-amber-50/50', 'border-slate-300 bg-slate-50', 'border-amber-700/20 bg-amber-50/20'];
+                    podiumEl.innerHTML = top3.map((item, idx) => `
+                        <div class="p-4 rounded-2xl border ${borderColors[idx]} flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block mb-1">
+                                    ${medals[idx]}
+                                </span>
+                                <h4 class="text-base font-black text-slate-900">${escapeHtml(item.name)}</h4>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-baseline justify-between text-xs">
+                                <span class="text-slate-500">${item.students.size} unieke lezers</span>
+                                <span class="font-black text-brand-700 text-sm">${item.total} boeken</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            const tbody = document.getElementById('classesReportTableBody');
+            if (tbody) {
+                if (list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-6 text-center text-slate-400 text-xs">Geen klasactiviteit gevonden.</td></tr>';
+                } else {
+                    tbody.innerHTML = list.map((item, idx) => `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-4 py-2.5 font-extrabold text-brand-700">#${idx + 1}</td>
+                            <td class="px-4 py-2.5 font-bold text-slate-900">${escapeHtml(item.name)}</td>
+                            <td class="px-4 py-2.5 font-extrabold text-slate-900">${item.total}</td>
+                            <td class="px-4 py-2.5 text-slate-600">${item.books.size}</td>
+                            <td class="px-4 py-2.5 text-right font-semibold text-slate-600">${item.students.size}</td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+
+        function exportClassesCsv() {
+            const dateStr = getReportDateStamp();
+            const periodLoans = getFilteredReportLoans();
+            const byClass = {};
+            periodLoans.forEach(l => {
+                const c = (l.klas || 'Overig').trim();
+                if (!byClass[c]) {
+                    byClass[c] = { name: c, total: 0, books: new Set(), students: new Set() };
+                }
+                byClass[c].total++;
+                if (l.bookTitle) byClass[c].books.add(l.bookTitle.toLowerCase().trim());
+                if (l.student) byClass[c].students.add(l.student.toLowerCase().trim());
+            });
+
+            const list = Object.values(byClass).sort((a, b) => b.total - a.total);
+            const headers = ['Rang', 'Klas', 'Totaal uitleningen', 'Verschillende boeken', 'Aantal lezers'];
+            const rows = list.map((item, idx) => [
+                idx + 1,
+                item.name,
+                item.total,
+                item.books.size,
+                item.students.size
+            ]);
+            downloadCsv(`schoolbib_leesactiviteit_klassen_${dateStr}.csv`, headers, rows);
+        }
+
+        function renderAllReports() {
+            const periodLoans = getFilteredReportLoans();
+            const activeLoans = loans.filter(l => !l.returned);
+            const todayStr = new Date().toISOString().split('T')[0];
+            const overdueLoans = activeLoans.filter(l => l.dueDate && l.dueDate < todayStr);
+
+            const kpiTotal = document.getElementById('kpiTotalLoans');
+            if (kpiTotal) kpiTotal.textContent = periodLoans.length;
+
+            const kpiActive = document.getElementById('kpiActiveLoans');
+            const kpiOverdue = document.getElementById('kpiOverdueSubtext');
+            if (kpiActive) kpiActive.textContent = activeLoans.length;
+            if (kpiOverdue) kpiOverdue.textContent = `${overdueLoans.length} te laat`;
+
+            const borrowedTitles = new Set(periodLoans.map(l => (l.bookTitle || '').toLowerCase().trim()).filter(Boolean));
+            const sleepingCount = allBooks.filter(b => !borrowedTitles.has((b.Titel || '').toLowerCase().trim())).length;
+            const pctSleeping = allBooks.length > 0 ? Math.round((sleepingCount / allBooks.length) * 100) : 0;
+            const kpiSleeping = document.getElementById('kpiSleepingBooks');
+            const kpiSleepingPct = document.getElementById('kpiSleepingPercent');
+            if (kpiSleeping) kpiSleeping.textContent = sleepingCount;
+            if (kpiSleepingPct) kpiSleepingPct.textContent = `${pctSleeping}% van collectie`;
+
+            const ratingsArr = Object.values(ratingsStore).filter(r => r.count > 0);
+            const kpiAvg = document.getElementById('kpiAvgRating');
+            const kpiReviews = document.getElementById('kpiRatingCount');
+            if (ratingsArr.length > 0) {
+                const totalScore = ratingsArr.reduce((acc, r) => acc + (r.avg * r.count), 0);
+                const totalVotes = ratingsArr.reduce((acc, r) => acc + r.count, 0);
+                const avgOverall = totalVotes > 0 ? (totalScore / totalVotes).toFixed(1) : '-';
+                if (kpiAvg) kpiAvg.textContent = `${avgOverall} / 5`;
+                if (kpiReviews) kpiReviews.textContent = `${totalVotes} beoordelingen`;
+            } else {
+                if (kpiAvg) kpiAvg.textContent = '-';
+                if (kpiReviews) kpiReviews.textContent = '0 beoordelingen';
+            }
+
+            renderPopularReport();
+            renderSleepingReport();
+            renderActiveLoansReport();
+            renderConditionReport();
+            renderRatingsReport();
+            renderClassesReport();
+        }
+
+        function exportFullLoansCsv() {
+            const dateStr = getReportDateStamp();
+            const headers = ['ID', 'Tijdstip', 'Leerling', 'Klas', 'Boektitel', 'Exemplaar', 'Locatie', 'Uitleendatum', 'Inleverdatum', 'Status', 'Werkelijke inleverdatum', 'Staat van het boek', 'Opmerking'];
+            const rows = loans.map(l => [
+                l.id || '',
+                l.createdAt || '',
+                l.student || '',
+                l.klas || '',
+                l.bookTitle || '',
+                l.copyLabel || '',
+                l.copyLoc || '',
+                l.loanDate || '',
+                l.dueDate || '',
+                l.returned ? 'Ingeleverd' : 'Uitgeleend',
+                l.returnDate || '',
+                l.condition || 'Goed',
+                l.conditionNote || ''
+            ]);
+            downloadCsv(`schoolbib_alle_uitleningen_${dateStr}.csv`, headers, rows);
+        }
+
     </script>
 </body>
 </html>
