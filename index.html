@@ -4474,7 +4474,10 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     if (!currentQuickLoanBook) return;
 
                     const student = document.getElementById('quickLoanStudent').value.trim();
-                    const klas = document.getElementById('quickLoanClass').value.trim();
+                    const rawKlas = document.getElementById('quickLoanClass').value.trim();
+                    const knownClasses = getSchoolClasses();
+                    const matchedClass = knownClasses.find(k => k.toLowerCase() === rawKlas.toLowerCase());
+                    const klas = matchedClass || rawKlas;
                     const copyVal = document.getElementById('quickLoanCopySelect').value;
                     const startDateInput = document.getElementById('quickLoanStartDate');
                     const loanDate = (startDateInput && startDateInput.value) ? startDateInput.value : new Date().toISOString().split('T')[0];
@@ -6067,14 +6070,21 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     if (Array.isArray(parsed) && parsed.length > 0) list = parsed;
                 } catch (e) {}
             }
-            // Voeg klassen toe die in actieve/historische uitleningen voorkomen
-            const set = new Set(list);
+            // Voeg klassen toe die in actieve/historische uitleningen voorkomen (zonder dubbele hoofdletter/kleine letter varianten)
+            const classMap = new Map();
+            list.forEach(c => {
+                const trimmed = (c || '').trim();
+                if (trimmed) classMap.set(trimmed.toLowerCase(), trimmed);
+            });
             if (Array.isArray(loans)) {
                 loans.forEach(l => {
-                    if (l.klas && l.klas.trim()) set.add(l.klas.trim());
+                    const trimmed = (l.klas || '').trim();
+                    if (trimmed && !classMap.has(trimmed.toLowerCase())) {
+                        classMap.set(trimmed.toLowerCase(), trimmed);
+                    }
                 });
             }
-            return Array.from(set).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+            return Array.from(classMap.values()).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
         }
 
         function updateSchoolClassesDatalist() {
@@ -6119,7 +6129,10 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 loanForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const student = document.getElementById('loanStudent').value.trim();
-                    const klas = document.getElementById('loanClass').value.trim();
+                    const rawKlas = document.getElementById('loanClass').value.trim();
+                    const knownClasses = getSchoolClasses();
+                    const matchedClass = knownClasses.find(k => k.toLowerCase() === rawKlas.toLowerCase());
+                    const klas = matchedClass || rawKlas;
                     const bookTitle = titleInput.value.trim();
                     const selectedCopyVal = copySelect ? copySelect.value : '';
                     const loanDate = (startDateInput && startDateInput.value) ? startDateInput.value : todayStr;
@@ -6371,7 +6384,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
 
             const activeClasses = new Set();
             activeLoans.forEach(l => {
-                if (l.klas && l.klas.trim()) activeClasses.add(l.klas.trim());
+                if (l.klas && l.klas.trim()) activeClasses.add(l.klas.trim().toLowerCase());
             });
 
             const statActive = document.getElementById('statActiveLoans');
@@ -6387,24 +6400,33 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             const bar = document.getElementById('loansClassFilterBar');
             if (!bar) return;
 
-            const classCounts = {};
+            // Bundel klassen case-insensitief in 1 knop
+            const knownClasses = getSchoolClasses();
+            const classGroups = new Map();
             let totalActive = 0;
+
             loans.forEach(l => {
                 if (!l.returned && l.klas && l.klas.trim()) {
-                    const k = l.klas.trim();
-                    classCounts[k] = (classCounts[k] || 0) + 1;
+                    const raw = l.klas.trim();
+                    const key = raw.toLowerCase();
                     totalActive++;
+                    if (!classGroups.has(key)) {
+                        const canonical = knownClasses.find(c => c.toLowerCase() === key) || raw;
+                        classGroups.set(key, { canonical, count: 0 });
+                    }
+                    classGroups.get(key).count++;
                 }
             });
 
-            const sortedClasses = Object.keys(classCounts).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+            const sortedGroups = Array.from(classGroups.entries())
+                .sort((a, b) => a[1].canonical.localeCompare(b[1].canonical, undefined, { numeric: true }));
 
             bar.innerHTML = '';
 
             // 'Alle klassen' chip
             const allBtn = document.createElement('button');
             allBtn.type = 'button';
-            const isAllSelected = loansActiveFilterClass === 'all';
+            const isAllSelected = !loansActiveFilterClass || loansActiveFilterClass.toLowerCase() === 'all';
             allBtn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${isAllSelected ? 'bg-brand-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`;
             allBtn.innerHTML = `Alle klassen <span class="ml-1 text-[10px] ${isAllSelected ? 'text-brand-100' : 'text-slate-500'} font-semibold">(${totalActive})</span>`;
             allBtn.addEventListener('click', () => {
@@ -6414,15 +6436,15 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             });
             bar.appendChild(allBtn);
 
-            // Klas chips
-            sortedClasses.forEach(cls => {
+            // Klas chips: precies 1 knop per unieke klas gebundeld
+            sortedGroups.forEach(([key, group]) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                const isSelected = loansActiveFilterClass.toLowerCase() === cls.toLowerCase();
+                const isSelected = loansActiveFilterClass && loansActiveFilterClass.toLowerCase().trim() === key;
                 btn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${isSelected ? 'bg-brand-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`;
-                btn.innerHTML = `${escapeHtml(cls)} <span class="ml-1 text-[10px] ${isSelected ? 'text-brand-100' : 'text-slate-500'} font-semibold">(${classCounts[cls]})</span>`;
+                btn.innerHTML = `${escapeHtml(group.canonical)} <span class="ml-1 text-[10px] ${isSelected ? 'text-brand-100' : 'text-slate-500'} font-semibold">(${group.count})</span>`;
                 btn.addEventListener('click', () => {
-                    loansActiveFilterClass = cls;
+                    loansActiveFilterClass = group.canonical;
                     renderClassFilterChips();
                     renderLoans();
                 });
@@ -6432,10 +6454,14 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             // Batch inleverknop voor geselecteerde klas
             const batchBtn = document.getElementById('btnBatchReturnClass');
             if (batchBtn) {
-                if (loansActiveFilterClass !== 'all' && classCounts[loansActiveFilterClass]) {
+                const activeGroup = loansActiveFilterClass && loansActiveFilterClass.toLowerCase() !== 'all' 
+                    ? classGroups.get(loansActiveFilterClass.toLowerCase().trim()) 
+                    : null;
+
+                if (activeGroup && activeGroup.count > 0) {
                     batchBtn.classList.remove('hidden');
-                    batchBtn.innerHTML = `<span>✓ Alles van klas <strong>${escapeHtml(loansActiveFilterClass)}</strong> inleveren (${classCounts[loansActiveFilterClass]})</span>`;
-                    batchBtn.onclick = () => batchReturnClass(loansActiveFilterClass);
+                    batchBtn.innerHTML = `<span>✓ Alles van klas <strong>${escapeHtml(activeGroup.canonical)}</strong> inleveren (${activeGroup.count})</span>`;
+                    batchBtn.onclick = () => batchReturnClass(activeGroup.canonical);
                 } else {
                     batchBtn.classList.add('hidden');
                 }
