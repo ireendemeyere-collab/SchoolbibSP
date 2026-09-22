@@ -6608,7 +6608,10 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             }
 
             if (action.type === 'return') {
-                textEl.innerHTML = `Boek <strong>"${escapeHtml(action.loan.bookTitle)}"</strong> is zojuist ingeleverd voor <strong>${escapeHtml(action.loan.student)}</strong> (${escapeHtml(action.loan.klas)}).`;
+                const condBadge = action.condition && action.condition !== 'Goed' 
+                    ? `<span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 font-bold text-[11px] ml-1">⚠️ ${escapeHtml(action.condition)}</span>`
+                    : `<span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px] ml-1">✓ Goed</span>`;
+                textEl.innerHTML = `Boek <strong>"${escapeHtml(action.loan.bookTitle)}"</strong> is zojuist ingeleverd voor <strong>${escapeHtml(action.loan.student)}</strong> (${escapeHtml(action.loan.klas)}) — Staat: ${condBadge}${action.note ? ` <em class="text-slate-500">("${escapeHtml(action.note)}")</em>` : ''}.`;
             } else if (action.type === 'loan') {
                 textEl.innerHTML = `Boek <strong>"${escapeHtml(action.loan.bookTitle)}"</strong> is zojuist uitgeleend aan <strong>${escapeHtml(action.loan.student)}</strong> (${escapeHtml(action.loan.klas)}).`;
             }
@@ -6715,10 +6718,18 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                                 <span class="text-slate-400 ml-2">• Inleveren voor: ${loan.dueDate || '-'}</span>
                             </div>
                         </div>
-                        <button type="button" onclick="markLoanReturned('${loan.id}')"
-                                class="shrink-0 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs transition shadow-2xs flex items-center gap-1.5 cursor-pointer">
-                            <span>Direct Inleveren ✓</span>
-                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="confirmReturnLoan('${loan.id}', 'Goed', '')"
+                                    title="Boek is in goede staat - direct afhandelen"
+                                    class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs transition shadow-2xs flex items-center gap-1 cursor-pointer">
+                                <span>🟢 Goed</span>
+                            </button>
+                            <button type="button" onclick="markLoanReturned('${loan.id}')"
+                                    title="Staat controleren / Schade of verlies opgeven"
+                                    class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-extrabold text-xs transition active:scale-95 flex items-center gap-1 cursor-pointer">
+                                <span>⚠️ Schade / Opmerking</span>
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -6762,27 +6773,54 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 return;
             }
 
-            resultsBox.className = 'space-y-2 pt-1';
+            resultsBox.className = 'space-y-3 pt-1';
             resultsBox.innerHTML = matchedLoans.map(l => {
                 return `
-                    <div class="p-4 rounded-2xl bg-white text-slate-900 border-2 border-emerald-400 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div>
-                            <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-block mb-1">
-                                Uitgeleend boek gevonden
-                            </span>
-                            <h4 class="text-sm font-extrabold text-slate-900">
-                                "${escapeHtml(l.bookTitle)}" <span class="text-xs font-normal text-slate-500">(${escapeHtml(l.copyLabel || 'Exemplaar')})</span>
-                            </h4>
-                            <p class="text-xs text-slate-600 mt-0.5">
-                                Uitgeleend aan: <strong class="text-slate-900">${escapeHtml(l.student)}</strong> 
-                                <span class="font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">${escapeHtml(l.klas)}</span>
-                                <span class="text-slate-400 ml-1">• Uiterste datum: ${l.dueDate || '-'}</span>
-                            </p>
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white text-slate-900 border-2 border-emerald-400 shadow-md space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                            <div>
+                                <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-block mb-1">
+                                    Uitgeleend boek gevonden
+                                </span>
+                                <h4 class="text-sm font-extrabold text-slate-900">
+                                    "${escapeHtml(l.bookTitle)}" <span class="text-xs font-normal text-slate-500">(${escapeHtml(l.copyLabel || 'Exemplaar')})</span>
+                                </h4>
+                                <p class="text-xs text-slate-600 mt-0.5">
+                                    Uitgeleend aan: <strong class="text-slate-900">${escapeHtml(l.student)}</strong> 
+                                    <span class="font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">${escapeHtml(l.klas)}</span>
+                                    <span class="text-slate-400 ml-1">• Inleverdatum: ${l.dueDate || '-'}</span>
+                                </p>
+                            </div>
                         </div>
-                        <button type="button" onclick="markLoanReturned('${l.id}')"
-                                class="shrink-0 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                            <span>✓ Dit boek inleveren</span>
-                        </button>
+
+                        <!-- VRAAG NAAR STAAT VAN HET BOEK -->
+                        <div>
+                            <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <span>📖 In welke staat bevindt het boek zich?</span>
+                            </label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button type="button" onclick="confirmReturnLoan('${l.id}', 'Goed', '')"
+                                        class="p-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-extrabold text-xs transition flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-xs active:scale-95">
+                                    <span class="text-base">🟢</span>
+                                    <span>Goed / Prima</span>
+                                </button>
+                                <button type="button" onclick="markLoanReturnedWithPreset('${l.id}', 'Cover beschadigd')"
+                                        class="p-2.5 rounded-xl border-2 border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs transition flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-xs active:scale-95">
+                                    <span class="text-base">🟡</span>
+                                    <span>Kaft beschadigd</span>
+                                </button>
+                                <button type="button" onclick="markLoanReturnedWithPreset('${l.id}', 'Pagina\\'s gescheurd of beschreven')"
+                                        class="p-2.5 rounded-xl border-2 border-orange-300 bg-orange-50 hover:bg-orange-100 text-orange-900 font-bold text-xs transition flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-xs active:scale-95">
+                                    <span class="text-base">🟠</span>
+                                    <span>Pagina's schade</span>
+                                </button>
+                                <button type="button" onclick="markLoanReturned('${l.id}')"
+                                        class="p-2.5 rounded-xl border-2 border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-900 font-bold text-xs transition flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-xs active:scale-95">
+                                    <span class="text-base">⚠️</span>
+                                    <span>Schade / Kwijt...</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -7226,8 +7264,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-1.5">
                             ${!loan.returned ? `
-                                <button onclick="markLoanReturned('${loan.id}')" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1 rounded-xl transition cursor-pointer" title="Boek als ingeleverd markeren">
-                                    Inleveren ✓
+                                <button onclick="markLoanReturned('${loan.id}')" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1 rounded-xl transition cursor-pointer" title="Boek als ingeleverd markeren met staat">
+                                    Inleveren & Staat...
                                 </button>
                                 <button onclick="extendLoan('${loan.id}')" class="text-xs font-semibold bg-brand-50 hover:bg-brand-100 text-brand-700 px-2 py-1 rounded-xl transition cursor-pointer" title="Verleng met 3 weken">
                                     +3w
@@ -7313,27 +7351,57 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             }
         };
 
+        window.markLoanReturnedWithPreset = function(id, presetCondition) {
+            const loan = loans.find(l => String(l.id) === String(id));
+            if (!loan) return;
+            pendingReturnLoanId = id;
+
+            if (returnModalBookTitle) returnModalBookTitle.textContent = loan.bookTitle || 'Boek inleveren';
+            if (returnModalLoanInfo) returnModalLoanInfo.textContent = `${loan.student || 'Leerling'} (${loan.klas || 'Klas'}) • ${loan.copyLabel || 'Exemplaar'}`;
+            if (returnConditionNote) returnConditionNote.value = '';
+
+            const targetRadio = document.querySelector(`input[name="returnCondition"][value="${presetCondition}"]`);
+            if (targetRadio) {
+                targetRadio.checked = true;
+                targetRadio.dispatchEvent(new Event('change'));
+            }
+
+            if (returnConditionModal && typeof returnConditionModal.showModal === 'function') {
+                returnConditionModal.showModal();
+                setTimeout(() => {
+                    if (returnConditionNote) returnConditionNote.focus();
+                }, 100);
+            } else {
+                confirmReturnLoan(id, presetCondition, '');
+            }
+        };
+
         function confirmReturnLoan(id, condition, note) {
             const loan = loans.find(l => String(l.id) === String(id));
             if (loan) {
                 const prevSnapshot = JSON.parse(JSON.stringify(loan));
                 loan.returned = true;
                 loan.returnDate = new Date().toISOString().split('T')[0];
-                loan.condition = condition;
-                loan.conditionNote = note;
+                loan.condition = condition || 'Goed';
+                loan.conditionNote = note || '';
                 saveLoans();
                 syncLoanToCloud('return_loan', { 
                     id: loan.id, 
                     returnDate: loan.returnDate,
-                    condition: condition,
-                    note: note
+                    condition: loan.condition,
+                    note: loan.conditionNote
                 });
                 renderLoans();
                 if (typeof renderDeskReturnActiveList === 'function') renderDeskReturnActiveList();
                 if (typeof playDeskAudio === 'function') playDeskAudio('success');
-                if (typeof setLastDeskAction === 'function') setLastDeskAction({ type: 'return', loan: prevSnapshot });
+                if (typeof setLastDeskAction === 'function') setLastDeskAction({ 
+                    type: 'return', 
+                    loan: prevSnapshot, 
+                    condition: loan.condition, 
+                    note: loan.conditionNote 
+                });
 
-                const statusSuffix = condition !== 'Goed' ? ` (Staat: ${condition})` : '';
+                const statusSuffix = loan.condition !== 'Goed' ? ` (Staat: ⚠️ ${loan.condition})` : ' (Staat: ✓ Goed)';
                 showToast(`"${loan.bookTitle}" is succesvol ingeleverd door ${loan.student}${statusSuffix} ✓`, 'success');
 
                 const retInput = document.getElementById('deskReturnSearchInput');
