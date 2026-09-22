@@ -80,13 +80,16 @@ Je kan op twee manieren een boek toewijzen aan een leerling:
 
 <a id="manier-b-aan-de-uitleenbalie"></a>
 
-### Manier B: Aan de Uitleenbalie (met barcode of handmatig)
+### Manier B: Aan de Uitleenbalie (met de grote knop 'Boek Uitlenen')
 *Ideaal wanneer leerlingen met hun gekozen boeken naar de computer komen om uit te checken.*
 
 1. Klik in het bovenmenu op **🔄 Uitleenbalie** (op smartphone/tablet: **🔄 Balie**).
-2. Voer de leerkrachtcode in (standaard **`donbosco`** of actuele code) en klik op **Balie Openen**.
-3. **Met de handscanner**: Scan de barcode achterop het boek in de donkere balk bovenaan. Het boek wordt direct herkend -> klik op **Dit boek uitlenen 📘**.
-4. **Zonder scanner**: Klap het formulier *'Nieuwe uitlening handmatig registreren'* open. Vul naam, klas en boektitel in en klik op **Uitlening opslaan**.
+2. Voer de leerkrachtcode in (standaard **`donbosco`** of de actuele code) en klik op **Balie Openen**.
+3. Klik op de grote blauwe kaart: **📘 Boek Uitlenen**.
+4. In het formulier:
+   - Kies het boek uit de lijst of typ/scan de barcode.
+   - Selecteer de **naam van de leerling** en de **klas**.
+   - Klik op **Uitlening Bevestigen**. Klaar! Er klinkt een bevestigingsbelletje en het boek is direct uitgeleend.
 
 ---
 
@@ -98,30 +101,31 @@ Wanneer een leerling een boek teruggeeft aan de balie of in de klas:
 
 <a id="bliksemsnel-met-de-barcodescanner"></a>
 
-### Bliksemsnel met de barcodescanner (Aanbevolen)
+### Bliksemsnel inleveren met de knop 'Boek Inleveren' (Aanbevolen)
 1. Open de **🔄 Uitleenbalie**.
-2. Zorg dat de cursor in het scanveld staat (bovenaan in de donkere balk).
-3. Scan de barcode van het ingeleverde boek.
-4. Het systeem herkent direct wie het boek ontleend heeft (naam + klas) en toont een groene knop: **Direct Inleveren ✓**.
-5. Klik op de knop. Het boek is direct weer beschikbaar in de catalogus!
+2. Klik op de grote groene kaart: **📥 Boek Inleveren**.
+3. **Met de handscanner of zoekbalk**: Scan de barcode achterop het boek of typ (een deel van) de titel of leerlingnaam.
+4. Het systeem herkent direct de lener en vraagt meteen:  
+   👉 **"In welke staat bevindt het boek zich?"**
+5. Klik op:
+   - 🟢 **Goed / Prima**: Met 1 klik afgerond in goede staat. Het boek staat meteen weer op rek!
+   - 🟡 **Kaft beschadigd**: Registreert de schade, opent eventueel een toelichtingsveld.
+   - 🟠 **Pagina's schade**: Registreert losse of beschreven pagina's.
+   - ⚠️ **Schade / Kwijt...**: Voor waterschade, verloren boeken of eigen notities.
 
 <a id="handmatig-opzoeken-en-inleveren"></a>
 
-### Handmatig opzoeken en inleveren (Zonder scanner)
-1. Typ in de zoekbalk boven de tabel de naam van de leerling of de boektitel.
-2. De tabel filtert direct mee.
-3. Klik achter de juiste uitlening op de groene knop **Inleveren ✓**.
+### Handmatig inleveren via de lijst van nog in te leveren boeken
+1. Onderaan het inleverscherm zie je een lijst met alle momenteel openstaande boeken.
+2. Bij elk boek heb je twee directe knoppen:
+   - **`🟢 Goed`**: Direct inleveren in prima staat.
+   - **`⚠️ Schade / Opmerking`**: Opent het venster om specifieke schade of verlies te noteren.
 
 <a id="de-staat-van-het-boek-registreren"></a>
 
-### De staat van het boek registreren
-Bij het inleveren verschijnt er een handig pop-upvenster:
-- Kies tussen:
-  - 🟢 **Goed** (standaard)
-  - 🟡 **Lichte schade** (bv. ezelsoor, kleine plooi)
-  - 🔴 **Ernstig beschadigd / Pagina los / Waterschade**
-- Typ eventueel een korte toelichting (bv. *"Koffievlek op kaft"*).
-- Dit wordt netjes opgeslagen in de uitleenhistoriek en in de centrale Google Sheet, zodat de bib-verantwoordelijken weten welk boek hersteld moet worden.
+### Audio-feedback & Ongedaan maken (Undo)
+- Bij elke geslaagde inlevering klinkt een vriendelijk belletje.
+- Op het startscherm van de balie verschijnt een balk *"Zojuist afgehandeld"*. Heb je per ongeluk het verkeerde boek aangeklikt? Klik simpelweg op **Ongedaan maken ↩** en de uitlening wordt direct hersteld!
 
 ---
 

@@ -149,8 +149,12 @@
                     <button id="btnMobCatalog" class="nav-tab-btn px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-brand-600 text-white shadow-xs">
                         📚 Boeken
                     </button>
-                    <button id="btnMobDesk" class="nav-tab-btn px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 border border-slate-200">
-                        🔄 Balie
+                    <button id="btnMobDesk" class="nav-tab-btn px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 border border-slate-200">
+                        <svg class="w-3.5 h-3.5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.5 7C5.5 5.5 8.5 5.5 12 7c3.5-1.5 6.5-1.5 8.5 0v11c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V7z"/>
+                            <path d="M12 7v11"/>
+                        </svg>
+                        <span>Balie</span>
                     </button>
                     <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer"
                        class="px-2 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
@@ -170,8 +174,11 @@
                     <span>Catalogus Bib</span>
                 </button>
                 <button id="btnDeskDesk" class="nav-tab-btn px-4 py-2 rounded-2xl text-sm font-bold transition flex items-center gap-2 bg-white text-slate-700 hover:bg-brand-50 hover:text-brand-700 border border-slate-200">
-                    <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                    <span>🔄 Uitleenbalie</span>
+                    <svg class="w-4 h-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3.5 7C5.5 5.5 8.5 5.5 12 7c3.5-1.5 6.5-1.5 8.5 0v11c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V7z"/>
+                        <path d="M12 7v11"/>
+                    </svg>
+                    <span>Uitleenbalie</span>
                 </button>
                 <a href="https://www.boekenzoeker.be" target="_blank" rel="noopener noreferrer" 
                    class="px-3.5 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 bg-slate-100 hover:bg-brand-50 hover:text-brand-700 border border-slate-200 hover:border-brand-200" 
@@ -670,6 +677,31 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Beknopte Balie Handleiding (Snelgids voor Secretariaat & Leerkrachten) -->
+                <details class="group bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs transition">
+                    <summary class="font-bold text-xs sm:text-sm text-slate-800 flex items-center justify-between cursor-pointer list-none select-none">
+                        <span class="flex items-center gap-2">
+                            <span class="text-base">💡</span>
+                            <span>Snelgids voor de balie: hoe werkt het?</span>
+                        </span>
+                        <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-slate-600">
+                        <div class="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-100 space-y-1.5">
+                            <strong class="text-emerald-900 font-extrabold block text-xs">📥 1. Boek Inleveren (Terugbrengen)</strong>
+                            <p class="leading-relaxed">Klik op de grote groene knop <strong>Boek Inleveren</strong>. Scan de barcode achterop het boek of typ de titel/leerling. Het systeem toont direct de uitlening en vraagt: <em>'Wat is de staat van het boek?'</em>. Klik op 🟢 <strong>Goed / Prima</strong> om direct in te nemen, of kies 🟡 <strong>Kaft beschadigd</strong>, 🟠 <strong>Pagina's schade</strong> of ⚠️ <strong>Schade / Kwijt</strong> met toelichting.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-brand-50/60 border border-brand-100 space-y-1.5">
+                            <strong class="text-brand-900 font-extrabold block text-xs">📘 2. Boek Uitlenen (Meenemen)</strong>
+                            <p class="leading-relaxed">Klik op de grote blauwe knop <strong>Boek Uitlenen</strong>. Kies het boek, selecteer de leerling en de klas, en klik op <strong>Uitlening Bevestigen</strong>. De uitleentermijn van 1 maand wordt automatisch geregistreerd.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-100 space-y-1.5">
+                            <strong class="text-amber-950 font-extrabold block text-xs">🏫 3. Klasinlevering & Verlengen</strong>
+                            <p class="leading-relaxed">Brengt een leerkracht na een leesuur alle boeken van een klas terug? Klik in het overzicht hieronder op de klasbadge (bv. <em>2MWb</em>) en klik op de groene knop <strong>✓ Alles van deze klas inleveren</strong>. Een individueel boek verlengen kan met de <strong>+3w</strong> knop.</p>
+                        </div>
+                    </div>
+                </details>
 
                 <!-- Volledige Uitleentabel Overzicht -->
                 <div class="bg-white p-6 rounded-3xl shadow-xs border border-slate-200/80 space-y-4">
@@ -1698,7 +1730,7 @@
                                 <span>Uitleenbalie (Inleveren & Balie)</span>
                             </div>
                             <p class="text-amber-800 leading-relaxed">
-                                Klik in het hoofdmenu op <strong>🔄 Uitleenbalie</strong>. Met de leerkrachtcode neem je boeken in via barcode of lever je met één klik alle boeken van een hele klas in!
+                                Klik in het hoofdmenu op <strong>🔄 Uitleenbalie</strong>. Kies tussen de twee grote actieknoppen: <strong>Boek Inleveren</strong> (met directe controle van de staat van het boek) of <strong>Boek Uitlenen</strong>. Met één klik kan je ook een hele klas inleveren!
                             </p>
                         </div>
                     </div>
@@ -1738,7 +1770,9 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de pincode in (<code class="font-bold font-mono text-slate-800 display-teacher-pin">donbosco</code>), vul de naam en klas in en bevestig. De uitleentermijn wordt automatisch berekend.
+                                Dat kan op twee eenvoudige manieren:<br>
+                                1. <strong>In de klas / catalogus</strong>: Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de code in (<code class="font-bold font-mono text-slate-800 display-teacher-pin">donbosco</code>), kies leerling en klas en bevestig.<br>
+                                2. <strong>Aan de balie</strong>: Klik in het menu op <strong>🔄 Uitleenbalie</strong> en kies de grote blauwe knop <strong>📘 Boek Uitlenen</strong>. Selecteer het boek, kies leerling en klas en klik op <strong>Uitlening Bevestigen</strong>.
                             </p>
                         </details>
 
@@ -1761,7 +1795,7 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Klik in het hoofdmenu bovenaan op <strong>🔄 Uitleenbalie</strong>. Voer de leerkrachtcode in (<code class="font-bold font-mono text-slate-800 display-teacher-pin">donbosco</code>). Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (of zoek de leerling in de tabel) en klik op <strong>Direct Inleveren</strong>. Je kan eventueel ook de staat van het boek registreren.
+                                Klik in het hoofdmenu bovenaan op <strong>🔄 Uitleenbalie</strong> en kies de grote groene knop <strong>📥 Boek Inleveren</strong>. Scan de barcode met de handscanner of typ (een deel van) de boektitel of naam van de leerling. Het systeem toont direct de uitlening en vraagt: <em>'Wat is de staat van het ingeleverde boek?'</em>. Kies met één klik 🟢 <strong>Goed / Prima</strong> (meteen weer beschikbaar in de catalogus) of kies voor 🟡 <strong>Kaft beschadigd</strong>, 🟠 <strong>Pagina's schade</strong> of ⚠️ <strong>Schade / Kwijt</strong> met een optionele toelichting.
                             </p>
                         </details>
 

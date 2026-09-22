@@ -152,35 +152,35 @@ De **Uitleenbalie** is dé centrale werkplek voor leerkrachten (bv. leerkracht N
 
 <a id="snelle-barcodescan"></a>
 
-### Snelle Barcode / ISBN scan (Inleveren of Uitlenen)
-Bovenaan de balie vind je de donkere scanbalk:
-- **Boek innemen**: Scan de barcode met een handscanner (of typ de titel). Het systeem herkent direct wie het boek ontleend heeft en toont één knop: **Direct Inleveren ✓**.
-- **Boek uitlenen**: Scan een beschikbaar boek. Het systeem herkent het boek en biedt direct de knop **Dit boek uitlenen 📘**.
+### Twee Grote Keuzeknoppen: Inleveren of Uitlenen
+Bij binnenkomst aan de balie kiest de medewerker direct tussen twee overzichtelijke hoofdschermen:
 
-<a id="handmatig-registreren"></a>
+1. **📥 Boek Inleveren (Terugbrengen)**:
+   - Scan de barcode met een handscanner of typ (een deel van) de titel of naam van de leerling.
+   - Het systeem zoekt direct in alle actieve uitleningen en vraagt expliciet:  
+     👉 **"In welke staat bevindt het boek zich?"**
+   - Kies met één klik:
+     - 🟢 **Goed / Prima**: Direct afgesloten en klaar voor het rek.
+     - 🟡 **Kaft beschadigd**: Voor slijtage aan omslag of rug.
+     - 🟠 **Pagina's schade**: Voor scheuren of aantekeningen.
+     - ⚠️ **Schade / Kwijt**: Voor waterschade, verlies of vrije toelichting.
 
-### Nieuwe uitlening handmatig registreren
-Onder de scanbalk vind je het uitklapformulier *'Nieuwe uitlening handmatig registreren'*:
-1. Vul de naam van de leerling of collega in.
-2. Selecteer de klas uit de dropdown (bv. `2MWb`).
-3. Typ de titel van het boek en kies het gewenste exemplaar.
-4. Klik op **Uitlening opslaan**.
+2. **📘 Boek Uitlenen (Meenemen)**:
+   - Drie duidelijke stappen: selecteer het gewenste boek, kies de leerling en klas, en klik op **Uitlening Bevestigen**.
 
 <a id="klasinlevering"></a>
 
 ### Filteren per klas & Klasinlevering in één klik
 Brengt een leerkracht na een leesuur een hele bak boeken van de klas terug?
-1. Klik in de filterbalk op de badge van jouw klas (bv. `2MWb`).
-2. Je ziet direct alle openstaande boeken van die specifieke klas.
-3. Klik op de groene knop **✓ Alles van klas 2MWb inleveren**. Alle boeken van die klas worden gelijktijdig gemarkeerd als ingeleverd!
+1. In het overzicht onderaan klik je op de badge van de klas (bv. `2MWb`).
+2. Je ziet direct alle openstaande boeken van die klas.
+3. Klik op de groene knop **✓ Alles van klas 2MWb inleveren**. Alle boeken worden gelijktijdig gemarkeerd als ingeleverd!
 
 <a id="staat-controle"></a>
 
-### Boek inleveren met staat-controle
-Bij het individueel inleveren van een boek opent een handig pop-upvenster:
-- Kies de staat van het boek: **Goed**, **Lichte schade** of **Ernstig beschadigd / Pagina los**.
-- Voeg eventueel een korte opmerking toe.
-- Dit wordt netjes bewaard in de historiek en gesynchroniseerd met Google Sheets.
+### Audio-feedback & Ongedaan maken (Undo)
+- Een vriendelijk geluidssignaal bevestigt elke actie.
+- Heb je per ongeluk het verkeerde boek ingecheckt? In de statusbalk *"Zojuist afgehandeld"* klik je op **Ongedaan maken ↩** om de uitlening meteen te herstellen.
 
 ---
 

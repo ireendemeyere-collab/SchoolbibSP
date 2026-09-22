@@ -298,31 +298,56 @@
             </div>
 
             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                De <strong>🔄 Uitleenbalie</strong> is het centrale werkblad voor baliewachten en leerkrachten. Klik in het bovenmenu op <strong>🔄 Uitleenbalie</strong> en meld aan met de leerkrachtcode (<code class="font-mono font-bold">donbosco</code>).
+                De <strong>🔄 Uitleenbalie</strong> is het centrale werkblad voor secretariaatsmedewerkers en leerkrachten. Klik in het bovenmenu op <strong>🔄 Uitleenbalie</strong> en meld aan met de leerkrachtcode.
             </p>
 
-            <div class="space-y-3 pt-2">
-                <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-brand-900 text-white space-y-1.5 shadow-xs">
-                    <span class="text-xs font-extrabold text-brand-200 uppercase tracking-wider block">⚡ Bliksemsnel met de handscanner (Aanbevolen)</span>
-                    <p class="text-xs text-slate-200 leading-relaxed">
-                        Zorg dat de cursor in het donkere scanvak staat. Scan de barcode achterop het boek. Het systeem toont direct de lener en één grote knop: <strong>Direct Inleveren ✓</strong>. Eén klik en het boek staat weer in de kast!
+            <!-- Twee Grote Keuzeknoppen Uitleg -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
+                <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+                    <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-sm">
+                        <span class="text-lg">📥</span>
+                        <span>1. Boek Inleveren (Terugbrengen)</span>
+                    </div>
+                    <p class="text-xs text-emerald-800 leading-relaxed">
+                        Klik op de grote groene knop <strong>Boek Inleveren</strong>. Scan de barcode of typ de titel/leerling. Het systeem zoekt direct in de actieve uitleningen en vraagt expliciet: <em>'In welke staat bevindt het boek zich?'</em>.
+                    </p>
+                    <ul class="text-[11px] text-emerald-900 space-y-1 list-disc list-inside font-medium">
+                        <li><strong>🟢 Goed / Prima</strong>: Met 1 klik direct ingenomen en klaar om terug op rek te zetten.</li>
+                        <li><strong>🟡 Kaft beschadigd</strong>: Direct registreren van omslagschade.</li>
+                        <li><strong>🟠 Pagina's schade</strong>: Losse of beschreven pagina's markeren.</li>
+                        <li><strong>⚠️ Schade / Kwijt</strong>: Waterschade, verlies of vrije toelichting toevoegen.</li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-brand-50 border border-brand-200 space-y-2">
+                    <div class="flex items-center gap-2 text-brand-900 font-extrabold text-sm">
+                        <span class="text-lg">📘</span>
+                        <span>2. Boek Uitlenen (Meenemen)</span>
+                    </div>
+                    <p class="text-xs text-brand-800 leading-relaxed">
+                        Klik op de grote blauwe knop <strong>Boek Uitlenen</strong>. In een overzichtelijk 3-stappen formulier koppel je een nieuw boek aan een lener:
+                    </p>
+                    <ol class="text-[11px] text-brand-900 space-y-1 list-decimal list-inside font-medium">
+                        <li>Kies het gewenste boek uit de catalogus (of scan de barcode).</li>
+                        <li>Vul de naam van de leerling en de klas in.</li>
+                        <li>Klik op <strong>Uitlening Bevestigen</strong>. De uitleentermijn (1 maand) start direct!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                    <span class="font-extrabold text-slate-900 block text-xs">🏫 Klasinlevering in één klik na een leesuur:</span>
+                    <p class="text-slate-600 leading-relaxed">
+                        Brengt een leerkracht na een leesuur een hele bak boeken terug? Klik in het overzicht onderaan simpelweg op de klasbadge (bv. <strong>2MWb</strong>) en klik op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
-                        <span class="font-extrabold text-slate-900 block text-xs">🏫 Klasinlevering in één klik na een leesuur:</span>
-                        <p class="text-slate-600 leading-relaxed">
-                            Brengt een leerkracht na een leesuur een hele bak boeken terug? Klik simpelweg op de klasbadge (bv. <strong>2MWb</strong>) en klik op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>.
-                        </p>
-                    </div>
-
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
-                        <span class="font-extrabold text-slate-900 block text-xs">🩹 Staat van het boek registreren:</span>
-                        <p class="text-slate-600 leading-relaxed">
-                            Is een boek beschadigd of bevuild? Bij het inleveren kan je de staat selecteren (<em>Beschadigd, Waterschade, Pagina los</em>). Dit wordt direct vastgelegd in de historiek en Google Sheets.
-                        </p>
-                    </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                    <span class="font-extrabold text-slate-900 block text-xs">↩️ Audio-feedback & Ongedaan maken (Undo):</span>
+                    <p class="text-slate-600 leading-relaxed">
+                        Bij elke handeling klinkt een vriendelijk geluidssignaal en verschijnt een balk <em>'Zojuist afgehandeld'</em>. Per ongeluk het verkeerde boek ingeleverd? Met één klik op <strong>Ongedaan maken</strong> herstel je de uitlening meteen.
+                    </p>
                 </div>
             </div>
         </section>
@@ -401,7 +426,9 @@
                         <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
-                        <p>Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de leerkrachtcode in (<code class="font-mono font-bold text-slate-800">donbosco</code>), vul de naam en klas in en bevestig. De uitleentermijn wordt automatisch berekend.</p>
+                        <p>Dat kan op twee eenvoudige manieren:</p>
+                        <p>1. <strong>In de klas / aan het rek</strong>: Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de leerkrachtcode in, vul naam en klas in en bevestig.</p>
+                        <p>2. <strong>Aan de balie</strong>: Klik op <strong>🔄 Uitleenbalie</strong> en kies de grote blauwe knop <strong>📘 Boek Uitlenen</strong>. Selecteer het boek, kies de leerling en klas en klik op <strong>Uitlening Bevestigen</strong>.</p>
                         <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#uitlenen" class="underline hover:text-brand-900">Lees meer in: 4. Snel Uitlenen vanuit de Boekfiche</a></p>
                     </div>
                 </details>
@@ -412,7 +439,7 @@
                         <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
-                        <p>Er zijn twee aparte codes: de <strong>Leerkrachtcode</strong> (<code class="font-mono font-bold text-slate-800">donbosco</code>) voor balie en uitlenen, en de <strong>Beheerderscode</strong> (<code class="font-mono font-bold text-slate-800">beheerder</code>) voor het hoofdbeheer. Beheerders kunnen beide codes aanpassen via <em>Beheerder ➔ Instellingen</em>.</p>
+                        <p>Er zijn twee aparte codes: de <strong>Leerkrachtcode</strong> voor balie en uitlenen, en de <strong>Beheerderscode</strong> voor het hoofdbeheer. Beheerders kunnen beide codes aanpassen via <em>Beheerder ➔ Instellingen</em>.</p>
                         <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#rollen" class="underline hover:text-brand-900">Lees meer in: 1. De Twee Rollen</a></p>
                     </div>
                 </details>
@@ -423,7 +450,7 @@
                         <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60 space-y-1">
-                        <p>Klik op <strong>🔄 Uitleenbalie</strong> en log in met de leerkrachtcode. Scan de barcode van het boek in het veld <em>'Snelle Barcode scan'</em> (of zoek de leerling in de tabel) en klik op <strong>Direct Inleveren</strong>.</p>
+                        <p>Klik in het hoofdmenu op <strong>🔄 Uitleenbalie</strong> en kies de grote groene knop <strong>📥 Boek Inleveren</strong>. Scan de barcode of typ de titel/leerling. Het systeem toont de lener en vraagt meteen naar de staat van het boek: klik op 🟢 <strong>Goed / Prima</strong> (meteen weer beschikbaar), of kies 🟡 <strong>Kaft beschadigd</strong>, 🟠 <strong>Pagina's schade</strong> of ⚠️ <strong>Schade / Kwijt</strong> om toelichting te noteren.</p>
                         <p class="text-brand-700 font-semibold pt-1">➡️ <a href="#balie" class="underline hover:text-brand-900">Lees meer in: 5. De Uitleenbalie & Scannen</a></p>
                     </div>
                 </details>
