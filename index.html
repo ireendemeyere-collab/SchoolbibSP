@@ -507,8 +507,8 @@
             <!-- Modal Footer: Uitlenen knop (beveiligd) & Link naar Boekenzoeker/Hebban/Goodreads -->
             <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <button id="btnModalLoanOut" type="button" class="w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white cursor-pointer order-2 sm:order-1">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    <span>📘 Dit boek uitlenen</span>
+                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8C5.5 6.5 8.5 6.5 12 8c3.5-1.5 6.5-1.5 8.5 0v10.5c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V8z"/><path d="M12 8v10.5"/><path d="M8.5 8v6l2-1.5 2 1.5V8"/></svg>
+                    <span>Dit boek uitlenen</span>
                 </button>
                 <a id="btnModalInfoLink" href="#" target="_blank" rel="noopener noreferrer"
                    class="w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 order-1 sm:order-2">
@@ -556,8 +556,13 @@
             <!-- Dashboard Header Bar -->
             <div class="bg-white p-5 rounded-3xl shadow-xs border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center font-black text-xl">
-                        🔄
+                    <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.5 7C5.5 5.5 8.5 5.5 12 7c3.5-1.5 6.5-1.5 8.5 0v11c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V7z"/>
+                            <path d="M12 7v11"/>
+                            <path d="M7 12.5h10"/>
+                            <path d="M14.5 10l2.5 2.5-2.5 2.5"/>
+                        </svg>
                     </div>
                     <div>
                         <h2 class="text-lg font-extrabold text-slate-900">Uitleenbalie Boekenbende</h2>
@@ -573,8 +578,12 @@
                     <button id="btnRefreshLoans" type="button" title="Synchroniseer uitleningen opnieuw met Google Sheets" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition flex items-center justify-center cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </button>
-                    <a href="handleiding.html?view=quick#balie" target="_blank" class="text-xs font-extrabold text-teal-800 bg-teal-50 hover:bg-teal-100 transition flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-teal-200 shadow-2xs cursor-pointer" title="Open de interactieve handleiding voor leerkrachten en balie-medewerkers">
-                        <span>📖 Handleiding Balie ↗</span>
+                    <a href="handleiding.html?view=quick#balie" target="_blank" class="text-xs font-extrabold text-teal-800 bg-teal-50 hover:bg-teal-100 transition flex items-center gap-2 px-3.5 py-2 rounded-xl border border-teal-200 shadow-2xs cursor-pointer" title="Open de interactieve handleiding voor leerkrachten en balie-medewerkers">
+                        <svg class="w-4 h-4 text-teal-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.5 6.5C5.5 5 8.5 5 12 6.5c3.5-1.5 6.5-1.5 8.5 0v12c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0v-12z"/>
+                            <path d="M12 6.5v12"/>
+                        </svg>
+                        <span>Handleiding Balie ↗</span>
                     </a>
                     <button id="deskLogoutBtn" class="text-xs sm:text-sm font-extrabold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 hover:border-rose-300 transition flex items-center gap-2 px-4 py-2 rounded-xl shadow-xs cursor-pointer ml-1" title="Balie vergrendelen en uitloggen">
                         <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -593,8 +602,13 @@
                     <button type="button" id="btnGoReturnScreen" class="group p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 text-left cursor-pointer flex flex-col justify-between border-2 border-emerald-400/40 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-36 h-36 bg-white/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
                         <div>
-                            <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-3xl mb-5 shadow-xs group-hover:rotate-[-6deg] transition-transform">
-                                📥
+                            <div class="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center mb-5 shadow-xs group-hover:rotate-[-6deg] transition-transform">
+                                <svg class="w-9 h-9 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3.5 8C5.5 6.5 8.5 6.5 12 8c3.5-1.5 6.5-1.5 8.5 0v10.5c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V8z"/>
+                                    <path d="M12 8v10.5"/>
+                                    <path d="M12 2.5v4.5"/>
+                                    <path d="M9.5 4.5l2.5 2.5 2.5-2.5"/>
+                                </svg>
                             </div>
                             <span class="inline-block text-[11px] font-black uppercase tracking-widest text-emerald-200 bg-emerald-950/40 px-3 py-1 rounded-full mb-2">
                                 Stap 1: Terugbrengen
@@ -608,7 +622,9 @@
                         </div>
                         <div class="mt-6 pt-4 border-t border-white/20 flex items-center justify-between text-sm font-black text-white">
                             <span>Inleverbalie openen</span>
-                            <span class="w-9 h-9 rounded-xl bg-white text-emerald-800 flex items-center justify-center font-black group-hover:translate-x-1.5 transition-transform">➔</span>
+                            <span class="w-9 h-9 rounded-xl bg-white text-emerald-800 flex items-center justify-center font-black group-hover:translate-x-1.5 transition-transform">
+                                <svg class="w-4 h-4 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </span>
                         </div>
                     </button>
 
@@ -616,8 +632,13 @@
                     <button type="button" id="btnGoLoanScreen" class="group p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-indigo-800 text-white shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 text-left cursor-pointer flex flex-col justify-between border-2 border-brand-400/40 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-36 h-36 bg-white/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
                         <div>
-                            <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-3xl mb-5 shadow-xs group-hover:rotate-[6deg] transition-transform">
-                                📘
+                            <div class="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center mb-5 shadow-xs group-hover:rotate-[6deg] transition-transform">
+                                <svg class="w-9 h-9 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3.5 8C5.5 6.5 8.5 6.5 12 8c3.5-1.5 6.5-1.5 8.5 0v10.5c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V8z"/>
+                                    <path d="M12 8v10.5"/>
+                                    <path d="M8.5 8v6l2-1.5 2 1.5V8"/>
+                                    <path d="M18.5 2.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>
+                                </svg>
                             </div>
                             <span class="inline-block text-[11px] font-black uppercase tracking-widest text-brand-200 bg-brand-950/40 px-3 py-1 rounded-full mb-2">
                                 Stap 2: Meenemen
@@ -631,7 +652,9 @@
                         </div>
                         <div class="mt-6 pt-4 border-t border-white/20 flex items-center justify-between text-sm font-black text-white">
                             <span>Uitleenscherm openen</span>
-                            <span class="w-9 h-9 rounded-xl bg-white text-brand-800 flex items-center justify-center font-black group-hover:translate-x-1.5 transition-transform">➔</span>
+                            <span class="w-9 h-9 rounded-xl bg-white text-brand-800 flex items-center justify-center font-black group-hover:translate-x-1.5 transition-transform">
+                                <svg class="w-4 h-4 text-brand-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </span>
                         </div>
                     </button>
                 </div>
@@ -639,7 +662,10 @@
                 <!-- Zojuist Afgehandeld (Undo / Ongedaan Maken) Strook -->
                 <div id="deskRecentActionBox" class="hidden p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
                     <div class="flex items-center gap-2.5 text-xs">
-                        <span class="text-base">ℹ️</span>
+                        <svg class="w-4 h-4 text-amber-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M12 8h.01M12 11v5"/>
+                        </svg>
                         <span id="deskRecentActionText">Geen recente actie.</span>
                     </div>
                     <button type="button" id="btnUndoDeskAction" class="shrink-0 px-3 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer">
@@ -650,8 +676,11 @@
                 <!-- Mini-Dashboard Statistieken (ONDER DE TWEE KNOPPEN) -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div class="p-4 rounded-2xl bg-brand-50/60 border border-brand-100 flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-lg font-black">
-                            📖
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3.5 6.5C5.5 5 8.5 5 12 6.5c3.5-1.5 6.5-1.5 8.5 0v12c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0v-12z"/>
+                                <path d="M12 6.5v12"/>
+                            </svg>
                         </div>
                         <div>
                             <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider block">Actief uitgeleend</span>
@@ -659,8 +688,11 @@
                         </div>
                     </div>
                     <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg font-black">
-                            ⚠️
+                        <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M12 7v5l3 2"/>
+                            </svg>
                         </div>
                         <div>
                             <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Te laat</span>
@@ -668,8 +700,12 @@
                         </div>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center text-lg font-black">
-                            🏫
+                        <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center shrink-0 shadow-xs">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18M5 21V10l7-5 7 5v11"/>
+                                <path d="M10 21v-5a2 2 0 0 1 4 0v5"/>
+                                <path d="M9 12h2m2 0h2"/>
+                            </svg>
                         </div>
                         <div>
                             <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Betrokken klassen</span>
@@ -682,22 +718,25 @@
                 <details class="group bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs transition">
                     <summary class="font-bold text-xs sm:text-sm text-slate-800 flex items-center justify-between cursor-pointer list-none select-none">
                         <span class="flex items-center gap-2">
-                            <span class="text-base">💡</span>
+                            <svg class="w-4 h-4 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 18h6M10 21h4"/>
+                                <path d="M12 3a6 6 0 0 0-6 6c0 2.5 1.5 4.5 3 6h6c1.5-1.5 3-3.5 3-6a6 6 0 0 0-6-6z"/>
+                            </svg>
                             <span>Snelgids voor de balie: hoe werkt het?</span>
                         </span>
                         <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div class="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-slate-600">
                         <div class="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-100 space-y-1.5">
-                            <strong class="text-emerald-900 font-extrabold block text-xs">📥 1. Boek Inleveren (Terugbrengen)</strong>
+                            <strong class="text-emerald-900 font-extrabold block text-xs">1. Boek Inleveren (Terugbrengen)</strong>
                             <p class="leading-relaxed">Klik op de grote groene knop <strong>Boek Inleveren</strong>. Scan de barcode achterop het boek of typ de titel/leerling. Het systeem toont direct de uitlening en vraagt: <em>'Wat is de staat van het boek?'</em>. Klik op 🟢 <strong>Goed / Prima</strong> om direct in te nemen, of kies 🟡 <strong>Kaft beschadigd</strong>, 🟠 <strong>Pagina's schade</strong> of ⚠️ <strong>Schade / Kwijt</strong> met toelichting.</p>
                         </div>
                         <div class="p-3.5 rounded-xl bg-brand-50/60 border border-brand-100 space-y-1.5">
-                            <strong class="text-brand-900 font-extrabold block text-xs">📘 2. Boek Uitlenen (Meenemen)</strong>
+                            <strong class="text-brand-900 font-extrabold block text-xs">2. Boek Uitlenen (Meenemen)</strong>
                             <p class="leading-relaxed">Klik op de grote blauwe knop <strong>Boek Uitlenen</strong>. Kies het boek, selecteer de leerling en de klas, en klik op <strong>Uitlening Bevestigen</strong>. De uitleentermijn van 1 maand wordt automatisch geregistreerd.</p>
                         </div>
                         <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-100 space-y-1.5">
-                            <strong class="text-amber-950 font-extrabold block text-xs">🏫 3. Klasinlevering & Verlengen</strong>
+                            <strong class="text-amber-950 font-extrabold block text-xs">3. Klasinlevering & Verlengen</strong>
                             <p class="leading-relaxed">Brengt een leerkracht na een leesuur alle boeken van een klas terug? Klik in het overzicht hieronder op de klasbadge (bv. <em>2MWb</em>) en klik op de groene knop <strong>✓ Alles van deze klas inleveren</strong>. Een individueel boek verlengen kan met de <strong>+3w</strong> knop.</p>
                         </div>
                     </div>
@@ -707,7 +746,11 @@
                 <div class="bg-white p-6 rounded-3xl shadow-xs border border-slate-200/80 space-y-4">
                     <div class="flex items-center justify-between">
                         <h4 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                            <span>📋</span>
+                            <svg class="w-4 h-4 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                                <path d="M9 12h6m-6 4h4"/>
+                            </svg>
                             <span>Overzicht van alle lopende uitleningen</span>
                         </h4>
                     </div>
@@ -762,7 +805,12 @@
                         <span>← Terug naar Balie-overzicht</span>
                     </button>
                     <span class="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl flex items-center gap-2 w-fit">
-                        <span class="text-base">📥</span>
+                        <svg class="w-4 h-4 text-emerald-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.5 8C5.5 6.5 8.5 6.5 12 8c3.5-1.5 6.5-1.5 8.5 0v10.5c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V8z"/>
+                            <path d="M12 8v10.5"/>
+                            <path d="M12 2.5v4.5"/>
+                            <path d="M9.5 4.5l2.5 2.5 2.5-2.5"/>
+                        </svg>
                         <span>Boek Inleveren (Terugbrengen)</span>
                     </span>
                 </div>
@@ -806,7 +854,12 @@
                         <span>← Terug naar Balie-overzicht</span>
                     </button>
                     <span class="text-xs font-black uppercase tracking-wider text-brand-800 bg-brand-50 border border-brand-200 px-3.5 py-1.5 rounded-xl flex items-center gap-2 w-fit">
-                        <span class="text-base">📘</span>
+                        <svg class="w-4 h-4 text-brand-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.5 8C5.5 6.5 8.5 6.5 12 8c3.5-1.5 6.5-1.5 8.5 0v10.5c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V8z"/>
+                            <path d="M12 8v10.5"/>
+                            <path d="M8.5 8v6l2-1.5 2 1.5V8"/>
+                            <path d="M18.5 2.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>
+                        </svg>
                         <span>Boek Uitlenen (Meenemen)</span>
                     </span>
                 </div>
@@ -815,7 +868,7 @@
                 <form id="loanForm" class="space-y-5">
                     <div class="p-4 sm:p-5 rounded-2xl bg-brand-50/50 border border-brand-100 space-y-3">
                         <span class="text-xs font-black uppercase tracking-wider text-brand-800 flex items-center gap-2">
-                            <span>1️⃣</span>
+                            <span class="w-5 h-5 rounded-full bg-brand-600 text-white text-[11px] font-black inline-flex items-center justify-center shrink-0">1</span>
                             <span>Welk boek wordt uitgeleend?</span>
                         </span>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -837,7 +890,7 @@
 
                     <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                         <span class="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
-                            <span>2️⃣</span>
+                            <span class="w-5 h-5 rounded-full bg-slate-700 text-white text-[11px] font-black inline-flex items-center justify-center shrink-0">2</span>
                             <span>Wie leent het boek?</span>
                         </span>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -856,7 +909,7 @@
 
                     <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                         <span class="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
-                            <span>3️⃣</span>
+                            <span class="w-5 h-5 rounded-full bg-slate-700 text-white text-[11px] font-black inline-flex items-center justify-center shrink-0">3</span>
                             <span>Uitleentermijn</span>
                         </span>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -950,7 +1003,11 @@
 
                 <div class="flex items-center gap-2">
                     <button id="adminToDeskBtn" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-brand-50 hover:bg-brand-100 text-brand-700 flex items-center gap-1.5 border border-brand-200 cursor-pointer" title="Naar de Uitleenbalie voor in- en uitlenen">
-                        <span>🔄 Naar Uitleenbalie</span>
+                        <svg class="w-3.5 h-3.5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.5 7C5.5 5.5 8.5 5.5 12 7c3.5-1.5 6.5-1.5 8.5 0v11c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V7z"/>
+                            <path d="M12 7v11"/>
+                        </svg>
+                        <span>Naar Uitleenbalie</span>
                     </button>
                 </div>
 
@@ -1730,7 +1787,7 @@
                                 <span>Uitleenbalie (Inleveren & Balie)</span>
                             </div>
                             <p class="text-amber-800 leading-relaxed">
-                                Klik in het hoofdmenu op <strong>🔄 Uitleenbalie</strong>. Kies tussen de twee grote actieknoppen: <strong>Boek Inleveren</strong> (met directe controle van de staat van het boek) of <strong>Boek Uitlenen</strong>. Met één klik kan je ook een hele klas inleveren!
+                                Klik in het hoofdmenu op <strong>Uitleenbalie</strong>. Kies tussen de twee grote actieknoppen: <strong>Boek Inleveren</strong> (met directe controle van de staat van het boek) of <strong>Boek Uitlenen</strong>. Met één klik kan je ook een hele klas inleveren!
                             </p>
                         </div>
                     </div>
@@ -1766,13 +1823,13 @@
 
                         <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
                             <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
-                                <span>📘 FAQ 3: Hoe leen ik een boek snel uit aan een leerling?</span>
+                                <span>FAQ 3: Hoe leen ik een boek snel uit aan een leerling?</span>
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
                                 Dat kan op twee eenvoudige manieren:<br>
-                                1. <strong>In de klas / catalogus</strong>: Open de fiche van het boek en klik op <strong>📘 Dit boek uitlenen</strong>. Voer de code in (<code class="font-bold font-mono text-slate-800 display-teacher-pin">donbosco</code>), kies leerling en klas en bevestig.<br>
-                                2. <strong>Aan de balie</strong>: Klik in het menu op <strong>🔄 Uitleenbalie</strong> en kies de grote blauwe knop <strong>📘 Boek Uitlenen</strong>. Selecteer het boek, kies leerling en klas en klik op <strong>Uitlening Bevestigen</strong>.
+                                1. <strong>In de klas / catalogus</strong>: Open de fiche van het boek en klik op <strong>Dit boek uitlenen</strong>. Voer de code in (<code class="font-bold font-mono text-slate-800 display-teacher-pin">donbosco</code>), kies leerling en klas en bevestig.<br>
+                                2. <strong>Aan de balie</strong>: Klik in het menu op <strong>Uitleenbalie</strong> en kies de grote blauwe knop <strong>Boek Uitlenen</strong>. Selecteer het boek, kies leerling en klas en klik op <strong>Uitlening Bevestigen</strong>.
                             </p>
                         </details>
 
@@ -1791,21 +1848,21 @@
 
                         <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
                             <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
-                                <span>📥 FAQ 5: Hoe neem ik een boek weer in wanneer een leerling het terugbrengt?</span>
+                                <span>FAQ 5: Hoe neem ik een boek weer in wanneer een leerling het terugbrengt?</span>
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Klik in het hoofdmenu bovenaan op <strong>🔄 Uitleenbalie</strong> en kies de grote groene knop <strong>📥 Boek Inleveren</strong>. Scan de barcode met de handscanner of typ (een deel van) de boektitel of naam van de leerling. Het systeem toont direct de uitlening en vraagt: <em>'Wat is de staat van het ingeleverde boek?'</em>. Kies met één klik 🟢 <strong>Goed / Prima</strong> (meteen weer beschikbaar in de catalogus) of kies voor 🟡 <strong>Kaft beschadigd</strong>, 🟠 <strong>Pagina's schade</strong> of ⚠️ <strong>Schade / Kwijt</strong> met een optionele toelichting.
+                                Klik in het hoofdmenu bovenaan op <strong>Uitleenbalie</strong> en kies de grote groene knop <strong>Boek Inleveren</strong>. Scan de barcode met de handscanner of typ (een deel van) de boektitel of naam van de leerling. Het systeem toont direct de uitlening en vraagt: <em>'Wat is de staat van het ingeleverde boek?'</em>. Kies met één klik 🟢 <strong>Goed / Prima</strong> (meteen weer beschikbaar in de catalogus) of kies voor 🟡 <strong>Kaft beschadigd</strong>, 🟠 <strong>Pagina's schade</strong> of ⚠️ <strong>Schade / Kwijt</strong> met een optionele toelichting.
                             </p>
                         </details>
 
                         <details class="group p-4 rounded-2xl bg-slate-50 border border-slate-200 transition">
                             <summary class="font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between cursor-pointer list-none">
-                                <span>🏫 FAQ 6: Kan ik na een leesuur een hele klas in één klik inleveren?</span>
+                                <span>FAQ 6: Kan ik na een leesuur een hele klas in één klik inleveren?</span>
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Ja! Open de <strong>🔄 Uitleenbalie</strong>, klik op de filterbadge van jouw klas (bv. <em>2MWb</em>), en klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>. Alle openstaande boeken van die klas worden in één klik afgesloten!
+                                Ja! Open de <strong>Uitleenbalie</strong>, klik op de filterbadge van jouw klas (bv. <em>2MWb</em>), en klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>. Alle openstaande boeken van die klas worden in één klik afgesloten!
                             </p>
                         </details>
 
@@ -2010,8 +2067,13 @@
         <div class="bg-white p-6 space-y-4">
             <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
-                        🔄
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.5 8C5.5 6.5 8.5 6.5 12 8c3.5-1.5 6.5-1.5 8.5 0v10.5c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V8z"/>
+                            <path d="M12 8v10.5"/>
+                            <path d="M12 2.5v4.5"/>
+                            <path d="M9.5 4.5l2.5 2.5 2.5-2.5"/>
+                        </svg>
                     </div>
                     <div>
                         <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Boek Inleveren</span>
@@ -5445,8 +5507,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 if (avail.available > 0) {
                     loanBtn.disabled = false;
                     loanBtn.innerHTML = `
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        <span>📘 Dit boek uitlenen</span>
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8C5.5 6.5 8.5 6.5 12 8c3.5-1.5 6.5-1.5 8.5 0v10.5c-2-1.5-5-1.5-8.5 0-3.5-1.5-6.5-1.5-8.5 0V8z"/><path d="M12 8v10.5"/><path d="M8.5 8v6l2-1.5 2 1.5V8"/></svg>
+                        <span>Dit boek uitlenen</span>
                     `;
                     loanBtn.className = "w-full sm:w-auto font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white cursor-pointer order-2 sm:order-1";
                 } else {
