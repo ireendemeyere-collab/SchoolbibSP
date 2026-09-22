@@ -540,7 +540,7 @@
         const btnFull = document.getElementById('btnViewFull');
         const btnQuick = document.getElementById('btnViewQuick');
 
-        btnQuick.addEventListener('click', () => {
+        function showQuickView() {
             btnQuick.className = "view-tab-btn active px-3 py-1 rounded-lg text-xs font-extrabold transition bg-brand-600 text-white shadow-2xs";
             btnFull.className = "view-tab-btn px-3 py-1 rounded-lg text-xs font-bold transition text-slate-600 hover:bg-slate-100";
             
@@ -552,14 +552,28 @@
             document.getElementById('balie').classList.remove('hidden');
             document.getElementById('beheer').classList.add('hidden');
             document.getElementById('faq').classList.remove('hidden');
-        });
+        }
 
-        btnFull.addEventListener('click', () => {
+        function showFullView() {
             btnFull.className = "view-tab-btn active px-3 py-1 rounded-lg text-xs font-extrabold transition bg-brand-600 text-white shadow-2xs";
             btnQuick.className = "view-tab-btn px-3 py-1 rounded-lg text-xs font-bold transition text-slate-600 hover:bg-slate-100";
             
             sections.forEach(s => s.classList.remove('hidden'));
-        });
+        }
+
+        btnQuick.addEventListener('click', showQuickView);
+        btnFull.addEventListener('click', showFullView);
+
+        // Automatische balie focus als aangeroepen vanuit het tabblad Balie
+        if (window.location.search.includes('quick') || window.location.hash === '#balie') {
+            showQuickView();
+            if (window.location.hash === '#balie') {
+                setTimeout(() => {
+                    const el = document.getElementById('balie');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 150);
+            }
+        }
     </script>
 </body>
 </html>
