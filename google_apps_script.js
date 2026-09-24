@@ -124,7 +124,27 @@ function doPost(e) {
       return createJsonResponse({ status: 'success', message: 'Instelling opgeslagen in Google Sheet' });
     }
 
-    // Actie 6: Nieuw boek / exemplaren toevoegen aan de catalogus
+    // Actie 6: Aankoopsuggestie van leerling of leerkracht opslaan
+    if (data.action === 'suggest_purchase') {
+      var suggestSheet = ss.getSheetByName("Aankoopsuggesties");
+      if (!suggestSheet) {
+        suggestSheet = ss.insertSheet("Aankoopsuggesties");
+        suggestSheet.appendRow(["Tijdstip", "Naam", "Klas", "Titel", "Auteur", "Reden aanbeveling", "Status"]);
+        suggestSheet.setFrozenRows(1);
+      }
+      suggestSheet.appendRow([
+        new Date(),
+        data.naam ? data.naam.toString().trim() : '',
+        data.klas ? data.klas.toString().trim() : '',
+        data.titel ? data.titel.toString().trim() : '',
+        data.auteur ? data.auteur.toString().trim() : '',
+        data.reden ? data.reden.toString().trim() : '',
+        'Nieuw'
+      ]);
+      return createJsonResponse({ status: 'success', message: 'Aankoopsuggestie opgeslagen in Google Sheet!' });
+    }
+
+    // Actie 7: Nieuw boek / exemplaren toevoegen aan de catalogus
     var sheet = ss.getActiveSheet();
     var count = data.aantal ? Math.max(1, parseInt(data.aantal, 10)) : 1;
     var startCopyNum = data.startCopyNum ? parseInt(data.startCopyNum, 10) : 1;
@@ -261,14 +281,35 @@ function doGet(e) {
         }
       }
 
+      // Aankoopsuggesties ophalen
+      var suggestions = [];
+      var suggestSheet = ss.getSheetByName("Aankoopsuggesties");
+      if (suggestSheet) {
+        var sgData = suggestSheet.getDataRange().getValues();
+        for (var g = 1; g < sgData.length; g++) {
+          if (sgData[g][3]) {
+            suggestions.push({
+              timestamp: formatCellDate(sgData[g][0]),
+              naam: sgData[g][1] ? sgData[g][1].toString() : '',
+              klas: sgData[g][2] ? sgData[g][2].toString() : '',
+              titel: sgData[g][3] ? sgData[g][3].toString() : '',
+              auteur: sgData[g][4] ? sgData[g][4].toString() : '',
+              reden: sgData[g][5] ? sgData[g][5].toString() : '',
+              status: sgData[g][6] ? sgData[g][6].toString() : 'Nieuw'
+            });
+          }
+        }
+      }
+
       return createJsonResponse({ 
         status: 'success', 
         loans: loans, 
         settings: settings, 
-        ratings: ratings 
+        ratings: ratings,
+        suggestions: suggestions
       });
     } catch (err) {
-      return createJsonResponse({ status: 'error', message: err.toString(), loans: [], settings: {}, ratings: {} });
+      return createJsonResponse({ status: 'error', message: err.toString(), loans: [], settings: {}, ratings: {}, suggestions: [] });
     }
   }
 
