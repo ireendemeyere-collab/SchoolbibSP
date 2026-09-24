@@ -172,9 +172,9 @@ Bij binnenkomst aan de balie kiest de medewerker direct tussen twee overzichteli
 
 ### Filteren per klas & Klasinlevering in één klik
 Brengt een leerkracht na een leesuur een hele bak boeken van de klas terug?
-1. In het overzicht onderaan klik je op de badge van de klas (bv. `2MWb`).
+1. In het overzicht onderaan klik je op de badge van de klas (bv. `2LA1`).
 2. Je ziet direct alle openstaande boeken van die klas.
-3. Klik op de groene knop **✓ Alles van klas 2MWb inleveren**. Alle boeken worden gelijktijdig gemarkeerd als ingeleverd!
+3. Klik op de groene knop **✓ Alles van klas 2LA1 inleveren**. Alle boeken worden gelijktijdig gemarkeerd als ingeleverd!
 
 <a id="staat-controle"></a>
 
@@ -301,7 +301,7 @@ Klik bovenaan in het menu op **🔄 Uitleenbalie**. Log in met de leerkrachtcode
 <a id="faq-6-kan-ik-in-één-klik-alle-boeken-van-mijn-klas-inleveren"></a>
 
 ### FAQ 6: Kan ik in één klik alle boeken van mijn klas inleveren?
-Ja! Open de **🔄 Uitleenbalie**, klik op de filterknop van jouw klas (bv. `2MWb`), en klik vervolgens op de groene knop **✓ Alles van deze klas inleveren**.
+Ja! Open de **🔄 Uitleenbalie**, klik op de filterknop van jouw klas (bv. `2LA1`), en klik vervolgens op de groene knop **✓ Alles van deze klas inleveren**.
 
 ---
 

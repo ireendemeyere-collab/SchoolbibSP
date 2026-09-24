@@ -136,7 +136,7 @@ Wanneer een leerling een boek teruggeeft aan de balie of in de klas:
 Heb je met je klas een leesuur gehad in de bib en breng je aan het einde van het lesuur de hele bak met boeken terug? Je hoeft die niet één voor één in te scannen!
 
 1. Open de **🔄 Uitleenbalie**.
-2. Klik in de filterbalk boven de tabel op de knop van jouw klas (bv. **`2MWb`** of **`4WET`**).
+2. Klik in de filterbalk boven de tabel op de knop van jouw klas (bv. **`2LA1`** of **`4MT`**).
 3. Je ziet direct een overzicht van alle boeken die leerlingen van die klas momenteel in bezit hebben.
 4. Rechtsboven verschijnt een grote groene knop:  
    👉 **`✓ Alles van klas [X] inleveren`**

@@ -737,7 +737,7 @@
                         </div>
                         <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-100 space-y-1.5">
                             <strong class="text-amber-950 font-extrabold block text-xs">3. Klasinlevering & Verlengen</strong>
-                            <p class="leading-relaxed">Brengt een leerkracht na een leesuur alle boeken van een klas terug? Klik in het overzicht hieronder op de klasbadge (bv. <em>2MWb</em>) en klik op de groene knop <strong>✓ Alles van deze klas inleveren</strong>. Een individueel boek verlengen kan met de <strong>+3w</strong> knop.</p>
+                            <p class="leading-relaxed">Brengt een leerkracht na een leesuur alle boeken van een klas terug? Klik in het overzicht hieronder op de klasbadge (bv. <em>2LA1</em>) en klik op de groene knop <strong>✓ Alles van deze klas inleveren</strong>. Een individueel boek verlengen kan met de <strong>+3w</strong> knop.</p>
                         </div>
                     </div>
                 </details>
@@ -901,7 +901,7 @@
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
-                                <input type="text" id="loanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" 
+                                <input type="text" id="loanClass" required placeholder="Bijv. 1EO, 2LA1, 3HW, 4MT" list="schoolClassesList" 
                                        class="w-full text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
                             </div>
                         </div>
@@ -1719,7 +1719,7 @@
                             <p class="text-xs text-slate-500 mt-0.5">Stel de klassen van de school in (gescheiden door komma's). Deze verschijnen automatisch in de keuzelijst bij het uitlenen.</p>
                         </div>
                         <div class="space-y-2">
-                            <textarea id="schoolClassesInput" rows="3" placeholder="Bijv. 1A, 1B, 2MWa, 2MWb, 3WET, 4ECO, 5ASO, 6ASO, OKAN, Leerkracht"
+                            <textarea id="schoolClassesInput" rows="3" placeholder="Bijv. 1EO, 1LA1, 2EO1, 3HW, 4MT, 5ECWI, 6WEWI1, Leerkracht"
                                       class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium"></textarea>
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-slate-400">Tip: Scheid klassen met een komma of op een nieuwe regel.</span>
@@ -1862,7 +1862,7 @@
                                 <span class="text-xs text-brand-600 group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <p class="mt-2 text-xs text-slate-600 leading-relaxed pt-2.5 border-t border-slate-200/60">
-                                Ja! Open de <strong>Uitleenbalie</strong>, klik op de filterbadge van jouw klas (bv. <em>2MWb</em>), en klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>. Alle openstaande boeken van die klas worden in één klik afgesloten!
+                                Ja! Open de <strong>Uitleenbalie</strong>, klik op de filterbadge van jouw klas (bv. <em>2LA1</em>), en klik vervolgens op de groene knop <strong>'✓ Alles van deze klas inleveren'</strong>. Alle openstaande boeken van die klas worden in één klik afgesloten!
                             </p>
                         </details>
 
@@ -2022,7 +2022,7 @@
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Klas <span class="text-rose-500">*</span></label>
-                    <input type="text" id="quickLoanClass" required placeholder="Bijv. 2MWb, 4WET" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
+                    <input type="text" id="quickLoanClass" required placeholder="Bijv. 1EO, 2LA1, 3HW, 4MT" list="schoolClassesList" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -2035,19 +2035,67 @@
                     </div>
                 </div>
                 <datalist id="schoolClassesList">
-                    <option value="1A"></option>
-                    <option value="1B"></option>
-                    <option value="1C"></option>
-                    <option value="2MWa"></option>
-                    <option value="2MWb"></option>
-                    <option value="2STEM"></option>
-                    <option value="3WET"></option>
-                    <option value="3HUM"></option>
-                    <option value="4WET"></option>
-                    <option value="4ECO"></option>
-                    <option value="5ASO"></option>
-                    <option value="6ASO"></option>
-                    <option value="OKAN"></option>
+                    <option value="1EO"></option>
+                    <option value="1LA1"></option>
+                    <option value="1LA2"></option>
+                    <option value="1LA3"></option>
+                    <option value="1MT"></option>
+                    <option value="1STWE1"></option>
+                    <option value="1STWE2"></option>
+                    <option value="2EO1"></option>
+                    <option value="2EO2"></option>
+                    <option value="2GRLA"></option>
+                    <option value="2LA1"></option>
+                    <option value="2LA2"></option>
+                    <option value="2MTWE1"></option>
+                    <option value="2MTWE2"></option>
+                    <option value="2STWE1"></option>
+                    <option value="2STWE2"></option>
+                    <option value="3EWt"></option>
+                    <option value="3EWw"></option>
+                    <option value="3GRLAt"></option>
+                    <option value="3GRLAw"></option>
+                    <option value="3HW"></option>
+                    <option value="3LAt"></option>
+                    <option value="3LAw"></option>
+                    <option value="3MT"></option>
+                    <option value="3NW1"></option>
+                    <option value="3NW2"></option>
+                    <option value="4EWt"></option>
+                    <option value="4EWw"></option>
+                    <option value="4GRLAt"></option>
+                    <option value="4GRLAw"></option>
+                    <option value="4HW"></option>
+                    <option value="4LAt"></option>
+                    <option value="4LAw1"></option>
+                    <option value="4LAw2"></option>
+                    <option value="4MT"></option>
+                    <option value="4NW1"></option>
+                    <option value="4NW2"></option>
+                    <option value="5ECMT"></option>
+                    <option value="5ECWI"></option>
+                    <option value="5GRLA"></option>
+                    <option value="5LAMT"></option>
+                    <option value="5LAWE"></option>
+                    <option value="5LAWIwe"></option>
+                    <option value="5GRWIwe"></option>
+                    <option value="5HW"></option>
+                    <option value="5MT"></option>
+                    <option value="5MTWE"></option>
+                    <option value="5WEWI1"></option>
+                    <option value="5WEWI2"></option>
+                    <option value="6ECMT"></option>
+                    <option value="6ECWI"></option>
+                    <option value="6GRLA"></option>
+                    <option value="6LAMT"></option>
+                    <option value="6LAWE"></option>
+                    <option value="6LAWIwe"></option>
+                    <option value="6GRWIwe"></option>
+                    <option value="6HW"></option>
+                    <option value="6MT"></option>
+                    <option value="6MTWE"></option>
+                    <option value="6WEWI1"></option>
+                    <option value="6WEWI2"></option>
                     <option value="Leerkracht"></option>
                 </datalist>
 
@@ -6486,7 +6534,15 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                             if (durSel) durSel.value = data.settings.schoolbib_loan_duration;
                         }
                         if (data.settings.schoolbib_classes) {
-                            localStorage.setItem('schoolbib_classes', data.settings.schoolbib_classes);
+                            try {
+                                const parsedCls = JSON.parse(data.settings.schoolbib_classes);
+                                if (Array.isArray(parsedCls) && parsedCls.length > 0) {
+                                    const hasOldMocks = parsedCls.some(c => ['1A', '1B', '1C', '1D', '2MWa', '2MWb', '2STEM', 'OKAN'].includes(c));
+                                    if (!hasOldMocks) {
+                                        localStorage.setItem('schoolbib_classes', data.settings.schoolbib_classes);
+                                    }
+                                }
+                            } catch (e) {}
                             updateSchoolClassesDatalist();
                         }
                     }
@@ -6610,13 +6666,13 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
         }
 
         const DEFAULT_CLASSES = [
-            "1A", "1B", "1C", "1D",
-            "2MWa", "2MWb", "2STEM", "2K&C",
-            "3WET", "3HUM", "3ECO", "3LAT",
-            "4WET", "4HUM", "4ECO", "4LAT",
-            "5ASO", "5WET", "5HUM", "5ECO",
-            "6ASO", "6WET", "6HUM", "6ECO",
-            "OKAN", "Leerkracht"
+            "1EO", "1LA1", "1LA2", "1LA3", "1MT", "1STWE1", "1STWE2",
+            "2EO1", "2EO2", "2GRLA", "2LA1", "2LA2", "2MTWE1", "2MTWE2", "2STWE1", "2STWE2",
+            "3EWt", "3EWw", "3GRLAt", "3GRLAw", "3HW", "3LAt", "3LAw", "3MT", "3NW1", "3NW2",
+            "4EWt", "4EWw", "4GRLAt", "4GRLAw", "4HW", "4LAt", "4LAw1", "4LAw2", "4MT", "4NW1", "4NW2",
+            "5ECMT", "5ECWI", "5GRLA", "5LAMT", "5LAWE", "5LAWIwe", "5GRWIwe", "5HW", "5MT", "5MTWE", "5WEWI1", "5WEWI2",
+            "6ECMT", "6ECWI", "6GRLA", "6LAMT", "6LAWE", "6LAWIwe", "6GRWIwe", "6HW", "6MT", "6MTWE", "6WEWI1", "6WEWI2",
+            "Leerkracht"
         ];
 
         function getSchoolClasses() {
@@ -6625,7 +6681,14 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed) && parsed.length > 0) list = parsed;
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        const hasOldMocks = parsed.some(c => ['1A', '1B', '1C', '1D', '2MWa', '2MWb', '2STEM', 'OKAN'].includes(c));
+                        if (!hasOldMocks) {
+                            list = parsed;
+                        } else {
+                            localStorage.setItem('schoolbib_classes', JSON.stringify(DEFAULT_CLASSES));
+                        }
+                    }
                 } catch (e) {}
             }
             // Voeg klassen toe die in actieve/historische uitleningen voorkomen (zonder dubbele hoofdletter/kleine letter varianten)
