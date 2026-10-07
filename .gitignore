@@ -1,0 +1,10 @@
+desktop.ini
+*.ini
+Thumbs.db
+.DS_Store
+handleiding.html
+HANDLEIDING.md
+HANDLEIDING_LEERKRACHTEN.md
+google_apps_script.js
+*_sanitized.html
+boeken.csv
