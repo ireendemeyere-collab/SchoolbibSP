@@ -590,6 +590,8 @@
     <script>
         // CONFIGURATIE
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpWPRhterrkdMeJ3qZlLFshWIZ6I3yR5gIJSMNTdG_fXXAVL8YZgrK-mEDLfN5Qb3rYPamLYgMfb4K/pub?gid=534968996&single=true&output=csv";
+        // Google Apps Script Web App URL voor het wegschrijven van beoordelingen & uitleningen naar de Google Sheet
+        const GOOGLE_APPS_SCRIPT_URL = "";
         // STATE
         let allBooks = [];
         let randomCatalogSample = [];
@@ -878,6 +880,37 @@
                         const goodreadsRaw = (book['Goodreads Link'] || book['goodreads link'] || book.Goodreads || '').toString().trim();
                         const exemplaar = (book.Exemplaar || book.exemplaar || book.Exemplaren || book.exemplaren || '').toString().trim();
 
+                        // Beoordeling / Sterren detectie uit Google Sheet (flexibel voor 'Sterren', 'Beoordeling', 'Score', 'Rating', etc.)
+                        const rawRatingVal = (book.Sterren || book.sterren || book.Beoordeling || book.beoordeling || book.Score || book.score || book.Rating || book.rating || '').toString().trim();
+                        const rawRatingCountVal = (book['Aantal stemmen'] || book['aantal stemmen'] || book['Aantal beoordelingen'] || book['aantal beoordelingen'] || book.Stemmen || book.stemmen || '').toString().trim();
+
+                        let itemSheetAvg = 0;
+                        let itemSheetCount = 0;
+
+                        if (rawRatingVal) {
+                            const starMatches = rawRatingVal.match(/★+/g);
+                            if (starMatches && starMatches[0].length > 0) {
+                                itemSheetAvg = starMatches[0].length;
+                            } else {
+                                const numMatch = rawRatingVal.replace(',', '.').match(/(\d+(\.\d+)?)/);
+                                if (numMatch) {
+                                    itemSheetAvg = parseFloat(numMatch[1]);
+                                }
+                            }
+                            if (itemSheetAvg > 5) {
+                                if (itemSheetAvg <= 10) itemSheetAvg = itemSheetAvg / 2;
+                                else if (itemSheetAvg <= 100) itemSheetAvg = (itemSheetAvg / 100) * 5;
+                            }
+                            itemSheetAvg = Math.min(5, Math.max(0, Math.round(itemSheetAvg * 10) / 10));
+                        }
+
+                        if (rawRatingCountVal) {
+                            const cMatch = rawRatingCountVal.match(/\d+/);
+                            if (cMatch) itemSheetCount = parseInt(cMatch[0], 10);
+                        } else if (itemSheetAvg > 0) {
+                            itemSheetCount = 1;
+                        }
+
                         // Uitleenstatus detectie (veilig en anoniem uit Google Sheet)
                         const statusVal = (book.Status || book.status || book.Uitleenstatus || book.uitleenstatus || book.Beschikbaarheid || book.beschikbaarheid || '').toString().trim().toLowerCase();
                         const uitgeleendVal = (book.Uitgeleend || book.uitgeleend || '').toString().trim().toLowerCase();
@@ -935,7 +968,8 @@
                             Goodreads: goodreadsRaw,
                             Exemplaar: exemplaar,
                             Taal: bepaalTaal(locatie),
-                            isLoaned: isItemLoaned
+                            isLoaned: isItemLoaned,
+                            sheetRating: { avg: itemSheetAvg, count: itemSheetCount }
                         };
                     }).filter(b => b.Titel !== '');
 
@@ -961,6 +995,7 @@
                                 Hebban: item.Hebban,
                                 Goodreads: item.Goodreads,
                                 Taal: item.Taal,
+                                sheetRating: { avg: item.sheetRating.avg, count: item.sheetRating.count },
                                 copies: []
                             });
                         }
@@ -971,6 +1006,9 @@
                         if (!entry.Hebban && item.Hebban) entry.Hebban = item.Hebban;
                         if (!entry.Goodreads && item.Goodreads) entry.Goodreads = item.Goodreads;
                         if (!entry.isBekroond && item.isBekroond) entry.isBekroond = true;
+                        if ((!entry.sheetRating || entry.sheetRating.avg === 0) && item.sheetRating && item.sheetRating.avg > 0) {
+                            entry.sheetRating = { avg: item.sheetRating.avg, count: item.sheetRating.count };
+                        }
                         if (!entry.Tags && item.Tags) {
                             entry.Tags = item.Tags;
                             entry.rawTagList = item.rawTagList;
@@ -1224,9 +1262,40 @@
 
         // 3. STERREN & FAVORIETEN
         function getBookRating(title) {
-            const data = ratingsStore[title];
-            if (!data || !data.avg) return { avg: 0, count: 0 };
-            return { avg: Math.round(data.avg * 10) / 10, count: data.count };
+            const local = ratingsStore[title];
+
+            // Haal de officiële score uit de Google Sheet voor dit boek op
+            let sheetAvg = 0;
+            let sheetCount = 0;
+            if (allBooks && allBooks.length > 0) {
+                const found = allBooks.find(b => b.Titel && b.Titel.toLowerCase().trim() === (title || '').toLowerCase().trim());
+                if (found && found.sheetRating && found.sheetRating.avg > 0) {
+                    sheetAvg = found.sheetRating.avg;
+                    sheetCount = found.sheetRating.count || 1;
+                }
+            }
+
+            // Als er een lokale stem is uitgebracht door de leerling in deze browser
+            if (local && local.avg) {
+                if (sheetAvg > 0) {
+                    // Combineer de sheet-score met de lokale stem
+                    const totalScore = (sheetAvg * sheetCount) + (local.myRating || local.avg);
+                    const totalCount = sheetCount + 1;
+                    return {
+                        avg: Math.round((totalScore / totalCount) * 10) / 10,
+                        count: totalCount,
+                        myRating: local.myRating
+                    };
+                }
+                return { avg: Math.round(local.avg * 10) / 10, count: local.count, myRating: local.myRating };
+            }
+
+            // Zo niet, toon de officiële score en het aantal beoordelingen uit de Google Sheet
+            if (sheetAvg > 0) {
+                return { avg: sheetAvg, count: sheetCount, myRating: 0 };
+            }
+
+            return { avg: 0, count: 0, myRating: 0 };
         }
 
         function isBookFavorite(title) {
@@ -1266,7 +1335,14 @@
 
             localStorage.setItem('schoolbib_ratings', JSON.stringify(ratingsStore));
 
-            const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
+            // Werk de score tekst direct bij in het geopende detailmodal
+            const scoreText = document.getElementById('modalRatingScoreText');
+            const r = getBookRating(title);
+            if (scoreText) {
+                scoreText.textContent = r.avg > 0 ? `${r.avg} / 5 (${r.count} beoordelingen)` : 'Nog niet beoordeeld';
+            }
+
+            const activeScriptUrl = (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : '') || localStorage.getItem('schoolbib_script_url') || '';
             if (activeScriptUrl) {
                 try {
                     fetch(activeScriptUrl, {
@@ -1701,6 +1777,7 @@
             card.onclick = () => openBookDetailModal(book);
 
             const avail = getBookAvailability(book);
+            const rating = getBookRating(book.Titel);
             const statusBadgeHtml = avail.available > 0
                 ? `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-2xs bg-emerald-600 text-white">Aanwezig</span>`
                 : `<span class="text-[9px] font-black px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-2xs bg-rose-600 text-white">Uitgeleend</span>`;
@@ -1725,7 +1802,10 @@
                     <h5 class="text-xs font-bold ${isDarkTheme ? 'text-white' : 'text-slate-900'} truncate group-hover:text-brand-600 transition" title="${escapeHtml(book.Titel)}">
                         ${escapeHtml(book.Titel)}
                     </h5>
-                    <p class="text-[11px] ${isDarkTheme ? 'text-slate-400' : 'text-slate-500'} truncate">${escapeHtml(book.Auteur)}</p>
+                    <div class="flex items-center justify-between text-[11px] mt-0.5">
+                        <p class="${isDarkTheme ? 'text-slate-400' : 'text-slate-500'} truncate">${escapeHtml(book.Auteur)}</p>
+                        ${rating.avg > 0 ? `<span class="text-sunny-400 font-extrabold shrink-0 ml-1">★ ${rating.avg}</span>` : ''}
+                    </div>
                 </div>
             `;
             return card;
