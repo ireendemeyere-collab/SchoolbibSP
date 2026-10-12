@@ -269,6 +269,22 @@
                         </div>
                     </div>
 
+                    <!-- 1b. Dropdown ERK Taalniveau -->
+                    <div class="relative dropdown-container">
+                        <button type="button" id="btnDropdownErk" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
+                            <span>ERK-niveau</span>
+                            <span id="badgeErkCount" class="hidden px-1.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] leading-none">0</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="menuErk" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
+                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies ERK-niveau</span>
+                                <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
+                            </div>
+                            <div class="space-y-2 max-h-60 overflow-y-auto clean-scroll" id="erkCheckboxes"></div>
+                        </div>
+                    </div>
+
                     <!-- 2. Dropdown Leeftijd -->
                     <div class="relative dropdown-container">
                         <button type="button" id="btnDropdownLeeftijd" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
@@ -424,6 +440,7 @@
                 <div class="flex flex-wrap items-center gap-2">
                     <span class="text-xs font-bold bg-brand-600 text-white px-3 py-1 rounded-full" id="modalGraadBadge">Graad</span>
                     <span class="text-xs font-bold text-slate-700 bg-white px-2.5 py-1 rounded-full border border-slate-200" id="modalTaalBadge">Taal</span>
+                    <span class="hidden text-xs font-bold bg-indigo-600 text-white px-2.5 py-1 rounded-full shadow-2xs" id="modalErkBadge">ERK</span>
                     <span class="hidden text-xs font-bold bg-amber-500 text-white px-2.5 py-1 rounded-full" id="modalBekroondBadge">Bekroond</span>
                 </div>
                 <button id="btnCloseModal" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center font-extrabold text-base transition shadow-2xs border border-slate-200">
@@ -609,13 +626,13 @@
         let ratingsStore = JSON.parse(localStorage.getItem('schoolbib_ratings') || '{}');
         let favoritesList = JSON.parse(localStorage.getItem('schoolbib_favorites') || '[]');
 
-        // UITGELICHT THEMA CONFIGURATIE (Standaard staat het thema UIT / geen thema actief)
+        // UITGELICHT THEMA CONFIGURATIE (Standaard actief thema voor alle bezoekers)
         const DEFAULT_FEATURED = {
-            enabled: false,
-            title: "",
-            description: "",
-            tag: "",
-            style: "auto",
+            enabled: true,
+            title: "Spannende boeken in de herfst",
+            description: "Mysteries, detectives, duistere geheimen en nagelbijtende spanning om bij weg te griezelen in onze schoolbib.",
+            tag: "spanning",
+            style: "night",
             gradePicks: {
                 grade1: [],
                 grade2: [],
@@ -637,7 +654,7 @@
             {
                 id: 'theme_spanning',
                 savedAt: 'Spannende fictie',
-                title: 'Spannende boeken in november',
+                title: 'Spannende boeken in de herfst',
                 description: 'Mysteries, detectives, duistere geheimen en nagelbijtende spanning om bij weg te griezelen.',
                 tag: 'spanning',
                 style: 'night',
@@ -667,10 +684,6 @@
                 const raw = localStorage.getItem('schoolbib_featured_theme');
                 if (raw) {
                     const parsed = JSON.parse(raw);
-                    // Automatische migratie indien nog de oude voorgeprogrammeerde griezelboeken in de lokale cache zaten
-                    if (parsed && (parsed.title === "Spannende boeken in november" || parsed.tag === "spanning")) {
-                        return DEFAULT_FEATURED;
-                    }
                     return parsed;
                 }
                 return DEFAULT_FEATURED;
@@ -880,6 +893,20 @@
                         const goodreadsRaw = (book['Goodreads Link'] || book['goodreads link'] || book.Goodreads || '').toString().trim();
                         const exemplaar = (book.Exemplaar || book.exemplaar || book.Exemplaren || book.exemplaren || '').toString().trim();
 
+                        // ERK-niveau detectie (uit aparte kolom 'ERK', 'ERK-niveau', of fallback uit tags)
+                        const erkRaw = (book.ERK || book['ERK-niveau'] || book['ERK-Niveau'] || book.erk || book.Taalniveau || book.taalniveau || book.CEFR || book.cefr || '').toString().trim().toUpperCase();
+                        let finalErk = '';
+                        if (/^[A-C][1-2]$/.test(erkRaw)) {
+                            finalErk = erkRaw;
+                        } else if (erkRaw) {
+                            const m = erkRaw.match(/\b([A-C][1-2])\b/);
+                            if (m) finalErk = m[1];
+                        }
+                        if (!finalErk) {
+                            const erkInTags = rawTags.match(/\b(?:ERK|CEFR)[-:\s]*([A-C][1-2])\b/i);
+                            if (erkInTags) finalErk = erkInTags[1].toUpperCase();
+                        }
+
                         // Beoordeling / Sterren detectie uit Google Sheet (flexibel voor 'Sterren', 'Beoordeling', 'Score', 'Rating', etc.)
                         const rawRatingVal = (book.Sterren || book.sterren || book.Beoordeling || book.beoordeling || book.Score || book.score || book.Rating || book.rating || '').toString().trim();
                         const rawRatingCountVal = (book['Aantal stemmen'] || book['aantal stemmen'] || book['Aantal beoordelingen'] || book['aantal beoordelingen'] || book.Stemmen || book.stemmen || '').toString().trim();
@@ -968,6 +995,7 @@
                             Goodreads: goodreadsRaw,
                             Exemplaar: exemplaar,
                             Taal: bepaalTaal(locatie),
+                            ERK: finalErk,
                             isLoaned: isItemLoaned,
                             sheetRating: { avg: itemSheetAvg, count: itemSheetCount }
                         };
@@ -995,6 +1023,7 @@
                                 Hebban: item.Hebban,
                                 Goodreads: item.Goodreads,
                                 Taal: item.Taal,
+                                ERK: item.ERK,
                                 sheetRating: { avg: item.sheetRating.avg, count: item.sheetRating.count },
                                 copies: []
                             });
@@ -1006,6 +1035,7 @@
                         if (!entry.Hebban && item.Hebban) entry.Hebban = item.Hebban;
                         if (!entry.Goodreads && item.Goodreads) entry.Goodreads = item.Goodreads;
                         if (!entry.isBekroond && item.isBekroond) entry.isBekroond = true;
+                        if (!entry.ERK && item.ERK) entry.ERK = item.ERK;
                         if ((!entry.sheetRating || entry.sheetRating.avg === 0) && item.sheetRating && item.sheetRating.avg > 0) {
                             entry.sheetRating = { avg: item.sheetRating.avg, count: item.sheetRating.count };
                         }
@@ -1716,6 +1746,7 @@
                                 <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs">
                                     ${escapeHtml(book.Graad)}
                                 </span>
+                                ${book.ERK ? `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>` : ''}
                                 ${statusBadgeHtml}
                                 ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-2xs">Bekroond</span>' : ''}
                             </div>
@@ -1789,6 +1820,7 @@
                         <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs">
                             ${escapeHtml(book.Graad)}
                         </span>
+                        ${book.ERK ? `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>` : ''}
                         ${statusBadgeHtml}
                         ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-2xs">Bekroond</span>' : ''}
                     </div>
@@ -1897,6 +1929,7 @@
         function initDropdownMenus() {
             const dropdownConfigs = [
                 { btnId: 'btnDropdownTaal', menuId: 'menuTaal' },
+                { btnId: 'btnDropdownErk', menuId: 'menuErk' },
                 { btnId: 'btnDropdownLeeftijd', menuId: 'menuLeeftijd' },
                 { btnId: 'btnDropdownThema', menuId: 'menuThema' },
                 { btnId: 'btnDropdownBeschikbaar', menuId: 'menuBeschikbaar' }
@@ -2004,7 +2037,7 @@
             }
         }
 
-        function renderActiveFilterTags(genres, themas, leeftijden, talen, beschikbaar, isBekroondActive) {
+        function renderActiveFilterTags(genres, themas, leeftijden, talen, beschikbaar, isBekroondActive, erks = []) {
             const bar = document.getElementById('activeFilterTagsBar');
             const list = document.getElementById('activeFilterTagsList');
             if (!bar || !list) return;
@@ -2048,6 +2081,13 @@
                 total++;
                 list.appendChild(createFilterChip(`Taal: ${val}`, 'taal', val));
             });
+
+            if (Array.isArray(erks)) {
+                erks.forEach(val => {
+                    total++;
+                    list.appendChild(createFilterChip(`ERK: ${val}`, 'erk', val));
+                });
+            }
 
             beschikbaar.forEach(val => {
                 total++;
@@ -2206,6 +2246,29 @@
                 });
             }
 
+            // 3b. Filter op ERK-niveau (A1 t/m C2)
+            const standardErks = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+            const foundErks = [...new Set(allBooks.map(b => b.ERK))].filter(Boolean);
+            const erkList = foundErks.length > 0 
+                ? standardErks.filter(lvl => foundErks.includes(lvl)).concat(foundErks.filter(lvl => !standardErks.includes(lvl))) 
+                : standardErks;
+            const erkContainer = document.getElementById('erkCheckboxes');
+            if (erkContainer) {
+                erkContainer.innerHTML = '';
+                erkList.forEach(erk => {
+                    const count = allBooks.filter(b => b.ERK === erk).length;
+                    erkContainer.innerHTML += `
+                        <label class="flex items-center justify-between gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
+                            <span class="flex items-center gap-2">
+                                <input type="checkbox" name="erk" value="${escapeHtml(erk)}" class="custom-checkbox filter-input rounded-md">
+                                <span class="font-bold">ERK ${escapeHtml(erk)}</span>
+                            </span>
+                            <span class="text-[11px] text-slate-400 font-semibold">${count}</span>
+                        </label>
+                    `;
+                });
+            }
+
             // 4. Beschikbaarheid & alle checkbox listeners koppelen
             document.querySelectorAll('.filter-input').forEach(input => {
                 input.onchange = filterAndRender;
@@ -2216,6 +2279,7 @@
             const selectedThemes = Array.from(document.querySelectorAll('input[name="tag"]:checked')).map(cb => cb.value);
             const selectedLeeftijd = Array.from(document.querySelectorAll('input[name="leeftijd"]:checked')).map(cb => cb.value);
             const selectedTalen = Array.from(document.querySelectorAll('input[name="taal"]:checked')).map(cb => cb.value);
+            const selectedErk = Array.from(document.querySelectorAll('input[name="erk"]:checked')).map(cb => cb.value);
             const selectedBeschikbaar = Array.from(document.querySelectorAll('input[name="beschikbaar"]:checked')).map(cb => cb.value);
             const filterBekroondChecked = !!document.querySelector('input[name="filterBekroond"]:checked');
 
@@ -2225,15 +2289,17 @@
             updateDropdownButtonState('btnDropdownThema', 'badgeThemaCount', selectedThemes.length);
             updateDropdownButtonState('btnDropdownLeeftijd', 'badgeLeeftijdCount', selectedLeeftijd.length);
             updateDropdownButtonState('btnDropdownTaal', 'badgeTaalCount', selectedTalen.length);
+            updateDropdownButtonState('btnDropdownErk', 'badgeErkCount', selectedErk.length);
             updateDropdownButtonState('btnDropdownBeschikbaar', 'badgeBeschikbaarCount', selectedBeschikbaar.length);
 
             // Render actieve filter chips onder de dropdowns
-            renderActiveFilterTags([], selectedThemes, selectedLeeftijd, selectedTalen, selectedBeschikbaar, isBekroondActive);
+            renderActiveFilterTags([], selectedThemes, selectedLeeftijd, selectedTalen, selectedBeschikbaar, isBekroondActive, selectedErk);
 
             const isFiltering = (
                 selectedThemes.length > 0 ||
                 selectedLeeftijd.length > 0 ||
                 selectedTalen.length > 0 ||
+                selectedErk.length > 0 ||
                 selectedBeschikbaar.length > 0 ||
                 searchQuery.trim() !== '' ||
                 activeQuickFilter !== 'all' ||
@@ -2293,6 +2359,7 @@
                     (book.ISBN && book.ISBN.includes(q));
                 
                 const matchTaal = selectedTalen.length === 0 || selectedTalen.includes(book.Taal);
+                const matchErk = selectedErk.length === 0 || (book.ERK && selectedErk.includes(book.ERK));
                 const matchLeeftijd = selectedLeeftijd.length === 0 || selectedLeeftijd.includes(book.Graad);
 
                 let matchThema = true;
@@ -2332,7 +2399,7 @@
                                  (book.Locatie && /graphic novel|strip/i.test(book.Locatie));
                 }
 
-                return matchSearch && matchTaal && matchLeeftijd && matchThema && matchBeschikbaar && matchBekroond && matchQuick;
+                return matchSearch && matchTaal && matchErk && matchLeeftijd && matchThema && matchBeschikbaar && matchBekroond && matchQuick;
             });
 
             if (currentSort === 'rating-desc') {
@@ -2427,6 +2494,7 @@
                                 <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs">
                                     ${escapeHtml(book.Graad)}
                                 </span>
+                                ${book.ERK ? `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>` : ''}
                                 ${statusBadgeHtml}
                                 ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-2xs">Bekroond</span>' : ''}
                             </div>
@@ -2887,6 +2955,15 @@
             document.getElementById('modalAuthor').textContent = book.Auteur;
             document.getElementById('modalGraadBadge').textContent = book.Graad || 'Alle graden';
             document.getElementById('modalTaalBadge').textContent = book.Taal;
+            const erkBadge = document.getElementById('modalErkBadge');
+            if (erkBadge) {
+                if (book.ERK) {
+                    erkBadge.textContent = `ERK ${book.ERK}`;
+                    erkBadge.classList.remove('hidden');
+                } else {
+                    erkBadge.classList.add('hidden');
+                }
+            }
             const isbnEl = document.getElementById('modalIsbn');
             if (isbnEl) isbnEl.textContent = book.ISBN ? `#${book.ISBN}` : '';
             document.getElementById('modalRatingFeedback').classList.add('hidden');
