@@ -626,13 +626,13 @@
         let ratingsStore = JSON.parse(localStorage.getItem('schoolbib_ratings') || '{}');
         let favoritesList = JSON.parse(localStorage.getItem('schoolbib_favorites') || '[]');
 
-        // UITGELICHT THEMA CONFIGURATIE (Standaard actief thema voor alle bezoekers)
+        // UITGELICHT THEMA CONFIGURATIE (Standaard UIT, wordt gesynchroniseerd via de beheerderspagina)
         const DEFAULT_FEATURED = {
-            enabled: true,
-            title: "Spannende boeken in de herfst",
-            description: "Mysteries, detectives, duistere geheimen en nagelbijtende spanning om bij weg te griezelen in onze schoolbib.",
-            tag: "spanning",
-            style: "night",
+            enabled: false,
+            title: "",
+            description: "",
+            tag: "",
+            style: "auto",
             gradePicks: {
                 grade1: [],
                 grade2: [],
@@ -697,6 +697,53 @@
         }
         window.featuredTheme = featuredTheme;
 
+        async function syncSettingToCloud(key, value) {
+            const activeScriptUrl = (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : '') || localStorage.getItem('schoolbib_script_url') || '';
+            if (!activeScriptUrl) return;
+            try {
+                await fetch(activeScriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'save_setting', key: key, value: value })
+                });
+            } catch (e) {
+                console.warn('Fout bij synchroniseren instelling naar Google Sheet:', e);
+            }
+        }
+
+        async function loadCloudTheme() {
+            const activeScriptUrl = (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' ? GOOGLE_APPS_SCRIPT_URL : '') || localStorage.getItem('schoolbib_script_url') || '';
+            if (!activeScriptUrl) return;
+            try {
+                const sep = activeScriptUrl.includes('?') ? '&' : '?';
+                const res = await fetch(`${activeScriptUrl}${sep}action=get_public_status&_t=${Date.now()}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data && data.status === 'success' && data.settings && data.settings.schoolbib_featured_theme) {
+                    try {
+                        const cloudTheme = typeof data.settings.schoolbib_featured_theme === 'string'
+                            ? JSON.parse(data.settings.schoolbib_featured_theme)
+                            : data.settings.schoolbib_featured_theme;
+                        if (cloudTheme && typeof cloudTheme === 'object') {
+                            featuredTheme = cloudTheme;
+                            if (!featuredTheme.gradePicks) {
+                                featuredTheme.gradePicks = { grade1: [], grade2: [], grade3: [] };
+                            }
+                            window.featuredTheme = featuredTheme;
+                            localStorage.setItem('schoolbib_featured_theme', JSON.stringify(featuredTheme));
+                            renderFeaturedTheme();
+                            filterAndRender();
+                        }
+                    } catch (e) {
+                        console.warn('Kon cloud thema niet parsen:', e);
+                    }
+                }
+            } catch (e) {
+                console.warn('Kon cloud thema niet ophalen:', e);
+            }
+        }
+
         let currentModalBook = null;
 
         function cleanDemoRatings() {
@@ -722,14 +769,13 @@
             }
         }
 
-                document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             // Privacy & Beveiliging: wis eventuele eerder gecachete gegevens uit localStorage
             try {
                 localStorage.removeItem('schoolbib_admin_pin');
                 localStorage.removeItem('schoolbib_teacher_pin');
                 localStorage.removeItem('schoolbib_pin');
                 localStorage.removeItem('schoolbib_loans');
-                localStorage.removeItem('schoolbib_script_url');
                 sessionStorage.removeItem('schoolbib_desk_logged_in');
                 sessionStorage.removeItem('schoolbib_admin_logged_in');
                 sessionStorage.removeItem('schoolbib_logged_in');
@@ -742,6 +788,7 @@
             initDropdownMenus();
             initPurchaseSuggestions();
             loadBooks();
+            loadCloudTheme();
         });
 
         // TAXONOMIE VOOR GENRES & THEMA'S (TEXT-ONLY, OVERZICHTELIJK EN ZONDER ICOONTJES)
@@ -1079,7 +1126,7 @@
                     renderNewBooksShelf();
                     refreshRandomCatalogSample();
                     filterAndRender();
-                    
+                    loadCloudTheme();
                 }
             });
         }
@@ -2325,11 +2372,15 @@
                     countEl.textContent = `${allBooks.length} boeken in de bib`;
                 }
 
-                // Standaard weergave: toon thema in de kijker en 1 rij met 10 willekeurige boeken
+                // Standaard weergave: toon thema in de kijker (indien ingeschakeld door beheerder) en 1 rij met 10 willekeurige boeken
                 if (defaultCarouselSection) defaultCarouselSection.classList.remove('hidden');
                 if (gridSection) gridSection.classList.add('hidden');
-                if (featuredSection && featuredTheme && featuredTheme.enabled) {
-                    featuredSection.classList.remove('hidden');
+                if (featuredSection) {
+                    if (featuredTheme && featuredTheme.enabled) {
+                        featuredSection.classList.remove('hidden');
+                    } else {
+                        featuredSection.classList.add('hidden');
+                    }
                 }
 
                 if (defaultCarousel) {
