@@ -235,6 +235,10 @@
                 <button data-filter="graphic-novels" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700">
                     Graphic novels
                 </button>
+                <button data-filter="okan" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 shadow-2xs flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span>OKAN</span>
+                </button>
             </div>
 
             <!-- Live Status & Teller -->
@@ -269,16 +273,16 @@
                         </div>
                     </div>
 
-                    <!-- 1b. Dropdown ERK Taalniveau -->
+                    <!-- 1b. Dropdown Niveau (ERK & OKAN) -->
                     <div class="relative dropdown-container">
                         <button type="button" id="btnDropdownErk" class="dropdown-toggle px-3.5 py-2 rounded-2xl text-xs font-extrabold transition flex items-center gap-2 bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200">
-                            <span>ERK-niveau</span>
+                            <span>Niveau</span>
                             <span id="badgeErkCount" class="hidden px-1.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] leading-none">0</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 dropdown-arrow transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div id="menuErk" class="dropdown-menu hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-3xl p-4 shadow-xl border border-slate-200/90 z-50 animate-in fade-in zoom-in-95 duration-150">
                             <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies ERK-niveau</span>
+                                <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Kies Niveau</span>
                                 <button type="button" onclick="closeAllDropdowns()" class="text-[11px] font-bold text-brand-600 hover:text-brand-800">Sluiten ✕</button>
                             </div>
                             <div class="space-y-2 max-h-60 overflow-y-auto clean-scroll" id="erkCheckboxes"></div>
@@ -988,18 +992,24 @@
                         const goodreadsRaw = (book['Goodreads Link'] || book['goodreads link'] || book.Goodreads || '').toString().trim();
                         const exemplaar = (book.Exemplaar || book.exemplaar || book.Exemplaren || book.exemplaren || '').toString().trim();
 
-                        // ERK-niveau detectie (uit aparte kolom 'ERK', 'ERK-niveau', of fallback uit tags)
-                        const erkRaw = (book.ERK || book['ERK-niveau'] || book['ERK-Niveau'] || book.erk || book.Taalniveau || book.taalniveau || book.CEFR || book.cefr || '').toString().trim().toUpperCase();
+                        // Niveau (ERK / OKAN) detectie (uit kolom 'ERK', 'ERK-niveau', 'Niveau' of fallback uit tags)
+                        const erkRaw = (book.ERK || book['ERK-niveau'] || book['ERK-Niveau'] || book.erk || book.Niveau || book.niveau || book.Taalniveau || book.taalniveau || book.CEFR || book.cefr || '').toString().trim().toUpperCase();
                         let finalErk = '';
-                        if (/^[A-C][1-2]$/.test(erkRaw)) {
+                        if (/^(?:OKAN|[A-C][1-2])$/.test(erkRaw)) {
                             finalErk = erkRaw;
+                        } else if (erkRaw.includes('OKAN')) {
+                            finalErk = 'OKAN';
                         } else if (erkRaw) {
                             const m = erkRaw.match(/\b([A-C][1-2])\b/);
                             if (m) finalErk = m[1];
                         }
                         if (!finalErk) {
-                            const erkInTags = rawTags.match(/\b(?:ERK|CEFR)[-:\s]*([A-C][1-2])\b/i);
-                            if (erkInTags) finalErk = erkInTags[1].toUpperCase();
+                            if (/\bOKAN\b/i.test(rawTags)) {
+                                finalErk = 'OKAN';
+                            } else {
+                                const erkInTags = rawTags.match(/\b(?:ERK|CEFR)[-:\s]*([A-C][1-2])\b/i);
+                                if (erkInTags) finalErk = erkInTags[1].toUpperCase();
+                            }
                         }
 
                         // Beoordeling / Sterren detectie uit Google Sheet (flexibel voor 'Sterren', 'Beoordeling', 'Score', 'Rating', etc.)
@@ -1842,7 +1852,7 @@
                                 <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs">
                                     ${escapeHtml(book.Graad)}
                                 </span>
-                                ${book.ERK ? `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>` : ''}
+                                ${book.ERK ? (book.ERK === 'OKAN' ? `<span class="text-[9px] font-black uppercase tracking-wider bg-amber-500 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">OKAN</span>` : `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>`) : ''}
                                 ${statusBadgeHtml}
                                 ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-2xs">Bekroond</span>' : ''}
                             </div>
@@ -1916,7 +1926,7 @@
                         <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs">
                             ${escapeHtml(book.Graad)}
                         </span>
-                        ${book.ERK ? `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>` : ''}
+                        ${book.ERK ? (book.ERK === 'OKAN' ? `<span class="text-[9px] font-black uppercase tracking-wider bg-amber-500 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">OKAN</span>` : `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>`) : ''}
                         ${statusBadgeHtml}
                         ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-2xs">Bekroond</span>' : ''}
                     </div>
@@ -2181,7 +2191,8 @@
             if (Array.isArray(erks)) {
                 erks.forEach(val => {
                     total++;
-                    list.appendChild(createFilterChip(`ERK: ${val}`, 'erk', val));
+                    const chipLbl = val === 'OKAN' ? 'Niveau: OKAN' : `ERK: ${val}`;
+                    list.appendChild(createFilterChip(chipLbl, 'erk', val));
                 });
             }
 
@@ -2342,22 +2353,25 @@
                 });
             }
 
-            // 3b. Filter op ERK-niveau (A1 t/m C2)
-            const standardErks = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+            // 3b. Filter op Niveau (ERK A1 t/m C2 + OKAN)
+            const standardErks = ['OKAN', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
             const foundErks = [...new Set(allBooks.map(b => b.ERK))].filter(Boolean);
-            const erkList = foundErks.length > 0 
-                ? standardErks.filter(lvl => foundErks.includes(lvl)).concat(foundErks.filter(lvl => !standardErks.includes(lvl))) 
-                : standardErks;
+            const erkList = ['OKAN', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'].concat(foundErks.filter(lvl => !standardErks.includes(lvl)));
             const erkContainer = document.getElementById('erkCheckboxes');
             if (erkContainer) {
                 erkContainer.innerHTML = '';
                 erkList.forEach(erk => {
                     const count = allBooks.filter(b => b.ERK === erk).length;
+                    const labelText = erk === 'OKAN' ? 'OKAN' : `ERK ${escapeHtml(erk)}`;
+                    const badgeClasses = erk === 'OKAN' ? 'text-amber-700 bg-amber-50 border border-amber-200' : 'text-indigo-700 bg-indigo-50 border border-indigo-100';
                     erkContainer.innerHTML += `
                         <label class="flex items-center justify-between gap-2.5 text-xs sm:text-sm text-slate-600 cursor-pointer hover:text-slate-900 font-medium">
                             <span class="flex items-center gap-2">
                                 <input type="checkbox" name="erk" value="${escapeHtml(erk)}" class="custom-checkbox filter-input rounded-md">
-                                <span class="font-bold">ERK ${escapeHtml(erk)}</span>
+                                <span class="font-bold inline-flex items-center gap-1.5">
+                                    <span class="text-[10px] px-1.5 py-0.2 rounded ${badgeClasses}">${escapeHtml(erk)}</span>
+                                    <span>${labelText}</span>
+                                </span>
                             </span>
                             <span class="text-[11px] text-slate-400 font-semibold">${count}</span>
                         </label>
@@ -2497,6 +2511,10 @@
                                  (book.rawTagList && book.rawTagList.some(t => t.includes('strip') || t.includes('graphic') || t.includes('comic'))) ||
                                  /graphic novel|strip|beeldverhaal|comic/i.test(book.Tags || '') ||
                                  (book.Locatie && /graphic novel|strip/i.test(book.Locatie));
+                } else if (activeQuickFilter === 'okan') {
+                    matchQuick = (book.ERK === 'OKAN') ||
+                                 (book.rawTagList && book.rawTagList.some(t => t.includes('okan'))) ||
+                                 /\bokan\b/i.test(book.Tags || '');
                 }
 
                 return matchSearch && matchTaal && matchErk && matchLeeftijd && matchThema && matchBeschikbaar && matchBekroond && matchQuick;
@@ -2519,6 +2537,8 @@
                 feedbackEl.textContent = `Mijn bewaarde favorieten (${favoritesList.length} boeken)`;
             } else if (activeQuickFilter === 'graphic-novels') {
                 feedbackEl.textContent = 'Gefilterd op: Graphic novels & strips in onze schoolbib';
+            } else if (activeQuickFilter === 'okan') {
+                feedbackEl.textContent = 'Gefilterd op: Boeken geschikt voor OKAN & anderstalige nieuwkomers';
             } else if (searchQuery) {
                 feedbackEl.textContent = `Zoekresultaten voor "${escapeHtml(searchQuery)}" (${filtered.length} boeken gevonden)`;
             } else {
@@ -2594,7 +2614,7 @@
                                 <span class="text-[9px] font-black uppercase tracking-wider bg-slate-900/85 text-white backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs">
                                     ${escapeHtml(book.Graad)}
                                 </span>
-                                ${book.ERK ? `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>` : ''}
+                                ${book.ERK ? (book.ERK === 'OKAN' ? `<span class="text-[9px] font-black uppercase tracking-wider bg-amber-500 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">OKAN</span>` : `<span class="text-[9px] font-black uppercase tracking-wider bg-indigo-600 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-2xs">ERK ${escapeHtml(book.ERK)}</span>`) : ''}
                                 ${statusBadgeHtml}
                                 ${book.isBekroond ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500 text-white shadow-2xs">Bekroond</span>' : ''}
                             </div>
@@ -3058,7 +3078,13 @@
             const erkBadge = document.getElementById('modalErkBadge');
             if (erkBadge) {
                 if (book.ERK) {
-                    erkBadge.textContent = `ERK ${book.ERK}`;
+                    if (book.ERK === 'OKAN') {
+                        erkBadge.textContent = 'OKAN';
+                        erkBadge.className = 'text-xs font-bold bg-amber-500 text-white px-2.5 py-1 rounded-full shadow-2xs';
+                    } else {
+                        erkBadge.textContent = `ERK ${book.ERK}`;
+                        erkBadge.className = 'text-xs font-bold bg-indigo-600 text-white px-2.5 py-1 rounded-full shadow-2xs';
+                    }
                     erkBadge.classList.remove('hidden');
                 } else {
                     erkBadge.classList.add('hidden');
@@ -3081,27 +3107,30 @@
                 copiesListEl.innerHTML = '';
                 copies.forEach((c, idx) => {
                     const div = document.createElement('div');
-                    div.className = 'px-2.5 py-1.5 rounded-xl border flex items-center justify-between gap-2 text-[11px] bg-white border-slate-200 text-slate-800';
+                    div.className = 'p-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white border-slate-200/90 shadow-2xs';
                     
                     const isLoaned = !!c.isLoaned;
                     const statusHtml = isLoaned
-                        ? `<span class="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200 flex items-center gap-1 shrink-0">
-                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                        ? `<span class="text-xs font-bold text-rose-700 bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200 flex items-center gap-2 shrink-0">
+                                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                                 Momenteel uitgeleend
                            </span>`
-                        : `<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 flex items-center gap-1 shrink-0">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        : `<span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 flex items-center gap-2 shrink-0">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                 Aanwezig in schoolbib
                            </span>`;
 
+                    const copyName = copies.length > 1 ? escapeHtml(c.copyLabel || ('Exemplaar ' + (idx + 1))) : '';
+
                     div.innerHTML = `
-                        <div class="flex items-center gap-1.5 min-w-0 flex-1">
-                            <span class="font-bold text-[11px] text-slate-800 shrink-0">${escapeHtml(c.copyLabel || ('Exemplaar ' + (idx + 1)))}:</span>
-                            <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/80 truncate">
-                                Locatie: ${escapeHtml(c.locatie || 'Bibliotheek')}
-                            </span>
+                        <div class="flex items-center gap-2 flex-wrap min-w-0">
+                            ${copyName ? `<span class="font-bold text-xs text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 shrink-0">${copyName}</span>` : ''}
+                            <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
+                                <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <span><strong class="font-semibold text-slate-500">Locatie:</strong> <span class="text-slate-900">${escapeHtml(c.locatie || 'Schoolbibliotheek')}</span></span>
+                            </div>
                         </div>
-                        <div class="shrink-0">
+                        <div class="shrink-0 flex items-center">
                             ${statusHtml}
                         </div>
                     `;
