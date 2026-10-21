@@ -235,9 +235,8 @@
                 <button data-filter="graphic-novels" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700">
                     Graphic novels
                 </button>
-                <button data-filter="okan" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 shadow-2xs flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                    <span>OKAN</span>
+                <button data-filter="okan" class="quick-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+                    OKAN
                 </button>
             </div>
 
@@ -2353,10 +2352,10 @@
                 });
             }
 
-            // 3b. Filter op Niveau (ERK A1 t/m C2 + OKAN)
-            const standardErks = ['OKAN', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-            const foundErks = [...new Set(allBooks.map(b => b.ERK))].filter(Boolean);
-            const erkList = ['OKAN', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'].concat(foundErks.filter(lvl => !standardErks.includes(lvl)));
+            // 3b. Filter op Niveau (ERK A1 t/m C1 + OKAN)
+            const standardErks = ['OKAN', 'A1', 'A2', 'B1', 'B2', 'C1'];
+            const foundErks = [...new Set(allBooks.map(b => b.ERK))].filter(b => b && b !== 'C2');
+            const erkList = ['OKAN', 'A1', 'A2', 'B1', 'B2', 'C1'].concat(foundErks.filter(lvl => !standardErks.includes(lvl) && lvl !== 'C2'));
             const erkContainer = document.getElementById('erkCheckboxes');
             if (erkContainer) {
                 erkContainer.innerHTML = '';
