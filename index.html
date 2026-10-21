@@ -913,27 +913,39 @@
         }
 
         function applyLiveLoansToBooks() {
-            if (!allBooks || allBooks.length === 0 || !Array.isArray(liveActiveLoans) || liveActiveLoans.length === 0) return;
+            if (!allBooks || allBooks.length === 0 || !Array.isArray(liveActiveLoans)) return;
             allBooks.forEach(book => {
                 const bTitle = (book.Titel || '').toLowerCase().trim();
                 const matchedLoans = liveActiveLoans.filter(l => l.bookTitle && l.bookTitle.toLowerCase().trim() === bTitle);
-                if (matchedLoans.length > 0) {
-                    if (book.copies && book.copies.length > 0) {
-                        book.copies.forEach((copy, idx) => {
-                            const cNum = copy.copyNumber ? String(copy.copyNumber) : String(idx + 1);
-                            const cLbl = (copy.copyLabel || '').toLowerCase();
-                            const isMatch = matchedLoans.some(m => {
+                
+                if (book.copies && book.copies.length > 0) {
+                    book.copies.forEach((copy, idx) => {
+                        const cNum = copy.copyNumber ? String(copy.copyNumber) : String(idx + 1);
+                        const cLbl = (copy.copyLabel || '').toLowerCase();
+                        
+                        if (matchedLoans.length === 0) {
+                            copy.isLoaned = false;
+                        } else {
+                            const isCopyMatched = matchedLoans.some(m => {
                                 const mLbl = (m.copyLabel || '').toLowerCase();
                                 const mNum = mLbl.replace(/[^0-9]/g, '');
                                 if (cNum && mNum && cNum === mNum) return true;
                                 if (cLbl && mLbl && (cLbl === mLbl || cLbl.includes(mLbl) || mLbl.includes(cLbl))) return true;
-                                return matchedLoans.length >= book.copies.length;
+                                return false;
                             });
-                            if (isMatch) copy.isLoaned = true;
-                        });
-                    } else {
-                        book.isLoaned = true;
-                    }
+                            
+                            if (isCopyMatched) {
+                                copy.isLoaned = true;
+                            } else if (matchedLoans.some(m => !m.copyLabel || !m.copyLabel.replace(/[^0-9]/g, ''))) {
+                                copy.isLoaned = idx < matchedLoans.length;
+                            } else {
+                                copy.isLoaned = false;
+                            }
+                        }
+                    });
+                    book.isLoaned = book.copies.some(c => c.isLoaned);
+                } else {
+                    book.isLoaned = matchedLoans.length > 0;
                 }
             });
             if (typeof filterAndRender === 'function') {
