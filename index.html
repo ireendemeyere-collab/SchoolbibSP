@@ -1034,21 +1034,21 @@
                         }
 
                         // Uitleenstatus detectie (veilig en anoniem uit Google Sheet)
-                        const statusVal = (book.Status || book.status || book.Uitleenstatus || book.uitleenstatus || book.Beschikbaarheid || book.beschikbaarheid || '').toString().trim().toLowerCase();
+                        const statusVal = (book.Status || book.status || book.Uitleenstatus || book.uitleenstatus || book.Beschikbaarheid || book.beschikbaarheid || book.Uitgeleend || book.uitgeleend || '').toString().trim().toLowerCase();
                         const uitgeleendVal = (book.Uitgeleend || book.uitgeleend || '').toString().trim().toLowerCase();
                         const beschikbaarVal = (book.Beschikbaar || book.beschikbaar || '').toString().trim().toLowerCase();
 
                         let isItemLoaned = false;
                         if (statusVal) {
-                            if (statusVal.includes('uitgeleend') || statusVal.includes('ontleend') || statusVal === 'uit' || statusVal === 'bezet') {
+                            if (statusVal.includes('uitgeleend') || statusVal.includes('ontleend') || statusVal === 'uit' || statusVal === 'bezet' || statusVal.includes('afwezig') || statusVal === 'ja' || statusVal === 'true') {
                                 isItemLoaned = true;
-                            } else if (statusVal.includes('aanwezig') || statusVal.includes('beschikbaar') || statusVal === 'in') {
+                            } else if (statusVal.includes('aanwezig') || statusVal.includes('beschikbaar') || statusVal === 'in' || statusVal === 'nee' || statusVal === 'false') {
                                 isItemLoaned = false;
                             }
                         } else if (uitgeleendVal) {
-                            isItemLoaned = uitgeleendVal === 'ja' || uitgeleendVal === 'true' || uitgeleendVal === '1' || uitgeleendVal === 'uitgeleend';
+                            isItemLoaned = uitgeleendVal === 'ja' || uitgeleendVal === 'true' || uitgeleendVal === '1' || uitgeleendVal === 'uitgeleend' || uitgeleendVal.includes('afwezig');
                         } else if (beschikbaarVal) {
-                            isItemLoaned = beschikbaarVal === 'nee' || beschikbaarVal === 'false' || beschikbaarVal === '0' || beschikbaarVal === 'niet beschikbaar';
+                            isItemLoaned = beschikbaarVal === 'nee' || beschikbaarVal === 'false' || beschikbaarVal === '0' || beschikbaarVal === 'niet beschikbaar' || beschikbaarVal.includes('afwezig');
                         }
 
                         // Normaliseer en ontdubbel tags direct
