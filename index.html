@@ -249,12 +249,17 @@
             <div id="emailStep1" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">Je school e-mailadres</label>
-                    <input type="email" id="staffOtpEmailInput" placeholder="voornaam.achternaam@dbsp.gent" class="w-full text-sm px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                    <input type="email" id="staffOtpEmailInput" placeholder="voornaam.achternaam@dbsp.gent" onkeydown="if(event.key==='Enter') requestStaffEmailOtp()" class="w-full text-sm px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
                 <button type="button" id="btnRequestOtp" onclick="requestStaffEmailOtp()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                     <span>Verstuur 6-cijferige inlogcode</span>
                 </button>
+                <div class="text-center pt-1">
+                    <button type="button" onclick="goToOtpStep()" class="text-xs text-brand-600 hover:text-brand-800 font-semibold hover:underline cursor-pointer">
+                        Heb je al een code ontvangen? Klik hier om hem in te voeren &rarr;
+                    </button>
+                </div>
             </div>
 
             <!-- Stap 2: Code invoeren -->
@@ -264,7 +269,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5 text-center">Voer de 6-cijferige code in</label>
-                    <input type="text" id="staffOtpCodeInput" maxlength="6" placeholder="123456" class="w-full text-center text-3xl font-extrabold tracking-widest px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                    <input type="text" id="staffOtpCodeInput" inputmode="numeric" maxlength="6" placeholder="123456" onkeydown="if(event.key==='Enter') verifyStaffEmailOtp()" oninput="if(this.value.trim().length===6) verifyStaffEmailOtp()" class="w-full text-center text-3xl font-extrabold tracking-widest px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
                 <div class="flex gap-2">
                     <button type="button" id="btnVerifyOtp" onclick="verifyStaffEmailOtp()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-xs transition cursor-pointer">
@@ -6462,8 +6467,23 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     document.getElementById('emailStep1')?.classList.add('hidden');
                     document.getElementById('emailStep2')?.classList.remove('hidden');
                     const msgEl = document.getElementById('otpSentMsg');
-                    if (msgEl) msgEl.textContent = `Inlogcode verzonden naar ${email}! Controleer je inbox.`;
-                    document.getElementById('staffOtpCodeInput')?.focus();
+                    if (msgEl) {
+                        msgEl.textContent = `Inlogcode verzonden naar ${email}! Controleer je inbox.`;
+                        msgEl.className = "text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 p-3 rounded-xl font-medium";
+                    }
+                    if (errEl) errEl.classList.add('hidden');
+                    setTimeout(() => document.getElementById('staffOtpCodeInput')?.focus(), 50);
+                } else if (data && data.message && (data.message.includes('onlangs al een code') || data.message.includes('wacht even'))) {
+                    // Er is recent al een code verzonden; schakel direct over naar stap 2 zodat de gebruiker de code kan invoeren!
+                    document.getElementById('emailStep1')?.classList.add('hidden');
+                    document.getElementById('emailStep2')?.classList.remove('hidden');
+                    const msgEl = document.getElementById('otpSentMsg');
+                    if (msgEl) {
+                        msgEl.textContent = `Er is onlangs al een code naar ${email} verstuurd. Controleer je inbox en vul de 6 cijfers hieronder in:`;
+                        msgEl.className = "text-xs text-amber-800 bg-amber-50 border border-amber-200 p-3 rounded-xl font-medium";
+                    }
+                    if (errEl) errEl.classList.add('hidden');
+                    setTimeout(() => document.getElementById('staffOtpCodeInput')?.focus(), 50);
                 } else {
                     if (errEl) {
                         errEl.textContent = data.message || 'Kon inlogcode niet verzenden.';
@@ -6543,8 +6563,27 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             document.getElementById('emailStep1')?.classList.remove('hidden');
             const inp = document.getElementById('staffOtpCodeInput');
             if (inp) inp.value = '';
+            const errEl = document.getElementById('emailOtpError');
+            if (errEl) errEl.classList.add('hidden');
         }
         window.resetOtpStep = resetOtpStep;
+
+        function goToOtpStep() {
+            const emailInput = document.getElementById('staffOtpEmailInput');
+            const email = (emailInput?.value || '').trim().toLowerCase();
+            if (email) activeOtpRequestEmail = email;
+            document.getElementById('emailStep1')?.classList.add('hidden');
+            document.getElementById('emailStep2')?.classList.remove('hidden');
+            const errEl = document.getElementById('emailOtpError');
+            if (errEl) errEl.classList.add('hidden');
+            const msgEl = document.getElementById('otpSentMsg');
+            if (msgEl && email) {
+                msgEl.textContent = `Voer de 6-cijferige code in die naar ${email} is verzonden:`;
+                msgEl.className = "text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 p-3 rounded-xl font-medium";
+            }
+            setTimeout(() => document.getElementById('staffOtpCodeInput')?.focus(), 50);
+        }
+        window.goToOtpStep = goToOtpStep;
 
         // SUCCESVOLLE AANMELDING VERWERKEN
         function applyStaffLoginSuccess(authData) {
