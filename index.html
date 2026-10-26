@@ -6613,7 +6613,13 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
 
             showToast(`Welkom, ${currentStaffUser.name}! Uitleenbalie ontgrendeld.`);
 
-            if (typeof showDesk === 'function') {
+            if (pendingLoanBookAfterLogin) {
+                const pendingBook = pendingLoanBookAfterLogin;
+                pendingLoanBookAfterLogin = null;
+                setTimeout(() => {
+                    openQuickLoanModal(pendingBook);
+                }, 300);
+            } else if (typeof showDesk === 'function') {
                 showDesk();
             }
         }
@@ -6677,14 +6683,11 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             if (btnDeskDesk) { btnDeskDesk.classList.remove('hidden'); btnDeskDesk.classList.add('flex'); }
             if (btnMobDesk) { btnMobDesk.classList.remove('hidden'); btnMobDesk.classList.add('flex'); }
 
+            // Beheerknop blijft verborgen (zoals gevraagd: beheerknop mag weg)
+            if (btnDeskAdmin) btnDeskAdmin.classList.add('hidden');
+            if (btnMobAdmin) btnMobAdmin.classList.add('hidden');
+
             if (isLoggedIn) {
-                if (staffUserRole === 'admin') {
-                    if (btnDeskAdmin) { btnDeskAdmin.classList.remove('hidden'); btnDeskAdmin.classList.add('flex'); }
-                    if (btnMobAdmin) { btnMobAdmin.classList.remove('hidden'); btnMobAdmin.classList.add('flex'); }
-                } else {
-                    if (btnDeskAdmin) btnDeskAdmin.classList.add('hidden');
-                    if (btnMobAdmin) btnMobAdmin.classList.add('hidden');
-                }
 
                 if (btnDeskStaffLogin) btnDeskStaffLogin.classList.add('hidden');
                 if (staffProfileBadge) {
@@ -7921,11 +7924,19 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             }
         }
 
+        let pendingLoanBookAfterLogin = null;
         function handleBookLoanButtonClick(book) {
+            // Sluit eerst het boekdetailmodal zodat het inlogvenster er nooit achter komt te liggen!
+            const detailModal = document.getElementById('bookDetailModal');
+            if (detailModal && (detailModal.open || typeof detailModal.close === 'function')) {
+                try { detailModal.close(); } catch(e){}
+            }
+
             const isAuth = staffSessionToken || sessionStorage.getItem('schoolbib_session_token') || sessionStorage.getItem('schoolbib_desk_logged_in') === 'true';
             if (!isAuth) {
+                pendingLoanBookAfterLogin = book;
                 openStaffLoginModal();
-                showToast('Meld je eerst aan als leerkracht om een boek uit te lenen.');
+                showToast('Meld je eerst aan als personeel om een boek uit te lenen.');
                 return;
             }
             currentQuickLoanBook = book;
