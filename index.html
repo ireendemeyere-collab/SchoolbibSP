@@ -1841,20 +1841,24 @@
                             </div>
                         </div>
 
-                        <div class="p-3.5 rounded-2xl bg-white border border-emerald-200 text-xs text-slate-600 space-y-2">
+                        <div class="p-3.5 rounded-2xl bg-white border border-emerald-200 text-xs text-slate-600 space-y-2.5">
                             <p class="font-bold text-slate-800">Wie heeft toegang?</p>
                             <p class="leading-relaxed">
-                                De geautoriseerde leerkrachten en beheerders worden centraal beheerd in jullie Google Spreadsheet op het tabblad <strong>Personeel</strong>:
+                                De geautoriseerde leerkrachten en beheerders worden beheerd in jullie Google Spreadsheet via één van deze twee manieren:
                             </p>
-                            <ul class="list-disc pl-5 space-y-1 text-slate-600 font-medium">
-                                <li><strong>Kolom A (E-mail):</strong> Het schooladres (bv. <em>ireen.demeyere@dbsp.gent</em>).</li>
-                                <li><strong>Kolom B (Rol):</strong> Kies <em>Beheerder</em> (volledige toegang) of <em>Leerkracht</em> (enkel Balie).</li>
-                            </ul>
+                            <div class="space-y-1.5 pl-2 border-l-2 border-emerald-300">
+                                <p class="font-semibold text-slate-800">Optie 1: In het tabblad <em>Instellingen</em> (Direct & Eenvoudig):</p>
+                                <p class="text-[11px] text-slate-500">Voeg een rij toe met <code>schoolbib_teacher_emails</code> of <code>schoolbib_admin_emails</code> in kolom A en de e-mails gescheiden door komma's in kolom B.</p>
+                            </div>
+                            <div class="space-y-1.5 pl-2 border-l-2 border-emerald-300">
+                                <p class="font-semibold text-slate-800">Optie 2: In het tabblad <em>Personeel</em> (Overzichtelijke tabel):</p>
+                                <p class="text-[11px] text-slate-500">Kolom A: E-mailadres, Kolom B: Rol (<em>Beheerder</em> of <em>Leerkracht</em>), Kolom C: Naam.</p>
+                            </div>
                             <div class="pt-2">
                                 <a href="https://docs.google.com/spreadsheets/d/19YE6XAJYEjqZkjluHrDiwEfDphhO-lxctzaMOu0Vi0M/edit?gid=534968996" 
                                    target="_blank" rel="noopener noreferrer"
                                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs">
-                                    <span>Personeelslijst openen in Google Sheets ↗</span>
+                                    <span>Google Sheets openen ↗</span>
                                 </a>
                             </div>
                         </div>
