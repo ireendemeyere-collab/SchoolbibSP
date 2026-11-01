@@ -6258,6 +6258,19 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                         }
                     });
                 });
+
+                // Behoud strikt de juiste zichtbaarheid van de beheerknop (enkel zichtbaar voor hoofdbeheerder)
+                const isAdmin = staffUserRole === 'admin' || sessionStorage.getItem('schoolbib_auth_role') === 'admin' || sessionStorage.getItem('schoolbib_admin_logged_in') === 'true';
+                adminBtns.forEach(btn => {
+                    if (!btn) return;
+                    if (isAdmin) {
+                        btn.classList.remove('hidden');
+                        btn.classList.add('flex');
+                    } else {
+                        btn.classList.add('hidden');
+                        btn.classList.remove('flex');
+                    }
+                });
             }
 
             function showCatalog() {
@@ -6269,12 +6282,19 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             window.showCatalog = showCatalog;
 
             function showDesk() {
+                const isAuth = staffSessionToken || sessionStorage.getItem('schoolbib_session_token');
+                if (!isAuth) {
+                    pendingTargetViewAfterLogin = 'desk';
+                    openStaffLoginModal('desk');
+                    showToast('Meld je eerst aan met je school e-mailadres (@dbsp.gent) om de uitleenbalie te openen.', 'info');
+                    return;
+                }
+
                 catalogView.classList.add('hidden');
                 if (deskView) deskView.classList.remove('hidden');
                 if (adminView) adminView.classList.add('hidden');
                 setNavActive('desk');
 
-                // Cloudflare Zero Trust: Geauthenticeerde leerkrachten hebben direct balietoegang
                 sessionStorage.setItem('schoolbib_desk_logged_in', 'true');
                 if (!sessionStorage.getItem('schoolbib_auth_pin')) {
                     sessionStorage.setItem('schoolbib_auth_pin', currentTeacherPin || DEFAULT_TEACHER_PIN);
@@ -6287,21 +6307,23 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             }
 
             function showAdmin() {
+                const isAdmin = staffUserRole === 'admin' || sessionStorage.getItem('schoolbib_auth_role') === 'admin' || sessionStorage.getItem('schoolbib_admin_logged_in') === 'true';
+                if (!isAdmin) {
+                    pendingTargetViewAfterLogin = 'admin';
+                    openStaffLoginModal('admin');
+                    showToast('Meld je aan als beheerder om het beheerderspaneel te openen.', 'info');
+                    return;
+                }
+
                 catalogView.classList.add('hidden');
                 if (deskView) deskView.classList.add('hidden');
                 if (adminView) adminView.classList.remove('hidden');
                 setNavActive('admin');
 
-                if (sessionStorage.getItem('schoolbib_admin_logged_in') === 'true') {
-                    document.getElementById('adminLoginSection')?.classList.add('hidden');
-                    document.getElementById('adminDashboardSection')?.classList.remove('hidden');
-                    const btnAdd = document.getElementById('tabBtnAddBook');
-                    if (btnAdd) btnAdd.click();
-                } else {
-                    document.getElementById('adminLoginSection')?.classList.remove('hidden');
-                    document.getElementById('adminDashboardSection')?.classList.add('hidden');
-                    document.getElementById('adminPinInput')?.focus();
-                }
+                document.getElementById('adminLoginSection')?.classList.add('hidden');
+                document.getElementById('adminDashboardSection')?.classList.remove('hidden');
+                const btnAdd = document.getElementById('tabBtnAddBook');
+                if (btnAdd) btnAdd.click();
             }
 
             catalogBtns.forEach(btn => btn && btn.addEventListener('click', showCatalog));
@@ -6407,6 +6429,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
         let staffSessionToken = sessionStorage.getItem('schoolbib_session_token') || '';
         let staffUserRole = sessionStorage.getItem('schoolbib_auth_role') || '';
         let activeOtpRequestEmail = '';
+        let pendingTargetViewAfterLogin = null;
 
         function handleMobLoginClick() {
             if (staffSessionToken || sessionStorage.getItem('schoolbib_desk_logged_in') === 'true') {
@@ -6417,7 +6440,8 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
         }
         window.handleMobLoginClick = handleMobLoginClick;
 
-        function openStaffLoginModal() {
+        function openStaffLoginModal(targetView) {
+            if (targetView) pendingTargetViewAfterLogin = targetView;
             const modal = document.getElementById('staffLoginModal');
             if (modal) {
                 modal.classList.remove('hidden');
@@ -6614,7 +6638,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 fetchStaffProtectedData();
             }
 
-            showToast(`Welkom, ${currentStaffUser.name}! Uitleenbalie ontgrendeld.`);
+            showToast(`Welkom, ${currentStaffUser.name}! ${staffUserRole === 'admin' ? 'Beheerderspaneel en uitleenbalie ontgrendeld.' : 'Uitleenbalie ontgrendeld.'}`);
 
             if (pendingLoanBookAfterLogin) {
                 const pendingBook = pendingLoanBookAfterLogin;
@@ -6622,7 +6646,13 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 setTimeout(() => {
                     openQuickLoanModal(pendingBook);
                 }, 300);
+            } else if (pendingTargetViewAfterLogin === 'admin' || (staffUserRole === 'admin' && pendingTargetViewAfterLogin !== 'desk')) {
+                pendingTargetViewAfterLogin = null;
+                if (typeof showAdmin === 'function') {
+                    showAdmin();
+                }
             } else if (typeof showDesk === 'function') {
+                pendingTargetViewAfterLogin = null;
                 showDesk();
             }
         }
@@ -6686,11 +6716,15 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             if (btnDeskDesk) { btnDeskDesk.classList.remove('hidden'); btnDeskDesk.classList.add('flex'); }
             if (btnMobDesk) { btnMobDesk.classList.remove('hidden'); btnMobDesk.classList.add('flex'); }
 
-            // Beheerknop blijft verborgen (zoals gevraagd: beheerknop mag weg)
-            if (btnDeskAdmin) btnDeskAdmin.classList.add('hidden');
-            if (btnMobAdmin) btnMobAdmin.classList.add('hidden');
-
             if (isLoggedIn) {
+                // Beheerknop tonen indien aangemeld als hoofdbeheerder
+                if (staffUserRole === 'admin') {
+                    if (btnDeskAdmin) { btnDeskAdmin.classList.remove('hidden'); btnDeskAdmin.classList.add('flex'); }
+                    if (btnMobAdmin) { btnMobAdmin.classList.remove('hidden'); btnMobAdmin.classList.add('flex'); }
+                } else {
+                    if (btnDeskAdmin) { btnDeskAdmin.classList.add('hidden'); btnDeskAdmin.classList.remove('flex'); }
+                    if (btnMobAdmin) { btnMobAdmin.classList.add('hidden'); btnMobAdmin.classList.remove('flex'); }
+                }
 
                 if (btnDeskStaffLogin) btnDeskStaffLogin.classList.add('hidden');
                 if (staffProfileBadge) {
