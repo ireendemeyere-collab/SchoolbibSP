@@ -3707,6 +3707,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                         if (!bookMap.has(key)) {
                             bookMap.set(key, {
                                 id: item.rowId,
+                                lastRowId: item.rowId,
                                 Titel: item.Titel,
                                 Auteur: item.Auteur,
                                 Tags: item.Tags,
@@ -3726,6 +3727,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                             });
                         }
                         const entry = bookMap.get(key);
+                        entry.lastRowId = item.rowId;
                         if (!entry.ISBN && item.ISBN) entry.ISBN = item.ISBN;
                         if (!entry.Cover && item.Cover) entry.Cover = item.Cover;
                         if (!entry.Boekenzoeker && item.Boekenzoeker) entry.Boekenzoeker = item.Boekenzoeker;
@@ -4813,7 +4815,9 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             if (!carousel) return;
             carousel.innerHTML = '';
 
-            const newBooks = allBooks.slice(-14).reverse();
+            const newBooks = [...allBooks]
+                .sort((a, b) => (b.lastRowId || b.id || 0) - (a.lastRowId || a.id || 0))
+                .slice(0, 14);
 
             newBooks.forEach(book => {
                 const card = createMiniBookCard(book, false);
