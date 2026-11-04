@@ -3755,6 +3755,11 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                                 if (matchDigits) numericCopyNum = parseInt(matchDigits[0], 10);
                             }
                         }
+                        // Veiligheidscheck: voorkom dubbele exemplaarnummers binnen hetzelfde boek
+                        if (entry.copies.some(c => c.copyNumber === numericCopyNum)) {
+                            numericCopyNum = copyNum;
+                            copyLabel = `Exemplaar ${copyNum}`;
+                        }
                         entry.copies.push({
                             copyId: item.rowId,
                             copyNumber: numericCopyNum,
@@ -5116,13 +5121,23 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             const total = (book.copies && book.copies.length > 0) ? book.copies.length : 1;
             let loaned = 0;
             if (book.copies && book.copies.length > 0) {
-                book.copies.forEach(c => {
-                    if (isCopyLoaned(book.Titel, c.copyLabel, c.copyId)) {
+                const bookLoans = (loans || []).filter(l => !l.returned && l.bookTitle && l.bookTitle.toLowerCase().trim() === book.Titel.toLowerCase().trim());
+                const claimedLoanIds = new Set();
+                book.copies.forEach((c, idx) => {
+                    const match = bookLoans.find(l => !claimedLoanIds.has(l.id) && (
+                        (c.copyId && l.copyId && String(l.copyId) === String(c.copyId)) ||
+                        (c.copyLabel && l.copyLabel && l.copyLabel.toLowerCase() === c.copyLabel.toLowerCase())
+                    ));
+                    if (match) {
+                        claimedLoanIds.add(match.id);
                         loaned++;
                     }
                 });
+                if (claimedLoanIds.size < bookLoans.length) {
+                    loaned = Math.min(total, bookLoans.length);
+                }
             } else {
-                if (loans.some(l => !l.returned && l.bookTitle && l.bookTitle.toLowerCase().trim() === book.Titel.toLowerCase().trim())) {
+                if (loans && loans.some(l => !l.returned && l.bookTitle && l.bookTitle.toLowerCase().trim() === book.Titel.toLowerCase().trim())) {
                     loaned = 1;
                 }
             }
@@ -6799,21 +6814,39 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 const matched = activeLoans.filter(l => l.bookTitle && l.bookTitle.toLowerCase().trim() === title);
                 if (matched.length > 0) {
                     if (b.copies && b.copies.length > 0) {
+                        const remainingLoans = [...matched];
                         b.copies.forEach((copy, idx) => {
                             const cNum = copy.copyNumber ? String(copy.copyNumber) : String(idx + 1);
                             const cLbl = (copy.copyLabel || '').toLowerCase();
-                            const isMatch = matched.some(m => {
+                            const loanIdx = remainingLoans.findIndex(m => {
                                 const mLbl = (m.copyLabel || '').toLowerCase();
                                 const mNum = mLbl.replace(/[^0-9]/g, '');
                                 if (cNum && mNum && cNum === mNum) return true;
                                 if (cLbl && mLbl && (cLbl === mLbl || cLbl.includes(mLbl) || mLbl.includes(cLbl))) return true;
-                                return matched.length >= b.copies.length;
+                                return false;
                             });
-                            if (isMatch) copy.isLoaned = true;
+                            if (loanIdx !== -1) {
+                                copy.isLoaned = true;
+                                remainingLoans.splice(loanIdx, 1);
+                            } else {
+                                copy.isLoaned = false;
+                            }
                         });
+                        // Als er nog ongematchte leningen overblijven, markeer dan de eerste vrije exemplaren
+                        if (remainingLoans.length > 0) {
+                            b.copies.forEach(copy => {
+                                if (!copy.isLoaned && remainingLoans.length > 0) {
+                                    copy.isLoaned = true;
+                                    remainingLoans.pop();
+                                }
+                            });
+                        }
                     } else {
                         b.isLoaned = true;
                     }
+                } else {
+                    if (b.copies) b.copies.forEach(c => c.isLoaned = false);
+                    b.isLoaned = false;
                 }
             });
             if (typeof filterAndRender === 'function') filterAndRender();
