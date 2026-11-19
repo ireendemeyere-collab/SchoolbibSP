@@ -2,10 +2,13 @@
  * Google Apps Script voor SchoolbibSP (Schoolbibliotheek Don Bosco Gent campus Sint-Pieters)
  * 
  * UPDATE:
- * 1. Automatische synchronisatie naar tabblad 'Boeken': bij een uitlening wordt kolom K ('Status')
+ * 1. Volledig dynamisch: GEEN namen of specifieke e-mailadressen hardcoded in de code!
+ *    Alle beheerders en leerkrachten worden uitsluitend beheerd via de Google Spreadsheet
+ *    (tabblad 'Instellingen' of tabblad 'Personeel').
+ * 2. Automatische synchronisatie naar tabblad 'Boeken': bij een uitlening wordt kolom K ('Status')
  *    automatisch op 'Uitgeleend' gezet (wordt direct ROOD). Bij inleveren weer op 'Aanwezig'.
- * 2. Ondersteuning voor sam.steppe@dbsp.gent als beheerder + robuuste parsing van de 'Instellingen'-sheet
- *    (negeert enters, witruimtes en hoofdletters in e-maillijsten).
+ * 3. Robuuste verwerking van e-maillijsten in de sheet: enters, spaties, komma's en hoofdletters
+ *    worden automatisch opgeschoond.
  */
 
 function doPost(e) {
@@ -36,6 +39,7 @@ function doPost(e) {
         return createJsonResponse({ status: 'error', message: 'Ongeldig e-mailadres.' });
       }
 
+      // Controleert dynamisch in de Google Sheet (Instellingen of Personeel)
       var authInfo = getStaffRoleAndName(ss, email);
       if (!authInfo.allowed) {
         return createJsonResponse({ 
@@ -393,27 +397,17 @@ function updateCatalogBookStatus(ss, bookTitle, copyLabel, newStatus) {
 }
 
 /**
- * Controleert of een e-mailadres beheer- of balierechten heeft.
+ * Controleert dynamisch in de Google Sheet of een e-mailadres beheer- of balierechten heeft.
+ * 100% dynamisch: GEEN namen of specifieke e-mailadressen hardcoded in de code!
+ * 
  * Ondersteunt:
- * 1. Standaard beheerders (Ireen De Meyere & Sam Steppe)
- * 2. Tabblad 'Instellingen' (schoolbib_admin_emails & schoolbib_teacher_emails)
- * 3. Tabblad 'Personeel' (Kolom A = email, Kolom B = rol)
+ * 1. Tabblad 'Instellingen' (schoolbib_admin_emails & schoolbib_teacher_emails)
+ * 2. Tabblad 'Personeel' (Kolom A = email, Kolom B = rol, Kolom C = naam)
  */
 function getStaffRoleAndName(ss, email) {
   var cleanEmail = email.toLowerCase().trim();
 
-  // 1. Ingebouwde hoofdbeheerders (altijd gegarandeerd toegang)
-  var defaultAdmins = [
-    'ireen.demeyere@dbsp.gent', 
-    'ireen.demeyere@sintpietersgent.be', 
-    'sam.steppe@dbsp.gent'
-  ];
-  if (defaultAdmins.indexOf(cleanEmail) !== -1) {
-    var name = cleanEmail.indexOf('sam') !== -1 ? 'Sam Steppe' : 'Ireen De Meyere';
-    return { allowed: true, role: 'admin', name: name };
-  }
-
-  // 2. Controleer tabblad 'Personeel'
+  // 1. Controleer tabblad 'Personeel' (indien aanwezig)
   var persSheet = ss.getSheetByName("Personeel");
   if (persSheet) {
     var pData = persSheet.getDataRange().getValues();
@@ -421,7 +415,7 @@ function getStaffRoleAndName(ss, email) {
       var pEmail = (pData[i][0] || '').toString().toLowerCase().trim();
       if (pEmail === cleanEmail) {
         var pRole = (pData[i][1] || '').toString().toLowerCase().trim();
-        var pName = (pData[i][2] || '').toString().trim() || cleanEmail.split('@')[0];
+        var pName = (pData[i][2] || '').toString().trim() || formatDisplayName(cleanEmail);
         return {
           allowed: true,
           role: (pRole.indexOf('beheer') !== -1 || pRole.indexOf('admin') !== -1) ? 'admin' : 'teacher',
@@ -431,7 +425,7 @@ function getStaffRoleAndName(ss, email) {
     }
   }
 
-  // 3. Controleer tabblad 'Instellingen' (robuust met enters, spaties en komma's)
+  // 2. Controleer tabblad 'Instellingen' (robuust met enters, spaties, komma's en puntkomma's)
   var setSheet = ss.getSheetByName("Instellingen");
   if (setSheet) {
     var sData = setSheet.getDataRange().getValues();
@@ -440,14 +434,16 @@ function getStaffRoleAndName(ss, email) {
       var val = (sData[j][1] || '').toString();
 
       if (key === 'schoolbib_admin_emails' || key === 'schoolbib_teacher_emails') {
-        // Splits op komma's, puntkomma's én nieuwe regels (\n)
+        // Splits op komma's, puntkomma's én nieuwe regels (\n en \r) en strip witruimtes
         var list = val.split(/[,;\n\r]+/).map(function(item) {
           return item.trim().toLowerCase();
+        }).filter(function(item) {
+          return item.length > 0;
         });
 
         if (list.indexOf(cleanEmail) !== -1) {
           var role = (key === 'schoolbib_admin_emails') ? 'admin' : 'teacher';
-          var displayName = cleanEmail.split('@')[0].replace('.', ' ');
+          var displayName = formatDisplayName(cleanEmail);
           return { allowed: true, role: role, name: displayName };
         }
       }
@@ -455,6 +451,21 @@ function getStaffRoleAndName(ss, email) {
   }
 
   return { allowed: false, role: 'none', name: '' };
+}
+
+/**
+ * Maakt van een e-mailadres zoals 'sam.steppe@dbsp.gent' een nette naam 'Sam Steppe'.
+ */
+function formatDisplayName(email) {
+  try {
+    var localPart = email.split('@')[0];
+    var parts = localPart.split(/[._-]+/);
+    return parts.map(function(p) {
+      return p.charAt(0).toUpperCase() + p.slice(1);
+    }).join(' ');
+  } catch (e) {
+    return 'Collega';
+  }
 }
 
 function getBooksSheet(ss) {
