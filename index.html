@@ -6867,7 +6867,27 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
 
                 if (data && data.status === 'success') {
                     if (Array.isArray(data.loans)) {
+                        // Automatische tweerichtingssync: lokale leningen die nog niet in de sheet staan direct doorsturen
+                        const cloudIds = new Set(data.loans.map(l => String(l.id)));
+                        const cloudKeys = new Set(data.loans.map(l => `${(l.bookTitle||'').toLowerCase()}|||${(l.copyLabel||'').toLowerCase()}|||${(l.student||'').toLowerCase()}`));
+                        
+                        const unsyncedLoans = (loans || []).filter(l => {
+                            if (!l || l.returned) return false;
+                            const idMatch = l.id && cloudIds.has(String(l.id));
+                            const keyMatch = cloudKeys.has(`${(l.bookTitle||'').toLowerCase()}|||${(l.copyLabel||'').toLowerCase()}|||${(l.student||'').toLowerCase()}`);
+                            return !idMatch && !keyMatch;
+                        });
+
+                        if (unsyncedLoans.length > 0) {
+                            console.log('Ongehechte lokale uitleningen automatisch synchroniseren naar Google Sheet:', unsyncedLoans);
+                            unsyncedLoans.forEach(l => {
+                                syncLoanToCloud('save_loan', l);
+                                data.loans.push(l);
+                            });
+                        }
+
                         loans = data.loans;
+                        try { localStorage.setItem('schoolbib_loans', JSON.stringify(loans)); } catch(e){}
                         renderLoans();
                     }
                     if (data.settings && typeof applySettingsFromCloud === 'function') {
