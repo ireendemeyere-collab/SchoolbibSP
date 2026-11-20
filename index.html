@@ -3413,7 +3413,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     // Automatische migratie indien nog de oude voorgeprogrammeerde griezelboeken in de lokale cache zaten
-                    if (parsed && (parsed.title === "Spannende boeken in november" || parsed.tag === "spanning")) {
+                    if (parsed && (parsed.title === "Spannende boeken in november" || parsed.tag === "spanning" || (parsed.title && parsed.title.toLowerCase().includes("oktober")))) {
                         return DEFAULT_FEATURED;
                     }
                     return parsed;
@@ -6799,8 +6799,23 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 const resp = await fetch(`${activeScriptUrl}${sep}action=get_public_status&_t=${Date.now()}`);
                 if (!resp.ok) return;
                 const data = await resp.json();
-                if (data && data.status === 'success' && Array.isArray(data.activeLoans)) {
-                    applyPublicActiveLoans(data.activeLoans);
+                if (data && data.status === 'success') {
+                    if (Array.isArray(data.activeLoans)) {
+                        applyPublicActiveLoans(data.activeLoans);
+                    }
+                    // Thema in de kijker centraal synchroniseren voor alle bezoekers (leerlingen & leerkrachten)
+                    if (data.featuredTheme !== undefined) {
+                        featuredTheme = data.featuredTheme;
+                        if (typeof renderFeaturedTheme === 'function') renderFeaturedTheme();
+                    } else if (data.settings && data.settings.schoolbib_featured_theme) {
+                        try {
+                            const th = typeof data.settings.schoolbib_featured_theme === 'string'
+                                ? JSON.parse(data.settings.schoolbib_featured_theme)
+                                : data.settings.schoolbib_featured_theme;
+                            featuredTheme = th;
+                            if (typeof renderFeaturedTheme === 'function') renderFeaturedTheme();
+                        } catch(e){}
+                    }
                 }
             } catch (e) {
                 console.warn('Publieke beschikbaarheid kon niet worden geladen:', e);
