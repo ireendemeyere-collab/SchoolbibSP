@@ -5,15 +5,20 @@
 // -------------------------------------------------------------------------
 // 1. EIGEN MENU BOVENAAN IN GOOGLE SHEETS
 // -------------------------------------------------------------------------
-function onOpen() {
-  SpreadsheetApp.getUi()
-    .createMenu('📚 Schoolbibbeheer')
-    .addItem('⚡ Alles in 1 klik bijwerken (Status, ERK & Sterren)', 'synchroniseerAlles')
-    .addSeparator()
-    .addItem('📦 Uitleenstatussen bijwerken (per exemplaar)', 'werkUitleenStatussenBij')
-    .addItem('🏷️ ERK & OKAN niveaus automatisch toekennen', 'kenErkAutomatischToe')
-    .addItem('⭐ Sterren & Beoordelingen herberekenen', 'berekenAlleBestaandeGemiddelden')
-    .addToUi();
+function onOpen(e) {
+  try {
+    SpreadsheetApp.getUi()
+      .createMenu('📚 Schoolbibbeheer')
+      .addItem('⚡ Alles in 1 klik bijwerken (Status, ERK & Sterren)', 'synchroniseerAlles')
+      .addSeparator()
+      .addItem('📦 Uitleenstatussen bijwerken (per exemplaar)', 'werkUitleenStatussenBij')
+      .addItem('🏷️ ERK & OKAN niveaus automatisch toekennen', 'kenErkAutomatischToe')
+      .addItem('⭐ Sterren & Beoordelingen herberekenen', 'berekenAlleBestaandeGemiddelden')
+      .addToUi();
+  } catch (err) {
+    // getUi() werkt enkel wanneer de spreadsheet zelf opent, niet bij handmatig 'Uitvoeren' in de code-editor
+    Logger.log('Menu kan niet geladen worden vanuit de code-editor: ' + err);
+  }
 }
 
 // -------------------------------------------------------------------------
