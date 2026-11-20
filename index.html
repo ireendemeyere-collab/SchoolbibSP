@@ -7723,12 +7723,14 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                 if (activeScriptUrl) {
                     try {
                         const authPin = sessionStorage.getItem('schoolbib_auth_pin') || currentTeacherPin || currentAdminPin || DEFAULT_TEACHER_PIN;
+                        const activeSessionToken = staffSessionToken || sessionStorage.getItem('schoolbib_session_token') || '';
                         await fetch(activeScriptUrl, {
                             method: 'POST',
                             mode: 'no-cors',
                             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                             body: JSON.stringify({
                                 action: 'add_book',
+                                sessionToken: activeSessionToken,
                                 pin: authPin,
                                 titel: newBook.Titel,
                                 auteur: newBook.Auteur,
@@ -7913,11 +7915,12 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
             const activeScriptUrl = localStorage.getItem('schoolbib_script_url') || scriptUrl;
             if (!activeScriptUrl) return { success: false, message: 'Geen Google Apps Script URL ingesteld' };
             const authPin = sessionStorage.getItem('schoolbib_auth_pin') || currentAdminPin || DEFAULT_ADMIN_PIN;
+            const activeSessionToken = staffSessionToken || sessionStorage.getItem('schoolbib_session_token') || '';
 
             // 1. Probeer eerst via GET (zodat de browser het JSON-antwoord met CORS kan verifiëren)
             try {
                 const sep = activeScriptUrl.includes('?') ? '&' : '?';
-                const getUrl = `${activeScriptUrl}${sep}action=save_setting&key=${encodeURIComponent(key)}&value=${encodeURIComponent(value)}&pin=${encodeURIComponent(authPin)}&_t=${Date.now()}`;
+                const getUrl = `${activeScriptUrl}${sep}action=save_setting&key=${encodeURIComponent(key)}&value=${encodeURIComponent(value)}&sessionToken=${encodeURIComponent(activeSessionToken)}&pin=${encodeURIComponent(authPin)}&_t=${Date.now()}`;
                 const resp = await fetch(getUrl);
                 if (resp.ok) {
                     const data = await resp.json();
@@ -7935,7 +7938,7 @@ De spin en de sleutel,Anna Woltz,"spanning, bekroond, familie, mental health, ps
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'save_setting', key: key, value: value, pin: authPin })
+                    body: JSON.stringify({ action: 'save_setting', key: key, value: value, sessionToken: activeSessionToken, pin: authPin })
                 });
                 return { success: true, message: 'Verzonden naar Google Sheet' };
             } catch (e) {
